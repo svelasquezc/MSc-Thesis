@@ -1,0 +1,6 @@
+*.aux
+*.synctext.gz
+*.lot
+*.lof
+*.log
+*.blg
