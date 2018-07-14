@@ -1,5 +1,5 @@
 *.aux
-*.synctext.gz
+*.synctex.gz
 *.lot
 *.lof
 *.log
