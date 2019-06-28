@@ -8,24 +8,9 @@
 #include <string>
 
 #include "Cell.h"
+#include "Generics/Value_Reader.h"
 
-class Reader{
- public:
-    template <class T> void myRead(std::string Message, T& Input, std::string Error){
-        while(true){
-            std::cout << Message;
-            try{
-                std::cin >> Input;
-                break;
-            }catch(std::exception e){
-                std::cout << Error <<std::endl;
-                continue;
-            };
-        };
-    };
-};
-
-class Mesh : protected Reader{
+class Mesh : protected Value_Reader{
  private:
     int dimension;
     std::vector<int> cell_number = std::vector<int>(3);
