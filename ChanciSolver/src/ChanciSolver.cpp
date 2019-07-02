@@ -16,6 +16,9 @@ Mesh mymesh;
 void launchTriggers(){
   mymesh.appear(timestamp,stencil);
 };
+
+
+
 void launchGeomodeler(){
     int option;
     int _dimension;

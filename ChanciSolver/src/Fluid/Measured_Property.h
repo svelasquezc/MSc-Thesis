@@ -43,11 +43,19 @@ void Measured_Property::ReadMe(){
  */
 double Measured_Property::interpolate(double Reference_value){
 
-    
+
+    auto compare = [](const std::pair<double,double>& lhs, const std::pair<double,double>& rhs){
+                                      return lhs.first() < rhs.first();
+    };
     
     //Find lesser adjacent
-    
+    auto lower = std::lower_bound(taken_measures.begin(), taken_measures.end(),
+                                  std::pair<double,double>(Reference_value,0),
+                                  compare);
     //Find greater adjacent
-
+    auto upper = std::upper_bound(taken_measures.begin(), taken_measures.end(),
+                                  std::pair<double,double>(Reference_value,0),
+                                  compare);
     //Interpolate
+    return lower.second() + (Reference_value-lower.first())*(upper.second()-lower.second())/(upper.first()-lower.first())
 };
