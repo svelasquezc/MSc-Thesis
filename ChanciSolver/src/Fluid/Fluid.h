@@ -4,7 +4,6 @@
 #include <vector>
 #include <memory>
 #include <string>
-#include <iostream>
 
 #include "Measured_Property.h"
 
@@ -24,8 +23,8 @@ class Fluid{
 
  public:
     Fluid(){};
-    void Characterize(){};
-    
+    void characterize(){};
+    void calculateProperties();
 };
 
 #endif /* FLUID_H */

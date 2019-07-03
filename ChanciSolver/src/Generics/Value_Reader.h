@@ -1,5 +1,10 @@
 #ifndef VALUE_READER_H
 #define VALUE_READER_H
+
+#include <iostream>
+#include <exception>
+#include <string>
+
 class Value_Reader{
  public:
     template <class T> void myRead(std::string Message, T& Input, std::string Error){

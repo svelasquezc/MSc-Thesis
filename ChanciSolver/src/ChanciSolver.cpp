@@ -1,6 +1,6 @@
 
-#include "Mesh/Mesh.h"
-#include "Fluid/Equilibrium_Relations.h"
+#include "Mesh.h"
+#include "Equilibrium_Relation.h"
 
 std::string timestamp="";
 double simulationtime=0;
