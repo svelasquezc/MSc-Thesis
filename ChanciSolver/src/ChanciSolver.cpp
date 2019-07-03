@@ -8,7 +8,7 @@ int fluids_quantity=0;
 int stencil[2] = {-1,1};
 int equilibrium_relations_quantity=0;
 constexpr double gravity=9.80665;
-int cells_quantity=0;
+int cells_number=0;
 const double machine_epsilon = 1e-16;
 const double relative_change_in_solution=1e-6;
 Mesh mymesh;
@@ -29,6 +29,7 @@ void launchGeomodeler(){
     case 1:
         mymesh = Mesh();
         mymesh.defineMesh();
+        cells_number = mymesh.getCellTotal();
         break;
     case 2:
         break;
