@@ -11,13 +11,41 @@ constexpr double gravity=9.80665;
 int cells_number=0;
 const double machine_epsilon = 1e-16;
 const double relative_change_in_solution=1e-6;
+
+std::vector<std::shared_ptr<Fluid>> characterized_fluids =
+    std::vector<std::shared_ptr<Fluid>>();
+std::vector<std::unique_ptr<Equilibrium_Relation>> added_equilibrium_relations =
+    std::vector<std::unique_ptr<Equilibrium_Relation>>();
+
 Mesh mymesh;
+
 //Rock
 void launchTriggers(){
   mymesh.appear(timestamp,stencil);
 };
 
+void launchFluidsEngineer(){
+    int option;
+    int _dimension;
+    std::cout << "Select your action" << std::endl;
+    std::cout << "1. Characterize Fluid" << std::endl;
+    std::cout << "2. Add Equilibrium Relation" << std::endl;
+    std::cin >> option;
+    switch(option){
+    case 1:
+        characterized_fluids.push_back(std::make_shared<Fluid>(Fluid()));
+	(--(characterized_fluids.end()))->get()->characterize(cells_number);
+	++fluids_quantity;
+        break;
+    case 2:
+	added_equilibrium_relations.push_back(std::make_unique<Equilibrium_Relation>());
+	(--(added_equilibrium_relations.end()))->get()->add(fluids_quantity,characterized_fluids);
+        break;
+    default:
+        break;
+    }
 
+};
 
 void launchGeomodeler(){
     int option;
