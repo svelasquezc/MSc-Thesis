@@ -1,9 +1,13 @@
 
 #include "Mesh.h"
+#include "Rock.h"
 #include "Equilibrium_Relation.h"
 
 std::string timestamp="";
-double simulationtime=0;
+double mytime=0;
+double simulationtime = 60;
+double timedelta=1;
+int term=0;
 int fluids_quantity=0;
 int stencil[2] = {-1,1};
 int equilibrium_relations_quantity=0;
@@ -18,10 +22,58 @@ std::vector<std::unique_ptr<Equilibrium_Relation>> added_equilibrium_relations =
     std::vector<std::unique_ptr<Equilibrium_Relation>>();
 
 Mesh mymesh;
+Rock myrock;
+
+void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _timedelta, double& _simulationtime){
+    if(_timestamp == "continue" && _mytime<=_simulationtime){
+        _mytime    +=_timedelta;
+        _timestamp = "stop";
+        ++_term;      
+    }
+};
 
 //Rock
 void launchTriggers(){
-  mymesh.appear(timestamp,stencil);
+    timePasses(timestamp, term, mytime, timedelta, simulationtime);
+    mymesh.appear(timestamp,stencil);
+};
+
+void launchGeomodeler(){
+    int option;
+    int _dimension;
+    std::cout << "Select your action" << std::endl;
+    std::cout << "1. Define Mesh" << std::endl;
+
+    Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
+    
+    switch(option){
+    case 1:
+        mymesh = Mesh();
+        mymesh.defineMesh();
+        cells_number = mymesh.getCellTotal();
+        break;
+    case 2:
+        break;
+    default:
+        break;
+    }
+}
+
+void launchPetrophysicalEngineer(){
+    int option;
+    std::cout << "Select your action" << std::endl;
+    std::cout << "1. Characterize Rock" << std::endl;
+
+    Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
+    
+    switch(option){
+    case 1:
+        myrock = Rock();
+        myrock.characterize(cells_number);
+        break;
+    default:
+        break;
+    }
 };
 
 void launchFluidsEngineer(){
@@ -31,6 +83,9 @@ void launchFluidsEngineer(){
     std::cout << "1. Characterize Fluid" << std::endl;
     std::cout << "2. Add Equilibrium Relation" << std::endl;
     std::cin >> option;
+    
+    Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
+    
     switch(option){
     case 1:
         characterized_fluids.push_back(std::make_shared<Fluid>(Fluid()));
@@ -47,46 +102,39 @@ void launchFluidsEngineer(){
 
 };
 
-void launchGeomodeler(){
-    int option;
-    int _dimension;
-    std::cout << "Select your action" << std::endl;
-    std::cout << "1. Define Mesh" << std::endl;
-    std::cin >> option;
-    switch(option){
-    case 1:
-        mymesh = Mesh();
-        mymesh.defineMesh();
-        cells_number = mymesh.getCellTotal();
-        break;
-    case 2:
-        break;
-    default:
-        break;
-    }
-    
-}
+void launchReservoirEngineer(){
+
+};
 
 void launchMenu(){
     int option;
-    while(true){
-        std::cout << "Select your role" << std::endl;
+    bool run=false;
+    while(!run){
+        std::cout << "Select your role or -1 for running simulation" << std::endl;
         std::cout << "1. Geomodeler"<< std::endl << "2. Petrophysical Engineer" << std::endl;
         std::cout << "3. Fluids Engineer" << std::endl << "4. Reservoir Engineer" << std::endl;
-        try{
-            std::cin >> option;
-            switch(option){
-            case 1:
-                launchGeomodeler();
-		break;
-            }
-	    launchTriggers();
-	    break;
-        }catch(std::exception e){
-            
-            continue;
+        
+        Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid role"));
+        
+        switch(option){
+        case 1:
+            launchGeomodeler();
+            break;
+        case 2:
+            launchPetrophysicalEngineer();
+            break;
+        case 3:
+            launchFluidsEngineer();
+            break;
+        case 4:
+            launchReservoirEngineer();
+            break;
+        case -1:
+            run=true;
+            break;
         }
-    }
+        launchTriggers();
+    };
 }
 
 int main(){

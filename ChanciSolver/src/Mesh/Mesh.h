@@ -24,7 +24,7 @@ class Mesh : protected Value_Reader{
     Mesh();
     int getCellTotal();
     void defineMesh();
-    void appear(std::string _timestamp, int stencil[2]);
+    void appear(std::string& _timestamp, int stencil[2]);
     //int listCell(int index);
     int listCell(int posx, int posy, int posz);
     int listCell(std::vector<int> _Numeration);
@@ -43,14 +43,14 @@ void Mesh::defineMesh(){
     double AuxThickness;
     cell_total=1;
     thickness = std::vector<std::vector<double>>(3,std::vector<double>());
-    myRead(std::string("Please insert the dimension of the mesh: \n"), dimension, std::string("Please insert a valid input\n"));
+    myRead(std::string("Please insert the dimension of the mesh: "), dimension, std::string("Please insert a valid input"));
     for(axis=0; axis<3; axis++){
-      ss << "Please insert number of cells in direction " << axisnames[axis] << "(integer): "<<std::endl;
-        myRead<>(ss.str(), cell_number[axis], std::string("Please insert a valid input\n"));
+      ss << "Please insert number of cells in direction " << axisnames[axis] << "(integer): ";
+        myRead<>(ss.str(), cell_number[axis], std::string("Please insert a valid input"));
         ss.flush();
         for(int spacing=0; spacing<cell_number[axis];spacing++){
-	  ss << "Please insert "<< spacing << " spacing in direction " << axisnames[axis] << " "<< std::endl;
-            myRead<>(ss.str(), AuxThickness, std::string("Please insert a valid input\n"));
+	  ss << "Please insert "<< spacing << " spacing in direction " << axisnames[axis];
+            myRead<>(ss.str(), AuxThickness, std::string("Please insert a valid input"));
             ss.flush();
             thickness[axis].push_back(AuxThickness);
         };
@@ -59,7 +59,7 @@ void Mesh::defineMesh(){
     defined = true;
 };
 
-void Mesh::appear(std::string _timestamp, int stencil[2]){
+void Mesh::appear(std::string& _timestamp, int stencil[2]){
     if(_timestamp=="" && this->defined){
         int index = 0;
         for(int axisz=0;axisz<cell_number[2];axisz++){

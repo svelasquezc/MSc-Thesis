@@ -26,12 +26,7 @@ class Fluid : protected Value_Reader{
     std::unique_ptr<Measured_Property> measured_viscosity;
 
  public:
-    Fluid(){
-        // Creation of secure pointers for properties
-        
-        measured_volumetric_factor = std::make_unique<Measured_Property>();
-        measured_viscosity = std::make_unique<Measured_Property>();
-    };
+    Fluid(){};
     void characterize(int& cells_number);
     void updateProperties(int& term);
     //void calculate(int& term, int& _cellindex);
@@ -39,10 +34,13 @@ class Fluid : protected Value_Reader{
     void calculateViscosity(int& _term, int& _cellindex);
     const std::string print();
     int getIndex();
+    void calculatePotential(int& _term, int& _cellindex, const double _gravity, const double _depth);
 };
 
 void Fluid::characterize(int& _cells_number){
 
+    std::stringstream ref_name = std::stringstream();
+    std::stringstream ref_value = std::stringstream();
     std::stringstream ss = std::stringstream();
     
     pressure              = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
@@ -53,14 +51,22 @@ void Fluid::characterize(int& _cells_number){
     relative_permeability = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
     potential             = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
 
-    myRead(std::string("Please insert the type of fluid\n"), type, std::string("Please insert a valid input"));
+    myRead(std::string("Please insert the type of fluid "), type, std::string("Please insert a valid input"));
     
     // Reading of measured properties (PVT Table)
+    ref_name << type << " Pressure";
+    ref_value << type << " Volumetric Factor";
+    measured_volumetric_factor = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
+    ref_value.flush();
+    
+    ref_value << type << " Viscosity";
+    measured_viscosity = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
+    
     measured_volumetric_factor->readMe();
     measured_viscosity->readMe();
     
     // Reading of standard conditions density
-    myRead(std::string("Please insert the standard conditions density for the fluid\n"), standard_conditions_density, std::string("Please insert a valid input"));
+    myRead(std::string("Please insert the standard conditions density for the fluid "), standard_conditions_density, std::string("Please insert a valid input"));
     
     // Initial Conditions for the fluid
     for(int cellindex=0; cellindex<_cells_number; ++cellindex){
@@ -109,7 +115,12 @@ const std::string Fluid::print(){
 
 int Fluid::getIndex(){
     return index;
-}
+};
+
+void Fluid::calculatePotential(int& _term, int& _cellindex, const double _gravity, const double _depth){
+    potential[_term][_cellindex] =
+        pressure[_term][_cellindex] - density[_term][_cellindex]*_gravity*_depth;
+};
 
 //void {density[_term][_cellindex] = standard_conditions_density;};
 
