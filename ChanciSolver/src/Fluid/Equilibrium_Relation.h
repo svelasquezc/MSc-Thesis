@@ -37,7 +37,6 @@ void Equilibrium_Relation::add(const int& fluids_quantity, std::vector<std::shar
 
         while(true){
             myRead(std::string(""), contributor, std::string("Please insert a valid index"));
-            std::cin >> contributor;
             if(contributor>0 && contributor<=MyFluids.size()){
                 contributor_fluid = MyFluids[contributor-1];
                 break;

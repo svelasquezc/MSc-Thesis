@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Rock.h"
 #include "Equilibrium_Relation.h"
+#include "Jacobian.h"
 
 std::string timestamp="";
 double mytime=0;
@@ -24,8 +25,13 @@ std::vector<std::unique_ptr<Equilibrium_Relation>> added_equilibrium_relations =
 Mesh mymesh;
 Rock myrock;
 
+
+
+
 void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _timedelta, double& _simulationtime){
     if(_timestamp == "continue" && _mytime<=_simulationtime){
+        std::cout << "Simulating interval [" << _mytime << " - " << _mytime + _timedelta << "]" << std::endl;
+        
         _mytime    +=_timedelta;
         _timestamp = "stop";
         ++_term;      
@@ -36,13 +42,18 @@ void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _t
 void launchTriggers(){
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
     mymesh.appear(timestamp,stencil);
+    
+};
+
+void calculateProperties(int& _term, int& _cell_index, int& _fluid_index){
+    
 };
 
 void launchGeomodeler(){
     int option;
     int _dimension;
     std::cout << "Select your action" << std::endl;
-    std::cout << "1. Define Mesh" << std::endl;
+    std::cout << "1. Define Mesh";
 
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
     
@@ -62,7 +73,7 @@ void launchGeomodeler(){
 void launchPetrophysicalEngineer(){
     int option;
     std::cout << "Select your action" << std::endl;
-    std::cout << "1. Characterize Rock" << std::endl;
+    std::cout << "1. Characterize Rock";
 
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
     
@@ -81,8 +92,7 @@ void launchFluidsEngineer(){
     int _dimension;
     std::cout << "Select your action" << std::endl;
     std::cout << "1. Characterize Fluid" << std::endl;
-    std::cout << "2. Add Equilibrium Relation" << std::endl;
-    std::cin >> option;
+    std::cout << "2. Add Equilibrium Relation";
     
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
     
@@ -112,7 +122,7 @@ void launchMenu(){
     while(!run){
         std::cout << "Select your role or -1 for running simulation" << std::endl;
         std::cout << "1. Geomodeler"<< std::endl << "2. Petrophysical Engineer" << std::endl;
-        std::cout << "3. Fluids Engineer" << std::endl << "4. Reservoir Engineer" << std::endl;
+        std::cout << "3. Fluids Engineer" << std::endl << "4. Reservoir Engineer";
         
         Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid role"));
         
@@ -139,7 +149,11 @@ void launchMenu(){
 
 int main(){
     launchMenu();
-    timestamp="s";
-    launchTriggers();
+    timestamp="continue";
+    
+    while(mytime<simulationtime){
+        launchTriggers();
+    };
+    
     return 0;
 };

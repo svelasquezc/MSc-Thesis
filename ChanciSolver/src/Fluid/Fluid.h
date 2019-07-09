@@ -39,9 +39,9 @@ class Fluid : protected Value_Reader{
 
 void Fluid::characterize(int& _cells_number){
 
-    std::stringstream ref_name = std::stringstream();
-    std::stringstream ref_value = std::stringstream();
-    std::stringstream ss = std::stringstream();
+    std::ostringstream ref_name = std::ostringstream();
+    std::ostringstream ref_value = std::ostringstream();
+    std::ostringstream ss = std::ostringstream();
     
     pressure              = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
     density               = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
@@ -57,7 +57,8 @@ void Fluid::characterize(int& _cells_number){
     ref_name << type << " Pressure";
     ref_value << type << " Volumetric Factor";
     measured_volumetric_factor = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
-    ref_value.flush();
+    ref_value.str("");
+    ref_value.clear();
     
     ref_value << type << " Viscosity";
     measured_viscosity = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
@@ -70,13 +71,17 @@ void Fluid::characterize(int& _cells_number){
     
     // Initial Conditions for the fluid
     for(int cellindex=0; cellindex<_cells_number; ++cellindex){
-        ss << "Please insert initial pressure for the "<< cellindex+1 << "cell" <<std::endl;
+        ss << "Please insert initial pressure for the "<< cellindex+1 << " cell [Pa]";
         myRead(ss.str(), pressure[0][cellindex], std::string("Please insert a valid input"));
-        ss.flush();
+        ss.str("");
+        ss.clear();
         
-        ss << "Please insert initial saturation for the "<< cellindex+1 << "cell" <<std::endl;
+    };
+    for(int cellindex=0; cellindex<_cells_number; ++cellindex){
+        ss << "Please insert initial saturation for the "<< cellindex+1 << " cell [-]";
         myRead(ss.str(), saturation[0][cellindex], std::string("Please insert a valid input"));
-        ss.flush();
+        ss.str("");
+        ss.clear();
     };
 };
 

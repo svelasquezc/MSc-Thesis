@@ -26,18 +26,20 @@ class Measured_Property : protected Value_Reader{
 };
 
 void Measured_Property::readMe(){
-    std::stringstream ss=std::stringstream();
+    std::ostringstream ss=std::ostringstream();
     double aux_reference, aux_measure;
     myRead(std::string("Please insert the number of measures: "), number_of_measures,std::string("Please insert a valid input"));
     
     for(int measure=1; measure<=number_of_measures; ++measure){
 	ss<<"Please insert the " << measure << " " << reference_measure_name;
 	myRead(ss.str(), aux_reference,std::string("Please insert a valid input"));
-	ss.flush();
+        ss.str("");
+        ss.clear();
 
 	ss<<"Please insert the " << measure << " " << measured_value_name;
 	myRead(ss.str(), aux_measure,std::string("Please insert a valid input"));
-	ss.flush();
+        ss.str("");
+        ss.clear();
 
 	taken_measures.insert(std::make_pair(aux_reference,aux_measure));
     };

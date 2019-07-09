@@ -38,20 +38,22 @@ int Mesh::getCellTotal(){return cell_total;};
 void Mesh::defineMesh(){
 
     const std::string axisnames[3]={"x", "y", "z"};
-    std::stringstream ss = std::stringstream();
+    std::ostringstream ss = std::ostringstream();
     int axis=1;
     double AuxThickness;
     cell_total=1;
     thickness = std::vector<std::vector<double>>(3,std::vector<double>());
     myRead(std::string("Please insert the dimension of the mesh: "), dimension, std::string("Please insert a valid input"));
     for(axis=0; axis<3; axis++){
-      ss << "Please insert number of cells in direction " << axisnames[axis] << "(integer): ";
+        ss << "Please insert number of cells in direction " << axisnames[axis] << "(integer): ";
         myRead<>(ss.str(), cell_number[axis], std::string("Please insert a valid input"));
-        ss.flush();
+        ss.str("");
+        ss.clear();
         for(int spacing=0; spacing<cell_number[axis];spacing++){
-	  ss << "Please insert "<< spacing << " spacing in direction " << axisnames[axis];
+            ss << "Please insert "<< spacing << " spacing in direction " << axisnames[axis];
             myRead<>(ss.str(), AuxThickness, std::string("Please insert a valid input"));
-            ss.flush();
+            ss.str("");
+            ss.clear();
             thickness[axis].push_back(AuxThickness);
         };
         this->cell_total=this->cell_total*cell_number[axis];
@@ -134,7 +136,7 @@ int Mesh::listCell(std::vector<int> _Numeration){
         index = _Numeration[0] + _Numeration[1]*cell_number[0] + _Numeration[2]*cell_number[0]*cell_number[1];
 	return index;
     }else{
-      return -1;
+        return -1;
     }
     
 }
