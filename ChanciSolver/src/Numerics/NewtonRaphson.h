@@ -4,6 +4,7 @@
 #include <Eigen/Sparse>
 #include <vector>
 
+template<typename FlowFunction, typename AccumulationFunction>
 class NewtonRaphson{
  private:
     
@@ -17,23 +18,24 @@ class NewtonRaphson{
     Eigen::VectorXd solutiondelta;
     
  public:
-    template<typename FlowFunction, typename AccumulationFunction>
     void iterate(FlowFunction calculateFlow, AccumulationFunction calculateAccumulation);
+    void calculateResidual(FlowFunction calculateFlow, AccumulationFunction calculateAccumulation);
     void solve();
     void updateInteration(std::vector<double*> unknowns);
 };
 
-void NewtonRaphson::solve(){
+template<typename FlowFunction, typename AccumulationFunction>
+    void NewtonRaphson<FlowFunction, AccumulationFunction>::solve(){
     solver.compute(jacobian);
     solutiondelta = solver.solve(residual);
 };
 
-void NewtonRaphson::updateInteration(std::vector<double*> unknowns){
+template<typename FlowFunction, typename AccumulationFunction>
+void NewtonRaphson<FlowFunction, AccumulationFunction>::updateInteration(std::vector<double*> unknowns){
     
 };
-
 template<typename FlowFunction, typename AccumulationFunction>
-    void NewtonRaphson::iterate(FlowFunction calculateFlow, AccumulationFunction calculateAccumulation){
+void NewtonRaphson<FlowFunction,AccumulationFunction>::iterate(FlowFunction calculateFlow, AccumulationFunction calculateAccumulation){
 
 };
 

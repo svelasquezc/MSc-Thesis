@@ -1,8 +1,10 @@
 
+#include <cmath>
+
 #include "Mesh.h"
 #include "Rock.h"
 #include "Equilibrium_Relation.h"
-#include "Jacobian.h"
+#include "NewtonRaphson.h"
 
 std::string timestamp="";
 double mytime=0;
@@ -14,7 +16,7 @@ int stencil[2] = {-1,1};
 int equilibrium_relations_quantity=0;
 constexpr double gravity=9.80665;
 int cells_number=0;
-const double machine_epsilon = 1e-16;
+const double machine_epsilon = sqrt(std::numeric_limits<double>::epsilon());
 const double relative_change_in_solution=1e-6;
 
 std::vector<std::shared_ptr<Fluid>> characterized_fluids =
@@ -25,8 +27,15 @@ std::vector<std::unique_ptr<Equilibrium_Relation>> added_equilibrium_relations =
 Mesh mymesh;
 Rock myrock;
 
+void updateVariables(){
+    for(auto fluid : characterized_fluids){
+	fluid->updateProperties(term);
+    };
+};
 
-
+void FluidPressureVaries(){
+    
+};
 
 void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _timedelta, double& _simulationtime){
     if(_timestamp == "continue" && _mytime<=_simulationtime){
