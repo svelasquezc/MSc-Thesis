@@ -12,90 +12,99 @@ class Fluid : protected Value_Reader{
     
  private:
     
-    int index;
-    std::string type;
-    std::vector<std::vector<double>> pressure;
-    std::vector<std::vector<double>> density;
-    std::vector<std::vector<double>> saturation;
-    std::vector<std::vector<double>> viscosity;
-    std::vector<std::vector<double>> volumetric_factor;
-    std::vector<std::vector<double>> potential;
-    std::vector<std::vector<double>> relative_permeability;
-    double standard_conditions_density;
-    std::unique_ptr<Measured_Property> measured_volumetric_factor;
-    std::unique_ptr<Measured_Property> measured_viscosity;
+    int _index;
+    std::string _type;
+    std::vector<std::vector<double>> _pressure;
+    std::vector<std::vector<double>> _density;
+    std::vector<std::vector<double>> _saturation;
+    std::vector<std::vector<double>> _viscosity;
+    std::vector<std::vector<double>> _volumetric_factor;
+    std::vector<std::vector<double>> _potential;
+    std::vector<std::vector<double>> _relative_permeability;
+    double _standard_conditions_density;
+    std::unique_ptr<Measured_Property> _measured_volumetric_factor;
+    std::unique_ptr<Measured_Property> _measured_viscosity;
 
  public:
     Fluid(){};
     void characterize(int& cells_number);
     void updateProperties(int& term);
     //void calculate(int& term, int& _cellindex);
-    void calculateVolumetricFactor(int& _term, int& _cellindex);
-    void calculateViscosity(int& _term, int& _cellindex);
-    const std::string print();
-    int getIndex();
-    void calculatePotential(int& _term, int& _cellindex, const double _gravity, const double _depth);
+    void volumetricFactor(int& _term, int& _cellindex);
+    void viscosity(int& _term, int& _cellindex);
+    const std::string& print() const;
+    const int& index() const;
+    void potential(int& _term, int& _cellindex, const double _gravity, const double _depth);
+    double pressure             (const int _term, const int _cell_index){return _pressure[_term][_cell_index];};             
+    double density              (const int _term, const int _cell_index){return _density[_term][_cell_index];};              
+    double saturation           (const int _term, const int _cell_index){return _saturation[_term][_cell_index];};           
+    double viscosity            (const int _term, const int _cell_index){return _viscosity[_term][_cell_index];};            
+    double volumetricFactor    (const int _term, const int _cell_index){return _volumetric_factor[_term][_cell_index];};    
+    double potential            (const int _term, const int _cell_index){return _potential[_term][_cell_index];};            
+    double relativePermeability(const int _term, const int _cell_index){return _relative_permeability[_term][_cell_index];};
+
+    
 };
 
-void Fluid::characterize(int& _cells_number){
+void Fluid::characterize(int& cells_number){
 
     std::ostringstream ref_name = std::ostringstream();
     std::ostringstream ref_value = std::ostringstream();
     std::ostringstream ss = std::ostringstream();
     
-    pressure              = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
-    density               = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
-    saturation            = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
-    viscosity             = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
-    volumetric_factor     = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
-    relative_permeability = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
-    potential             = std::vector<std::vector<double>>(1,std::vector<double>(_cells_number));
+    _pressure              = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _density               = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _saturation            = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _viscosity             = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _volumetric_factor     = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _relative_permeability = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _potential             = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
 
-    myRead(std::string("Please insert the type of fluid "), type, std::string("Please insert a valid input"));
+    myRead(std::string("Please insert the type of fluid "), _type, std::string("Please insert a valid input"));
     
     // Reading of measured properties (PVT Table)
-    ref_name << type << " Pressure";
-    ref_value << type << " Volumetric Factor";
-    measured_volumetric_factor = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
+    ref_name  << _type << " Pressure";
+    ref_value << _type << " Volumetric Factor";
+    _measured_volumetric_factor = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
     ref_value.str("");
     ref_value.clear();
     
-    ref_value << type << " Viscosity";
-    measured_viscosity = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
+    ref_value << _type << " Viscosity";
+    _measured_viscosity = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
     
-    measured_volumetric_factor->readMe();
-    measured_viscosity->readMe();
+    _measured_volumetric_factor->readMe();
+    _measured_viscosity->readMe();
     
     // Reading of standard conditions density
-    myRead(std::string("Please insert the standard conditions density for the fluid "), standard_conditions_density, std::string("Please insert a valid input"));
+    myRead(std::string("Please insert the standard conditions density for the fluid "), _standard_conditions_density, std::string("Please insert a valid input"));
     
     // Initial Conditions for the fluid
-    for(int cellindex=0; cellindex<_cells_number; ++cellindex){
+    for(int cellindex=0; cellindex<cells_number; ++cellindex){
         ss << "Please insert initial pressure for the "<< cellindex+1 << " cell [Pa]";
-        myRead(ss.str(), pressure[0][cellindex], std::string("Please insert a valid input"));
+        myRead(ss.str(), _pressure[0][cellindex], std::string("Please insert a valid input"));
         ss.str("");
         ss.clear();
         
     };
-    for(int cellindex=0; cellindex<_cells_number; ++cellindex){
+    for(int cellindex=0; cellindex<cells_number; ++cellindex){
         ss << "Please insert initial saturation for the "<< cellindex+1 << " cell [-]";
-        myRead(ss.str(), saturation[0][cellindex], std::string("Please insert a valid input"));
+        myRead(ss.str(), _saturation[0][cellindex], std::string("Please insert a valid input"));
         ss.str("");
         ss.clear();
     };
 };
 
 void Fluid::updateProperties(int& term){
-    pressure.push_back(pressure[term-1]);
-    density.push_back(density[term-1]);
-    saturation.push_back(saturation[term-1]);
-    viscosity.push_back(viscosity[term-1]);
-    volumetric_factor.push_back(volumetric_factor[term-1]);
-    relative_permeability.push_back(relative_permeability[term-1]);
-    potential.push_back(potential[term-1]);
+    _pressure.push_back             (_pressure[term-1]);
+    _potential.push_back            (_potential[term-1]);
+    _density.push_back              (_density[term-1]);
+    _saturation.push_back           (_saturation[term-1]);
+    _viscosity.push_back            (_viscosity[term-1]);
+    _volumetric_factor.push_back    (_volumetric_factor[term-1]);
+    _relative_permeability.push_back(_relative_permeability[term-1]);
 };
 
-void Fluid::calculateVolumetricFactor(int& _term, int& _cellindex){
+void Fluid::volumetricFactor(int& _term, int& _cellindex){
     /*
       Here we need to calculate the restrictions to the flow equations (Volume restriction and Capilarity)
 
@@ -105,26 +114,26 @@ void Fluid::calculateVolumetricFactor(int& _term, int& _cellindex){
 
     */
     //Properties Calculation
-    volumetric_factor[_term][_cellindex] =
-        measured_volumetric_factor->interpolate(pressure[_term][_cellindex]);
+    _volumetric_factor[_term][_cellindex] =
+        measured_volumetric_factor->interpolate(_pressure[_term][_cellindex]);
 };
 
-void Fluid::calculateViscosity(int& _term, int& _cellindex){
-    viscosity[_term][_cellindex] =
-        measured_viscosity->interpolate(pressure[_term][_cellindex]);
+void Fluid::viscosity(int& _term, int& _cellindex){
+    _viscosity[_term][_cellindex] =
+        measured_viscosity->interpolate(_pressure[_term][_cellindex]);
 };
 
-const std::string Fluid::print(){
-    return type;
+const std::string& Fluid::print() const{
+    return _type;
 };
 
-int Fluid::getIndex(){
-    return index;
+const int& Fluid::index() const{
+    return _index;
 };
 
-void Fluid::calculatePotential(int& _term, int& _cellindex, const double _gravity, const double _depth){
-    potential[_term][_cellindex] =
-        pressure[_term][_cellindex] - density[_term][_cellindex]*_gravity*_depth;
+void Fluid::potential(int& _term, int& _cellindex, const double gravity, const double depth){
+    _potential[_term][_cellindex] =
+        _pressure[_term][_cellindex] - _density[_term][_cellindex]*gravity*depth;
 };
 
 //void {density[_term][_cellindex] = standard_conditions_density;};

@@ -7,35 +7,37 @@
 
 class Cell{
  private:
-    int index;
+    int _index;
     
-    std::vector<Face> active_faces;
-    std::vector<int> numeration3D;
-    double Volume;
-    double depth;
+    std::vector<Face> _active_faces;
+    std::vector<int> _numeration3D;
+    double _volume;
+    double _depth;
  public:
-    int Number_of_active_faces;
-    Cell(int _index): index(_index){
-        numeration3D=std::vector<int>(3);
-        Number_of_active_faces=0;
-        active_faces = std::vector<Face>();
+    int _number_of_active_faces;
+    Cell(int index): _index(index){
+        _numeration_3d=std::vector<int>(3);
+        _number_of_active_faces=0;
+        _active_faces = std::vector<Face>();
     };
-    void setVolume(double _Volume){Volume=_Volume;};
-    void setVolume(double dz, double dy, double dx){Volume=dx*dy*dz;};
-    double getVolume(){return Volume;};
     
-    void setNumeration3D(int pos, int val){numeration3D[pos]=val;};
-    std::vector<int> getNumeration3D(){return numeration3D;};
+    void volume(double volume){_volume=volume;};
+    void volume(double dz, double dy, double dx){_volume=dx*dy*dz;};
+    const double volume() const {return _volume;};
     
-    void setDepth(double _depth){depth=_depth;};
-    double getDepth(){return depth;};
-    void pushFace(Face _face){
-        active_faces.push_back(_face);
+    void numeration3D(int pos, int val){_numeration3D[pos]=val;};
+    const std::vector<int>& numeration3D const(){return _numeration3D;};
+    
+    void depth(double depth){_depth=depth;};
+    const double& depth() const{return _depth;};
+    
+    void pushFace(Face face){
+        _active_faces.push_back(face);
     };
 };
 
-void Face::setNeighbor(Cell _cell){
-    neighbor_cell = std::make_shared<Cell> (_cell);
+void Face::setNeighbor(Cell cell){
+    neighbor_cell = std::make_shared<Cell> (cell);
 };
 
 #endif /* CELL_H */

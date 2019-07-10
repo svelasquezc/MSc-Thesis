@@ -28,7 +28,6 @@ class Mesh : protected Value_Reader{
     //int listCell(int index);
     int listCell(int posx, int posy, int posz);
     int listCell(std::vector<int> _Numeration);
-
 };
 
 Mesh::Mesh(){};

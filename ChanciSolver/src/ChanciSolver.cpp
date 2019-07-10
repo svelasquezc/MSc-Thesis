@@ -1,9 +1,6 @@
 
 #include <cmath>
 
-#include "Mesh.h"
-#include "Rock.h"
-#include "Equilibrium_Relation.h"
 #include "NewtonRaphson.h"
 
 std::string timestamp="";
@@ -16,25 +13,63 @@ int stencil[2] = {-1,1};
 int equilibrium_relations_quantity=0;
 constexpr double gravity=9.80665;
 int cells_number=0;
-const double machine_epsilon = sqrt(std::numeric_limits<double>::epsilon());
-const double relative_change_in_solution=1e-6;
+const double machine_epsilon = std::sqrt(std::numeric_limits<double>::epsilon());
+const double relative_change_in_residual=1e-6;
 
 std::vector<std::shared_ptr<Fluid>> characterized_fluids =
     std::vector<std::shared_ptr<Fluid>>();
 std::vector<std::unique_ptr<Equilibrium_Relation>> added_equilibrium_relations =
     std::vector<std::unique_ptr<Equilibrium_Relation>>();
 
-Mesh mymesh;
-Rock myrock;
+std::shared_ptr<Mesh> mymesh;
+std::shared_ptr<Rock> myrock;
 
-void updateVariables(){
-    for(auto fluid : characterized_fluids){
+void updateVariables(std::vector<std::shared_ptr<Fluid>>& _characterized_fluids){
+    for(auto fluid : _characterized_fluids){
 	fluid->updateProperties(term);
     };
 };
 
-void FluidPressureVaries(){
+double calculateAccumulation(const int _term, Fluid& _fluid, Cell& _cell, Rock& _rock){
+
+    double past_contribution=0;
+    double current_contribution=0;
+
+    const auto _cell_index = _cell.index();
     
+    for(auto equilibrium_relation : added_equilibrium_relations){
+        if(equilibrium_relation->receiverFluid()->index() == _fluid.index()){
+            
+            const auto contributor = equilibrium_relation->contributorFluid();
+            
+            past_contribution = past_contribution +
+                equilibrium_relation->partitionCoefficient(_term-1,_cell_index) *
+                (_rock.porosity(_term-1,_cell_index) * contributor->saturation(_term-1,_cell_index)
+                 / contributor->volumetricFactor(_term-1,_cell_index));
+
+            current_contribution = current_contribution +
+                equilibrium_relation->partitionCoefficient(_term,_cell_index) *
+                (_rock.porosity(_term,_cell_index) * contributor->saturation(_term,_cell_index)
+                 / contributor->volumetricFactor(_term,_cell_index));
+            
+        };
+    };
+
+    double accumulation= (_cell.getVolume()/timedelta) *
+        (((_rock.porosity(_term,_cell_index)*_fluid.saturation(_term,_cell_index)
+           /_fluid.volumetricFactor(_term,_cell_index)) + current_contribution)-
+        ((_rock.porosity(_term-1,_cell_index)*_fluid.saturation(_term-1,_cell_index)
+          /_fluid.volumetricFactor(_term-1,_cell_index)) + past_contribution));
+    
+    return accumulation;
+}
+
+//Change Event Name
+void FluidPressureVaries(std::string& _timestamp){
+    if(_timestamp == "stop"){
+        updateVariables(characterized_fluids);
+        
+    }
 };
 
 void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _timedelta, double& _simulationtime){
@@ -50,7 +85,7 @@ void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _t
 //Rock
 void launchTriggers(){
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
-    mymesh.appear(timestamp,stencil);
+    mymesh->appear(timestamp,stencil);
     
 };
 
@@ -68,9 +103,9 @@ void launchGeomodeler(){
     
     switch(option){
     case 1:
-        mymesh = Mesh();
-        mymesh.defineMesh();
-        cells_number = mymesh.getCellTotal();
+        mymesh = std::make_shared<Mesh>(Mesh());
+        mymesh->defineMesh();
+        cells_number = mymesh->getCellTotal();
         break;
     case 2:
         break;
@@ -88,8 +123,8 @@ void launchPetrophysicalEngineer(){
     
     switch(option){
     case 1:
-        myrock = Rock();
-        myrock.characterize(cells_number);
+        myrock = std::make_shared<Rock>(Rock());
+        myrock->characterize(cells_number);
         break;
     default:
         break;
