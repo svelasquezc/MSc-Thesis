@@ -14,14 +14,21 @@ class Rock : protected Value_Reader{
  public:
 
     Rock(){};
-    void characterize(int& _cells_number);
+    void characterize(const int& cells_number);
     void porosity(const int term, const int cell_index, const double pressure);
-    void updateProperties(int& _term);
+    
+    void updateProperties(const int& term);
 
-    const double& porosity (const int term, const int cells_number) const {return _porosity[term][cells_number];};
+    const double& porosity (const int term, const int cells_number) const {
+        return _porosity[term][cells_number];
+    };
+
+    const std::vector<double>& absolutePermeability(const int term, const int cells_number) const {
+        return _absolute_permeability[term][cells_number];
+    };
 };
 
-void Rock::characterize(int& cells_number){
+void Rock::characterize(const int& cells_number){
     
     std::ostringstream ss = std::ostringstream();
     const std::string axisnames[3]={"x", "y", "z"};
@@ -52,10 +59,11 @@ void Rock::characterize(int& cells_number){
             ss.clear();
         };
     };
-}
+};
 
-void updateProperties(int& term){
-
+void Rock::updateProperties(const int& term){
+    _absolute_permeability.push_back(_absolute_permeability[term-1]);
+    _porosity.push_back(_porosity[term-1]);
 };
 
 void Rock::porosity(const int term, const int cell_index, const double pressure){

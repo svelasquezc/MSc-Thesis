@@ -6,15 +6,21 @@
 #include "Face.h"
 
 class Cell{
+
+    using Faces_t = std::vector<Face>;
+    
  private:
     int _index;
     
-    std::vector<Face> _active_faces;
+    Faces_t _active_faces;
     std::vector<int> _numeration_3d;
     double _volume;
     double _depth;
     int _number_of_active_faces;
  public:
+
+    using Face_iterator = Faces_t::iterator;
+    using Face_const_iterator = Faces_t::const_iterator;
 
     Cell(int index): _index(index){
         _numeration_3d=std::vector<int>(3);
@@ -43,6 +49,13 @@ class Cell{
         _active_faces.push_back(face);
     };
 
+    Face_iterator begin() {return _active_faces.begin();};
+    Face_iterator end()   {return _active_faces.end();};
+
+    Face_const_iterator begin()  const {return _active_faces.begin();};
+    Face_const_iterator end()    const {return _active_faces.end();};
+    Face_const_iterator cbegin() const {return _active_faces.cbegin();};
+    Face_const_iterator cend()   const {return _active_faces.cend();};
     
 };
 

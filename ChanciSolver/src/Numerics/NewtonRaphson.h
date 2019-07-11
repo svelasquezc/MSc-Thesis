@@ -51,9 +51,12 @@ template<typename FlowFunction_t, typename AccumulationFunction_t>
     void NewtonRaphson<FlowFunction_t,AccumulationFunction_t>::iterate(const double relative_change_in_residual, const int term, const Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
     
     do{
-
+        //Residual calculation
         for(auto fluid : characterized_fluids){
-            
+            for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
+                //calculateProperties(term, fluid->index(), cell->index());
+                calculateResidual(term,cell);
+            }
         }
         
     }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > relative_change_in_residual);

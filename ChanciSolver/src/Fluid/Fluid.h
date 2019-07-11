@@ -35,7 +35,10 @@ class Fluid : protected Value_Reader{
     //sets
     void volumetricFactor(int& _term, int& _cellindex);
     void viscosity(int& _term, int& _cellindex);
-    void potential(int& _term, int& _cellindex, const double _gravity, const double _depth);
+    void potential(const int& _term, const int& _cellindex, const double _gravity, const double& depth);
+
+    void density(const int& term, const int& cell_index, const double density){_density[term][cell_index]=density;}
+    
     //gets
     const double& standardConditionsDensity() const {return _standard_conditions_density;};
     const double& pressure             (const int _term, const int _cell_index) const {return _pressure[_term][_cell_index];};             
@@ -134,7 +137,7 @@ const int& Fluid::index() const{
     return _index;
 };
 
-void Fluid::potential(int& _term, int& _cellindex, const double gravity, const double depth){
+void Fluid::potential(const int& _term, const int& _cellindex, const double gravity, const double& depth){
     _potential[_term][_cellindex] =
         _pressure[_term][_cellindex] - _density[_term][_cellindex]*gravity*depth;
 };

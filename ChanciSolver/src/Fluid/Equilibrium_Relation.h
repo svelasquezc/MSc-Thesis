@@ -14,9 +14,15 @@ class Equilibrium_Relation : Value_Reader{
  public:
     Equilibrium_Relation(){};
     void add(const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& MyFluids);
-    const std::shared_ptr<Fluid> contributorFluid() const {return _contributor_fluid;}
-    const std::shared_ptr<Fluid> receiverFluid()    const {return _receiver_fluid;}
-    double partitionCoefficient(const int _term, const int _cell_index){return _partition_coefficient[_term][_cell_index];};             
+    const std::shared_ptr<Fluid>& contributorFluid() const {return _contributor_fluid;}
+    const std::shared_ptr<Fluid>& receiverFluid()    const {return _receiver_fluid;}
+
+    const double& partitionCoefficient (const int& term, const int& cell_index) const {return _partition_coefficient[term][cell_index];};             
+
+    void partitionCoefficient(int& term, int& cell_index){
+        _partition_coefficient[term][cell_index] =
+            _measured_partition_coefficient->interpolate(_contributor_fluid->pressure(term,cell_index));
+    };
     
 };
 
@@ -76,6 +82,7 @@ void Equilibrium_Relation::add(const int fluids_quantity, std::vector<std::share
         
     };
     
-}
+};
+
 
 #endif /* EQUILIBRIUM_RELATION_H */
