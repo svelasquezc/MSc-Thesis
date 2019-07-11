@@ -8,55 +8,55 @@
 #include "Rock.h"
 #include "Equilibrium_Relation.h"
 
-template<typename FlowFunction, typename AccumulationFunction>
-class NewtonRaphson{
+template<typename FlowFunction_t, typename AccumulationFunction_t>
+    class NewtonRaphson{
  private:
     
-    typedef Eigen::SparseMatrix<double> SparseMat;
-    typedef Eigen::Triplet<double> Triplet;
+    typedef Eigen::SparseMatrix<double> SparseMat_t;
+    typedef Eigen::Triplet<double> Triplet_t;
     
-    Eigen::BiCGSTAB<SparseMat, Eigen::IncompleteLUT<double, int> > solver;
+    Eigen::BiCGSTAB<SparseMat_t, Eigen::IncompleteLUT<double, int> > _solver;
     
-    SparseMat jacobian;
-    Eigen::VectorXd residual;
-    Eigen::VectorXd initial_residual;
-    Eigen::VectorXd solutiondelta;
+    SparseMat_t _jacobian;
+    Eigen::VectorXd _residual;
+    Eigen::VectorXd _initial_residual;
+    Eigen::VectorXd _solution_delta;
 
-    FlowFunction calculateFlow;
-    AccumulationFunction calculateAccumulation;
+    FlowFunction_t _calculateFlow;
+    AccumulationFunction_t _calculateAccumulation;
 
     int iteration=0;
     
  public:
-    void NewtonRaphson(FlowFunction _calculateFlow, AccumulationFunction _calculateAccumulation) :
-    calculateFlow(_calculateFlow), calculateAccumulation(_calculateAccumulation){};
+    NewtonRaphson(FlowFunction_t calculateFlow, AccumulationFunction_t calculateAccumulation) :
+    _calculateFlow(calculateFlow), _calculateAccumulation(calculateAccumulation){};
     
-    void iterate(const double relative_change_in_residual, const int& _term, const Mesh& _mesh, std::vector<std::shared_ptr<Fluid>>& _characterized_fluids, Rock& _rock);
-    double calculateResidual(const int& _term, std::vector<std::shared_ptr<Fluid>>& _characterized_fluids, Mesh& _mesh, Rock& _rock);
+    void iterate(const double relative_change_in_residual, const int term, const Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock);
+    double calculateResidual(const int& _term, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Mesh& mesh, Rock& rock);
     void solve();
     void updateInteration(std::vector<double*> unknowns);
 };
 
-template<typename FlowFunction, typename AccumulationFunction>
-    void NewtonRaphson<FlowFunction, AccumulationFunction>::solve(){
-    solver.compute(jacobian);
-    solutiondelta = solver.solve(residual);
+template<typename FlowFunction_t, typename AccumulationFunction_t>
+    void NewtonRaphson<FlowFunction_t, AccumulationFunction_t>::solve(){
+    _solver.compute(_jacobian);
+    _solution_delta = _solver.solve(_residual);
 };
 
-template<typename FlowFunction, typename AccumulationFunction>
-void NewtonRaphson<FlowFunction, AccumulationFunction>::updateInteration(std::vector<double*> unknowns){
+template<typename FlowFunction_t, typename AccumulationFunction_t>
+    void NewtonRaphson<FlowFunction_t, AccumulationFunction_t>::updateInteration(std::vector<double*> unknowns){
     
 };
-template<typename FlowFunction, typename AccumulationFunction>
-void NewtonRaphson<FlowFunction,AccumulationFunction>::iterate(const double relative_change_in_residual, const int& _term, const Mesh& _mesh, std::vector<std::shared_ptr<Fluid>>& _characterized_fluids, Rock& _rock){
+template<typename FlowFunction_t, typename AccumulationFunction_t>
+    void NewtonRaphson<FlowFunction_t,AccumulationFunction_t>::iterate(const double relative_change_in_residual, const int term, const Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
     
     do{
 
-        for(auto fluid : _characterized_fluids){
+        for(auto fluid : characterized_fluids){
             
         }
         
-    }while(residual.squaredNorm()/initial_residual.squaredNorm() > relative_change_in_residual);
+    }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > relative_change_in_residual);
     
 };
 

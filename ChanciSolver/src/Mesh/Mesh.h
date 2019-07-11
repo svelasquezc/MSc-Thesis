@@ -67,49 +67,49 @@ void Mesh::appear(std::string& _timestamp, int stencil[2]){
             for(int axisy=0;axisy<cell_number[1];axisy++){
                 for(int axisx=0;axisx<cell_number[0];axisx++){
                     Cell myCell = Cell(index);
-                    myCell.setVolume(thickness[2][axisz], thickness[1][axisy], thickness[0][axisx]);
-                    myCell.setNumeration3D(0,axisx);
-                    myCell.setNumeration3D(1,axisy);
-                    myCell.setNumeration3D(2,axisz);
+                    myCell.volume(thickness[2][axisz], thickness[1][axisy], thickness[0][axisx]);
+                    myCell.numeration3D(0,axisx);
+                    myCell.numeration3D(1,axisy);
+                    myCell.numeration3D(2,axisz);
                     cells.push_back(myCell);
                     index++;
                 };
             };
         };
         int face_index=0;
-        for(auto Celli : cells){
+        for(auto celli : cells){
             
-            auto LocalNumeration = Celli.getNumeration3D();
+            auto local_numeration = celli.numeration3D();
             
             for(int axis=0; axis<3; axis++){
                 for(int direction=0;direction<2;direction++){
-                    LocalNumeration[axis]=LocalNumeration[axis]+stencil[direction];
-                    int neighbor_cell=listCell(LocalNumeration);
+                    local_numeration[axis]=local_numeration[axis]+stencil[direction];
+                    int neighbor_cell=listCell(local_numeration);
                     
-                    LocalNumeration[axis]=LocalNumeration[axis]-stencil[direction];
+                    local_numeration[axis]=local_numeration[axis]-stencil[direction];
                     
                     if(neighbor_cell > -1){
                         
-                        Celli.Number_of_active_faces=Celli.Number_of_active_faces+1;
+                        celli.numberOfActiveFaces(celli.numberOfActiveFaces()+1);
                         Face face = Face();
                         switch(axis){
                         case 0:
-                            face.setArea(thickness[1][LocalNumeration[1]]*thickness[2][LocalNumeration[2]]);
-                            face.setOrientation(0);
+                            face.area(thickness[1][local_numeration[1]]*thickness[2][local_numeration[2]]);
+                            face.orientation(0);
                             break;
                         case 1:
-                            face.setArea(thickness[0][LocalNumeration[0]]*thickness[2][LocalNumeration[2]]);
-                            face.setOrientation(1);
+                            face.area(thickness[0][local_numeration[0]]*thickness[2][local_numeration[2]]);
+                            face.orientation(1);
                             break;
                         case 2:
-                            face.setArea(thickness[0][LocalNumeration[0]]*thickness[1][LocalNumeration[1]]);
-                            face.setOrientation(2);
+                            face.area(thickness[0][local_numeration[0]]*thickness[1][local_numeration[1]]);
+                            face.orientation(2);
                             break;
                         }
-                        face.setNeighbor(cells[neighbor_cell]);
+                        face.neighbor(cells[neighbor_cell]);
                         face_index++;
-                        face.setIndex(face_index);
-                        Celli.pushFace(face);
+                        face.index(face_index);
+                        celli.pushFace(face);
                     }
                     
                 }

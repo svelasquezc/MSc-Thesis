@@ -30,32 +30,33 @@ void updateVariables(std::vector<std::shared_ptr<Fluid>>& _characterized_fluids)
     };
 };
 
-double calculateAccumulation(const int _term, Fluid& _fluid, Cell& _cell, Rock& _rock){
+double calculateAccumulation(const int& _term, Fluid& _fluid, Cell& _cell, Rock& _rock){
 
     double past_contribution=0;
     double current_contribution=0;
 
     const auto _cell_index = _cell.index();
     
-    for(auto equilibrium_relation : added_equilibrium_relations){
-        if(equilibrium_relation->receiverFluid()->index() == _fluid.index()){
+    for(auto equilibrium_relation = added_equilibrium_relations.begin();
+        equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
+        if((equilibrium_relation->get())->receiverFluid()->index() == _fluid.index()){
             
-            const auto contributor = equilibrium_relation->contributorFluid();
+            const auto contributor = (equilibrium_relation->get())->contributorFluid();
             
             past_contribution = past_contribution +
-                equilibrium_relation->partitionCoefficient(_term-1,_cell_index) *
+                (equilibrium_relation->get())->partitionCoefficient(_term-1,_cell_index) *
                 (_rock.porosity(_term-1,_cell_index) * contributor->saturation(_term-1,_cell_index)
                  / contributor->volumetricFactor(_term-1,_cell_index));
 
             current_contribution = current_contribution +
-                equilibrium_relation->partitionCoefficient(_term,_cell_index) *
+                (equilibrium_relation->get())->partitionCoefficient(_term,_cell_index) *
                 (_rock.porosity(_term,_cell_index) * contributor->saturation(_term,_cell_index)
                  / contributor->volumetricFactor(_term,_cell_index));
             
         };
     };
 
-    double accumulation= (_cell.getVolume()/timedelta) *
+    double accumulation= (_cell.volume()/timedelta) *
         (((_rock.porosity(_term,_cell_index)*_fluid.saturation(_term,_cell_index)
            /_fluid.volumetricFactor(_term,_cell_index)) + current_contribution)-
         ((_rock.porosity(_term-1,_cell_index)*_fluid.saturation(_term-1,_cell_index)

@@ -8,18 +8,23 @@ class Cell;
 
 class Face{
  private:
-    int index;
-    std::shared_ptr<Cell> neighbor_cell;
-    double area;
-    int orientation;
+    int _index;
+    std::shared_ptr<Cell> _neighbor_cell;
+    double _area;
+    int _orientation;
  public:
 
-    void setArea(double _area) {area=_area;};
-    void setOrientation(double _orientation) {orientation=_orientation;};
-    void setIndex(int _index){index = _index;};
-    double getArea(){return area;};
-    int getOrientation(){return orientation;};
-    void setNeighbor(Cell _cell);    
+    void area(double area) {_area=area;};
+    const double& area() const {return _area;};
+    
+    void orientation(double orientation) {_orientation=orientation;};
+    const int& orientation() const {return _orientation;};
+    
+    void index(int index){_index = index;};
+    const int& index() const {return _index;};
+    
+    void neighbor(Cell _cell);
+    const std::shared_ptr<Cell>& neighbor() const {return _neighbor_cell;};
 };
 
 #endif /* FACE_H */
