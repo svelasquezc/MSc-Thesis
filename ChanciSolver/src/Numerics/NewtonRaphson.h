@@ -22,7 +22,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     int _iteration=0;
 
     const double _machine_epsilon = std::sqrt(std::numeric_limits<double>::epsilon());
-    const double _relative_change_in_residual=1e-6;
+    const double _relative_change_in_residual=1e-4;
 
     std::vector<Tripletd_t> _non_zeros;
     
@@ -31,9 +31,9 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     Eigen::VectorXd _initial_residual;
     Eigen::VectorXd _solution_delta;
 
-    PropertiesFunction_t _calculateProperties;
-    FlowFunction_t _calculateFlow;
-    AccumulationFunction_t _calculateAccumulation;
+    PropertiesFunction_t *_calculateProperties;
+    FlowFunction_t *_calculateFlow;
+    AccumulationFunction_t *_calculateAccumulation;
     
     const inline int locate(int input_selector, int input_index){
         return _cells_number*input_selector + input_index;
@@ -71,7 +71,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         _solution_delta = _solver.solve(_residual);
     }
     
-    void iterate(const double relative_change_in_residual, const int term, const Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
+    void iterate(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
 
         int residual_selector;
         int cell_index;
@@ -88,8 +88,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                 for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
                 
                     cell_index = cell->index();
-                    _calculateProperties(term, *residual_fluid, cell_index, rock);
-                    residual(locate(residual_selector, cell_index)) = calculateResidual(term,residual_fluid,cell);
+                    _calculateProperties(term, *residual_fluid, *cell, rock);
+                    residual(locate(residual_selector, cell_index)) = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
                 }
             }
 
@@ -109,7 +109,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         cell_index = cell->index();
                         
                         modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
-                        _calculateProperties(term, residual_selector, cell_index, rock);
+                        _calculateProperties(term, *residual_fluid, *cell, rock);
                         
                         for (auto face = cell->begin(); face!=cell->end(); ++face){
                             
@@ -117,7 +117,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                             int neighbor_index = neighbor_cell->index();
                             int row = locate(residual_selector, neighbor_index);
                             int col = locate(variable_selector, cell_index);
-                            modified_residual = calculateResidual(term,*residual_fluid,*neighbor_cell);
+                            modified_residual = calculateResidual(term,*residual_fluid, mesh,*neighbor_cell,rock);
 
                             double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
                             if(derivative != 0){
@@ -127,7 +127,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         
                         int row = locate(residual_selector, cell_index);
                         int col = locate(variable_selector, cell_index);
-                        modified_residual = calculateResidual(term,*residual_fluid,*cell);
+                        modified_residual = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
 
                         double derivative = (modified_residual - _residual(cell_index))/_machine_epsilon;
                         if(derivative != 0){
@@ -136,7 +136,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                         modified_epsilon = -_machine_epsilon;
                         modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
-                        _calculateProperties(term, residual_selector, cell_index, rock);
+                        _calculateProperties(term, *residual_fluid, *cell, rock);
                     };
                     
                 };
@@ -148,7 +148,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             //Update();
             _non_zeros.clear();
         
-        }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > relative_change_in_residual);
+        }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > _relative_change_in_residual);
     
     };
     

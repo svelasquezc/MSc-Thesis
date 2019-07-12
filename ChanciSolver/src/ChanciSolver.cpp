@@ -194,6 +194,12 @@ double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face
 
     return flow;
 };
+
+using BlackOilNewton = NewtonRaphson<decltype(calculateProperties), decltype(calculateFlow), decltype(calculateAccumulation)>;
+
+BlackOilNewton my_newton(calculateProperties,calculateFlow,calculateAccumulation);
+
+
 //Change Event Name
 void FluidPressureVaries(std::string& _timestamp){
     if(_timestamp == "stop"){
