@@ -38,6 +38,9 @@ class Fluid : protected Value_Reader{
     void potential(const int& _term, const int& _cellindex, const double _gravity, const double& depth);
 
     void density(const int& term, const int& cell_index, const double density){_density[term][cell_index]=density;}
+    void pressure(const int& term, const int& cell_index, const double pressure){_pressure[term][cell_index]=pressure;}
+
+    void saturation(const int& term, const int& cell_index, const double saturation){_saturation[term][cell_index]=saturation;}
     
     //gets
     const double& standardConditionsDensity() const {return _standard_conditions_density;};

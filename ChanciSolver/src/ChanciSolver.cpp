@@ -1,6 +1,3 @@
-
-#include <cmath>
-
 #include "NewtonRaphson.h"
 
 std::string timestamp="";
@@ -13,8 +10,6 @@ int stencil[2] = {-1,1};
 int equilibrium_relations_quantity=0;
 constexpr double gravity=9.80665;
 int cells_number=0;
-const double machine_epsilon = std::sqrt(std::numeric_limits<double>::epsilon());
-const double relative_change_in_residual=1e-6;
 
 std::vector<std::shared_ptr<Fluid>> characterized_fluids =
     std::vector<std::shared_ptr<Fluid>>();
@@ -32,44 +27,6 @@ void updateVariables(std::vector<std::shared_ptr<Fluid>>& characterized_fluids, 
 	fluid->updateProperties(term);
     };
     
-};
-
-double calculateAccumulation(const int& term, Fluid& fluid, Cell& cell, Rock& rock){
-
-    double past_contribution=0;
-    double current_contribution=0;
-
-    const auto cell_index = cell.index();
-    
-    for(auto equilibrium_relation = added_equilibrium_relations.begin();
-        equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
-        
-        if((equilibrium_relation->get())->receiverFluid()->index() == fluid.index()){
-            
-            const auto contributor = (equilibrium_relation->get())->contributorFluid();
-
-            double past_coef = (equilibrium_relation->get())->partitionCoefficient(term-1,cell_index);
-            
-            past_contribution = past_contribution +
-                 past_coef * (rock.porosity(term-1,cell_index) * contributor->saturation(term-1,cell_index)
-                 / contributor->volumetricFactor(term-1,cell_index));
-
-            double curr_coef = (equilibrium_relation->get())->partitionCoefficient(term,cell_index);
-            
-            current_contribution = current_contribution +
-                curr_coef * (rock.porosity(term,cell_index) * contributor->saturation(term,cell_index)
-                 / contributor->volumetricFactor(term,cell_index));
-            
-        };
-    };
-
-    double accumulation = (cell.volume()/timedelta) *
-        (((rock.porosity(term,cell_index)*fluid.saturation(term,cell_index)
-           /fluid.volumetricFactor(term,cell_index)) + current_contribution)-
-        ((rock.porosity(term-1,cell_index)*fluid.saturation(term-1,cell_index)
-          /fluid.volumetricFactor(term-1,cell_index)) + past_contribution));
-    
-    return accumulation;
 };
 
 void calculateProperties(const int& term, Fluid& fluid, Cell& cell, Rock& rock){
@@ -112,9 +69,53 @@ void calculateProperties(const int& term, Fluid& fluid, Cell& cell, Rock& rock){
     
 };
 
+double calculateAccumulation(const int& term, Fluid& fluid, Cell& cell, Rock& rock){
+
+    double past_contribution=0;
+    double current_contribution=0;
+
+    const auto cell_index = cell.index();
+    
+    for(auto equilibrium_relation = added_equilibrium_relations.begin();
+        equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
+        
+        if((equilibrium_relation->get())->receiverFluid()->index() == fluid.index()){
+            
+            const auto contributor = (equilibrium_relation->get())->contributorFluid();
+
+            double past_coef = (equilibrium_relation->get())->partitionCoefficient(term-1,cell_index);
+            
+            past_contribution = past_contribution +
+                past_coef * (rock.porosity(term-1,cell_index) * contributor->saturation(term-1,cell_index)
+                             / contributor->volumetricFactor(term-1,cell_index));
+
+            double curr_coef = (equilibrium_relation->get())->partitionCoefficient(term,cell_index);
+            
+            current_contribution = current_contribution +
+                curr_coef * (rock.porosity(term,cell_index) * contributor->saturation(term,cell_index)
+                             / contributor->volumetricFactor(term,cell_index));
+            
+        };
+    };
+
+    double accumulation = (cell.volume()/timedelta) *
+        (((rock.porosity(term,cell_index)*fluid.saturation(term,cell_index)
+           /fluid.volumetricFactor(term,cell_index)) + current_contribution)-
+         ((rock.porosity(term-1,cell_index)*fluid.saturation(term-1,cell_index)
+           /fluid.volumetricFactor(term-1,cell_index)) + past_contribution));
+    
+    return accumulation;
+};
+
 double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face& face, Rock& rock){
     
-    double direction = face.orientation();
+    auto harmonic_average = [](double cell_property, double neighbor_property){
+        return 1.0/((1/cell_property) + (1/neighbor_property));
+    };
+
+    double flow=0;
+    
+    int direction = face.orientation();
 
     const auto neighbor_cell = face.neighbor();
     
@@ -130,12 +131,69 @@ double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face
     double porous_volume = rock.porosity(term, cell_index)*cell.volume();
     double neighbor_porous_volume = rock.porosity(term, neighbor_axis)*neighbor_cell->volume();
 
-    double shape_factor = face.area()*rock.absolutePermeability(term, cell_index)/length_delta;
-    double neighbor_shape_factor = face.area()*rock.absolutePermeability(term, neighbor_index)/neighbor_length_delta;
+    // here is corrected the shape_factor calculation, review the preconceptual schema...
+    double shape_factor = face.area()*rock.absolutePermeability(term, cell_index)[direction]/length_delta;
+    double neighbor_shape_factor = face.area()*rock.absolutePermeability(term, neighbor_index)[direction]/neighbor_length_delta;
 
+    double face_volumetric_factor = (fluid.volumetricFactor(term, cell_index)*porous_volume +
+                                     fluid.volumetricFactor(term, neighbor_index)*neighbor_porous_volume) /
+        (porous_volume + neighbor_porous_volume);
+
+    double face_viscosity = (fluid.viscosity(term, cell_index)*porous_volume +
+                             fluid.viscosity(term, neighbor_index)*neighbor_porous_volume) /
+        (porous_volume + neighbor_porous_volume);
+
+    double face_shape_factor = 2*harmonic_average(shape_factor, neighbor_shape_factor);
+
+    double face_relative_permeability=1;
     
-};
+    //Upwind!!!!
+    if(fluid.potential(term, cell_index) >= fluid.potential(term, neighbor_index)){
+        face_relative_permeability = fluid.relativePermeability(term, cell_index);
+    }else{
+        face_relative_permeability = fluid.relativePermeability(term, neighbor_index);
+    };
 
+    double face_transmissivity = face_shape_factor * face_relative_permeability /
+        (face_volumetric_factor * face_viscosity);
+
+    flow = flow + face_transmissivity*(fluid.potential(term, cell_index) - fluid.potential(term, neighbor_index));
+
+    for(auto equilibrium_relation = added_equilibrium_relations.begin();
+        equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
+        
+        if((equilibrium_relation->get())->receiverFluid()->index() == fluid.index()){
+
+            const auto contributor = (equilibrium_relation->get())->contributorFluid();
+            
+            double face_volumetric_factor = (contributor->volumetricFactor(term, cell_index)*porous_volume +
+                                             contributor->volumetricFactor(term, neighbor_index)*neighbor_porous_volume) / (porous_volume + neighbor_porous_volume);
+
+            double face_viscosity = (contributor->viscosity(term, cell_index)*porous_volume +
+                                     contributor->viscosity(term, neighbor_index)*neighbor_porous_volume) /
+                (porous_volume + neighbor_porous_volume);
+
+            //Upwind!!!!
+            if(contributor->potential(term, cell_index) >= contributor->potential(term, neighbor_index)){
+                face_relative_permeability = contributor->relativePermeability(term, cell_index);
+            }else{
+                face_relative_permeability = contributor->relativePermeability(term, neighbor_index);
+            };
+
+            double face_partition_coefficient =
+                ((equilibrium_relation->get())->partitionCoefficient(term, cell_index)*porous_volume +
+                 (equilibrium_relation->get())->partitionCoefficient(term, neighbor_index)*neighbor_porous_volume) / (porous_volume + neighbor_porous_volume);
+            
+            double face_transmissivity = face_shape_factor * face_relative_permeability /
+                (face_volumetric_factor * face_viscosity);
+
+            flow = flow + face_partition_coefficient*face_transmissivity*
+                (contributor->potential(term, cell_index) - contributor->potential(term, neighbor_index));
+        };
+    };
+
+    return flow;
+};
 //Change Event Name
 void FluidPressureVaries(std::string& _timestamp){
     if(_timestamp == "stop"){
@@ -214,12 +272,12 @@ void launchFluidsEngineer(){
     switch(option){
     case 1:
         characterized_fluids.push_back(std::make_shared<Fluid>(Fluid()));
-	(--(characterized_fluids.end()))->get()->characterize(cells_number);
-	++fluids_quantity;
+        (--(characterized_fluids.end()))->get()->characterize(cells_number);
+        ++fluids_quantity;
         break;
     case 2:
-	added_equilibrium_relations.push_back(std::make_unique<Equilibrium_Relation>());
-	(--(added_equilibrium_relations.end()))->get()->add(fluids_quantity,characterized_fluids);
+        added_equilibrium_relations.push_back(std::make_unique<Equilibrium_Relation>());
+        (--(added_equilibrium_relations.end()))->get()->add(fluids_quantity,characterized_fluids);
         break;
     default:
         break;
