@@ -21,52 +21,55 @@ std::shared_ptr<Rock> myrock;
 
 void updateVariables(std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
     
-    rock.updateProperties(term);
-    
     for(auto fluid : characterized_fluids){
-	fluid->updateProperties(term);
+	    fluid->updateProperties(term);
     };
-    
+
+    for(auto equilibrium_relation : added_equilibrium_relations){
+	    equilibrium_relation->updateProperties(term);
+    };
+
+    rock.updateProperties(term);
 };
 
-void calculateProperties(const int& term, Fluid& fluid, Cell& cell, Rock& rock){
+void calculateProperties(const int& term, Cell& cell, Rock& rock){
 
     const auto cell_index = cell.index();
-    
-    if(fluid.print() == "Oil"){
-        rock.porosity(term, cell_index, fluid.pressure(term, cell_index));
-    };
-
-    fluid.volumetricFactor(term, cell_index);
-    fluid.viscosity(term, cell_index);
-
-    //Calculate density
-
-    double density_contribution = fluid.standardConditionsDensity();
-    
-    for(auto equilibrium_relation = added_equilibrium_relations.begin();
-        equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
-        
-        if((equilibrium_relation->get())->contributorFluid()->index() == fluid.index()){
-            
-            const auto receiver = (equilibrium_relation->get())->receiverFluid();
-            // I suppose this should interpolate the partition coefficient
-            // to the contributor fluid pressure
-            (equilibrium_relation->get())->partitionCoefficient(term,cell_index);
-
-            density_contribution = density_contribution + 
-                (equilibrium_relation->get())->partitionCoefficient(term,cell_index) *
-                receiver->standardConditionsDensity();
-            
+    for(auto fluid : characterized_fluids){
+        if(fluid->print() == "Oil"){
+            rock.porosity(term, cell_index, fluid->pressure(term, cell_index));
         };
-    };
 
-    density_contribution = density_contribution/fluid.volumetricFactor(term, cell_index);
+        fluid->volumetricFactor(term, cell_index);
+        fluid->viscosity(term, cell_index);
 
-    fluid.density(term, cell_index, density_contribution);
-    
-    fluid.potential(term, cell_index, gravity, cell.depth());
-    
+        //Calculate density
+
+        double density_contribution = fluid->standardConditionsDensity();
+        
+        for(auto equilibrium_relation = added_equilibrium_relations.begin();
+            equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
+            
+            if((equilibrium_relation->get())->contributorFluid()->index() == fluid->index()){
+                
+                const auto receiver = (equilibrium_relation->get())->receiverFluid();
+                // I suppose this should interpolate the partition coefficient
+                // to the contributor fluid pressure
+                (equilibrium_relation->get())->partitionCoefficient(term,cell_index);
+
+                density_contribution = density_contribution + 
+                    (equilibrium_relation->get())->partitionCoefficient(term,cell_index) *
+                    receiver->standardConditionsDensity();
+                
+            };
+        };
+
+        density_contribution = density_contribution/fluid->volumetricFactor(term, cell_index);
+
+        fluid->density(term, cell_index, density_contribution);
+        
+        fluid->potential(term, cell_index, gravity, cell.depth());
+    };        
 };
 
 double calculateAccumulation(const int& term, Fluid& fluid, Cell& cell, Rock& rock){

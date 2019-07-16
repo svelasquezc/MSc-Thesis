@@ -24,6 +24,9 @@ class Equilibrium_Relation : Value_Reader{
             _measured_partition_coefficient->interpolate(_contributor_fluid->pressure(term,cell_index));
     };
     
+    void updateProperties(const int& term){
+        _partition_coefficient.push_back(_partition_coefficient[term-1]);
+    }
 };
 
 void Equilibrium_Relation::add(const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& MyFluids){

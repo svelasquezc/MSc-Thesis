@@ -41,6 +41,8 @@ class Fluid : protected Value_Reader{
     void pressure(const int& term, const int& cell_index, const double pressure){_pressure[term][cell_index]=pressure;}
 
     void saturation(const int& term, const int& cell_index, const double saturation){_saturation[term][cell_index]=saturation;}
+
+    void relativePermeability(const int& term, const int& cell_index, const double relative_permeability){_relative_permeability[term][cell_index]=relative_permeability;}
     
     //gets
     const double& standardConditionsDensity() const {return _standard_conditions_density;};
