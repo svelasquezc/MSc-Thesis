@@ -13,8 +13,8 @@ class Fluid : protected Value_Reader{
  private:
     
     int _index;
-    static int _count_of_principals = 0;
-    static int _count_of_fluids     = 0;
+    static int _count_of_principals;
+    static int _count_of_fluids    ;
     std::string _type;
     std::vector<std::vector<double>> _pressure;
     std::vector<std::vector<double>> _density;
@@ -58,8 +58,8 @@ class Fluid : protected Value_Reader{
     const double& relativePermeability (const int _term, const int _cell_index) const {return _relative_permeability[_term][_cell_index];};
     const bool  & principal            ()                                       const {return _principal;};
     
-    static const int& countOfPrincipals()                                       const {return _count_of_principals;};
-    static const int& countOfFluids    ()                                       const {return _count_of_fluids;};
+    static const int& countOfPrincipals(){return _count_of_principals;};
+    static const int& countOfFluids    (){return _count_of_fluids;};
     
 };
 

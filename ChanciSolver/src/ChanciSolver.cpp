@@ -4,6 +4,8 @@ std::string timestamp="";
 double mytime=0;
 double simulationtime = 60;
 double timedelta=1;
+int Fluid::_count_of_principals=0;
+int Fluid::_count_of_fluids=0;
 int term=0;
 int fluids_quantity=0;
 int stencil[2] = {-1,1};
@@ -25,8 +27,11 @@ void updateVariables(std::vector<std::shared_ptr<Fluid>>& characterized_fluids, 
 	    fluid->updateProperties(term);
     };
 
-    for(auto equilibrium_relation : added_equilibrium_relations){
-	    equilibrium_relation->updateProperties(term);
+    for(auto equilibrium_relation = added_equilibrium_relations.begin();
+            equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
+        
+        (equilibrium_relation->get())->updateProperties(term);
+            
     };
 
     rock.updateProperties(term);
