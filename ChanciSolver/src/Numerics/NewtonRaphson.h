@@ -48,7 +48,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         
         const int cell_index = cell.index();
             
-        if(fluid.print() == "Oil"){
+        if(fluid.principal()){
             fluid.pressure(term, cell_index, fluid.pressure(term, cell_index)+modified_epsilon);
         }else{
             fluid.saturation(term, cell_index, fluid.saturation(term, cell_index)+modified_epsilon);
@@ -88,7 +88,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                 for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
                 
                     cell_index = cell->index();
-                    _calculateProperties(term, *residual_fluid, *cell, rock);
+                    _calculateProperties(term, *cell, rock);
                     residual(locate(residual_selector, cell_index)) = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
                 }
             }
@@ -109,7 +109,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         cell_index = cell->index();
                         
                         modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
-                        _calculateProperties(term, *residual_fluid, *cell, rock);
+                        _calculateProperties(term, *cell, rock);
                         
                         for (auto face = cell->begin(); face!=cell->end(); ++face){
                             
@@ -136,7 +136,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                         modified_epsilon = -_machine_epsilon;
                         modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
-                        _calculateProperties(term, *residual_fluid, *cell, rock);
+                        _calculateProperties(term, *cell, rock);
                     };
                     
                 };
@@ -145,13 +145,36 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
             _jacobian.setFromTriplets(_non_zeros.begin(), _non_zeros.end());
             solve();
-            //Update();
+            update(term, mesh, characterized_fluids);
             _non_zeros.clear();
         
         }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > _relative_change_in_residual);
     
     };
     
+    void update(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
+        int cell_index;
+        int residual_selector;
+        int row;
+
+        for(auto fluid : characterized_fluids){
+
+            residual_selector = fluid->index();
+            
+            for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
+
+                cell_index = cell->index();
+                row = locate(residual_selector,cell_index);
+
+                if(fluid->principal()){
+                    fluid->pressure(term, cell_index, fluid->pressure(term, cell_index)+_solution_delta(row));
+                }else{
+                    fluid->saturation(term, cell_index, fluid->saturation(term, cell_index)+_solution_delta(row));
+                };
+            };
+        };
+    };
+
 };
 
 

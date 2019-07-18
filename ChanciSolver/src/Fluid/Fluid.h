@@ -13,6 +13,8 @@ class Fluid : protected Value_Reader{
  private:
     
     int _index;
+    static int _count_of_principals = 0;
+    static int _count_of_fluids     = 0;
     std::string _type;
     std::vector<std::vector<double>> _pressure;
     std::vector<std::vector<double>> _density;
@@ -24,6 +26,7 @@ class Fluid : protected Value_Reader{
     double _standard_conditions_density;
     std::unique_ptr<Measured_Property> _measured_volumetric_factor;
     std::unique_ptr<Measured_Property> _measured_viscosity;
+    mutable bool _principal=false;
 
  public:
     Fluid(){};
@@ -53,7 +56,10 @@ class Fluid : protected Value_Reader{
     const double& volumetricFactor     (const int _term, const int _cell_index) const {return _volumetric_factor[_term][_cell_index];};    
     const double& potential            (const int _term, const int _cell_index) const {return _potential[_term][_cell_index];};            
     const double& relativePermeability (const int _term, const int _cell_index) const {return _relative_permeability[_term][_cell_index];};
-
+    const bool  & principal            ()                                       const {return _principal;};
+    
+    static const int& countOfPrincipals()                                       const {return _count_of_principals;};
+    static const int& countOfFluids    ()                                       const {return _count_of_fluids;};
     
 };
 
@@ -103,6 +109,20 @@ void Fluid::characterize(int& cells_number){
         ss.str("");
         ss.clear();
     };
+
+    if(_count_of_principals < 1) {
+        bool aux_principal=false;
+        myRead(std::string("Please insert 1 or 0 for principal or not principal fluid (bool) "), aux_principal, std::string("Please insert a valid input"));
+        _principal=aux_principal;
+        if(_principal){
+            ++_count_of_principals;
+        }
+    }else{
+        _principal=false;
+    };
+
+    _index = _count_of_fluids;
+    ++_count_of_fluids;
 };
 
 void Fluid::updateProperties(int& term){

@@ -35,9 +35,23 @@ void updateVariables(std::vector<std::shared_ptr<Fluid>>& characterized_fluids, 
 void calculateProperties(const int& term, Cell& cell, Rock& rock){
 
     const auto cell_index = cell.index();
+
+    double remaining_saturation = 1.0;
+
     for(auto fluid : characterized_fluids){
-        if(fluid->print() == "Oil"){
+
+        if(fluid->principal()){
             rock.porosity(term, cell_index, fluid->pressure(term, cell_index));
+        }else{
+            remaining_saturation = remaining_saturation - fluid->saturation(term, cell_index);
+        };
+
+    };
+
+    for(auto fluid : characterized_fluids){
+
+        if(fluid->principal()){
+            fluid->saturation(term, cell_index, remaining_saturation);
         };
 
         fluid->volumetricFactor(term, cell_index);
@@ -112,7 +126,7 @@ double calculateAccumulation(const int& term, Fluid& fluid, Cell& cell, Rock& ro
 
 double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face& face, Rock& rock){
     
-    auto harmonic_average = [](double cell_property, double neighbor_property){
+    auto harmonicAverage = [](double cell_property, double neighbor_property){
         return 1.0/((1/cell_property) + (1/neighbor_property));
     };
 
@@ -146,7 +160,7 @@ double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face
                              fluid.viscosity(term, neighbor_index)*neighbor_porous_volume) /
         (porous_volume + neighbor_porous_volume);
 
-    double face_shape_factor = 2*harmonic_average(shape_factor, neighbor_shape_factor);
+    double face_shape_factor = 2*harmonicAverage(shape_factor, neighbor_shape_factor);
 
     double face_relative_permeability=1;
     
@@ -224,10 +238,6 @@ void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _t
 void launchTriggers(){
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
     mymesh->appear(timestamp,stencil);
-    
-};
-
-void calculateProperties(int& _term, int& _cell_index, int& _fluid_index){
     
 };
 

@@ -12,17 +12,15 @@
 
 class Mesh : protected Value_Reader{
     
-    using Cells_t = std::vector<Cell>;
-    
  private:
     
+    using Cells_t = std::vector<Cell>;
     int _dimension;
     std::vector<int> _cell_number = std::vector<int>(3);
     int _cell_total;
     std::vector<std::vector<double>> _thickness;
     mutable bool _defined=false;
     Cells_t _cells;
-    
     
  public:
     
