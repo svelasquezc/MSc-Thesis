@@ -10,12 +10,20 @@
 
 class Measured_Property : protected Value_Reader{
  private:
+
+    using Measures_t = std::map<double,double>;
+    
+    
     std::string _reference_measure_name;
     std::string _measured_value_name;
     int _number_of_measures;
-    std::map<double,double> _taken_measures;
+    Measures_t _taken_measures;
     
  public:
+    
+    using Measures_iterator = Measures_t::iterator;
+    using Measures_const_iterator = Measures_t::const_iterator;
+    
  Measured_Property(std::string reference_measure_name, std::string measured_value_name):
     _reference_measure_name(reference_measure_name), _measured_value_name(measured_value_name)
     {
@@ -23,6 +31,14 @@ class Measured_Property : protected Value_Reader{
     };
     void readMe();
     double interpolate(double reference_value);
+
+    Measures_iterator begin() {return _taken_measures.begin();};
+    Measures_iterator end()   {return _taken_measures.end();};
+
+    Measures_const_iterator begin()  const {return _taken_measures.begin();};
+    Measures_const_iterator end()    const {return _taken_measures.end();};
+    Measures_const_iterator cbegin() const {return _taken_measures.cbegin();};
+    Measures_const_iterator cend()   const {return _taken_measures.cend();};
 };
 
 void Measured_Property::readMe(){
@@ -51,7 +67,7 @@ void Measured_Property::readMe(){
 };
 /*
   This Function implements Linear interpolation in the taken_measures map
- */
+*/
 double Measured_Property::interpolate(double reference_value){
 
     auto great_it = _taken_measures.upper_bound(reference_value);

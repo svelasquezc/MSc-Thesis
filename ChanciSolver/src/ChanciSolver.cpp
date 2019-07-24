@@ -1,4 +1,5 @@
 #include "NewtonRaphson.h"
+#include "Interfluid_Interaction.h"
 
 std::string timestamp="";
 double mytime=0;
@@ -18,23 +19,43 @@ std::vector<std::shared_ptr<Fluid>> characterized_fluids =
 std::vector<std::unique_ptr<Equilibrium_Relation>> added_equilibrium_relations =
     std::vector<std::unique_ptr<Equilibrium_Relation>>();
 
+std::vector<std::unique_ptr<Interfluid_Interaction>> added_interfluid_interactions =
+    std::vector<std::unique_ptr<Interfluid_Interaction>>();
+
 std::shared_ptr<Mesh> mymesh;
 std::shared_ptr<Rock> myrock;
 
 void updateVariables(std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
     
     for(auto fluid : characterized_fluids){
-	    fluid->updateProperties(term);
+	fluid->updateProperties(term);
     };
 
     for(auto equilibrium_relation = added_equilibrium_relations.begin();
-            equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
+	equilibrium_relation!=added_equilibrium_relations.end(); ++equilibrium_relation ){
         
         (equilibrium_relation->get())->updateProperties(term);
             
     };
 
     rock.updateProperties(term);
+};
+
+void calculateInteractions(const int& term, const int& cell_index, Fluid& fluid){
+    
+    for(auto interfluid_interaction = added_interfluid_interactions.begin();
+	interfluid_interaction!=added_interfluid_interactions.end(); ++interfluid_interaction )
+	{
+	    if(fluid.index() == interfluid_interaction->get()->referenceFluid()->index())
+		{
+	    
+		};
+	};
+};
+
+double calculateBaker(const int& term, const int& cell_index, Fluid& fluid){
+
+    return 1.0;
 };
 
 void calculateProperties(const int& term, Cell& cell, Rock& rock){
@@ -49,6 +70,8 @@ void calculateProperties(const int& term, Cell& cell, Rock& rock){
             rock.porosity(term, cell_index, fluid->pressure(term, cell_index));
         }else{
             remaining_saturation = remaining_saturation - fluid->saturation(term, cell_index);
+
+	    calculateInteractions(term, cell_index, *fluid);
         };
 
     };
@@ -57,6 +80,7 @@ void calculateProperties(const int& term, Cell& cell, Rock& rock){
 
         if(fluid->principal()){
             fluid->saturation(term, cell_index, remaining_saturation);
+	    fluid->relativePermeability(term, cell_index, calculateBaker(term, cell_index, *fluid));
         };
 
         fluid->volumetricFactor(term, cell_index);
