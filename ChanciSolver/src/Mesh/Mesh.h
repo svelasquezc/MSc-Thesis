@@ -19,6 +19,7 @@ class Mesh : protected Value_Reader{
     std::vector<int> _cell_number = std::vector<int>(3);
     int _cell_total;
     std::vector<std::vector<double>> _thickness;
+    std::vector<std::vector<double>> _top;
     mutable bool _defined=false;
     Cells_t _cells;
     
@@ -59,12 +60,12 @@ void Mesh::defineMesh(){
     _cell_total=1;
     _thickness = std::vector<std::vector<double>>(3,std::vector<double>());
     myRead(std::string("Please insert the dimension of the mesh: "), _dimension, std::string("Please insert a valid input"));
-    for(axis=0; axis<3; axis++){
+    for(axis=0; axis<3; ++axis){
         ss << "Please insert number of cells in direction " << axisnames[axis] << "(integer): ";
         myRead<>(ss.str(), _cell_number[axis], std::string("Please insert a valid input"));
         ss.str("");
         ss.clear();
-        for(int spacing=0; spacing<_cell_number[axis];spacing++){
+        for(int spacing=0; spacing<_cell_number[axis];++spacing){
             ss << "Please insert "<< spacing << " spacing in direction " << axisnames[axis];
             myRead<>(ss.str(), aux_thickness, std::string("Please insert a valid input"));
             ss.str("");
@@ -73,22 +74,44 @@ void Mesh::defineMesh(){
         };
         _cell_total=_cell_total*_cell_number[axis];
     };
+    
+    _top = std::vector<std::vector<double>>(_cell_number[1], std::vector<double>(_cell_number[0]));
+    
+    for(int y_spacing=0; y_spacing<_cell_number[1];++y_spacing){
+	
+	for(int x_spacing=0; x_spacing<_cell_number[0];++x_spacing){
+	    ss << "Please insert mesh top in position (x,y): (" << x_spacing << " , " << y_spacing << ") (double): ";
+	    myRead<>(ss.str(), _top[y_spacing][x_spacing], std::string("Please insert a valid input"));
+            ss.str("");
+            ss.clear();
+	};
+	
+    };
     _defined = true;
 };
 
 void Mesh::appear(const std::string& _timestamp, const int stencil[2]){
     if(_timestamp=="" && _defined){
         int index = 0;
-        for(int axisz=0;axisz<_cell_number[2];axisz++){
-            for(int axisy=0;axisy<_cell_number[1];axisy++){
-                for(int axisx=0;axisx<_cell_number[0];axisx++){
+	double auxiliar_centroid=0;
+        for(int axisz=0;axisz<_cell_number[2];++axisz){
+	    
+	    if(axisz==0){
+		auxiliar_centroid += _thickness[2][axisz]/2.0;
+	    }else{
+		auxiliar_centroid += _thickness[2][axisz-1]/2.0 + _thickness[2][axisz]/2.0;
+	    };
+	    
+            for(int axisy=0;axisy<_cell_number[1];++axisy){
+                for(int axisx=0;axisx<_cell_number[0];++axisx){
                     Cell my_cell = Cell(index);
                     my_cell.volume(_thickness[2][axisz], _thickness[1][axisy], _thickness[0][axisx]);
+		    my_cell.depth(auxiliar_centroid + _top[axisy][axisx]);
                     my_cell.numeration3D(0,axisx);
                     my_cell.numeration3D(1,axisy);
                     my_cell.numeration3D(2,axisz);
                     _cells.push_back(my_cell);
-                    index++;
+                    ++index;
                 };
             };
         };
@@ -97,8 +120,8 @@ void Mesh::appear(const std::string& _timestamp, const int stencil[2]){
             
             auto local_numeration = celli.numeration3D();
             
-            for(int axis=0; axis<3; axis++){
-                for(int direction=0;direction<2;direction++){
+            for(int axis=0; axis<3; ++axis){
+                for(int direction=0;direction<2;++direction){
                     local_numeration[axis]=local_numeration[axis]+stencil[direction];
                     int neighbor_cell=listCell(local_numeration);
                     
@@ -123,7 +146,7 @@ void Mesh::appear(const std::string& _timestamp, const int stencil[2]){
                             break;
                         }
                         face.neighbor(_cells[neighbor_cell]);
-                        face_index++;
+                        ++face_index;
                         face.index(face_index);
                         celli.pushFace(face);
                     }

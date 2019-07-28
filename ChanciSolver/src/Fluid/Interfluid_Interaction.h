@@ -34,6 +34,28 @@ class Interfluid_Interaction : protected Value_Reader {
     const std::shared_ptr<Fluid>& referenceFluid()  const {return _reference_fluid;}
     const std::shared_ptr<Fluid>& wettingFluid()    const {return _wetting_fluid;}
     const std::shared_ptr<Fluid>& nonWettingFluid() const {return _non_wetting_fluid;}
+
+    void add(const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& MyFluids){
+
+	int counter;
+	int reference;
+	int wetting_fliud;
+	int non_wetting_fliud;
+
+	if(fluids_quantity >= 2){
+
+	    std::cout << "Please select the Reference Fluid: " << std::endl;
+	    for (counter=0; counter<MyFluids.size(); ++counter){
+		std::cout << (counter+1) << ". " << MyFluids[counter]->print() << std::endl;
+	    };
+	    
+	}else{
+	    
+	    std::cout << "It is not possible to add an Interfluid interaction with only one fluid characterized."
+                  << std::endl;
+	    
+	};
+    };
 };
 
 #endif /* INTERFLUID_INTERACTION_H */

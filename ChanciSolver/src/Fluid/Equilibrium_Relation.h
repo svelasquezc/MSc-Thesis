@@ -80,7 +80,7 @@ void Equilibrium_Relation::add(const int fluids_quantity, std::vector<std::share
         
     }else{
         
-        std::cout << "It is not possible to add a Equilibrium relation with only one fluid characterized."
+        std::cout << "It is not possible to add an Equilibrium relation with only one fluid characterized."
                   << std::endl;
         
     };
