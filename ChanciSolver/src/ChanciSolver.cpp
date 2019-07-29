@@ -42,20 +42,66 @@ void updateVariables(std::vector<std::shared_ptr<Fluid>>& characterized_fluids, 
 };
 
 void calculateInteractions(const int& term, const int& cell_index, Fluid& fluid){
+
+    double capillary_pressure=0;
     
     for(auto interfluid_interaction = added_interfluid_interactions.begin();
 	interfluid_interaction!=added_interfluid_interactions.end(); ++interfluid_interaction )
 	{
-	    if(fluid.index() == interfluid_interaction->get()->referenceFluid()->index())
-		{
+	    auto reference_fluid = interfluid_interaction->get()->referenceFluid();
+	    auto wetting_fluid = interfluid_interaction->get()->wettingFluid();
+	    auto non_wetting_fluid = interfluid_interaction->get()->nonWettingFluid();
 	    
+	    if(fluid.index() == reference_fluid->index()){
+		
+		fluid.relativePermeability(term, cell_index,
+					   interfluid_interaction->get()->referenceRelativePermeability(fluid.saturation(term, cell_index)));
+		capillary_pressure = interfluid_interaction->get()->capillaryPressure(fluid.saturation(term, cell_index));
+	    
+		if(fluid.index() == wetting_fluid->index()){
+		    fluid.pressure(term, cell_index,
+				   non_wetting_fluid->pressure(term, cell_index) - capillary_pressure);
+		}else{
+		    fluid.pressure(term, cell_index,
+				   wetting_fluid->pressure(term, cell_index) + capillary_pressure);
 		};
+	    };
 	};
 };
 
-double calculateBaker(const int& term, const int& cell_index, Fluid& fluid){
+double calculateBaker(const int& term, const int& cell_index){
 
-    return 1.0;
+    double accumulated_saturation = 0;
+    double accumulated_principal_relative_permeability=0;
+    double irreducible_saturation = 0;
+    double mobile_saturation=0;
+    double interpolated_principal_relative_permeability=0;
+    
+
+    for(auto interfluid_interaction = added_interfluid_interactions.begin();
+	interfluid_interaction!=added_interfluid_interactions.end(); ++interfluid_interaction )
+	{
+	    auto reference_fluid = interfluid_interaction->get()->referenceFluid();
+	    
+	    irreducible_saturation = interfluid_interaction->get()->irreducibleSaturation();
+	    
+	    interpolated_principal_relative_permeability = interfluid_interaction->get()->
+		principalRelativePermeability(reference_fluid->saturation(term, cell_index));
+
+	    mobile_saturation = reference_fluid->saturation(term, cell_index) - irreducible_saturation;
+	    
+	    accumulated_saturation += mobile_saturation;
+
+	    accumulated_principal_relative_permeability += mobile_saturation*interpolated_principal_relative_permeability;
+
+	};
+    
+    if(accumulated_saturation == 0){
+	return 1;
+    }else{
+	return accumulated_principal_relative_permeability/accumulated_saturation;
+    };
+    
 };
 
 void calculateProperties(const int& term, Cell& cell, Rock& rock){
@@ -80,7 +126,7 @@ void calculateProperties(const int& term, Cell& cell, Rock& rock){
 
         if(fluid->principal()){
             fluid->saturation(term, cell_index, remaining_saturation);
-	    fluid->relativePermeability(term, cell_index, calculateBaker(term, cell_index, *fluid));
+	    fluid->relativePermeability(term, cell_index, calculateBaker(term, cell_index));
         };
 
         fluid->volumetricFactor(term, cell_index);

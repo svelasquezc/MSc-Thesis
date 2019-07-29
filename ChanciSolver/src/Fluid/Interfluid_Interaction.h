@@ -16,6 +16,11 @@ class Interfluid_Interaction : protected Value_Reader {
 
  public:
 
+    const double irreducibleSaturation() const
+    {
+        return _measured_principal_relative_permeability->begin()->first;
+    };
+    
     double referenceRelativePermeability(const double saturation) const
     {
 	return _measured_reference_relative_permeability->interpolate(saturation);
@@ -95,7 +100,7 @@ class Interfluid_Interaction : protected Value_Reader {
             
         };
 
-        ref_name << _reference_fluid->print() << " Saturation"
+        ref_name << _reference_fluid->print() << " Saturation";
 
         ref_value << _reference_fluid->print() << " Relative Permeability";
         
@@ -115,7 +120,7 @@ class Interfluid_Interaction : protected Value_Reader {
                 ref_value.str("");
                 ref_value.clear();
 
-                ref_value << fluid->print() << "-" << _reference_fluid->print() << "Capillary Pressure";
+                ref_value << _non_wetting_fluid->print() << "-" << _wetting_fluid->print() << "Capillary Pressure";
 
                 _measured_capillary_pressure =
                     std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
