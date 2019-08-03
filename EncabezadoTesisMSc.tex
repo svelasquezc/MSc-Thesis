@@ -16,9 +16,12 @@
 \usepackage{tabularx}
 \usepackage{subfigure}
 \usepackage{longtable}
-
 %\usepackage{pdfcrop}
 
+\usepackage{natbib}
+\bibpunct{(}{)}{,}{a}{}{;}
+\bibliographystyle{abbrvnat}
+\renewcommand{\citep}[1]{[\citealp{#1}]}
 
 \usepackage{rotating} %Para rotar texto, objetos y tablas seite. No se ve en DVI solo en PS. Seite 328 Hundebuch
                         %se usa junto con \rotate, \sidewidestable ....
@@ -92,6 +95,5 @@
 \include{Kap6/Kap6}
 \include{Anexos/Anexos}
 \addcontentsline{toc}{chapter}{\numberline{}Bibliograf\'{\i}a}
-\bibliographystyle{apalike}
 \bibliography{BibliMSc}
 \end{document}

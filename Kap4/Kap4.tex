@@ -1,29 +1,51 @@
+% !TeX spellcheck = es_ES
 %\chapter{Cap\'{\i}tulo 3}
-\chapter{Solution Proposal}
+%\chapter{Solution Proposal}
+\chapter{Propuesta de solución}
+En esta sección se propone una extensión para los EP que apoya el desarrollo de la representación del dominio de la simulación de procesos EOR. Adicionalmente, se conceptualizan los términos derivados de las ecuaciones presentadas en el marco teórico, a partir de los cuales se generan las relaciones estructurales. Posteriormente, se muestra el EP completo de la simulación y se explican por secciones los conceptos principales o clases y los eventos que ejecutan la simulación.
 
-In this section we propose one element as an extension for Preconceptual Schemas(PS) which aid the understanding of diverse elements in the oil reservoir simulation domain. In addition, we present further description of the concepts stated in the theoretical framework, with their respective representation in the elaborated PS.
-\\
-This section is structured as follows: in section \ref{sec:PSNew} we present the added elements to PS and their usage in our represented domain. In section \ref{sec:PS_EOR} we propose the representation of structural and dynamical behavior of each developed concept in the theoretical framework using PS.
+Esta sección se estructura así: en la sección \ref{sec:PSNew} se presenta el elemento adicional para los EP que permite reutilizar una representación en múltiples secciones del EP y la regla para la obtención de código a partir del nuevo elemento. En la sección \ref{sec:Concepts} se revisan los términos de cada ecuación y su traducción a los conceptos presentes en el EP. En la sección \ref{sec:PS_EOR} se muestra el EP completo y se explican las relaciones dinámicas y eventuales por cada concepto principal.
 
-\section{Added elements to Preconceptual Schemas}\label{sec:PSNew}
-\subsection{Analyst defined subroutines}\label{sec:PS_ADS}
-Analyst defined subroutines are analyst defined functions as proposed by (ref Calle) without the return argument. They use global elements and parameters of the subroutine definition. They are defined for re-using dynamical behavior elements which appear more than once in the PS. Names of both subroutines and functions must differ from operators predefined in the PS. Graphic symbol used for subroutines is the same as used for operators and functions. In figure \# we present graphical representation of analyst defined subroutines.
+%In this section we propose one element as an extension for Preconceptual Schemas(PS) which aid the understanding of diverse elements in the oil reservoir simulation domain. In addition, we present further description of the concepts stated in the theoretical framework, with their respective representation in the elaborated PS.
+%This section is structured as follows: in section  we present the added elements to PS and their usage in our represented domain. In section  we propose the representation of structural and dynamical behavior of each developed concept in the theoretical framework using PS.
 
-\section{Conceptualization}
+%\section{Added elements to Preconceptual Schemas}\label{sec:PSNew}
+%\subsection{Analyst defined subroutines}\label{sec:PS_ADS}
+%Analyst defined subroutines are analyst defined functions as proposed by (ref Calle) without the return argument. They use global elements and parameters of the subroutine definition. They are defined for re-using dynamical behavior elements which appear more than once in the PS. Names of both subroutines and functions must differ from operators predefined in the PS. Graphic symbol used for subroutines is the same as used for operators and functions. In figure \# we present graphical representation of analyst defined subroutines.
+
+\section{Extensión al Esquema Preconceptual}\label{sec:PSNew}
+\subsection{Subrutinas definidas por el analista}\label{sec:PS_ADS}
+Las subrutinas definidas por el analista son funciones definidas tal como \cite{JCalle} propuso, pero carecen de un concepto retorno ``return''. Estas utilizan elementos globales y también pueden recibir parámetros adicionales, su representación gráfica es igual a la de una función, pero en su uso no hay una asignación. En la figura \ref{fig:Subroutine} se presenta la representación gráfica y su traducción a código. %\citep{AG01}.
+%Nota: Poner tabla y gráfica de uso
+
+%\section{Conceptualization}\label{sec:Concepts}
+\section{Conceptualización}\label{sec:Concepts}
+En esta sección se traducen las ecuaciones algebraicas, resultantes de la discretización del modelo Black-Oil extendido y las ecuaciones constitutivas usando el método de los volúmenes finitos, a los conceptos principales y su respectiva categoría. 
+
+%\subsection{Mesh}
+\subsection{Malla}
+Al resolver el dominio espacial continuo como un conjunto discreto de celdas (discretizar el espacio), aparecen propiedades tales como los volúmenes de las celdas y el área de las caras. Este conjunto discreto de celdas es el que denominamos como ``malla''. A su vez, la celda es vista como un conjunto discreto de caras que generan una superficie cerrada\footnote{En el caso tridimensional}. Cada celda cuenta con una numeración, esta sirve para identificar órdenes de solución y ubicación de vecinos para el cálculo del flujo discretizado.
+
+Luego: 
+%Poner ecuación acá con Volumen de celda ya como concepto
+
+%\subsection{Rock}
+\subsection{Roca}
+
+
+\subsection{Fluido}
+%\subsection{Phase}
 %
-\subsection{Mesh}
+\subsection{Interacción Interfluido}
+%\subsection{Inter-phase interaction}
 %
-\subsection{Rock}
+%\subsection{Component}
 %
-\subsection{Phase}
+%\subsection{Equlibrium Relation}
+\subsection{Relación de Equilibrio}
 %
-\subsection{Inter-phase interaction}
-%
-\subsection{Component}
-%
-\subsection{Equlibrium Relation}
-%
-\subsection{Well}
+%\subsection{Well}
+\subsection{Pozo}
 
 \section{PS Representation of Enhanced Oil Recovery Simulation}\label{sec:PS_EOR}
 In this section we propose a PS representation for enhanced oil recovery simulation, we couple a black oil model discretized using finite volumes method with the theoretical framework developed the previous chapter. We mapped each term in the resultant equations to their respective concepts and how they are linked together. The complete representation is shown in \ref{fig:PSComplete}.\\
