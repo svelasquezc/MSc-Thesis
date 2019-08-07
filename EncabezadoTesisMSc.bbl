@@ -1,18 +1,34 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Antal, 1982]{AG01}
-Antal, M. (1982).
+\bibitem[Antal(1982)]{AG01}
+M.~Antal.
 \newblock Biomass pyrolysis: A review of the literature part 1 - carbohydrate
   pyrolysis.
-\newblock In {\em Advances in Solar Energy Vol. 1 American Solar Energy
-  Society}, pages 61--111.
+\newblock In \emph{Advances in Solar Energy Vol. 1 American Solar Energy
+  Society}, pages 61--111, 1982.
 
-\bibitem[Calle, 2016]{JCalle}
-Calle, J. (2016).
+\bibitem[Calle(2016)]{JCalle}
+J.~Calle.
 \newblock Identificaci{\'o}n de patrones de dise{\~n}o para software
   cient{\'i}fico a partir de esquemas preconceptuales.
 \newblock Master's thesis, Universidad Nacional de Colombia - Sede
-  Medell{\'i}n.
+  Medell{\'i}n, Noviembre 2016.
+\newblock URL \url{http://bdigital.unal.edu.co/56381/}.
 \newblock L{\'i}nea de Investigaci{\'o}n: Ingenier{\'i}a de software.
+
+\bibitem[Zuo et~al.(2014)Zuo, Chen, Dengen, and Kamath]{Zuo2014}
+L.~Zuo, Y.~Chen, Z.~Dengen, and J.~Kamath.
+\newblock {Three-Phase Relative Permeability Modeling in the Simulation of WAG
+  Injection}.
+\newblock \emph{SPE Reservoir Evaluation {\&} Engineering}, 17\penalty0
+  (03):\penalty0 326--339, aug 2014.
+\newblock ISSN 1094-6470.
+\newblock \doi{10.2118/166138-PA}.
+\newblock URL \url{http://www.onepetro.org/doi/10.2118/166138-PA}.
 
 \end{thebibliography}
