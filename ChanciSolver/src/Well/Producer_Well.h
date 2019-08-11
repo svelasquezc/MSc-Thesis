@@ -1,6 +1,8 @@
 #ifndef PRODUCER_WELL_H
 #define PRODUCER_WELL_H
 
+#include "Well.h"
+
 class Producer_Well : Well{
 
  private:

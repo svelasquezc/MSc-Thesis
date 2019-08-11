@@ -3,32 +3,35 @@
 
 #include <memory>
 
-/*template<typename TypeRef>
-class Equation {
+class Equation_Base{
+ protected:    
+    int _index;
+    bool _status;
+    
+ public:
+    
+    virtual const bool& status() const = 0;
+    virtual const int& index() const = 0;
+};
+
+template<typename TypeRef>
+class Equation : Equation_Base{
     
  private:    
-    TypeRef* _reference;
+    std::shared_ptr<TypeRef> _reference;
     
  public:
 
     typedef TypeRef ReferenceType;
 
-    Equation(TypeRef& reference){
-        _reference = &reference;
+    Equation(std::shared_ptr<TypeRef> reference){
+        _reference = reference;
     };
     
     TypeRef& reference() {return *_reference;};
-};
 
-template<>
-class Equation<void>{
- protected:    
-    int _index;
-    bool _status;
- public:
-    const bool& status() const{return _status;};
-    const int& index() const{return _index;};
-    //no juan
-    };*/
+    virtual const bool& status() const{return _status;};
+    virtual const int& index() const{return _index;};
+};
 
 #endif /* EQUATION_H */

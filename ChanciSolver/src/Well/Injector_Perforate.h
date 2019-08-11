@@ -1,6 +1,8 @@
 #ifndef INJECTOR_PERFORATE_H
 #define INJECTOR_PERFORATE_H
 
+#include "Perforate.h"
+
 class Injector_Perforate : Perforate{
 
  private:

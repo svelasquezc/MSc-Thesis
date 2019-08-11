@@ -1,17 +1,26 @@
 #include "NewtonRaphson.h"
 #include "Interfluid_Interaction.h"
 
+#include "Injector_Perforate.h"
+#include "Producer_Perforate.h"
+
+#include "Producer_Well.h"
+#include "Injector_Well.h"
+
+
+std::vector<std::shared_ptr<Equation_Base>> equations;
+
 std::string timestamp="";
 double mytime=0;
 double simulationtime = 60;
 double timedelta=1;
 int Fluid::_count_of_principals=0;
 int Fluid::_count_of_fluids=0;
+int wells_quantity=0;
 int term=0;
 int fluids_quantity=0;
 int stencil[2] = {-1,1};
 int equilibrium_relations_quantity=0;
-constexpr double gravity=9.80665;
 int cells_number=0;
 
 std::vector<std::shared_ptr<Fluid>> characterized_fluids =
@@ -367,6 +376,7 @@ void launchFluidsEngineer(){
     case 1:
         characterized_fluids.push_back(std::make_shared<Fluid>(Fluid()));
         (--(characterized_fluids.end()))->get()->characterize(cells_number);
+        //equations.push_back(*(--(characterized_fluids.end())));
         ++fluids_quantity;
         break;
     case 2:

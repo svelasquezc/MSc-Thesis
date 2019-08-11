@@ -9,7 +9,7 @@
 #include "Measured_Property.h"
 #include "Equation.h"
 
-class Fluid : protected Value_Reader{
+class Fluid : Equation<Fluid>, public std::enable_shared_from_this<Fluid>{
     
  private:
     
@@ -29,10 +29,10 @@ class Fluid : protected Value_Reader{
     std::unique_ptr<Measured_Property> _measured_viscosity;
     mutable bool _principal=false;
 
-    //Equation<Fluid> _equation;
-
  public:
-    Fluid(){};
+ Fluid() : Equation<Fluid>(shared_from_this()){
+     
+ };
     void characterize(int& cells_number);
     void updateProperties(int& term);
     //void calculate(int& term, int& _cellindex);
@@ -80,7 +80,7 @@ void Fluid::characterize(int& cells_number){
     _relative_permeability = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
     _potential             = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
 
-    myRead(std::string("Please insert the type of fluid "), _type, std::string("Please insert a valid input"));
+    Value_Reader::myRead(std::string("Please insert the type of fluid "), _type, std::string("Please insert a valid input"));
     
     // Reading of measured properties (PVT Table)
     ref_name  << _type << " Pressure";
@@ -96,26 +96,26 @@ void Fluid::characterize(int& cells_number){
     _measured_viscosity->readMe();
     
     // Reading of standard conditions density
-    myRead(std::string("Please insert the standard conditions density for the fluid "), _standard_conditions_density, std::string("Please insert a valid input"));
+    Value_Reader::myRead(std::string("Please insert the standard conditions density for the fluid "), _standard_conditions_density, std::string("Please insert a valid input"));
     
     // Initial Conditions for the fluid
     for(int cellindex=0; cellindex<cells_number; ++cellindex){
         ss << "Please insert initial pressure for the "<< cellindex+1 << " cell [Pa]";
-        myRead(ss.str(), _pressure[0][cellindex], std::string("Please insert a valid input"));
+        Value_Reader::myRead(ss.str(), _pressure[0][cellindex], std::string("Please insert a valid input"));
         ss.str("");
         ss.clear();
         
     };
     for(int cellindex=0; cellindex<cells_number; ++cellindex){
         ss << "Please insert initial saturation for the "<< cellindex+1 << " cell [-]";
-        myRead(ss.str(), _saturation[0][cellindex], std::string("Please insert a valid input"));
+        Value_Reader::myRead(ss.str(), _saturation[0][cellindex], std::string("Please insert a valid input"));
         ss.str("");
         ss.clear();
     };
 
     if(_count_of_principals < 1) {
         bool aux_principal=false;
-        myRead(std::string("Please insert 1 or 0 for principal or not principal fluid (bool) "), aux_principal, std::string("Please insert a valid input"));
+        Value_Reader::myRead(std::string("Please insert 1 or 0 for principal or not principal fluid (bool) "), aux_principal, std::string("Please insert a valid input"));
         _principal=aux_principal;
         if(_principal){
             ++_count_of_principals;
@@ -150,7 +150,7 @@ void Fluid::volumetricFactor(int& _term, int& _cellindex){
 
       //Pressure calculation (Capilarity)
 
-    */
+      */
     //Properties Calculation
     _volumetric_factor[_term][_cellindex] =
         _measured_volumetric_factor->interpolate(_pressure[_term][_cellindex]);
