@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include "Measured_Property.h"
+#include "Equation.h"
 
 class Fluid : protected Value_Reader{
     
@@ -27,6 +28,8 @@ class Fluid : protected Value_Reader{
     std::unique_ptr<Measured_Property> _measured_volumetric_factor;
     std::unique_ptr<Measured_Property> _measured_viscosity;
     mutable bool _principal=false;
+
+    //Equation<Fluid> _equation;
 
  public:
     Fluid(){};
@@ -123,6 +126,10 @@ void Fluid::characterize(int& cells_number){
 
     _index = _count_of_fluids;
     ++_count_of_fluids;
+
+    //_equation = std::make_unique<Equation<Fluid>>(*this);
+
+    
 };
 
 void Fluid::updateProperties(int& term){
