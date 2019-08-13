@@ -24,7 +24,7 @@ En esta sección se traducen las ecuaciones algebraicas, resultantes de la discr
 
 %\subsection{Mesh}
 \subsection{Malla}
-Al resolver el dominio espacial continuo como un conjunto discreto de celdas (discretizar el espacio), aparecen propiedades tales como los volúmenes de las celdas y el área de las caras. Este conjunto discreto de celdas es el que denominamos como ``malla''. A su vez, la celda es vista como un conjunto discreto de caras que generan una superficie cerrada\footnote{En el caso tridimensional}. Cada celda cuenta con una numeración, esta sirve para identificar órdenes de solución y ubicación de vecinos para el cálculo del flujo discretizado.
+Al resolver el dominio espacial continuo como un conjunto discreto de celdas (discretizar el espacio), aparecen propiedades tales como los volúmenes de las celdas y el área de las caras. Este conjunto discreto de celdas es el que denominamos como ``malla''. A su vez, la celda es vista como un conjunto discreto de caras que generan una superficie cerrada\footnote{En el caso tridimensional}. Cada celda cuenta con una numeración, esta sirve para identificar posiciones en el espacio y ubicar las vecindades correspondientes para el cálculo del flujo discretizado.
 
 Luego: 
 %Poner ecuación acá con Volumen de celda ya como concepto
@@ -47,53 +47,78 @@ Luego:
 %\subsection{Well}
 \subsection{Pozo}
 
-\section{PS Representation of Enhanced Oil Recovery Simulation}\label{sec:PS_EOR}
-In this section we propose a PS representation for enhanced oil recovery simulation, we couple a black oil model discretized using finite volumes method with the theoretical framework developed the previous chapter. We mapped each term in the resultant equations to their respective concepts and how they are linked together. The complete representation is shown in \ref{fig:PSComplete}.\\
+%\section{PS Representation of Enhanced Oil Recovery Simulation}\label{sec:PS_EOR}
+\section{Representación en EP de la simulación de procesos EOR}\label{sec:PS_EOR}
+En esta sección proponemos una representación basada en un EP para procesos EOR de inyección de múltiples químicos. En el esquema \ref{fig:PSComplete} se evidencia la solución del modelo Black Oil discretizado usando volúmenes finitos en una malla cartesiana ortogonal. En el evento ``Presión del fluido varía'' se desarrollan las iteraciones del método de Newton-Raphson e internamente las iteraciones sobre las celdas requeridas para solucionar el sistema algebráico resultante de la discretización. En las secciones siguientes se explica el esquema preconceptual elaborado en las respectivas porciones correspondientes a los conceptos principales en la simulación de procesos EOR.
+%In this section we propose a PS representation for enhanced oil recovery simulation, we couple a black oil model discretized using finite volumes method with the theoretical framework developed the previous chapter. We mapped each term in the resultant equations to their respective concepts and how they are linked together. The complete representation is shown in \ref{fig:PSComplete}.\\
 \begin{figure}[h]
 \centering%
 \includegraphics[width=0.9\linewidth]{Kap4/MultifasicoSinPozos.pdf}%
-\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+\caption{Representación en EP de la simulación de procesos EOR} \label{fig:PSComplete}
 \end{figure}
 
-The rest of this section is as follows: In section \ref{sec:PS_Mesh} we present the Mesh concept as a collection of cells with additional elements needed for calculating the attributes of each cell. Furthermore, we develop the dynamical relationship ``Geomodeler defines Mesh'' as an interaction of the role ``Geomodeler'' with atomic\footnote{atomic as is stated by \cite{AG01} (Aca debe ir Zapata)} dynamical relationships. In section \ref{sec:PS_Rock} we present the Rock concept with its attributes and initial characterization. In section \ref{sec:PS_Phase} ... In section \ref{sec:PS_Interphase} ... In section \ref{sec:PS_Equilibrium} we define the partition coefficients as relations between two phases, one contributing mass and another receiving mass in the mass balance equation. In section \ref{sec:PS_Well}  
+%The rest of this section is as follows: In section \ref{sec:PS_Mesh} we present the Mesh concept as a collection of cells with additional elements needed for calculating the attributes of each cell. Furthermore, we develop the dynamical relationship ``Geomodeler defines Mesh'' as an interaction of the role ``Geomodeler'' with atomic\footnote{atomic as is stated by \cite{AG01} (Aca debe ir Zapata)} dynamical relationships. In section \ref{sec:PS_Rock} we present the Rock concept with its attributes and initial characterization. In section \ref{sec:PS_Phase} ... In section \ref{sec:PS_Interphase} ... In section \ref{sec:PS_Equilibrium} we define the partition coefficients as relations between two phases, one contributing mass and another receiving mass in the mass balance equation. In section \ref{sec:PS_Well}  
 
-\subsection{Mesh}\label{sec:PS_Mesh}
+%\subsection{Mesh}\label{sec:PS_Mesh}
+\subsection{Malla}\label{sec:PS_Mesh}
 
-We propose a representation of a mesh as a collection of cells which are represented likewise. collection of faces plus their respective attributes. This representation accounts for orthogonal cartesian meshes. Those are generated using the number of cells in each axis or direction, the thickness and top for each cell. Nevertheless, the thickness is only needed for the number of cells defined in every axis, because we work with regular meshes. Therefore the rest of the cells will have the same thickness.
-\\
-The top of the mesh is required for the first XY plane, and needs to be filled with the depths of each cell in that plane, the rest of the cells are calculated using the depth of the first plane.
-
-The representation stated for Mesh only accounts for orthogonal cartesian meshes, which can be generated with information about number of cells in each axis, their thickness and tops. A (The information above is inserted by a) Geomodeler with defines the mesh by inserting for each axis the number of cells and the thickness for cells in that direction. Once 
-\ref{fig:Mesh}.\\
+De la conceptualización de los elementos relacionados con la discretización, se encontró que existe una malla la cuál contiene todas las propiedades necesarias para generar el conjunto de celdas. Además, existe un actor ``Geomodelador'' que se encarga de definir el número de celdas en cada eje, sus espesores y topes tal como se presenta en \ref{fig:Mesh}. \\
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Kap4/Mesh.pdf}%
-	\caption{Mesh definition.} \label{fig:Mesh}
+	\caption{Definición de la malla} \label{fig:Mesh}
 \end{figure}
+Una vez definidas tales propiedades, la malla aparece en un proceso iterativo de creación de la cantidad de celdas definidas y el respectivo cálculo de volúmenes, profundidades y numeración. Posteriormente, las caras se crean en otro proceso iterativo, estas contienen la información sobre las vecindades de cada celda, donde cada celda tiene un conjunto de caras\footnote{Es posible notar que la cara existente entre dos celdas vecinas se crea dos veces, una por cada celda.}. 
 
-\subsection{Rock}\label{sec:PS_Rock}
-\ref{fig:Rock}.\\
+%We propose a representation of a mesh as a collection of cells which are represented likewise. collection of faces plus their respective attributes. This representation accounts for orthogonal cartesian meshes. Those are generated using the number of cells in each axis or direction, the thickness and top for each cell. Nevertheless, the thickness is only needed for the number of cells defined in every axis, because we work with regular meshes. Therefore the rest of the cells will have the same thickness.
+%The top of the mesh is required for the first XY plane, and needs to be filled with the depths of each cell in that plane, the rest of the cells are calculated using the depth of the first plane.
+
+%The representation stated for Mesh only accounts for orthogonal cartesian meshes, which can be generated with information about number of cells in each axis, their thickness and tops. A (The information above is inserted by a) Geomodeler with defines the mesh by inserting for each axis the number of cells and the thickness for cells in that direction. Once 
+
+%\subsection{Rock}\label{sec:PS_Rock}
+\subsection{Roca}\label{sec:PS_Rock}
+
+La especificación de la relación dinámica ``Petrofísico caracteriza roca'' consiste de insertar las condiciones iniciales de porosidad y permeabilidad absoluta para la roca asociada al yacimiento, es posible notar que estos atributos de la roca están representados como arreglos por la cantidad de términos, derivados de los pasos de tiempo (estos se verán más adelante), y la cantidad de celdas definidas en la malla. \\
+Adicionalmente, el petrofísico define la compresibilidad de poro y la presión a la que esta se mide para el cálculo de la porosidad a los términos posteriores. El modelo considera la existencia de una única roca a la cual todas las propiedades por cada una de las celdas son asignadas. La caracterización de la roca se presenta en \ref{fig:Rock}.\\
+
 \begin{figure}[h]
 	\centering%
-	\includegraphics[width=0.9\linewidth]{Kap4/Rock.pdf}%
-	\caption{Fluid Characterization.} \label{fig:Rock}
+	\includegraphics[width=0.90\linewidth]{Kap4/Rock.pdf}%
+	\caption{Caracterización de la Roca.} \label{fig:Rock}
 \end{figure}
-\subsection{Phase}\label{sec:PS_Phase}
 
-\ref{fig:Fluid}.\\
+%\subsection{Phase}\label{sec:PS_Phase}
+\subsection{Fluido}\label{sec:PS_Phase}
+
+Los fluidos tienen propiedades que son funciones de su presión y saturación, estas a su vez son función del tiempo y del espacio. Por lo que todas las propiedades que se proponen en la conceptualización se representan como arreglos dependientes de la cantidad de términos y de la cantidad de celdas. La representación del fluido, su relación dinámica ``Ingeniero de fluidos caracteriza Fluido'' y su respectiva especificación se presentan en la figura \ref{fig:Fluid}.\\
+
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Kap4/Fluid.pdf}%
 	\caption{Fluid Characterization.} \label{fig:Fluid}
 \end{figure}
 
-\subsection{Inter-phase interaction}\label{sec:PS_Interphase}
+En pos de la generalidad, definimos la viscosidad del fluido y su factor volumétrico como funciones directas de la presión. Con este fin, aparece el concepto de propiedad medida, el cuál tiene una medida de referencia y un valor medido a esa referencia. Ambos son arreglos de la cantidad de medidas. En la figura \ref{fig:Fluid} también es posible ver que el fluido tiene una viscosidad medida y un factor volumétrico medido. Esto nos permite calcular de manera general estas propiedades del agua, gas y el aceite como una interpolación en el conjunto de medidas a una presión arbitraria. La viscosidad medida y el factor volumétrico medido los inserta el Ingeniero de fluidos al caracterizar el fluido. \\
+
+Es importante notar también que el fluido tiene un tipo y un atributo de tipo lógico ``Principal''. El tipo del fluido nos permite explicitar que este es Petróleo, Gas o Agua, pero el atributo de principalidad indica que es el fluido para el cuál la incógnita a resolver será la presión, en los demás la incógnita será la saturación.
+
+%\subsection{Equilibrium Relation}\label{sec:PS_Equilibrium}
+\subsection{Relación de Equilibrio.}\label{sec:PS_Equilibrium}
+Las ecuaciones del Black Oil relacionan la posible existencia de masa de gas en el aceite (Rs o gas disuelto), y, en el caso del Black Oil extendido, la de aceite en el gas (Rv o aceite volatilizado). En el concepto ``Relación de equilibrio'', se generaliza la existencia de masa de un fluido dentro de otro fluido como un coeficiente de partición, tal como se vio en la conceptualización (ver \ref{sec:Concepts}). Se asume, también, que existe un fluido que aporta masa y otro que la recibe, tal como se ve en \ref{fig:EqRelation}. El coeficiente de partición cumple la mismas condiciones de la viscosidad del fluido y a su vez, tiene un coeficiente de partición medido. 
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Kap4/Equilibrium.pdf}%
+	\caption{Adición de Relaciones de equilibrio.} \label{fig:EqRelation}
+\end{figure}
+
+%\subsection{Inter-phase interaction}\label{sec:PS_Interphase}
+\subsection{Interacción Interfluido}\label{sec:PS_Interphase}
 
 %\subsection{Component}\label{sec:PS_Component} % This could be changed to Chemical
-
-\subsection{Equilibrium Relation}\label{sec:PS_Equilibrium}
-
-\subsection{Well}\label{sec:PS_Well}
+%\subsection{Well}\label{sec:PS_Well}
+\subsection{Pozo}\label{sec:PS_Well}
 
 %includefigure{Graphical Representation of subroutine}
 
