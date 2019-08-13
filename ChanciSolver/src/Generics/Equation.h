@@ -2,6 +2,8 @@
 #define EQUATION_H
 
 #include <memory>
+#include <typeinfo>
+#include <string>
 
 class Equation_Base{
  protected:    
@@ -9,13 +11,14 @@ class Equation_Base{
     bool _status;
     
  public:
-    
+    virtual ~Equation_Base() = default; 
+    virtual const std::string type() = 0;
     virtual const bool& status() const = 0;
     virtual const int& index() const = 0;
 };
 
 template<typename TypeRef>
-class Equation : Equation_Base{
+class Equation : public Equation_Base{
     
  private:    
     std::shared_ptr<TypeRef> _reference;
@@ -30,8 +33,10 @@ class Equation : Equation_Base{
     
     TypeRef& reference() {return *_reference;};
 
-    virtual const bool& status() const{return _status;};
-    virtual const int& index() const{return _index;};
+    const std::string type() override { return typeid(ReferenceType).name();};
+
+    const bool& status() const override {return _status;};
+    const int& index() const override {return _index;};
 };
 
 #endif /* EQUATION_H */

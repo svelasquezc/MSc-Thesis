@@ -9,7 +9,7 @@
 #include "Measured_Property.h"
 #include "Equation.h"
 
-class Fluid : Equation<Fluid>, public std::enable_shared_from_this<Fluid>{
+class Fluid : public Equation<Fluid>, public std::enable_shared_from_this<Fluid>{
     
  private:
     

@@ -366,6 +366,7 @@ void launchPetrophysicalEngineer(){
 void launchFluidsEngineer(){
     int option;
     int _dimension;
+    std::shared_ptr<Fluid> characterized_fluid;
     std::cout << "Select your action" << std::endl;
     std::cout << "1. Characterize Fluid" << std::endl;
     std::cout << "2. Add Equilibrium Relation";
@@ -374,9 +375,10 @@ void launchFluidsEngineer(){
     
     switch(option){
     case 1:
-        characterized_fluids.push_back(std::make_shared<Fluid>(Fluid()));
+        characterized_fluid = std::make_shared<Fluid>(Fluid());
+        characterized_fluids.push_back(characterized_fluid);
         (--(characterized_fluids.end()))->get()->characterize(cells_number);
-        //equations.push_back(*(--(characterized_fluids.end())));
+        equations.push_back(characterized_fluid);
         ++fluids_quantity;
         break;
     case 2:

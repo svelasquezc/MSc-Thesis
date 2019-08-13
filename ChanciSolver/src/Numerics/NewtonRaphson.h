@@ -71,7 +71,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         _solution_delta = _solver.solve(_residual);
     }
     
-    void iterate(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
+    void iterate(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
 
         int residual_selector;
         int cell_index;
@@ -81,62 +81,100 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
         do{
             //Residual calculation
-            for(auto residual_fluid : characterized_fluids){
+            for(auto equation : equations){
+
+                if(equation->type() == "Well"){
+
+                }else{
+
+                    auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
+                    
+                    residual_selector = residual_fluid->index();
             
-                residual_selector = residual_fluid->index();
-            
-                for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
+                    for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
                 
-                    cell_index = cell->index();
-                    _calculateProperties(term, *cell, rock);
-                    residual(locate(residual_selector, cell_index)) = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
+                        cell_index = cell->index();
+                        _calculateProperties(term, *cell, rock);
+                        residual(locate(residual_selector, cell_index)) = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
+                    }
                 }
             }
 
             // This should be an equation component
-            for(auto residual_fluid : characterized_fluids){
+            for(auto residual : equations){
+
+                if(residual->status()){
                 
-                residual_selector = residual_fluid->index();
-
-                //This should be a principal variable 
-                for(auto fluid_variable : characterized_fluids){
-                    
-                    variable_selector = fluid_variable->index();
-                    
-                    for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
-
-                        modified_epsilon = _machine_epsilon;
-                        cell_index = cell->index();
+                    if(residual->type() == "Well"){
                         
-                        modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
-                        _calculateProperties(term, *cell, rock);
+                        for(auto variable : equations){
+
+                            if(variable->status()){
+
+                                if(variable->type() == "Well"){
+
+                                }else{
+                    }else{
+
+                        auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(residual);
+                
+                        residual_selector = residual_fluid->index();
+
+                        //This should be a principal variable 
+                        for(auto variable : equations){
+
+                            if(variable->status()){
+
+                                if(variable->type() == "Well"){
+
+                                }else{
+
+                                    auto fluid_variable = std::dynamic_pointer_cast<Fluid,Equation_Base>(variable);
+                                    variable_selector = fluid_variable->index();
+                    
+                                    for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
+
+                                        modified_epsilon = _machine_epsilon;
+                                        cell_index = cell->index();
                         
-                        for (auto face = cell->begin(); face!=cell->end(); ++face){
+                                        modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
+                                        _calculateProperties(term, *cell, rock);
+                        
+                                        for (auto face = cell->begin(); face!=cell->end(); ++face){
                             
-                            auto neighbor_cell = face->neighbor();
-                            int neighbor_index = neighbor_cell->index();
-                            int row = locate(residual_selector, neighbor_index);
-                            int col = locate(variable_selector, cell_index);
-                            modified_residual = calculateResidual(term,*residual_fluid, mesh,*neighbor_cell,rock);
+                                            auto neighbor_cell = face->neighbor();
+                                            int neighbor_index = neighbor_cell->index();
+                                            int row = locate(residual_selector, neighbor_index);
+                                            int col = locate(variable_selector, cell_index);
+                                            modified_residual = calculateResidual(term,*residual_fluid, mesh,*neighbor_cell,rock);
 
-                            double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
-                            if(derivative != 0){
-                                _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                            double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
+                                            if(derivative != 0){
+                                                _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                            };
+                                        };
+                        
+                                        int row = locate(residual_selector, cell_index);
+                                        int col = locate(variable_selector, cell_index);
+                                        modified_residual = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
+
+                                        double derivative = (modified_residual - _residual(cell_index))/_machine_epsilon;
+                                        if(derivative != 0){
+                                            _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                        };
+
+                                        modified_epsilon = -_machine_epsilon;
+                                        modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
+                                        _calculateProperties(term, *cell, rock);
+                                    
+                                    };
+                                    
+                                };
+                                
                             };
+                            
                         };
                         
-                        int row = locate(residual_selector, cell_index);
-                        int col = locate(variable_selector, cell_index);
-                        modified_residual = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
-
-                        double derivative = (modified_residual - _residual(cell_index))/_machine_epsilon;
-                        if(derivative != 0){
-                            _non_zeros.push_back(Tripletd_t(row,col,derivative));
-                        };
-
-                        modified_epsilon = -_machine_epsilon;
-                        modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
-                        _calculateProperties(term, *cell, rock);
                     };
                     
                 };
@@ -145,7 +183,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
             _jacobian.setFromTriplets(_non_zeros.begin(), _non_zeros.end());
             solve();
-            update(term, mesh, characterized_fluids);
+            update(term, mesh, equations);
             _non_zeros.clear();
         
         }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > _relative_change_in_residual);
