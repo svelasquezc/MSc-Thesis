@@ -3,7 +3,7 @@
 
 #include "Well.h"
 #include "Fluid.h"
-
+#include "Injector_Perforate.h"
 
 class Injector_Well : public Well{
 
@@ -15,7 +15,14 @@ class Injector_Well : public Well{
     std::vector<double> _total_accumulated;    
 
  public:
-    
+
+    void perforate(Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
+        
+        Well::perforate(mesh, characterized_fluids, type);
+
+        insertPerforations<Injector_Perforate>(mesh);
+        
+    };
 };
 
 

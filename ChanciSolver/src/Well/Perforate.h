@@ -5,7 +5,7 @@
 
 class Perforate{
 
- private:
+ protected:
     
     int _index;
     int _local_index;
@@ -15,9 +15,14 @@ class Perforate{
     
     std::vector<double> _equivalent_radius;
 
+    Perforate(){
+        _well_index = std::vector<double>();
+        _equivalent_radius = std::vector<double>();
+    };
+    
  public:
-
-    virtual void flow() = 0;
+    //pure virtual function: Makes perforate an abstract class
+    virtual const double totalFlow() const = 0;
     
     void index(int index){_index = index;};
     void localIndex(int local_index){_local_index = local_index;};
@@ -41,7 +46,6 @@ class Perforate{
         _well_index[term]=2*pi()*z_thickness*std::sqrt(x_direction_permeability*y_direction_permeability)/(_skin+std::log(_equivalent_radius[term]/well_radius));
     };
 
-    
 };
 
 

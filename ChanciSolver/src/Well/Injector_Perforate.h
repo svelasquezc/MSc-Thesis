@@ -11,7 +11,9 @@ class Injector_Perforate : public Perforate{
 
  public:
 
-    void flow(const double flow) {_flow = flow;};
+ Injector_Perforate() : Perforate(){};
+    
+    const double totalFlow() const override {return _flow;};
     const double& flow() const{return _flow;};
 };
 

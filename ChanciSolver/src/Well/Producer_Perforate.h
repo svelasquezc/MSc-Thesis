@@ -2,18 +2,33 @@
 #define PRODUCER_PERFORATE_H
 
 #include "Perforate.h"
+#include <vector>
+#include <algorithm>
 
 class Producer_Perforate : public Perforate{
 
  private:
+
     
+    std::vector<int> _ignore_indexes;
     std::vector<double> _flow;
 
  public:
+
+ Producer_Perforate() : Perforate(){};
     
     void flow(const int fluid_index, const double flow){_flow[fluid_index] = flow;};
 
-    const double& flow(const int fluid_index) const {return _flow[fluid_index];};
+    const double totalFlow() const override{
+        double total=0;
+        for(int fluid_index=0; fluid_index<_flow.size(); ++fluid_index){
+            auto result = std::find(std::begin(_ignore_indexes), std::end(_ignore_indexes), fluid_index);
+            if(result != std::end(_ignore_indexes)){
+                total+=_flow[fluid_index];
+            };
+        };
+    };
+    
 };
 
 
