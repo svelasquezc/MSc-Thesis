@@ -36,6 +36,8 @@ class Mesh : protected Value_Reader{
     int listCell(int posx, int posy, int posz);
     int listCell(std::vector<int> _Numeration);
 
+    const Cell& cell(const int index) const {return _cells[index];};
+
     const double& thickness(const int axis, const int spacing) const {return _thickness[axis][spacing];};
 
     Cell_iterator begin() {return _cells.begin();};

@@ -2,6 +2,7 @@
 #define PRODUCER_WELL_H
 
 #include "Well.h"
+#include "Producer_Perforate.h"
 
 class Producer_Well : public Well{
 
@@ -12,6 +13,13 @@ class Producer_Well : public Well{
 
  public:
     
+    void perforate(Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
+        
+        Well::perforate(mesh, characterized_fluids, type);
+
+        insertPerforations<Producer_Perforate>(mesh);
+        
+    };
 };
 
 
