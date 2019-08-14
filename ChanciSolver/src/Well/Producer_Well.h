@@ -3,7 +3,7 @@
 
 #include "Well.h"
 
-class Producer_Well : Well{
+class Producer_Well : public Well{
 
  private:
     

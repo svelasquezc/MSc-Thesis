@@ -6,6 +6,7 @@
 
 #include "Mesh.h"
 #include "Rock.h"
+#include "Well.h"
 #include "Equilibrium_Relation.h"
 
 template<typename PropertiesFunction_t, typename FlowFunction_t, typename AccumulationFunction_t>
@@ -96,24 +97,37 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         cell_index = cell->index();
                         _calculateProperties(term, *cell, rock);
                         residual(locate(residual_selector, cell_index)) = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
-                    }
-                }
-            }
+                        
+                    };
+                };
+            };
 
             // This should be an equation component
             for(auto residual : equations){
 
                 if(residual->status()){
                 
-                    if(residual->type() == "Well"){
+                    if(residual->type() == typeid(Well).name()){
+
+                        auto residual_well = std::dynamic_pointer_cast<Well,Equation_Base>(residual);
                         
                         for(auto variable : equations){
 
                             if(variable->status()){
 
-                                if(variable->type() == "Well"){
-
+                                if(variable->type() == typeid(Well).name()){
+                                    
+                                    auto well_variable = std::dynamic_pointer_cast<Well,Equation_Base>(variable);
+                                    
                                 }else{
+                                    
+                                    auto fluid_variable = std::dynamic_pointer_cast<Fluid,Equation_Base>(variable);
+                                };
+                                
+                            };
+                            
+                        };
+                        
                     }else{
 
                         auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(residual);
@@ -125,8 +139,10 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                             if(variable->status()){
 
-                                if(variable->type() == "Well"){
+                                if(variable->type() == typeid(Well).name()){
 
+                                    auto well_variable = std::dynamic_pointer_cast<Well,Equation_Base>(variable);
+                                    
                                 }else{
 
                                     auto fluid_variable = std::dynamic_pointer_cast<Fluid,Equation_Base>(variable);
@@ -190,13 +206,15 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
     };
     
-    void update(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
+    void update(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Equation_Base>>& equations){
         int cell_index;
         int residual_selector;
         int row;
 
-        for(auto fluid : characterized_fluids){
+        for(auto equation : equations){
 
+            auto fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
+            
             residual_selector = fluid->index();
             
             for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){

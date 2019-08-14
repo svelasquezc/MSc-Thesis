@@ -3,7 +3,7 @@
 
 #include "Perforate.h"
 
-class Injector_Perforate : Perforate{
+class Injector_Perforate : public Perforate{
 
  private:
     

@@ -30,9 +30,7 @@ class Fluid : public Equation<Fluid>, public std::enable_shared_from_this<Fluid>
     mutable bool _principal=false;
 
  public:
- Fluid() : Equation<Fluid>(shared_from_this()){
-     
- };
+ Fluid() : Equation<Fluid>(shared_from_this()){};
     void characterize(int& cells_number);
     void updateProperties(int& term);
     //void calculate(int& term, int& _cellindex);
@@ -126,8 +124,6 @@ void Fluid::characterize(int& cells_number){
 
     _index = _count_of_fluids;
     ++_count_of_fluids;
-
-    //_equation = std::make_unique<Equation<Fluid>>(*this);
 
     
 };

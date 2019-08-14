@@ -5,7 +5,7 @@
 #include "Fluid.h"
 
 
-class Injector_Well : Well{
+class Injector_Well : public Well{
 
  private:
 

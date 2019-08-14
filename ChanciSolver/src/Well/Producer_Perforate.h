@@ -3,7 +3,7 @@
 
 #include "Perforate.h"
 
-class Producer_Perforate : Perforate{
+class Producer_Perforate : public Perforate{
 
  private:
     

@@ -1,9 +1,6 @@
 #include "NewtonRaphson.h"
 #include "Interfluid_Interaction.h"
 
-#include "Injector_Perforate.h"
-#include "Producer_Perforate.h"
-
 #include "Producer_Well.h"
 #include "Injector_Well.h"
 
@@ -30,6 +27,8 @@ std::vector<std::unique_ptr<Equilibrium_Relation>> added_equilibrium_relations =
 
 std::vector<std::unique_ptr<Interfluid_Interaction>> added_interfluid_interactions =
     std::vector<std::unique_ptr<Interfluid_Interaction>>();
+
+std::vector<std::shared_ptr<Well>> perforated_wells = std::vector<std::shared_ptr<Well>>();
 
 std::shared_ptr<Mesh> mymesh;
 std::shared_ptr<Rock> myrock;
@@ -339,17 +338,16 @@ void launchGeomodeler(){
         mymesh->defineMesh();
         cells_number = mymesh->getCellTotal();
         break;
-    case 2:
-        break;
     default:
         break;
     }
 }
 
 void launchPetrophysicalEngineer(){
-    int option;
+    int option;    
     std::cout << "Select your action" << std::endl;
     std::cout << "1. Characterize Rock";
+    std::cout << "2. Add Interfluid Interaction";
 
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
     
@@ -358,7 +356,17 @@ void launchPetrophysicalEngineer(){
         myrock = std::make_shared<Rock>(Rock());
         myrock->characterize(cells_number);
         break;
+    case 2:
+        if(fluids_quantity >= 2){
+            added_interfluid_interactions.push_back(std::make_unique<Interfluid_Interaction>());
+            (--added_interfluid_interactions.end())->get()->add(fluids_quantity,characterized_fluids);
+        }else{
+            std::cout << "It is not possible to add an Interfluid interaction with only one fluid characterized."
+                      << std::endl;
+        }
+        break;
     default:
+        
         break;
     }
 };
@@ -382,8 +390,14 @@ void launchFluidsEngineer(){
         ++fluids_quantity;
         break;
     case 2:
-        added_equilibrium_relations.push_back(std::make_unique<Equilibrium_Relation>());
-        (--(added_equilibrium_relations.end()))->get()->add(fluids_quantity,characterized_fluids);
+        if(fluids_quantity >= 2){
+            added_equilibrium_relations.push_back(std::make_unique<Equilibrium_Relation>());
+            (--(added_equilibrium_relations.end()))->get()->add(fluids_quantity,characterized_fluids);
+            break;
+        }else{
+            std::cout << "It is not possible to add an Equilibrium relation with only one fluid characterized."
+                      << std::endl;
+        }
         break;
     default:
         break;
@@ -392,7 +406,35 @@ void launchFluidsEngineer(){
 };
 
 void launchReservoirEngineer(){
+    int option;
+    std::string type;
+    
+    std::shared_ptr<Well> well;
+    
+    std::cout << "Select your action" << std::endl;
+    std::cout << "1. Perforate Well" << std::endl;
 
+        Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
+    
+    switch(option){
+    case 1:
+        if(fluids_quantity >= 1){
+            Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
+            if(type == "Producer"){
+                well = std::make_shared<Producer_Well>();
+            }else{
+                well = std::make_shared<Injector_Well>();
+            }
+
+            
+        }else{
+            std::cout << "It is not possible to perforate wells with no fluid characterized."
+                      << std::endl;
+        };
+        break;
+    default:
+        break;
+    }
 };
 
 void launchMenu(){
