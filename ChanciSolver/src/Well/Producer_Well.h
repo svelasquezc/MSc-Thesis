@@ -16,8 +16,10 @@ class Producer_Well : public Well{
     void perforate(Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
         
         Well::perforate(mesh, characterized_fluids, type);
-
         insertPerforations<Producer_Perforate>(mesh);
+
+        _rate = std::vector<std::vector<double>>();
+        _total_accumulated = std::vector<std::vector<double>>();
         
     };
 };

@@ -9,7 +9,6 @@ class Producer_Perforate : public Perforate{
 
  private:
 
-    
     std::vector<int> _ignore_indexes;
     std::vector<double> _flow;
 
@@ -18,6 +17,8 @@ class Producer_Perforate : public Perforate{
  Producer_Perforate() : Perforate(){};
     
     void flow(const int fluid_index, const double flow){_flow[fluid_index] = flow;};
+
+    const std::vector<double>& flow() const {return _flow;};
 
     const double totalFlow() const override{
         double total=0;

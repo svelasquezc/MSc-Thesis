@@ -84,7 +84,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             //Residual calculation
             for(auto equation : equations){
 
-                if(equation->type() == "Well"){
+                if(equation->type() == typeid(Well).name()){
 
                 }else{
 
@@ -92,7 +92,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     
                     residual_selector = residual_fluid->index();
             
-                    for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
+                    for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
                 
                         cell_index = cell->index();
                         _calculateProperties(term, *cell, rock);
