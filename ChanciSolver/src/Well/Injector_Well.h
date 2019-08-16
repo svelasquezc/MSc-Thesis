@@ -16,11 +16,31 @@ class Injector_Well : public Well{
 
  public:
 
+ Injector_Well() : Well(){};
+    
     void perforate(Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
         
         Well::perforate(mesh, characterized_fluids, type);
 
         insertPerforations<Injector_Perforate>(mesh);
+
+        int injection;
+        
+        std::cout << "Please select the injection Fluid: " << std::endl;
+        for (int counter=0; counter<characterized_fluids.size(); ++counter){
+            std::cout << (counter+1) << ". " << characterized_fluids[counter]->print() << std::endl;
+        };
+
+        while(true){
+            Value_Reader::myRead(std::string(""), injection, std::string("Please insert a valid index"));
+            if(injection>0 && injection<=characterized_fluids.size()){
+                _injection_fluid = characterized_fluids[injection-1];
+                break;
+            }else{
+                std::cout << "Please insert an index inside the range" << std::endl;
+            }
+            
+        };
         
     };
 };

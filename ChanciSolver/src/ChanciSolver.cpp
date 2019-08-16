@@ -346,7 +346,7 @@ void launchGeomodeler(){
 void launchPetrophysicalEngineer(){
     int option;    
     std::cout << "Select your action" << std::endl;
-    std::cout << "1. Characterize Rock";
+    std::cout << "1. Characterize Rock" << std::endl;;
     std::cout << "2. Add Interfluid Interaction";
 
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
@@ -384,8 +384,8 @@ void launchFluidsEngineer(){
     switch(option){
     case 1:
         characterized_fluid = std::make_shared<Fluid>(Fluid());
+        characterized_fluid->characterize(cells_number);
         characterized_fluids.push_back(characterized_fluid);
-        (--(characterized_fluids.end()))->get()->characterize(cells_number);
         equations.push_back(characterized_fluid);
         ++fluids_quantity;
         break;
@@ -421,11 +421,17 @@ void launchReservoirEngineer(){
         if(fluids_quantity >= 1){
             Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
             if(type == "Producer"){
-                well = std::make_shared<Producer_Well>();
+                well = std::make_shared<Producer_Well>(Producer_Well());
+            }else if(type == "Injector"){
+                well = std::make_shared<Injector_Well>(Injector_Well());
             }else{
-                well = std::make_shared<Injector_Well>();
-            }
-
+                std::cout << "Only Injector or Producer wells"
+                      << std::endl;
+            };
+            
+            well->perforate(*mymesh, characterized_fluids,type);
+            perforated_wells.push_back(well);
+            equations.push_back(well);
             
         }else{
             std::cout << "It is not possible to perforate wells with no fluid characterized."
