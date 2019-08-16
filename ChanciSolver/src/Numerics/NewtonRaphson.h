@@ -87,7 +87,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             for(auto equation : equations){
 
                 if(equation->type() == typeid(Well).name()){
-                    
+                    auto residual_well = std::dynamic_pointer_cast<Well,Equation_Base>(equation);
                 }else{
 
                     auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
@@ -284,26 +284,34 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         int row;
 
         for(auto equation : equations){
-
-            auto fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
             
-            residual_selector = fluid->index();
-            
-            for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
+            if(variable->status()){
 
-                cell_index = cell->index();
-                row = locate(residual_selector,cell_index);
+                if(variable->type() == typeid(Well).name()){
 
-                if(fluid->principal()){
-                    fluid->pressure(term, cell_index, fluid->pressure(term, cell_index)+_solution_delta(row));
+                    auto well = std::dynamic_pointer_cast<Well,Equation_Base>(equation);
+                    
                 }else{
-                    fluid->saturation(term, cell_index, fluid->saturation(term, cell_index)+_solution_delta(row));
+                    
+                    auto fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
+            
+                    residual_selector = fluid->index();
+            
+                    for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
+
+                        cell_index = cell->index();
+                        row = locate(residual_selector,cell_index);
+
+                        if(fluid->principal()){
+                            fluid->pressure(term, cell_index, fluid->pressure(term, cell_index)+_solution_delta(row));
+                        }else{
+                            fluid->saturation(term, cell_index, fluid->saturation(term, cell_index)+_solution_delta(row));
+                        };
+                    };
                 };
             };
         };
     };
-
 };
-
 
 #endif /* NEWTONRAPHSON_H */
