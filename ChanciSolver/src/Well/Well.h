@@ -14,6 +14,9 @@
 class Well : public Equation<Well>{
 
  protected:
+
+    using Perforates_t = std::vector<std::shared_ptr<Perforate>>;
+    
     
     std::string _type;
     int _index;
@@ -28,6 +31,10 @@ class Well : public Equation<Well>{
     
 
  public:
+
+    using Perforate_iterator = Perforates_t::iterator;
+    using Perforate_const_iterator = Perforates_t::const_iterator;
+    
     Well(){};
 
     virtual ~Well() = default;
@@ -44,6 +51,8 @@ class Well : public Equation<Well>{
         
         Value_Reader::myRead(std::string("Please insert the well radius "), _radius, std::string("Please insert a valid input"));
         Value_Reader::myRead(std::string("Please insert the number of perforates "), _number_of_perforates, std::string("Please insert a valid input"));
+
+        Equation<Well>::_status = false;
 
     };
 
@@ -95,6 +104,14 @@ class Well : public Equation<Well>{
             
         };
     };
+
+    Perforate_iterator begin() {return _perforates.begin();};
+    Perforate_iterator end()   {return _perforates.end();};
+
+    Perforate_const_iterator begin()  const {return _perforates.begin();};
+    Perforate_const_iterator end()    const {return _perforates.end();};
+    Perforate_const_iterator cbegin() const {return _perforates.cbegin();};
+    Perforate_const_iterator cend()   const {return _perforates.cend();};
     
 };
 

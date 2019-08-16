@@ -125,7 +125,7 @@ void Fluid::characterize(int& cells_number){
     _index = _count_of_fluids;
     ++_count_of_fluids;
 
-    
+    Equation<Fluid>::_status = true;
 };
 
 void Fluid::updateProperties(int& term){

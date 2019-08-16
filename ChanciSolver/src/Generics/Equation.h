@@ -34,6 +34,7 @@ class Equation : public Equation_Base{
 
     const bool& status() const override {return _status;};
     const int& index() const override {return _index;};
+    
 };
 
 #endif /* EQUATION_H */
