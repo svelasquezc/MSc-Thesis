@@ -29,7 +29,9 @@ class Producer_Perforate : public Perforate{
             };
         };
     };
-    
+
+
+    const std::string type() const override {return typeid(Producer_Perforate).name();};
 };
 
 

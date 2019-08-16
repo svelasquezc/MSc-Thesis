@@ -50,7 +50,10 @@ class Well : public Equation<Well>{
     void boreholePressure(const int& term, const double boreholePressure) {
         _borehole_pressure[term]=boreholePressure;
     };
-    
+
+    const int& index() const {return _index;};
+    const double& radius() const {return _radius;};
+    const double& boreholeDepth() const {return _borehole_depth;};
     const double& boreholePressure(const int& term) const { return _borehole_pressure[term];};
 
     void flow(const int& term, const double flow) {

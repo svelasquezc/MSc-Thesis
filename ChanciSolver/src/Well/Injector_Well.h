@@ -43,6 +43,8 @@ class Injector_Well : public Well{
         };
         
     };
+
+    const std::shared_ptr<Fluid>& injectionFluid() const {return  _injection_fluid;};
 };
 
 
