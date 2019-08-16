@@ -11,7 +11,7 @@
 #include "Mesh.h"
 #include "Perforate.h"
 
-class Well : public Equation<Well>, public std::enable_shared_from_this<Well>{
+class Well : public Equation<Well>{
 
  protected:
     
@@ -28,7 +28,7 @@ class Well : public Equation<Well>, public std::enable_shared_from_this<Well>{
     
 
  public:
- Well() : Equation<Well>(shared_from_this()){};
+    Well(){};
 
     virtual ~Well() = default;
     

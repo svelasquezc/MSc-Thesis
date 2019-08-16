@@ -9,7 +9,7 @@
 #include "Measured_Property.h"
 #include "Equation.h"
 
-class Fluid : public Equation<Fluid>, public std::enable_shared_from_this<Fluid>{
+class Fluid : public Equation<Fluid>{
     
  private:
     
@@ -30,7 +30,7 @@ class Fluid : public Equation<Fluid>, public std::enable_shared_from_this<Fluid>
     mutable bool _principal=false;
 
  public:
- Fluid() : Equation<Fluid>(shared_from_this()){};
+    Fluid(){};
     void characterize(int& cells_number);
     void updateProperties(int& term);
     //void calculate(int& term, int& _cellindex);

@@ -4,7 +4,7 @@
 #include "Well.h"
 #include "Producer_Perforate.h"
 
-class Producer_Well : public Well, public std::enable_shared_from_this<Producer_Well>{
+class Producer_Well : public Well{
 
  private:
     

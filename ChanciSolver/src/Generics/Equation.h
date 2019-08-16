@@ -21,19 +21,16 @@ template<typename TypeRef>
 class Equation : public Equation_Base{
     
  private:    
-    std::shared_ptr<TypeRef> _reference;
     
  public:
 
-    typedef TypeRef ReferenceType;
+    //typedef TypeRef ReferenceType;
 
-    Equation(std::shared_ptr<TypeRef> reference){
-        _reference = reference;
-    };
+    Equation(){};
     
-    TypeRef& reference() {return *_reference;};
+    //TypeRef& reference() {return *_reference;};
 
-    const std::string type() override { return typeid(ReferenceType).name();};
+    const std::string type() override { return typeid(TypeRef).name();};
 
     const bool& status() const override {return _status;};
     const int& index() const override {return _index;};
