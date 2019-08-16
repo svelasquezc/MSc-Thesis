@@ -79,13 +79,15 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         int variable_selector;
         double modified_epsilon;
         double modified_residual;
+        int row;
+        int col;
     
         do{
             //Residual calculation
             for(auto equation : equations){
 
                 if(equation->type() == typeid(Well).name()){
-
+                    
                 }else{
 
                     auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
@@ -116,12 +118,61 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                             if(variable->status()){
 
                                 if(variable->type() == typeid(Well).name()){
+                                    //int row = locate(residual_selector, well_index);
+                                    //int col = locate(variable_selector, cell_index);
                                     
                                     auto well_variable = std::dynamic_pointer_cast<Well,Equation_Base>(variable);
+                                    well_variable->boreholePressure(term, well_variable->boreholePressure(term)+_machine_epsilon);
+                                    //calculateFlow(term, well_variable);
+                                    //modified_residual = calculateWellResidual(well_variable);
+                                    
+                                    /*
+                                      double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
+                                      if(derivative != 0){
+                                      _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                      };
+                                    */
+                                    
+                                    
+                                    well_variable->boreholePressure(term, well_variable->boreholePressure(term)-_machine_epsilon);
+                                    //calculateFlow(term, well_variable);
+                     
                                     
                                 }else{
                                     
                                     auto fluid_variable = std::dynamic_pointer_cast<Fluid,Equation_Base>(variable);
+                                    for(auto perforation = residual_well->begin(); perforation!=residual_well->end(); ++perforation){
+                                        auto cell = mesh.cell((*perforation)->index());
+
+                                        auto unmodified_flow = (*perforation)->totalFlow();
+                                        
+                                        //int col = locate(variable_selector, cellindex());
+
+                                        modified_epsilon = _machine_epsilon;
+
+                                        modifyVariable(term, *fluid_variable, cell, modified_epsilon);
+                                        
+                                        _calculateProperties(term, cell, rock);
+
+                                        //calculatePerforation(term, well_variable, *perforation);
+
+                                        auto modified_flow = (*perforation)->totalFlow();
+
+                                        double derivative = (modified_flow - unmodified_flow)/_machine_epsilon;
+                                        if(derivative != 0){
+                                            _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                        };
+                                        
+                                        modified_epsilon = -_machine_epsilon;
+
+                                        modifyVariable(term, *fluid_variable, cell, modified_epsilon);
+                                        
+                                        _calculateProperties(term, cell, rock);
+
+                                        //calculatePerforation(term, well_variable, *perforation);
+                                        
+                                    };
+                                    
                                 };
                                 
                             };
@@ -142,7 +193,28 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                 if(variable->type() == typeid(Well).name()){
 
                                     auto well_variable = std::dynamic_pointer_cast<Well,Equation_Base>(variable);
+                                    for(auto perforation = well_variable->begin(); perforation!=well_variable->end(); ++perforation){
+
+                                        auto cell = mesh.cell((*perforation)->index());
+                                        
+                                        //int row = locate(residual_selector, neighbor_index);
+                                        //int col = locate(variable_selector, cellindex());
+                                        well_variable->boreholePressure(term, well_variable->boreholePressure(term)+_machine_epsilon);
+                                        //calculatePerforation(term, well_variable, *perforation);
                                     
+                                        modified_residual = calculateResidual(term,*residual_fluid, mesh,cell,rock);
+                                    
+                                        /*
+                                          double derivative = (modified_residual - _residual(row))/_machine_epsilon;
+                                          if(derivative != 0){
+                                          _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                          };
+                                        */
+                                    
+                                    
+                                        well_variable->boreholePressure(term, well_variable->boreholePressure(term)-_machine_epsilon);
+                                        //calculatePerforation(term, well_variable, *perforation);
+                                    };
                                 }else{
 
                                     auto fluid_variable = std::dynamic_pointer_cast<Fluid,Equation_Base>(variable);
@@ -160,8 +232,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                             
                                             auto neighbor_cell = face->neighbor();
                                             int neighbor_index = neighbor_cell->index();
-                                            int row = locate(residual_selector, neighbor_index);
-                                            int col = locate(variable_selector, cell_index);
+                                            row = locate(residual_selector, neighbor_index);
+                                            col = locate(variable_selector, cell_index);
                                             modified_residual = calculateResidual(term,*residual_fluid, mesh,*neighbor_cell,rock);
 
                                             double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
