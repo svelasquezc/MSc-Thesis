@@ -9,7 +9,7 @@
 #include "Well.h"
 #include "Equilibrium_Relation.h"
 
-template<typename PropertiesFunction_t, typename FlowFunction_t, typename AccumulationFunction_t>
+template<typename PropertiesFunction_t, typename FlowFunction_t, typename AccumulationFunction_t, typename PerforationFunction_t, typename WellFunction_t>
     class NewtonRaphson{
  private:
     
@@ -35,15 +35,21 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     PropertiesFunction_t *_calculateProperties;
     FlowFunction_t *_calculateFlow;
     AccumulationFunction_t *_calculateAccumulation;
+    PerforationFunction_t *_calculatePerforation;
+    WellFunction_t *_calculateWellFlow;
     
-    const inline int locate(int input_selector, int input_index){
-        return _cells_number*input_selector + input_index;
+    const inline int locate(const auto type, int input_selector, int input_index){
+        if(type == "fluid"){
+            return _cells_number*input_selector + input_index;
+        }else{
+            return _cells_number*fluids_quantity + input_index;
+        }
     };
     
  public:
     
- NewtonRaphson(PropertiesFunction_t calculateProperties, FlowFunction_t calculateFlow, AccumulationFunction_t calculateAccumulation) : _calculateProperties(calculateProperties),
-        _calculateFlow(calculateFlow), _calculateAccumulation(calculateAccumulation){};
+ NewtonRaphson(PropertiesFunction_t calculateProperties, FlowFunction_t calculateFlow, AccumulationFunction_t calculateAccumulation, PerforationFunction_t calculatePerforation, WellFunction_t calculateWellFlow) : _calculateProperties(calculateProperties),
+        _calculateFlow(calculateFlow), _calculateAccumulation(calculateAccumulation), _calculatePerforation(calculatePerforation), _calculateWellFlow(calculateWellFlow){};
 
     void modifyVariable(const int& term, Fluid& fluid, Cell& cell, const double modified_epsilon){
         
@@ -87,7 +93,9 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             for(auto equation : equations){
 
                 if(equation->type() == typeid(Well).name()){
+                    constexpr auto residual_type = "well";
                     auto residual_well = std::dynamic_pointer_cast<Well,Equation_Base>(equation);
+
                 }else{
 
                     auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
@@ -110,43 +118,46 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                 if(residual->status()){
                 
                     if(residual->type() == typeid(Well).name()){
-
+                        constexpr auto residual_type = "well";
                         auto residual_well = std::dynamic_pointer_cast<Well,Equation_Base>(residual);
                         
                         for(auto variable : equations){
 
                             if(variable->status()){
 
-                                if(variable->type() == typeid(Well).name()){
-                                    //int row = locate(residual_selector, well_index);
-                                    //int col = locate(variable_selector, cell_index);
-                                    
+                                if(variable->type() == typeid(Well).name() && residual->index() == variable->index()){
+                                    constexpr auto variable_type = "well";
                                     auto well_variable = std::dynamic_pointer_cast<Well,Equation_Base>(variable);
+
+                                    row = locate(residual_type, residual_selector, well->index());
+                                    col = locate(variable_type, variable_selector, well->index());
+
                                     well_variable->boreholePressure(term, well_variable->boreholePressure(term)+_machine_epsilon);
-                                    //calculateFlow(term, well_variable);
+                                    _calculateWellFlow(term, well_variable);
                                     //modified_residual = calculateWellResidual(well_variable);
                                     
-                                    /*
-                                      double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
+                                    
+                                      double derivative = (modified_residual - _residual(row))/_machine_epsilon;
                                       if(derivative != 0){
                                       _non_zeros.push_back(Tripletd_t(row,col,derivative));
                                       };
-                                    */
+                                    
                                     
                                     
                                     well_variable->boreholePressure(term, well_variable->boreholePressure(term)-_machine_epsilon);
-                                    //calculateFlow(term, well_variable);
+                                    _calculateFlow(term, well_variable);
                      
                                     
                                 }else{
-                                    
+                                    constexpr auto variable_type = "fluid";
                                     auto fluid_variable = std::dynamic_pointer_cast<Fluid,Equation_Base>(variable);
                                     for(auto perforation = residual_well->begin(); perforation!=residual_well->end(); ++perforation){
                                         auto cell = mesh.cell((*perforation)->index());
 
                                         auto unmodified_flow = (*perforation)->totalFlow();
                                         
-                                        //int col = locate(variable_selector, cellindex());
+                                        row = locate(residual_type, residual_selector, well->index());
+                                        col = locate(variable_type, variable_selector, cell.index());
 
                                         modified_epsilon = _machine_epsilon;
 
@@ -180,7 +191,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         };
                         
                     }else{
-
+                        constexpr auto equation_type = "fluid";
                         auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(residual);
                 
                         residual_selector = residual_fluid->index();
@@ -191,14 +202,14 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                             if(variable->status()){
 
                                 if(variable->type() == typeid(Well).name()){
-
+                                    constexpr auto variable_type = "fluid";
                                     auto well_variable = std::dynamic_pointer_cast<Well,Equation_Base>(variable);
                                     for(auto perforation = well_variable->begin(); perforation!=well_variable->end(); ++perforation){
 
                                         auto cell = mesh.cell((*perforation)->index());
                                         
-                                        //int row = locate(residual_selector, neighbor_index);
-                                        //int col = locate(variable_selector, cellindex());
+                                        //row = locate(residual_type, residual_selector, neighbor_index);
+                                        //col = locate(variable_type, variable_selector, cell.index());
                                         well_variable->boreholePressure(term, well_variable->boreholePressure(term)+_machine_epsilon);
                                         //calculatePerforation(term, well_variable, *perforation);
                                     

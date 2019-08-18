@@ -46,6 +46,10 @@ void updateVariables(std::vector<std::shared_ptr<Fluid>>& characterized_fluids, 
             
     };
 
+    for(auto well : perforated_wells){
+        well->updateProperties(term);
+    };
+
     rock.updateProperties(term);
 };
 
@@ -89,8 +93,7 @@ void estimateWellPressure(const int term, std::shared_ptr<Well>& well){
     std::shared_ptr<Injector_Perforate> injector_perf;
     std::shared_ptr<Producer_Perforate> producer_perf;
 
-    for(auto perforation = well->begin(); perforation !=well->end(); ++perforation){
-            
+    for(auto perforation = well->begin(); perforation !=well->end(); ++perforation){    
         calculateGeometry(term, well, *perforation);
     };
 
@@ -376,7 +379,7 @@ double calculateAccumulation(const int& term, Fluid& fluid, Cell& cell, Rock& ro
 double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face& face, Rock& rock){
     
     auto harmonicAverage = [](double cell_property, double neighbor_property){
-        return 1.0/((1/cell_property) + (1/neighbor_property));
+        return 1.0/((1.0/cell_property) + (1.0/neighbor_property));
     };
 
     double flow=0;
@@ -409,7 +412,7 @@ double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face
                              fluid.viscosity(term, neighbor_index)*neighbor_porous_volume) /
         (porous_volume + neighbor_porous_volume);
 
-    double face_shape_factor = 2*harmonicAverage(shape_factor, neighbor_shape_factor);
+    double face_shape_factor = 2.0*harmonicAverage(shape_factor, neighbor_shape_factor);
 
     double face_relative_permeability=1;
     
@@ -461,9 +464,9 @@ double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face
     return flow;
 };
 
-using BlackOilNewton = NewtonRaphson<decltype(calculateProperties), decltype(calculateFlow), decltype(calculateAccumulation)>;
+using BlackOilNewton = NewtonRaphson<decltype(calculateProperties), decltype(calculateFlow), decltype(calculateAccumulation),decltype(calculatePerforation),decltype(calculateWellFlow)>;
 
-BlackOilNewton my_newton(calculateProperties,calculateFlow,calculateAccumulation);
+BlackOilNewton my_newton(calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow);
 
 
 //Change Event Name
@@ -480,14 +483,13 @@ void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _t
         _mytime    +=_timedelta;
         _timestamp = "stop";
         ++_term;      
-    }
+    };
 };
 
 //Rock
 void launchTriggers(){
-    timePasses(timestamp, term, mytime, timedelta, simulationtime);
     mymesh->appear(timestamp,stencil);
-    
+    timePasses(timestamp, term, mytime, timedelta, simulationtime);
 };
 
 void launchGeomodeler(){
