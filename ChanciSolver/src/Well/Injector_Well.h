@@ -41,10 +41,20 @@ class Injector_Well : public Well{
             }
             
         };
+
+        _rate=std::vector<double>();
+        _total_accumulated=std::vector<double>();
         
     };
 
     const std::shared_ptr<Fluid>& injectionFluid() const {return  _injection_fluid;};
+
+    void updateProperties(const int term){
+        Well::updateProperties(term);
+
+        _rate.push_back(_rate[term-1]);
+        _total_accumulated.push_back(_total_accumulated[term-1]);
+    };
 };
 
 

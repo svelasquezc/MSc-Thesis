@@ -32,7 +32,7 @@ class Fluid : public Equation<Fluid>{
  public:
     Fluid(){};
     void characterize(int& cells_number);
-    void updateProperties(int& term);
+    void updateProperties(const int& term);
     //void calculate(int& term, int& _cellindex);
     const std::string& print() const;
     const int& index() const;
@@ -128,7 +128,7 @@ void Fluid::characterize(int& cells_number){
     Equation<Fluid>::_status = true;
 };
 
-void Fluid::updateProperties(int& term){
+void Fluid::updateProperties(const int& term){
     _pressure.push_back             (_pressure[term-1]);
     _potential.push_back            (_potential[term-1]);
     _density.push_back              (_density[term-1]);

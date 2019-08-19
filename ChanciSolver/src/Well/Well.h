@@ -11,6 +11,8 @@
 #include "Mesh.h"
 #include "Perforate.h"
 
+#include "Operative_Condition.h"
+
 class Well : public Equation<Well>{
 
  protected:
@@ -28,7 +30,7 @@ class Well : public Equation<Well>{
     std::vector<double> _borehole_pressure;
     std::vector<double> _flow;
 
-    
+    std::shared_ptr<Operative_Condition> _operative_condition;
 
  public:
 
@@ -105,6 +107,41 @@ class Well : public Equation<Well>{
         };
     };
 
+    virtual void updateProperties(const int term){
+        _borehole_pressure.push_back(_borehole_pressure[term-1]);
+        _flow.push_back(_flow[term-1]);
+    };
+
+    std::shared_ptr<Operative_Condition>& operativeCondition(){
+        return _operative_condition;
+    };
+
+    void establish(const int& term, std::string timestamp){
+
+        std::string type;
+        double value;
+        double next_change;
+        
+        if(timestamp == "Change"){
+            Value_Reader::myRead(std::string("Please insert the type of operative condition (Pressure or Flow)"), type, std::string("Please insert a valid option"));
+            
+            while(type != "Pressure" && type != "Flow"){
+                Value_Reader::myRead(std::string("Please insert the type of operative condition (Pressure or Flow)"), type, std::string("Please insert a valid option"));
+            };
+            
+            Value_Reader::myRead(std::string("Please insert the value of operative condition "), value, std::string("Please insert a valid option"));
+
+            Value_Reader::myRead(std::string("Please insert the next time of change of operative condition "), value, std::string("Please insert a valid option"));
+
+            if(type == "Pressure"){
+                Equation<Well>::_status = false;
+            }else{
+                Equation<Well>::_status = true;
+            };
+        };
+            
+    };
+    
     Perforate_iterator begin() {return _perforates.begin();};
     Perforate_iterator end()   {return _perforates.end();};
 

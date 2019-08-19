@@ -1,3 +1,5 @@
+#include "Global.h"
+
 #include "NewtonRaphson.h"
 #include "Interfluid_Interaction.h"
 
@@ -7,18 +9,10 @@
 
 std::vector<std::shared_ptr<Equation_Base>> equations;
 
-std::string timestamp="";
-double mytime=0;
-double simulationtime = 60;
-double timedelta=1;
+
 int Fluid::_count_of_principals=0;
 int Fluid::_count_of_fluids=0;
-int wells_quantity=0;
-int term=0;
-int fluids_quantity=0;
-int stencil[2] = {-1,1};
-int equilibrium_relations_quantity=0;
-int cells_number=0;
+
 
 std::vector<std::shared_ptr<Fluid>> characterized_fluids =
     std::vector<std::shared_ptr<Fluid>>();
@@ -33,7 +27,7 @@ std::vector<std::shared_ptr<Well>> perforated_wells = std::vector<std::shared_pt
 std::shared_ptr<Mesh> mymesh;
 std::shared_ptr<Rock> myrock;
 
-void updateVariables(std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
+void updateVariables(const int term, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
     
     for(auto fluid : characterized_fluids){
 	fluid->updateProperties(term);
@@ -367,7 +361,7 @@ double calculateAccumulation(const int& term, Fluid& fluid, Cell& cell, Rock& ro
         };
     };
 
-    double accumulation = (cell.volume()/timedelta) *
+    double accumulation = (cell.volume()/Global::timedelta) *
         (((rock.porosity(term,cell_index)*fluid.saturation(term,cell_index)
            /fluid.volumetricFactor(term,cell_index)) + current_contribution)-
          ((rock.porosity(term-1,cell_index)*fluid.saturation(term-1,cell_index)
@@ -472,7 +466,7 @@ BlackOilNewton my_newton(calculateProperties,calculateFlow,calculateAccumulation
 //Change Event Name
 void FluidPressureVaries(std::string& _timestamp){
     if(_timestamp == "stop"){
-        updateVariables(characterized_fluids, *myrock);
+        updateVariables(Global::term,characterized_fluids, *myrock);
     }
 };
 
@@ -488,6 +482,7 @@ void timePasses(std::string& _timestamp, int& _term, double& _mytime, double& _t
 
 //Rock
 void launchTriggers(){
+    using namespace Global;
     mymesh->appear(timestamp,stencil);
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
 };
@@ -504,7 +499,7 @@ void launchGeomodeler(){
     case 1:
         mymesh = std::make_shared<Mesh>(Mesh());
         mymesh->defineMesh();
-        cells_number = mymesh->getCellTotal();
+        Global::cells_number = mymesh->getCellTotal();
         break;
     default:
         break;
@@ -522,12 +517,12 @@ void launchPetrophysicalEngineer(){
     switch(option){
     case 1:
         myrock = std::make_shared<Rock>(Rock());
-        myrock->characterize(cells_number);
+        myrock->characterize(Global::cells_number);
         break;
     case 2:
-        if(fluids_quantity >= 2){
+        if(Global::fluids_quantity >= 2){
             added_interfluid_interactions.push_back(std::make_unique<Interfluid_Interaction>());
-            (--added_interfluid_interactions.end())->get()->add(fluids_quantity,characterized_fluids);
+            (--added_interfluid_interactions.end())->get()->add(Global::fluids_quantity,characterized_fluids);
         }else{
             std::cout << "It is not possible to add an Interfluid interaction with only one fluid characterized."
                       << std::endl;
@@ -552,15 +547,15 @@ void launchFluidsEngineer(){
     switch(option){
     case 1:
         characterized_fluid = std::make_shared<Fluid>(Fluid());
-        characterized_fluid->characterize(cells_number);
+        characterized_fluid->characterize(Global::cells_number);
         characterized_fluids.push_back(characterized_fluid);
         equations.push_back(characterized_fluid);
-        ++fluids_quantity;
+        ++Global::fluids_quantity;
         break;
     case 2:
-        if(fluids_quantity >= 2){
+        if(Global::fluids_quantity >= 2){
             added_equilibrium_relations.push_back(std::make_unique<Equilibrium_Relation>());
-            (--(added_equilibrium_relations.end()))->get()->add(fluids_quantity,characterized_fluids);
+            (--(added_equilibrium_relations.end()))->get()->add(Global::fluids_quantity,characterized_fluids);
             break;
         }else{
             std::cout << "It is not possible to add an Equilibrium relation with only one fluid characterized."
@@ -586,7 +581,7 @@ void launchReservoirEngineer(){
     
     switch(option){
     case 1:
-        if(fluids_quantity >= 1){
+        if(Global::fluids_quantity >= 1){
             Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
             if(type == "Producer"){
                 well = std::make_shared<Producer_Well>(Producer_Well());
@@ -644,9 +639,9 @@ void launchMenu(){
 
 int main(){
     launchMenu();
-    timestamp="continue";
+    Global::timestamp="continue";
     
-    while(mytime<simulationtime){
+    while(Global::mytime<Global::simulationtime){
         launchTriggers();
     };
     
