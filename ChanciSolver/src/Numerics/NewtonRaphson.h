@@ -49,8 +49,23 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
  public:
     
- NewtonRaphson(PropertiesFunction_t calculateProperties, FlowFunction_t calculateFlow, AccumulationFunction_t calculateAccumulation, PerforationFunction_t calculatePerforation, WellFunction_t calculateWellFlow) : _calculateProperties(calculateProperties),
-        _calculateFlow(calculateFlow), _calculateAccumulation(calculateAccumulation), _calculatePerforation(calculatePerforation), _calculateWellFlow(calculateWellFlow){};
+ NewtonRaphson(const int& mat_size,const int& max_number_of_non_zeros, PropertiesFunction_t calculateProperties, FlowFunction_t calculateFlow, AccumulationFunction_t calculateAccumulation, PerforationFunction_t calculatePerforation, WellFunction_t calculateWellFlow) : _calculateProperties(calculateProperties),
+        _calculateFlow(calculateFlow), _calculateAccumulation(calculateAccumulation), _calculatePerforation(calculatePerforation), _calculateWellFlow(calculateWellFlow){
+        using namespace Global;
+
+        //= fluids_quantity*cells_number + wells_with_equation;
+
+        // = fluids_quantity*fluids_quantity*cells_number + total_of_perforations*wells_with_equation;
+        
+        _jacobian = SparseMat_t(mat_size, mat_size);
+
+        _jacobian.reserve (max_number_of_non_zeros);
+        _non_zeros.reserve(max_number_of_non_zeros);
+
+        _residual         = Eigen::VectorXd(mat_size);
+        _initial_residual = Eigen::VectorXd(mat_size);
+        _solution_delta   = Eigen::VectorXd(mat_size);
+    };
 
     void modifyVariable(const int& term, Fluid& fluid, Cell& cell, const double modified_epsilon){
         
@@ -312,6 +327,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             _jacobian.setFromTriplets(_non_zeros.begin(), _non_zeros.end());
             solve();
             update(term, mesh, equations);
+            _jacobian.setZero();
             _non_zeros.clear();
         
         }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > _relative_change_in_residual);

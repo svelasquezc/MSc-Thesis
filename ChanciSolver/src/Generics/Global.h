@@ -15,6 +15,7 @@ namespace Global{
     int stencil[2] = {-1,1};
     int equilibrium_relations_quantity=0;
     int cells_number=0;
+    int total_of_perforations;
 };
 
 #endif /* GLOBAL_H */

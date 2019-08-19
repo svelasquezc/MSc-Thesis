@@ -460,7 +460,7 @@ double calculateFlow(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Face
 
 using BlackOilNewton = NewtonRaphson<decltype(calculateProperties), decltype(calculateFlow), decltype(calculateAccumulation),decltype(calculatePerforation),decltype(calculateWellFlow)>;
 
-BlackOilNewton my_newton(calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow);
+BlackOilNewton my_newton(0,0,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow);
 
 
 //Change Event Name
