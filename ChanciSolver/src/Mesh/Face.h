@@ -23,7 +23,7 @@ class Face{
     void index(int index){_index = index;};
     const int& index() const {return _index;};
     
-    void neighbor(Cell _cell);
+    void neighbor(std::shared_ptr<Cell>& _cell);
     const std::shared_ptr<Cell>& neighbor() const {return _neighbor_cell;};
 };
 

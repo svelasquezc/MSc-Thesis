@@ -32,12 +32,14 @@ class Well : public Equation<Well>{
 
     std::shared_ptr<Operative_Condition> _operative_condition;
 
+    bool _changed=false;
+
  public:
 
     using Perforate_iterator = Perforates_t::iterator;
     using Perforate_const_iterator = Perforates_t::const_iterator;
     
-    Well(){};
+ Well(const int index): _index(index){};
 
     virtual ~Well() = default;
     
@@ -122,7 +124,10 @@ class Well : public Equation<Well>{
         double value;
         double next_change;
         
-        if(timestamp == "Change"){
+        if(timestamp == "change" || timestamp == ""){
+
+            _changed=true;
+            
             Value_Reader::myRead(std::string("Please insert the type of operative condition (Pressure or Flow)"), type, std::string("Please insert a valid option"));
             
             while(type != "Pressure" && type != "Flow"){
@@ -141,6 +146,9 @@ class Well : public Equation<Well>{
         };
             
     };
+
+    void changed(const bool changed){_changed=changed;};
+    const bool changed() const {return _changed;};
     
     Perforate_iterator begin() {return _perforates.begin();};
     Perforate_iterator end()   {return _perforates.end();};

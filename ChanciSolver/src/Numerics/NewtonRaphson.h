@@ -11,7 +11,7 @@
 #include "Well.h"
 #include "Equilibrium_Relation.h"
 
-template<typename PropertiesFunction_t, typename FlowFunction_t, typename AccumulationFunction_t, typename PerforationFunction_t, typename WellFunction_t>
+template<typename PropertiesFunction_t, typename FlowFunction_t, typename AccumulationFunction_t, typename PerforationFunction_t, typename WellFunction_t, typename EstimatorFunction_t>
     class NewtonRaphson{
  private:
     
@@ -37,6 +37,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     AccumulationFunction_t *_calculateAccumulation;
     PerforationFunction_t *_calculatePerforation;
     WellFunction_t *_calculateWellFlow;
+    EstimatorFunction_t* _estimatePressure;
     
     const inline int locate(const auto type, int input_selector, int input_index){
         using namespace Global;
@@ -48,16 +49,31 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     };
     
  public:
+
+    NewtonRaphson(const NewtonRaphson& other_newton){
+        _jacobian = other_newton._jacobian;
+        _residual = other_newton._residual;
+        _initial_residual = other_newton._initial_residual;
+        _solution_delta = other_newton._solution_delta;
+
+        _non_zeros = other_newton._non_zeros;
+
+        _calculateProperties = other_newton._calculateProperties;
+        _calculateFlow = other_newton._calculateFlow;
+        _calculateAccumulation = other_newton._calculateAccumulation;
+        _calculatePerforation = other_newton._calculatePerforation;
+        _calculateWellFlow = other_newton._calculateWellFlow;
+        _estimatePressure = other_newton._estimatePressure;
+    };
     
- NewtonRaphson(const int& mat_size,const int& max_number_of_non_zeros, PropertiesFunction_t calculateProperties, FlowFunction_t calculateFlow, AccumulationFunction_t calculateAccumulation, PerforationFunction_t calculatePerforation, WellFunction_t calculateWellFlow) : _calculateProperties(calculateProperties),
-        _calculateFlow(calculateFlow), _calculateAccumulation(calculateAccumulation), _calculatePerforation(calculatePerforation), _calculateWellFlow(calculateWellFlow){
-        using namespace Global;
+ NewtonRaphson(const int& mat_size,const int& max_number_of_non_zeros, PropertiesFunction_t calculateProperties, FlowFunction_t calculateFlow, AccumulationFunction_t calculateAccumulation, PerforationFunction_t calculatePerforation, WellFunction_t calculateWellFlow, EstimatorFunction_t estimatePressure) : _calculateProperties(calculateProperties),
+        _calculateFlow(calculateFlow), _calculateAccumulation(calculateAccumulation), _calculatePerforation(calculatePerforation), _calculateWellFlow(calculateWellFlow), _estimatePressure(estimatePressure){
 
         //= fluids_quantity*cells_number + wells_with_equation;
 
         // = fluids_quantity*fluids_quantity*cells_number + total_of_perforations*wells_with_equation;
         
-        _jacobian = SparseMat_t(mat_size, mat_size);
+        _jacobian.resize(mat_size, mat_size);
 
         _jacobian.reserve (max_number_of_non_zeros);
         _non_zeros.reserve(max_number_of_non_zeros);
@@ -65,11 +81,15 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         _residual         = Eigen::VectorXd(mat_size);
         _initial_residual = Eigen::VectorXd(mat_size);
         _solution_delta   = Eigen::VectorXd(mat_size);
+
+        _residual.setZero();
+        _initial_residual.setZero();
+        _solution_delta.setZero();
     };
 
-    void modifyVariable(const int& term, Fluid& fluid, Cell& cell, const double modified_epsilon){
+    void modifyVariable(const int& term, Fluid& fluid, const std::shared_ptr<Cell>& cell, const double modified_epsilon){
         
-        const int cell_index = cell.index();
+        const int cell_index = cell->index();
             
         if(fluid.principal()){
             fluid.pressure(term, cell_index, fluid.pressure(term, cell_index)+modified_epsilon);
@@ -78,10 +98,10 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         };
     };
     
-    double calculateResidual(const int& term, Fluid& fluid, Mesh& mesh, Cell& cell, Rock& rock)
+    double calculateResidual(const int& term, Fluid& fluid, const Mesh& mesh, const std::shared_ptr<Cell>& cell, Rock& rock)
     {
         double flow=0;
-        for (auto face = cell.begin(); face!=cell.end(); ++face){
+        for (auto face = cell->begin(); face!=cell->end(); ++face){
             flow = flow + _calculateFlow(term, fluid, mesh, cell, *face, rock);
         };
         double accumulation = _calculateAccumulation(term, fluid, cell, rock);
@@ -96,9 +116,9 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     void solve(){
         _solver.compute(_jacobian);
         _solution_delta = _solver.solve(_residual);
-    }
+    };
     
-    void iterate(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
+    void iterate(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Well>>& wells, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
 
         int residual_selector;
         int cell_index;
@@ -109,6 +129,25 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         int col;
     
         do{
+
+            for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
+                _calculateProperties(term, *cell, rock);
+            };
+
+            for(auto well : wells){
+                
+                if(well->changed()){
+
+                    if(well->operativeCondition()->type() == "Flow"){
+                        _estimatePressure(term, well);
+                    }else{
+                        _calculateWellFlow(term, well);
+                    };
+                    
+                    well->changed(false);
+                };
+            };
+            
             //Residual calculation
             for(auto equation : equations){
                 
@@ -132,8 +171,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             
                     for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
                 
-                        cell_index = cell->index();
-                        _calculateProperties(term, *cell, rock);
+                        cell_index = (*cell)->index();
 
                         row = locate(residual_type, residual_selector, cell_index);
                         
@@ -141,7 +179,10 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         
                     };
                 };
+                
             };
+
+            std::cout << "Residual vector: " << _residual <<std::endl;
 
             // This should be an equation component
             for(auto residual : equations){
@@ -182,7 +223,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         };
                                                         
                                         well_variable->boreholePressure(term, well_variable->boreholePressure(term)-_machine_epsilon);
-                                        _calculateFlow(term, well_variable);
+                                        _calculateWellFlow(term, well_variable);
                                         
                                     };                     
                                     
@@ -196,7 +237,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         auto unmodified_flow = (*perforation)->totalFlow();
                                         
                                         row = locate(residual_type, residual_selector, residual_well->index());
-                                        col = locate(variable_type, variable_selector, cell.index());
+                                        col = locate(variable_type, variable_selector, cell->index());
 
                                         modified_epsilon = _machine_epsilon;
 
@@ -252,7 +293,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                                         auto cell = mesh.cell((*perforation)->index());
                                         
-                                        row = locate(residual_type, residual_selector, cell.index());
+                                        row = locate(residual_type, residual_selector, cell->index());
                                         col = locate(variable_type, variable_selector, well_variable->index());
                                         well_variable->boreholePressure(term, well_variable->boreholePressure(term)+_machine_epsilon);
                                         _calculatePerforation(term, well_variable, *perforation);
@@ -278,18 +319,18 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                     for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
 
                                         modified_epsilon = _machine_epsilon;
-                                        cell_index = cell->index();
+                                        cell_index = (*cell)->index();
                         
                                         modifyVariable(term, *fluid_variable, *cell, modified_epsilon);
                                         _calculateProperties(term, *cell, rock);
                         
-                                        for (auto face = cell->begin(); face!=cell->end(); ++face){
+                                        for (auto face = (*cell)->begin(); face!=(*cell)->end(); ++face){
                             
-                                            auto neighbor_cell = face->neighbor();
+                                            auto neighbor_cell = (*face)->neighbor();
                                             int neighbor_index = neighbor_cell->index();
                                             row = locate(residual_type, residual_selector, neighbor_index);
                                             col = locate(variable_type, variable_selector, cell_index);
-                                            modified_residual = calculateResidual(term,*residual_fluid, mesh,*neighbor_cell,rock);
+                                            modified_residual = calculateResidual(term,*residual_fluid, mesh,neighbor_cell,rock);
 
                                             double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
                                             if(derivative != 0){
@@ -360,7 +401,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             
                     for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
 
-                        cell_index = cell->index();
+                        cell_index = (*cell)->index();
                         row = locate(residual_type,residual_selector,cell_index);
 
                         if(fluid->principal()){

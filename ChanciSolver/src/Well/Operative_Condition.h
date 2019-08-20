@@ -17,7 +17,7 @@ class Operative_Condition{
 
     const std::string& type() const {return _type;};
     const double& value() const {return _value;};
-    const double& next_change() const {return _next_change;};
+    const double& nextChange() const {return _next_change;};
     
 };
 

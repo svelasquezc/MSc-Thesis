@@ -13,7 +13,7 @@ class Producer_Well : public Well{
 
  public:
 
- Producer_Well() : Well(){};
+ Producer_Well(const int index) : Well(index){};
     
     void perforate(Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
         

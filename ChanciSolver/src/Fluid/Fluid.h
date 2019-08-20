@@ -37,8 +37,8 @@ class Fluid : public Equation<Fluid>{
     const std::string& print() const;
     const int& index() const;
     //sets
-    void volumetricFactor(int& _term, int& _cellindex);
-    void viscosity(int& _term, int& _cellindex);
+    void volumetricFactor(const int& _term, const int& _cellindex, const double pressure);
+    void viscosity(const int& _term, const int& _cellindex, const double pressure);
     void potential(const int& _term, const int& _cellindex, const double _gravity, const double& depth);
 
     void density(const int& term, const int& cell_index, const double density){_density[term][cell_index]=density;}
@@ -138,7 +138,7 @@ void Fluid::updateProperties(const int& term){
     _relative_permeability.push_back(_relative_permeability[term-1]);
 };
 
-void Fluid::volumetricFactor(int& _term, int& _cellindex){
+void Fluid::volumetricFactor(const int& _term, const int& _cellindex, const double pressure){
     /*
       Here we need to calculate the restrictions to the flow equations (Volume restriction and Capilarity)
 
@@ -152,9 +152,9 @@ void Fluid::volumetricFactor(int& _term, int& _cellindex){
         _measured_volumetric_factor->interpolate(_pressure[_term][_cellindex]);
 };
 
-void Fluid::viscosity(int& _term, int& _cellindex){
+void Fluid::viscosity(const int& _term, const int& _cellindex, const double pressure){
     _viscosity[_term][_cellindex] =
-        _measured_viscosity->interpolate(_pressure[_term][_cellindex]);
+        _measured_viscosity->interpolate(pressure);
 };
 
 const std::string& Fluid::print() const{

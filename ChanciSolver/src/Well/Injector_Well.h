@@ -16,7 +16,7 @@ class Injector_Well : public Well{
 
  public:
 
- Injector_Well() : Well(){};
+ Injector_Well(const int index) : Well(index){};
     
     void perforate(Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
         

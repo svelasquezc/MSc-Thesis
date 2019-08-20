@@ -2,12 +2,13 @@
 #define CELL_H
 
 #include<vector>
+#include<memory>
 
 #include "Face.h"
 
 class Cell{
 
-    using Faces_t = std::vector<Face>;
+    using Faces_t = std::vector<std::shared_ptr<Face>>;
     
  private:
     int _index;
@@ -25,7 +26,7 @@ class Cell{
     Cell(int index): _index(index){
         _numeration_3d=std::vector<int>(3);
         _number_of_active_faces=0;
-        _active_faces = std::vector<Face>();
+        _active_faces = std::vector<std::shared_ptr<Face>>();
     };
     
     void volume(double volume){_volume=volume;};
@@ -45,7 +46,7 @@ class Cell{
     const int& numberOfActiveFaces() const{return _number_of_active_faces;};
 
     
-    void pushFace(Face face){
+    void pushFace(std::shared_ptr<Face>& face){
         _active_faces.push_back(face);
     };
 
@@ -59,6 +60,6 @@ class Cell{
     
 };
 
-void Face::neighbor(Cell cell) {_neighbor_cell = std::make_shared<Cell> (cell);};
+void Face::neighbor(std::shared_ptr<Cell>& cell) {_neighbor_cell = cell;};
 
 #endif /* CELL_H */

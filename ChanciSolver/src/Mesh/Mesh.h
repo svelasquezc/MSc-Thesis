@@ -2,6 +2,7 @@
 #define MESH_H
 
 #include <vector>
+#include <memory>
 #include <iostream>
 #include <sstream>
 #include <exception>
@@ -14,13 +15,13 @@ class Mesh : protected Value_Reader{
     
  private:
     
-    using Cells_t = std::vector<Cell>;
+    using Cells_t = std::vector<std::shared_ptr<Cell>>;
     int _dimension;
     std::vector<int> _cell_number = std::vector<int>(3);
     int _cell_total;
     std::vector<std::vector<double>> _thickness;
     std::vector<std::vector<double>> _top;
-    mutable bool _defined=false;
+    int _defined=0;
     Cells_t _cells;
     
  public:
@@ -36,7 +37,7 @@ class Mesh : protected Value_Reader{
     int listCell(int posx, int posy, int posz);
     int listCell(std::vector<int> _Numeration);
 
-    const Cell& cell(const int index) const {return _cells[index];};
+    const std::shared_ptr<Cell>& cell(const int index) const {return _cells[index];};
 
     const double& thickness(const int axis, const int spacing) const {return _thickness[axis][spacing];};
 
@@ -89,11 +90,11 @@ void Mesh::defineMesh(){
 	};
 	
     };
-    _defined = true;
+    _defined = 1;
 };
 
 void Mesh::appear(const std::string& _timestamp, const int stencil[2]){
-    if(_timestamp=="" && _defined){
+    if(_timestamp=="" && _defined==1){
         int index = 0;
 	double auxiliar_centroid=0;
         for(int axisz=0;axisz<_cell_number[2];++axisz){
@@ -106,12 +107,12 @@ void Mesh::appear(const std::string& _timestamp, const int stencil[2]){
 	    
             for(int axisy=0;axisy<_cell_number[1];++axisy){
                 for(int axisx=0;axisx<_cell_number[0];++axisx){
-                    Cell my_cell = Cell(index);
-                    my_cell.volume(_thickness[2][axisz], _thickness[1][axisy], _thickness[0][axisx]);
-		    my_cell.depth(auxiliar_centroid + _top[axisy][axisx]);
-                    my_cell.numeration3D(0,axisx);
-                    my_cell.numeration3D(1,axisy);
-                    my_cell.numeration3D(2,axisz);
+                    std::shared_ptr<Cell> my_cell = std::make_shared<Cell>(index);
+                    my_cell->volume(_thickness[2][axisz], _thickness[1][axisy], _thickness[0][axisx]);
+		    my_cell->depth(auxiliar_centroid + _top[axisy][axisx]);
+                    my_cell->numeration3D(0,axisx);
+                    my_cell->numeration3D(1,axisy);
+                    my_cell->numeration3D(2,axisz);
                     _cells.push_back(my_cell);
                     ++index;
                 };
@@ -120,7 +121,7 @@ void Mesh::appear(const std::string& _timestamp, const int stencil[2]){
         int face_index=0;
         for(auto celli : _cells){
             
-            auto local_numeration = celli.numeration3D();
+            auto local_numeration = celli->numeration3D();
             
             for(int axis=0; axis<3; ++axis){
                 for(int direction=0;direction<2;++direction){
@@ -131,32 +132,32 @@ void Mesh::appear(const std::string& _timestamp, const int stencil[2]){
                     
                     if(neighbor_cell > -1){
                         
-                        celli.numberOfActiveFaces(celli.numberOfActiveFaces()+1);
-                        Face face = Face();
+                        celli->numberOfActiveFaces(celli->numberOfActiveFaces()+1);
+                        std::shared_ptr<Face> face = std::make_shared<Face>();
                         switch(axis){
                         case 0:
-                            face.area(_thickness[1][local_numeration[1]]*_thickness[2][local_numeration[2]]);
-                            face.orientation(0);
+                            face->area(_thickness[1][local_numeration[1]]*_thickness[2][local_numeration[2]]);
+                            face->orientation(0);
                             break;
                         case 1:
-                            face.area(_thickness[0][local_numeration[0]]*_thickness[2][local_numeration[2]]);
-                            face.orientation(1);
+                            face->area(_thickness[0][local_numeration[0]]*_thickness[2][local_numeration[2]]);
+                            face->orientation(1);
                             break;
                         case 2:
-                            face.area(_thickness[0][local_numeration[0]]*_thickness[1][local_numeration[1]]);
-                            face.orientation(2);
+                            face->area(_thickness[0][local_numeration[0]]*_thickness[1][local_numeration[1]]);
+                            face->orientation(2);
                             break;
                         }
-                        face.neighbor(_cells[neighbor_cell]);
+                        face->neighbor(_cells[neighbor_cell]);
                         ++face_index;
-                        face.index(face_index);
-                        celli.pushFace(face);
+                        face->index(face_index);
+                        celli->pushFace(face);
                     }
                     
                 }
             }
         }
-        
+        _defined = 2;
     };
 };
 

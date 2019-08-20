@@ -16,6 +16,7 @@ namespace Global{
     int equilibrium_relations_quantity=0;
     int cells_number=0;
     int total_of_perforations;
+    bool was_change;
 };
 
 #endif /* GLOBAL_H */
