@@ -114,8 +114,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     };
 
     void solve(){
+
+        _residual = -_residual;
         _solver.compute(_jacobian);
         _solution_delta = _solver.solve(_residual);
+        _residual = -_residual;
+        std::cout << "Solution delta: " << _solution_delta <<std::endl;
     };
     
     void iterate(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Well>>& wells, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
@@ -129,6 +133,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         int col;
     
         do{
+
+            _residual.setZero();
 
             for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
                 _calculateProperties(term, *cell, rock);
@@ -365,7 +371,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                 
             };
 
-            _jacobian.setFromTriplets(_non_zeros.begin(), _non_zeros.end());
+            _jacobian.setFromTriplets(_non_zeros.begin(), _non_zeros.end());            
             solve();
             update(term, mesh, equations);
             _jacobian.setZero();
