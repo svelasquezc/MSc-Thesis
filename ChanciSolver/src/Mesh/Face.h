@@ -9,7 +9,7 @@ class Cell;
 class Face{
  private:
     int _index;
-    std::shared_ptr<Cell> _neighbor_cell;
+    std::weak_ptr<Cell> _neighbor_cell;
     double _area;
     int _orientation;
  public:
@@ -24,7 +24,7 @@ class Face{
     const int& index() const {return _index;};
     
     void neighbor(std::shared_ptr<Cell>& _cell);
-    const std::shared_ptr<Cell>& neighbor() const {return _neighbor_cell;};
+    const std::weak_ptr<Cell>& neighbor() const {return _neighbor_cell;};
 };
 
 #endif /* FACE_H */

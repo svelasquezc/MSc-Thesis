@@ -376,12 +376,12 @@ double calculateFlow(const int& term, Fluid& fluid, const Mesh& mesh, const std:
     
     int direction = face->orientation();
 
-    const auto neighbor_cell = face->neighbor();
+    auto neighbor_cell = face->neighbor().lock();
     
     const auto neighbor_index = neighbor_cell->index();
     const auto cell_index = cell->index();
 
-    const auto neighbor_axis = face->neighbor()->numeration3D()[direction];
+    const auto neighbor_axis = neighbor_cell->numeration3D()[direction];
     const auto axis = cell->numeration3D()[direction];
 
     double length_delta = mesh.thickness(direction,axis);
@@ -450,6 +450,8 @@ double calculateFlow(const int& term, Fluid& fluid, const Mesh& mesh, const std:
         };
     };
 
+    neighbor_cell.reset();
+    
     return flow;
 };
 
@@ -569,7 +571,7 @@ void launchGeomodeler(){
     switch(option){
     case 1:
         mymesh = std::make_unique<Mesh>();
-        mymesh->defineMesh();
+        mymesh->define();
         Global::cells_number = mymesh->getCellTotal();
         break;
     default:
@@ -578,7 +580,9 @@ void launchGeomodeler(){
 }
 
 void launchPetrophysicalEngineer(){
-    int option;    
+    int option;
+    std::unique_ptr<Interfluid_Interaction> added_interfluid_interaction;
+    
     std::cout << "Select your action" << std::endl;
     std::cout << "1. Characterize Rock" << std::endl;;
     std::cout << "2. Add Interfluid Interaction";
@@ -592,8 +596,12 @@ void launchPetrophysicalEngineer(){
         break;
     case 2:
         if(Global::fluids_quantity >= 2){
-            added_interfluid_interactions.push_back(std::make_unique<Interfluid_Interaction>());
-            (--added_interfluid_interactions.end())->get()->add(Global::fluids_quantity,characterized_fluids);
+            
+            added_interfluid_interaction = std::make_unique<Interfluid_Interaction>();
+            added_interfluid_interaction->add(Global::fluids_quantity,characterized_fluids);
+            
+            added_interfluid_interactions.push_back(std::move(added_interfluid_interaction));
+            
         }else{
             std::cout << "It is not possible to add an Interfluid interaction with only one fluid characterized."
                       << std::endl;
@@ -609,6 +617,7 @@ void launchFluidsEngineer(){
     int option;
     int _dimension;
     std::shared_ptr<Fluid> characterized_fluid;
+    std::unique_ptr<Equilibrium_Relation> added_equilibrium_relation;
     std::cout << "Select your action" << std::endl;
     std::cout << "1. Characterize Fluid" << std::endl;
     std::cout << "2. Add Equilibrium Relation";
@@ -617,7 +626,7 @@ void launchFluidsEngineer(){
     
     switch(option){
     case 1:
-        characterized_fluid = std::make_shared<Fluid>(Fluid());
+        characterized_fluid = std::make_shared<Fluid>(Global::fluids_quantity);
         characterized_fluid->characterize(Global::cells_number);
         characterized_fluids.push_back(characterized_fluid);
         equations.push_back(characterized_fluid);
@@ -625,8 +634,10 @@ void launchFluidsEngineer(){
         break;
     case 2:
         if(Global::fluids_quantity >= 2){
-            added_equilibrium_relations.push_back(std::make_unique<Equilibrium_Relation>());
-            (--(added_equilibrium_relations.end()))->get()->add(Global::fluids_quantity,characterized_fluids);
+            added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(Global::equilibrium_relations_quantity);
+            added_equilibrium_relation->add(Global::cells_number,Global::fluids_quantity,characterized_fluids);
+            added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
+            ++Global::equilibrium_relations_quantity;
             break;
         }else{
             std::cout << "It is not possible to add an Equilibrium relation with only one fluid characterized."
@@ -725,14 +736,81 @@ void launchMenu(){
         }
         launchTriggers();
     };
-}
+};
 
-int main(){
-    launchMenu();
-    Global::timestamp="continue";
+
+void launchFromFile(const char* filename){
+    std::ifstream file_reader(filename, std::ifstream::in);
+    std::string object;
     
-    while(Global::mytime<Global::simulationtime){
-        launchTriggers();
+    std::shared_ptr<Fluid> characterized_fluid;
+    
+    if(file_reader.is_open()){
+        while(file_reader>>object){
+            
+            std::transform(object.begin(), object.end(),object.begin(), ::toupper);
+            
+            if(object == "MESH"){
+                
+                mymesh = std::make_unique<Mesh>();
+                mymesh->defineFromFile(file_reader);
+                Global::cells_number = mymesh->getCellTotal();
+                
+            }else if(object == "ROCK"){
+                
+                myrock = std::make_unique<Rock>();
+                myrock->characterizeFromFile(file_reader, Global::cells_number);
+            
+            }else if(object == "FLUIDS"){
+                
+                file_reader>>Global::fluids_quantity;
+                
+                for(int fluid=0; fluid<Global::fluids_quantity;++fluid){
+                    
+                    characterized_fluid = std::make_shared<Fluid>(fluid);
+                    characterized_fluid->characterizeFromFile(file_reader, Global::cells_number);
+                    characterized_fluids.push_back(characterized_fluid);
+                    equations.push_back(characterized_fluid);
+                    
+                };
+            }else if(object == "EQUILIBRIUM_RELATIONS"){
+                file_reader>>Global::equilibrium_relations_quantity;
+                for(int equilibrium_relation=0; equilibrium_relation<Global::equilibrium_relations_quantity; ++equilibrium_relation;){
+                    added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(equilibrium_relation);
+                    added_equilibrium_relation->addFromFile(file_reader, Global::fluids_quantity,characterized_fluids);
+                    added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
+                };
+            }else if(object == "INTERFLUID_INTERACTIONS"){
+                
+            }else if(object == "WELLS"){
+
+            };
+            
+            launchTriggers();
+            
+        };
+        file_reader.close();
+    }else{
+        std::cout << "No success opening the file"<<std::endl;
+    };
+    
+};
+
+int main(int argc, char *argv[]){
+    if(argc <= 1){
+        launchMenu();
+        
+        Global::timestamp="continue";
+        while(Global::mytime<Global::simulationtime){
+            launchTriggers();
+        };
+        
+    }else{
+        launchFromFile(argv[1]);
+        Global::timestamp="continue";
+        while(Global::mytime<Global::simulationtime){
+            launchTriggers();
+        };
     };
     
     return 0;

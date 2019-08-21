@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <fstream>
 
 #include "Value_Reader.h"
 
@@ -30,6 +31,7 @@ class Measured_Property : protected Value_Reader{
         _taken_measures = std::map<double,double>();
     };
     void readMe();
+    void readFromFile(std::ifstream& property_reader);
     double interpolate(double reference_value);
 
     Measures_iterator begin() {return _taken_measures.begin();};
@@ -65,6 +67,22 @@ void Measured_Property::readMe(){
     };
 
 };
+
+void Measured_Property::readFromFile(std::ifstream& property_reader){
+
+    double aux_reference, aux_measure;
+    
+    property_reader>> _number_of_measures;
+
+    for (int measure=0; measure<_number_of_measures; ++measure){
+        property_reader>>aux_reference;
+        property_reader>>aux_measure;
+
+        _taken_measures.insert(std::make_pair(aux_reference,aux_measure));
+    };
+    return;
+};
+
 /*
   This Function implements Linear interpolation in the taken_measures map
 */

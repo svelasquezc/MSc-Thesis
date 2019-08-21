@@ -7,6 +7,8 @@
 #include <sstream>
 #include <exception>
 #include <string>
+#include <fstream>
+#include <algorithm>
 
 #include "Cell.h"
 #include "Value_Reader.h"
@@ -31,7 +33,8 @@ class Mesh : protected Value_Reader{
     
     Mesh();
     int getCellTotal();
-    void defineMesh();
+    void define();
+    void defineFromFile(std::ifstream& mesh_reader);
     void appear(const std::string& _timestamp, const int stencil[2]);
     //int listCell(int index);
     int listCell(int posx, int posy, int posz);
@@ -54,7 +57,7 @@ Mesh::Mesh(){};
 
 int Mesh::getCellTotal(){return _cell_total;};
 
-void Mesh::defineMesh(){
+void Mesh::define(){
 
     const std::string axisnames[3]={"x", "y", "z"};
     std::ostringstream ss = std::ostringstream();
@@ -93,27 +96,65 @@ void Mesh::defineMesh(){
     _defined = 1;
 };
 
+void Mesh::defineFromFile(std::ifstream& mesh_reader){
+
+    std::string element;
+    int axis=1;
+    double aux_thickness;
+
+    _cell_total=1;
+    _thickness = std::vector<std::vector<double>>(3,std::vector<double>());
+
+    while(mesh_reader>> element){
+        std::transform(element.begin(), element.end(),element.begin(), ::toupper);
+        if(element == "DIMENSIONS"){
+            for(axis=0; axis<3; ++axis){
+                mesh_reader >>_cell_number[axis];
+                _cell_total=_cell_total*_cell_number[axis];
+            };
+        }else if(element == "THICKNESS"){
+            for(axis=0; axis<3; ++axis){
+                for(int spacing=0; spacing<_cell_number[axis];++spacing){
+                    mesh_reader >> aux_thickness;
+                    _thickness[axis].push_back(aux_thickness);
+                };
+            };
+        }else if(element == "TOPS"){
+            _top = std::vector<std::vector<double>>(_cell_number[1], std::vector<double>(_cell_number[0]));
+            for(int y_spacing=0; y_spacing<_cell_number[1];++y_spacing){
+                for(int x_spacing=0; x_spacing<_cell_number[0];++x_spacing){
+                    mesh_reader >> _top[y_spacing][x_spacing];
+                };
+            };
+            break;
+        };
+    };
+    _defined = 1;
+    return;
+};
+
 void Mesh::appear(const std::string& _timestamp, const int stencil[2]){
+    std::shared_ptr<Cell> my_cell;
     if(_timestamp=="" && _defined==1){
         int index = 0;
-	double auxiliar_centroid=0;
+        double auxiliar_centroid=0;
         for(int axisz=0;axisz<_cell_number[2];++axisz){
 	    
-	    if(axisz==0){
-		auxiliar_centroid += _thickness[2][axisz]/2.0;
-	    }else{
-		auxiliar_centroid += _thickness[2][axisz-1]/2.0 + _thickness[2][axisz]/2.0;
-	    };
+            if(axisz==0){
+                auxiliar_centroid += _thickness[2][axisz]/2.0;
+            }else{
+                auxiliar_centroid += _thickness[2][axisz-1]/2.0 + _thickness[2][axisz]/2.0;
+            };
 	    
             for(int axisy=0;axisy<_cell_number[1];++axisy){
                 for(int axisx=0;axisx<_cell_number[0];++axisx){
-                    std::shared_ptr<Cell> my_cell = std::make_shared<Cell>(index);
+                    my_cell = std::make_shared<Cell>(index);
                     my_cell->volume(_thickness[2][axisz], _thickness[1][axisy], _thickness[0][axisx]);
-		    my_cell->depth(auxiliar_centroid + _top[axisy][axisx]);
+                    my_cell->depth(auxiliar_centroid + _top[axisy][axisx]);
                     my_cell->numeration3D(0,axisx);
                     my_cell->numeration3D(1,axisy);
                     my_cell->numeration3D(2,axisz);
-                    _cells.push_back(my_cell);
+                    _cells.push_back(std::move(my_cell));
                     ++index;
                 };
             };
@@ -165,7 +206,7 @@ int Mesh::listCell(int posx, int posy, int posz){
     int index;
     if (!(posx < 0 || posy < 0 && posz < 0 || posx >= _cell_number[0] || posy >= _cell_number[1] || posz >= _cell_number[2])){
         index = posx + posy*_cell_number[0] + posz*_cell_number[0]*_cell_number[1];
-	return index;
+        return index;
     }else{
         return -1;
     }
@@ -175,7 +216,7 @@ int Mesh::listCell(std::vector<int> numeration){
     int index;
     if (!(numeration[0] < 0 || numeration[1] < 0 || numeration[2] > 0 || numeration[0] >= _cell_number[0] || numeration[1] >= _cell_number[1] || numeration[2] >= _cell_number[2])){
         index = numeration[0] + numeration[1]*_cell_number[0] + numeration[2]*_cell_number[0]*_cell_number[1];
-	return index;
+        return index;
     }else{
         return -1;
     }

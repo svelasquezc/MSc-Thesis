@@ -20,8 +20,6 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
     Eigen::BiCGSTAB<SparseMat_t, Eigen::IncompleteLUT<double, int> > _solver;
 
-    int _iteration=0;
-
     const double _machine_epsilon = std::sqrt(std::numeric_limits<double>::epsilon());
     const double _relative_change_in_residual=1e-4;
 
@@ -131,6 +129,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         double modified_residual;
         int row;
         int col;
+        int iteration=0;
     
         do{
 
@@ -155,9 +154,9 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             };
             
             //Residual calculation
+            residual_selector = 0;
+            
             for(auto equation : equations){
-                
-                residual_selector = equation->index();
                 
                 if(equation->type() == typeid(Well).name()){
                     
@@ -172,8 +171,6 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     
                     constexpr auto residual_type = "fluid";
                     auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
-                    
-                    residual_selector = residual_fluid->index();
             
                     for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
                 
@@ -186,25 +183,28 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     };
                 };
                 
+                ++residual_selector;
             };
 
             std::cout << "Residual vector: " << _residual <<std::endl;
 
+            residual_selector = 0;
             // This should be an equation component
             for(auto residual : equations){
 
-                residual_selector = residual->index();
-                
+                //residual_selector = residual->index();
+                variable_selector = 0;
                 if(residual->status()){
                 
                     if(residual->type() == typeid(Well).name()){
                         
                         constexpr auto residual_type = "well";
                         auto residual_well = std::dynamic_pointer_cast<Well,Equation_Base>(residual);
+
                         
                         for(auto variable : equations){
 
-                            variable_selector = variable->index();
+                            //variable_selector = variable->index();
                             
                             if(variable->status()){
 
@@ -273,7 +273,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                 };
                                 
                             };
-                            
+                            ++variable_selector;
                         };
                         
                     }else{
@@ -281,12 +281,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         constexpr auto residual_type = "fluid";
                         auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(residual);
                 
-                        residual_selector = residual_fluid->index();
+                        //residual_selector = residual_fluid->index();
 
                         //This should be a principal variable 
                         for(auto variable : equations){
                             
-                            variable_selector = variable->index();
+                            //variable_selector = variable->index();
                             
                             if(variable->status()){
 
@@ -332,7 +332,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         
                                         for (auto face = (*cell)->begin(); face!=(*cell)->end(); ++face){
                             
-                                            auto neighbor_cell = (*face)->neighbor();
+                                            auto neighbor_cell = (*face)->neighbor().lock();
                                             int neighbor_index = neighbor_cell->index();
                                             row = locate(residual_type, residual_selector, neighbor_index);
                                             col = locate(variable_type, variable_selector, cell_index);
@@ -342,6 +342,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                             if(derivative != 0){
                                                 _non_zeros.push_back(Tripletd_t(row,col,derivative));
                                             };
+
+                                            neighbor_cell.reset();
                                         };
                         
                                         int row = locate(residual_type, residual_selector, cell_index);
@@ -363,19 +365,30 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                 
                             };
                             
+                            ++variable_selector;
+                            
                         };
                         
                     };
                     
                 };
+
+                ++residual_selector;
                 
             };
 
-            _jacobian.setFromTriplets(_non_zeros.begin(), _non_zeros.end());            
+            _jacobian.setFromTriplets(_non_zeros.begin(), _non_zeros.end());
+
+            if(iteration==0){
+                _initial_residual = _residual;
+            }
+            
             solve();
             update(term, mesh, equations);
             _jacobian.setZero();
             _non_zeros.clear();
+
+            ++iteration;
         
         }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > _relative_change_in_residual);
     

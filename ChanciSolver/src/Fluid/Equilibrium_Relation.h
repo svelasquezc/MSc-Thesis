@@ -6,14 +6,16 @@
 class Equilibrium_Relation : Value_Reader{
     
  private:
-    int index;
+    int _index;
     std::shared_ptr<Fluid> _contributor_fluid;
     std::shared_ptr<Fluid> _receiver_fluid;
     std::vector<std::vector<double>>   _partition_coefficient;
     std::unique_ptr<Measured_Property> _measured_partition_coefficient;
  public:
+ Equilibrium_Relation(const int index) : _index(index) {};
     Equilibrium_Relation(){};
-    void add(const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& MyFluids);
+    void add(const int cells_number, std::vector<std::shared_ptr<Fluid>>& MyFluids);
+    void addFromFile(std::ifstream& equilibrium_reader, const int cells_number, std::vector<std::shared_ptr<Fluid>>& MyFluids);
     const std::shared_ptr<Fluid>& contributorFluid() const {return _contributor_fluid;}
     const std::shared_ptr<Fluid>& receiverFluid()    const {return _receiver_fluid;}
 
@@ -29,7 +31,7 @@ class Equilibrium_Relation : Value_Reader{
     }
 };
 
-void Equilibrium_Relation::add(const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
+void Equilibrium_Relation::add(const int cells_number, const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
 
     int counter;
     int contributor;
@@ -38,6 +40,7 @@ void Equilibrium_Relation::add(const int fluids_quantity, std::vector<std::share
     std::stringstream ref_value = std::stringstream();
     
     if(fluids_quantity >= 2){
+
         
         
         std::cout << "Please select the contributor Fluid: " << std::endl;
@@ -87,5 +90,17 @@ void Equilibrium_Relation::add(const int fluids_quantity, std::vector<std::share
     
 };
 
+void Equilibrium_Relation::add(std::ifstream& equilibrium_reader, std::const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
+    std::string element;
+    int contributor;
+    int receiver;
+
+    while(equilibrium_reader >> element){
+
+        if(element == "CONTRIBUTOR_FLUID"){
+        };
+        
+    };
+};
 
 #endif /* EQUILIBRIUM_RELATION_H */

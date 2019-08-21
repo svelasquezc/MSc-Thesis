@@ -5,6 +5,9 @@
 #include <memory>
 #include <string>
 #include <sstream>
+#include <fstream>
+#include <algorithm>
+
 
 #include "Measured_Property.h"
 #include "Equation.h"
@@ -31,7 +34,9 @@ class Fluid : public Equation<Fluid>{
 
  public:
     Fluid(){};
+ Fluid(const int index) : _index(index){};
     void characterize(int& cells_number);
+    void characterizeFromFile(std::ifstream& fluid_reader, int& cells_number);
     void updateProperties(const int& term);
     //void calculate(int& term, int& _cellindex);
     const std::string& print() const;
@@ -125,6 +130,80 @@ void Fluid::characterize(int& cells_number){
     _index = _count_of_fluids;
     ++_count_of_fluids;
 
+    Equation<Fluid>::_status = true;
+};
+
+void Fluid::characterizeFromFile(std::ifstream& fluid_reader, int& cells_number){
+    std::string element;
+
+    std::ostringstream ref_name = std::ostringstream();
+    std::ostringstream ref_value = std::ostringstream();
+
+    _pressure              = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _density               = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _saturation            = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _viscosity             = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _volumetric_factor     = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _relative_permeability = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    _potential             = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    
+    // Reading of measured properties (PVT Table)
+    ref_name  << _type << " Pressure";
+    ref_value << _type << " Volumetric Factor";
+    _measured_volumetric_factor = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
+    ref_value.str("");
+    ref_value.clear();
+    
+    ref_value << _type << " Viscosity";
+    _measured_viscosity = std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
+    
+    
+    while(fluid_reader>>element){
+        
+        std::transform(element.begin(), element.end(),element.begin(), ::toupper);
+        
+        if(element == "TYPE"){
+            
+            fluid_reader>>_type;
+            
+        }else if(element == "VOLUME_FACTOR"){
+            
+            _measured_volumetric_factor->readFromFile(fluid_reader);
+            
+        }else if(element == "VISCOSITY"){
+            
+            _measured_viscosity->readFromFile(fluid_reader);
+            
+        }else if(element == "STANDARD_CONDITIONS_DENSITY"){
+            
+            fluid_reader>>_standard_conditions_density;
+            
+        }else if(element == "INITIAL_PRESSURE"){
+            
+            for(int cellindex=0; cellindex<cells_number; ++cellindex){
+                fluid_reader>>_pressure[0][cellindex];
+            };
+            
+        }else if(element == "INITIAL_SATURATION"){
+            
+            for(int cellindex=0; cellindex<cells_number; ++cellindex){
+                fluid_reader>>_saturation[0][cellindex];
+            };
+            
+        }else if(element == "PRINCIPAL"){
+            
+            fluid_reader>>_principal;
+            if(_count_of_principals < 1) {
+                if(_principal){
+                    ++_count_of_principals;
+                }
+            }else{
+                _principal=false;
+            };
+            
+            break;
+        }
+    };
     Equation<Fluid>::_status = true;
 };
 
