@@ -47,6 +47,39 @@ class Injector_Well : public Well{
         
     };
 
+    void perforateFromFile(std::ifstream& well_reader, Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
+        
+        Well::perforateFromFile(well_reader, mesh, characterized_fluids, type);
+
+        insertPerforationsFromFile<Injector_Perforate>(well_reader, mesh);
+
+        int injection;
+        std::string element;
+
+        while(well_reader >> element){
+            
+            std::transform(element.begin(), element.end(),element.begin(), ::toupper);
+            
+            if(element == "INJECTION_FLUID"){
+                well_reader >> injection;
+
+                if(injection < 1 && injection>characterized_fluids.size()){
+                    std::stringstream fluid_index_err = std::stringstream();
+                    fluid_index_err << "Injection fluid index must be between 1 and "<<characterized_fluids.size()<<std::endl;
+                    throw std::out_of_range(fluid_index_err.str());
+                }else{
+                    _injection_fluid = characterized_fluids[injection-1];
+                };
+                
+                break;
+            };
+        };
+
+        _rate=std::vector<double>();
+        _total_accumulated=std::vector<double>();
+        
+    };
+
     const std::shared_ptr<Fluid>& injectionFluid() const {return  _injection_fluid;};
 
     void updateProperties(const int term){

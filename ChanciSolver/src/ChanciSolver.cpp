@@ -35,9 +35,7 @@ void updateVariables(const int term, std::vector<std::shared_ptr<Fluid>>& charac
     };
 
     for(auto& equilibrium_relation : added_equilibrium_relations ){
-        
-        equilibrium_relation->updateProperties(term);
-            
+        equilibrium_relation->updateProperties(term);            
     };
 
     for(auto well : perforated_wells){
@@ -473,6 +471,7 @@ void FluidPressureVaries(std::string& timestamp){
 
         for(auto well : perforated_wells){
             if(next_time >= well->operativeCondition()->nextChange()){
+                //sizas.push_back(well->index());
                 timestamp == "change";
                 Global::was_change = true;
             };
@@ -598,7 +597,7 @@ void launchPetrophysicalEngineer(){
         if(Global::fluids_quantity >= 2){
             
             added_interfluid_interaction = std::make_unique<Interfluid_Interaction>();
-            added_interfluid_interaction->add(Global::fluids_quantity,characterized_fluids);
+            added_interfluid_interaction->add(characterized_fluids);
             
             added_interfluid_interactions.push_back(std::move(added_interfluid_interaction));
             
@@ -635,7 +634,7 @@ void launchFluidsEngineer(){
     case 2:
         if(Global::fluids_quantity >= 2){
             added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(Global::equilibrium_relations_quantity);
-            added_equilibrium_relation->add(Global::cells_number,Global::fluids_quantity,characterized_fluids);
+            added_equilibrium_relation->add(Global::cells_number,characterized_fluids);
             added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
             ++Global::equilibrium_relations_quantity;
             break;
@@ -742,8 +741,12 @@ void launchMenu(){
 void launchFromFile(const char* filename){
     std::ifstream file_reader(filename, std::ifstream::in);
     std::string object;
+    std::string type;
     
     std::shared_ptr<Fluid> characterized_fluid;
+    std::unique_ptr<Equilibrium_Relation> added_equilibrium_relation;
+    std::unique_ptr<Interfluid_Interaction> added_interfluid_interaction;
+    std::shared_ptr<Well> well;
     
     if(file_reader.is_open()){
         while(file_reader>>object){
@@ -773,18 +776,62 @@ void launchFromFile(const char* filename){
                     equations.push_back(characterized_fluid);
                     
                 };
+                
             }else if(object == "EQUILIBRIUM_RELATIONS"){
-                file_reader>>Global::equilibrium_relations_quantity;
-                for(int equilibrium_relation=0; equilibrium_relation<Global::equilibrium_relations_quantity; ++equilibrium_relation;){
-                    added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(equilibrium_relation);
-                    added_equilibrium_relation->addFromFile(file_reader, Global::fluids_quantity,characterized_fluids);
-                    added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
+                
+                if(Global::fluids_quantity >= 2){
+                    file_reader>>Global::equilibrium_relations_quantity;
+                    for(int equilibrium_relation=0; equilibrium_relation<Global::equilibrium_relations_quantity; ++equilibrium_relation){
+                        added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(equilibrium_relation);
+                        added_equilibrium_relation->addFromFile(file_reader, Global::cells_number, characterized_fluids);
+                        added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
+                    };
+                }else{
+                    std::cout << "There is only one fluid, EQUILIBRIUM_RELATIONS will be omitted\n";
                 };
+                
             }else if(object == "INTERFLUID_INTERACTIONS"){
                 
+                if(Global::fluids_quantity >= 2){
+                    file_reader>>Global::interfluid_interactions_quantity;
+                    for(int interfluid_interaction=0; interfluid_interaction<Global::interfluid_interactions_quantity; ++interfluid_interaction){
+                        added_interfluid_interaction = std::make_unique<Interfluid_Interaction>(interfluid_interaction);
+                        added_interfluid_interaction->addFromFile(file_reader, characterized_fluids);
+                        added_interfluid_interactions.push_back(std::move(added_interfluid_interaction));
+                    };
+                }else{
+                    std::cout << "There is only one fluid, INTERFLUID_INTERACTIONS will be omitted\n";
+                };
+                
             }else if(object == "WELLS"){
+                if(Global::fluids_quantity >= 1){
+                    file_reader>>Global::wells_quantity;
+                    for(int well_index=0; well_index<Global::wells_quantity;++well_index){
+                        file_reader>>type;
+                        std::transform(type.begin(), type.end(), type.begin(), ::toupper);
+                        if(type == "PRODUCER"){
+                            well = std::make_shared<Producer_Well>(Producer_Well(well_index));
+                        }else if(type == "INJECTOR"){
+                            well = std::make_shared<Injector_Well>(Injector_Well(well_index));
+                        }else{
+                            
+                            std::ostringstream well_err = std::ostringstream();
+                            
+                            well_err<<"The type selected for well "<< well_index+1 <<": ("<< type <<") is invalid, only Producer or Injector Wells"<<std::endl;
+                            
+                            throw std::invalid_argument(well_err.str());
+                        };
+                        well->perforateFromFile(file_reader,*mymesh, characterized_fluids,type);
+                        perforated_wells.push_back(well);
+                        equations.push_back(well);
 
+                    };
+                }else{
+                    throw std::domain_error("The file is ill-formed");
+                };
+                
             };
+            
             
             launchTriggers();
             

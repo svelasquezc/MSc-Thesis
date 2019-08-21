@@ -1,6 +1,8 @@
 #ifndef EQUILIBRIUM_RELATION_H
 #define EQUILIBRIUM_RELATION_H
 
+#include<exception>
+
 #include "Fluid.h"
 
 class Equilibrium_Relation : Value_Reader{
@@ -31,7 +33,7 @@ class Equilibrium_Relation : Value_Reader{
     }
 };
 
-void Equilibrium_Relation::add(const int cells_number, const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
+void Equilibrium_Relation::add(const int cells_number, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
 
     int counter;
     int contributor;
@@ -39,9 +41,9 @@ void Equilibrium_Relation::add(const int cells_number, const int fluids_quantity
 
     std::stringstream ref_value = std::stringstream();
     
-    if(fluids_quantity >= 2){
+    if(characterized_fluids.size() >= 2){
 
-        
+        _partition_coefficient = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
         
         std::cout << "Please select the contributor Fluid: " << std::endl;
         for (counter=0; counter<characterized_fluids.size(); ++counter){
@@ -90,14 +92,55 @@ void Equilibrium_Relation::add(const int cells_number, const int fluids_quantity
     
 };
 
-void Equilibrium_Relation::add(std::ifstream& equilibrium_reader, std::const int fluids_quantity, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
+void Equilibrium_Relation::addFromFile(std::ifstream& equilibrium_reader, const int cells_number, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
+    
     std::string element;
     int contributor;
     int receiver;
+    std::stringstream ref_value = std::stringstream();
+        
+    if(characterized_fluids.size() >= 2){
+        
+        _partition_coefficient = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+    
+        while(equilibrium_reader >> element){
 
-    while(equilibrium_reader >> element){
+            std::transform(element.begin(), element.end(),element.begin(), ::toupper);
 
-        if(element == "CONTRIBUTOR_FLUID"){
+            if(element == "CONTRIBUTOR_FLUID"){
+                
+                equilibrium_reader >> contributor;
+
+                if(contributor < 1 && contributor>characterized_fluids.size()){
+                    std::stringstream fluid_index_err = std::stringstream();
+                    fluid_index_err << "Contributor fluid index must be between 1 and "<<characterized_fluids.size()<<std::endl;
+                    throw std::out_of_range(fluid_index_err.str());
+                }else{
+                    _contributor_fluid = characterized_fluids[contributor-1];
+                };
+                    
+            }else if(element == "RECEIVER_FLUID"){
+                
+                equilibrium_reader >> receiver;
+
+                if(receiver < 1 && receiver>characterized_fluids.size()){
+                    std::stringstream fluid_index_err = std::stringstream();
+                    fluid_index_err << "Receiver fluid index must be between 1 and "<<characterized_fluids.size()<<std::endl;
+                    throw std::out_of_range(fluid_index_err.str());
+                }else{
+                    _receiver_fluid = characterized_fluids[receiver-1];
+                };
+                
+            }else if(element == "PARTITION_COEFFICIENT"){
+
+                ref_value << _receiver_fluid->print() << " in " << _contributor_fluid->print() << " ratio";
+        
+                _measured_partition_coefficient =
+                    std::make_unique<Measured_Property>(Measured_Property(std::string("Pressure"),ref_value.str()));
+                _measured_partition_coefficient->readFromFile(equilibrium_reader);
+                break;
+            };
+            
         };
         
     };

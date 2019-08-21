@@ -25,6 +25,16 @@ class Producer_Well : public Well{
         
     };
 
+    void perforateFromFile(std::ifstream& well_reader, Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
+        
+        Well::perforateFromFile(well_reader, mesh, characterized_fluids, type);
+        insertPerforationsFromFile<Producer_Perforate>(well_reader, mesh);
+
+        _rate = std::vector<std::vector<double>>(1,std::vector<double>(characterized_fluids.size()));
+        _total_accumulated = std::vector<std::vector<double>>(1,std::vector<double>(characterized_fluids.size()));
+        
+    };
+
     void updateProperties(const int term){
         
         Well::updateProperties(term);

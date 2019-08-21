@@ -117,7 +117,6 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         _solver.compute(_jacobian);
         _solution_delta = _solver.solve(_residual);
         _residual = -_residual;
-        std::cout << "Solution delta: " << _solution_delta <<std::endl;
     };
     
     void iterate(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Well>>& wells, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
@@ -157,36 +156,40 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             residual_selector = 0;
             
             for(auto equation : equations){
-                
-                if(equation->type() == typeid(Well).name()){
-                    
-                    constexpr auto residual_type = "well";
-                    auto residual_well = std::dynamic_pointer_cast<Well,Equation_Base>(equation);
-                    
-                    row = locate(residual_type, residual_selector, residual_well->index());
-                    _calculateWellFlow(term, residual_well);
-                    _residual(row) = calculateWellResidual(term, residual_well);;
-                    
-                }else{
-                    
-                    constexpr auto residual_type = "fluid";
-                    auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
-            
-                    for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
-                
-                        cell_index = (*cell)->index();
 
-                        row = locate(residual_type, residual_selector, cell_index);
-                        
-                        _residual(row) = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
-                        
-                    };
-                };
+                if(equation->status()){
                 
-                ++residual_selector;
+                    if(equation->type() == typeid(Well).name()){
+                    
+                        constexpr auto residual_type = "well";
+                        auto residual_well = std::dynamic_pointer_cast<Well,Equation_Base>(equation);
+                    
+                        row = locate(residual_type, residual_selector, residual_well->index());
+                        _calculateWellFlow(term, residual_well);
+                        _residual(row) = calculateWellResidual(term, residual_well);;
+                    
+                    }else{
+                    
+                        constexpr auto residual_type = "fluid";
+                        auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
+            
+                        for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
+                
+                            cell_index = (*cell)->index();
+
+                            row = locate(residual_type, residual_selector, cell_index);
+                        
+                            _residual(row) = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
+                        
+                        };
+                    };
+                
+                    ++residual_selector;
+                    
+                };
             };
 
-            std::cout << "Residual vector: " << _residual <<std::endl;
+            //Jacobian Calculation
 
             residual_selector = 0;
             // This should be an equation component
@@ -272,8 +275,10 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                     
                                 };
                                 
+                                ++variable_selector;
+                                
                             };
-                            ++variable_selector;
+                            
                         };
                         
                     }else{
@@ -363,17 +368,16 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                     
                                 };
                                 
+                              ++variable_selector;
+                              
                             };
-                            
-                            ++variable_selector;
                             
                         };
                         
                     };
-                    
-                };
 
-                ++residual_selector;
+                    ++residual_selector;
+                };
                 
             };
 

@@ -54,7 +54,35 @@ class Well : public Equation<Well>{
         _borehole_pressure=std::vector<double>();
         
         Value_Reader::myRead(std::string("Please insert the well radius "), _radius, std::string("Please insert a valid input"));
-        Value_Reader::myRead(std::string("Please insert the number of perforates "), _number_of_perforates, std::string("Please insert a valid input"));
+        Value_Reader::myRead(std::string("Please insert the number of perforations "), _number_of_perforates, std::string("Please insert a valid input"));
+
+        Equation<Well>::_status = false;
+
+        _operative_condition = std::make_shared<Operative_Condition>();
+        
+    };
+
+    virtual void perforateFromFile(std::ifstream& well_reader, Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type){
+
+        std::string element;
+        
+        _perforates = std::vector<std::shared_ptr<Perforate>>();
+        
+        _type = type;
+
+        _flow = std::vector<double>();
+
+        _borehole_pressure=std::vector<double>();
+        
+        while(well_reader >> element){
+            std::transform(element.begin(), element.end(), element.begin(), ::toupper);
+            if(element == "RADIUS"){
+                well_reader >> _radius;
+            }else if(element == "NUMBER_OF_PERFORATIONS"){
+                well_reader >> _number_of_perforates;
+                break;
+            }
+        };
 
         Equation<Well>::_status = false;
 
@@ -76,6 +104,41 @@ class Well : public Equation<Well>{
     const double& flow(const int& term) const { return _flow[term];};
 
     const int& numberOfPerforates() const {return _number_of_perforates;};
+
+    template<typename PerforationType> inline void insertPerforationsFromFile(std::ifstream& well_reader, Mesh& mesh){
+        std::string element;
+        double skin;
+        
+        std::shared_ptr<Perforate> aux_perforate;
+
+        std::vector<int> position = std::vector<int>(3);
+
+        for(int perforate=0; perforate<_number_of_perforates; ++perforate){
+            aux_perforate = std::make_shared<PerforationType>(PerforationType());
+            while(well_reader >> element){
+                std::transform(element.begin(), element.end(),element.begin(), ::toupper);                
+                if(element == "POSITION"){
+                    for(int axis=0; axis<3; ++axis){
+                        well_reader >> position[axis];
+                    };
+                }else if(element == "SKIN_FACTOR"){
+                    well_reader >> skin;
+                    break;
+                };
+            };
+            
+            aux_perforate->position(position[0], position[1], position[2]);
+            aux_perforate->index(mesh.listCell(position[0],position[1],position[2]));
+            aux_perforate->localIndex(perforate);
+            aux_perforate->skin(skin);
+            
+            if(perforate == 0){
+                auto first_perforate_cell = mesh.cell(aux_perforate->index());
+                _borehole_depth = first_perforate_cell->depth();
+            };
+            
+        };
+    };
 
     template<typename PerforationType> inline void insertPerforations(Mesh& mesh){
 
@@ -104,8 +167,12 @@ class Well : public Equation<Well>{
             aux_perforate->position(position[0], position[1], position[2]);
             aux_perforate->index(mesh.listCell(position[0],position[1],position[2]));
             aux_perforate->localIndex(perforate);
+            aux_perforate->skin(skin);
             
-            
+            if(perforate == 0){
+                auto first_perforate_cell = mesh.cell(aux_perforate->index());
+                _borehole_depth = first_perforate_cell->depth();
+            };
         };
     };
 
@@ -129,16 +196,61 @@ class Well : public Equation<Well>{
             _changed=true;
             
             Value_Reader::myRead(std::string("Please insert the type of operative condition (Pressure or Flow)"), type, std::string("Please insert a valid option"));
+
+            std::transform(type.begin(), type.end(),type.begin(), ::toupper);
             
-            while(type != "Pressure" && type != "Flow"){
+            while(type != "PRESSURE" && type != "FLOW" && type != "SHUT"){
                 Value_Reader::myRead(std::string("Please insert the type of operative condition (Pressure or Flow)"), type, std::string("Please insert a valid option"));
             };
             
             Value_Reader::myRead(std::string("Please insert the value of operative condition "), value, std::string("Please insert a valid option"));
 
-            Value_Reader::myRead(std::string("Please insert the next time of change of operative condition "), value, std::string("Please insert a valid option"));
+            Value_Reader::myRead(std::string("Please insert the next time of change of operative condition "), next_change, std::string("Please insert a valid option"));
 
-            if(type == "Pressure"){
+            _operative_condition->type(type);
+            _operative_condition->value(value);
+            _operative_condition->nextChange(next_change);
+
+            if(type == "PRESSURE" || type == "SHUT"){
+                Equation<Well>::_status = false;
+            }else{
+                Equation<Well>::_status = true;
+            };
+        };
+            
+    };
+
+    void establishFromFile(std::ifstream& condition_reader, const int& term, std::string timestamp){
+
+        std::string element;
+        std::string type;
+        double value;
+        double next_change;
+        
+        if(timestamp == "change" || timestamp == ""){
+
+            _changed=true;
+
+            while(condition_reader >> element){
+
+                std::transform(element.begin(), element.end(),element.begin(), ::toupper);
+
+                if(element == "TYPE"){
+                    condition_reader >> type;
+                    std::transform(type.begin(), type.end(),type.begin(), ::toupper);
+                }else if(element == "VALUE"){
+                    condition_reader >> value;
+                }else if(element == "NEXT_TIME"){
+                    condition_reader >> next_change;
+                    break;
+                };
+            };
+
+            _operative_condition->type(type);
+            _operative_condition->value(value);
+            _operative_condition->nextChange(next_change);
+            
+            if(type == "PRESSURE"){
                 Equation<Well>::_status = false;
             }else{
                 Equation<Well>::_status = true;
