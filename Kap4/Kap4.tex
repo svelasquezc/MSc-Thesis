@@ -57,11 +57,11 @@ En esta sección proponemos una representación basada en un EP para procesos EO
 %\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
 \caption{Representación en EP de la simulación de procesos EOR} \label{fig:PSComplete}
 \end{figure}
-
+\subsection{Estructura}\label{sec:PS_Estructura}
 %The rest of this section is as follows: In section \ref{sec:PS_Mesh} we present the Mesh concept as a collection of cells with additional elements needed for calculating the attributes of each cell. Furthermore, we develop the dynamical relationship ``Geomodeler defines Mesh'' as an interaction of the role ``Geomodeler'' with atomic\footnote{atomic as is stated by \cite{AG01} (Aca debe ir Zapata)} dynamical relationships. In section \ref{sec:PS_Rock} we present the Rock concept with its attributes and initial characterization. In section \ref{sec:PS_Phase} ... In section \ref{sec:PS_Interphase} ... In section \ref{sec:PS_Equilibrium} we define the partition coefficients as relations between two phases, one contributing mass and another receiving mass in the mass balance equation. In section \ref{sec:PS_Well}  
 
 %\subsection{Mesh}\label{sec:PS_Mesh}
-\subsection{Malla}\label{sec:PS_Mesh}
+\subsubsection{Malla}\label{sec:PS_Mesh}
 
 De la conceptualización de los elementos relacionados con la discretización, se encontró que existe una malla la cuál contiene todas las propiedades necesarias para generar el conjunto de celdas. Además, existe un actor ``Geomodelador'' que se encarga de definir el número de celdas en cada eje, sus espesores y topes tal como se presenta en \ref{fig:Mesh}. \\
 \begin{figure}[h]
@@ -77,7 +77,7 @@ Una vez definidas tales propiedades, la malla aparece en un proceso iterativo de
 %The representation stated for Mesh only accounts for orthogonal cartesian meshes, which can be generated with information about number of cells in each axis, their thickness and tops. A (The information above is inserted by a) Geomodeler with defines the mesh by inserting for each axis the number of cells and the thickness for cells in that direction. Once 
 
 %\subsection{Rock}\label{sec:PS_Rock}
-\subsection{Roca}\label{sec:PS_Rock}
+\subsubsection{Roca}\label{sec:PS_Rock}
 
 La especificación de la relación dinámica ``Petrofísico caracteriza roca'' consiste de insertar las condiciones iniciales de porosidad y permeabilidad absoluta para la roca asociada al yacimiento, es posible notar que estos atributos de la roca están representados como arreglos por la cantidad de términos, derivados de los pasos de tiempo (estos se verán más adelante), y la cantidad de celdas definidas en la malla. \\
 Adicionalmente, el petrofísico define la compresibilidad de poro y la presión a la que esta se mide para el cálculo de la porosidad a los términos posteriores. El modelo considera la existencia de una única roca a la cual todas las propiedades por cada una de las celdas son asignadas. La caracterización de la roca se presenta en \ref{fig:Rock}.\\
@@ -89,7 +89,7 @@ Adicionalmente, el petrofísico define la compresibilidad de poro y la presión 
 \end{figure}
 
 %\subsection{Phase}\label{sec:PS_Phase}
-\subsection{Fluido}\label{sec:PS_Phase}
+\subsubsection{Fluido}\label{sec:PS_Phase}
 
 Los fluidos tienen propiedades que son funciones de su presión y saturación, estas a su vez son función del tiempo y del espacio. Por lo que todas las propiedades que se proponen en la conceptualización se representan como arreglos dependientes de la cantidad de términos y de la cantidad de celdas. La representación del fluido, su relación dinámica ``Ingeniero de fluidos caracteriza Fluido'' y su respectiva especificación se presentan en la figura \ref{fig:Fluid}.\\
 
@@ -104,7 +104,7 @@ En pos de la generalidad, definimos la viscosidad del fluido y su factor volumé
 Es importante notar también que el fluido tiene un tipo y un atributo de tipo lógico ``Principal''. El tipo del fluido nos permite explicitar que este es Petróleo, Gas o Agua, pero el atributo de principalidad indica que es el fluido para el cuál la incógnita a resolver será la presión, en los demás la incógnita será la saturación.
 
 %\subsection{Equilibrium Relation}\label{sec:PS_Equilibrium}
-\subsection{Relación de Equilibrio.}\label{sec:PS_Equilibrium}
+\subsubsection{Relación de Equilibrio}\label{sec:PS_Equilibrium}
 Las ecuaciones del Black Oil relacionan la posible existencia de masa de gas en el aceite (Rs o gas disuelto), y, en el caso del Black Oil extendido, la de aceite en el gas (Rv o aceite volatilizado). En el concepto ``Relación de equilibrio'', se generaliza la existencia de masa de un fluido dentro de otro fluido como un coeficiente de partición, tal como se vio en la conceptualización (ver \ref{sec:Concepts}). Se asume, también, que existe un fluido que aporta masa y otro que la recibe, tal como se ve en \ref{fig:EqRelation}. El coeficiente de partición cumple la mismas condiciones de la viscosidad del fluido y a su vez, tiene un coeficiente de partición medido. 
 
 \begin{figure}[h]
@@ -114,7 +114,7 @@ Las ecuaciones del Black Oil relacionan la posible existencia de masa de gas en 
 \end{figure}
 
 %\subsection{Inter-phase interaction}\label{sec:PS_Interphase}
-\subsection{Interacción entre fluidos}\label{sec:PS_Interphase}
+\subsubsection{Interacción entre fluidos}\label{sec:PS_Interphase}
 %
 % Qué debo mencionar acá:
 % Este concepto me relaciona la presión del fluido principal con la del de referencia (Presión Capilar)
@@ -138,7 +138,23 @@ Las interacciones entre fluidos se proponen como una generalización de las rela
 %este concepto me relaciona un fluido de referencia, que se espera diferente del fluido con la propiedad de ser ``Principal'' y es respecto al cual se interpolarán las permeabilidades relativas, tanto propias como del fluido principal.
 %\subsection{Component}\label{sec:PS_Component} % This could be changed to Chemical
 %\subsection{Well}\label{sec:PS_Well}
-\subsection{Pozo}\label{sec:PS_Well}
+\subsubsection{Pozo}\label{sec:PS_Well}
+Se proponen los pozos, de manera análoga a la malla, como un conjunto de perforados que a su vez tienen atributos adicionales como lo son la presión de fondo y el caudal. Estos pozos, tienen una caracterización distinta según el tipo, sea productor o inyector. Además, es posible notar que el pozo es un concepto abstracto, de cuál se instancia uno de los dos tipos definidos. Más aún, los perforados dependerán del tipo de pozo, siendo estos también abstractos, con sus respectivos tipos ``perforado inyector'' o ``perforado productor''. En la figura \ref{fig:Well} se presenta la representación de los pozos.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Kap4/Equilibrium.pdf}%
+	\caption{Perforación de Pozos.} \label{fig:Well}
+\end{figure}
+
+La principal diferencia entre los pozos productores e inyectores radica en que el pozo inyector tiene un fluido de inyección. Además, la tasa y el acumulado del pozo inyector sólo dependen de este fluido, mientras que para el pozo productor dependerá de la cantidad de fluidos caracterizados. Estos pozos están sujetos a la restricción de no cambiar su tipo, además para un pozo productor, su conjunto de perforados corresponderá también a perforados productores. Así mismo para los pozos inyectores.\\
+
+Los pozos funcionan bajo una condición operativa, que permite regular la presión o el caudal al que estos inyectan o producen fluido. Estas condiciones definen si un pozo genera una ecuación (Peaceman) o si su caudal se puede resolver directamente usando la presión de fondo. Por otro lado, las condiciones operativas pueden variar en el tiempo, por lo que se requiere calcular o resolver el atributo que no está sujeto a la condición operativa cada que se establezca un cambio en esta. 
+
+\subsubsection{Ecuación}\label{sec:PS_Equation}
+ La ecuación es un concepto agrupador, tanto el fluido como el pozo son ecuaciones (Posteriormente los químicos). Sirve para iterar sobre todos los conceptos que generan un residual en el método de Newton. Tienen un índice y estado. Este último permite que todos los pozos generen ecuación pero no necesariamente se resuelva en el jacobiano. Sólo se resuelven las ecuaciones cuyo estado sea ``activo''. (Se verá más adelante).
+ 
+\subsection{Eventos}
 
 %includefigure{Graphical Representation of subroutine}
 
