@@ -483,9 +483,9 @@ void FluidPressureVaries(std::string& timestamp){
 
         for(auto well : perforated_wells){
             if(next_time >= well->operativeCondition()->nextChange()){
-                //sizas.push_back(well->index());
+                ++Global::changing_wells;
                 timestamp == "change";
-                Global::was_change = true;
+                well->operativeStatus(2); //Pending Change
             };
         };
     }
@@ -504,7 +504,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
 
             for(auto well : perforated_wells){
                 
-                if(well->changed()){
+                if(well->operativeStatus() == 1){ //Just Changed
 
                     if(well->operativeCondition()->type() == "Flow"){
                         estimateWellPressure(term, well);
@@ -514,7 +514,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
                         calculateWellFlow(term, well);
                     };
                     
-                    well->changed(false);
+                    well->operativeStatus(0); // Stable
                 };
             };
 
@@ -525,7 +525,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
             my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
         };
 
-        if(Global::was_change){
+        if(Global::changing_wells > 0){
             
             max_number_of_well_non_zeros=0;
             well_equations=0;
@@ -544,7 +544,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
             my_newton.reset();
             my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
 
-            Global::was_change=false;
+            Global::changing_wells = 0;
             
         };
         
@@ -718,6 +718,28 @@ void launchReservoirEngineer(std::string& timestamp){
     }
 };
 
+void reEstablishOperativeConditions(std::ifstream& file_reader, const int& term, std::string& timestamp){
+    
+    std::string object;
+    
+    if(timestamp == "change"){
+        for(auto well : perforated_wells){
+            if(well->operativeStatus() == 2){ //Pending Change
+                file_reader >> object;
+                std::transform(object.begin(), object.end(),object.begin(), ::toupper);
+                if(object == "WELL"){
+                    int index;
+                    file_reader >> index;
+                    if(well->index() == index){
+                        well->establishFromFile(file_reader, term, timestamp);
+                    };
+                };
+            };
+        };
+        timestamp == "continue";
+    };
+};
+
 void launchTriggers(){
     using namespace Global;
     mymesh->appear(timestamp,stencil);
@@ -733,7 +755,7 @@ void launchTriggers(std::ifstream& file_reader){
     mymesh->appear(timestamp,stencil);
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
     FluidPressureVaries(timestamp);
-    
+    reEstablishOperativeConditions(file_reader, term, timestamp);
 };
 
 void launchMenu(){
@@ -857,9 +879,25 @@ void launchFromFile(std::ifstream& file_reader){
 
                     };
                 }else{
-                    throw std::domain_error("The file is ill-formed");
+                    throw std::domain_error("There are no fluids characterized or WELLS Keyword appears before FLUIDS");
                 };
                 
+            }else if(object == "OPERATIVE_CONDITIONS"){
+                if(Global::wells_quantity >= 1){
+                    for(auto well : perforated_wells){
+                        file_reader >> object;
+                        std::transform(object.begin(), object.end(),object.begin(), ::toupper);
+                        if(object == "WELL"){
+                            int index;
+                            file_reader >> index;
+                            if(well->index() == index){
+                                well->establishFromFile(file_reader, Global::term, Global::timestamp);
+                            };
+                        };
+                    };
+                }else{
+                    throw std::domain_error("There are no wells perforated or OPERATIVE_CONDITIONS appears before WELLS");
+                };
             };
             
             launchTriggers(file_reader);

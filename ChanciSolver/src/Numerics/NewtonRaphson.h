@@ -158,7 +158,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
             for(auto well : wells){
                 
-                if(well->changed()){
+                if(well->operativeStatus()==1){
 
                     if(well->operativeCondition()->type() == "Flow"){
                         _estimatePressure(term, well);
@@ -166,7 +166,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         _calculateWellFlow(term, well);
                     };
                     
-                    well->changed(false);
+                    well->operativeStatus(0);
                 };
             };
             

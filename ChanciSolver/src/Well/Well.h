@@ -32,7 +32,9 @@ class Well : public Equation<Well>{
 
     std::shared_ptr<Operative_Condition> _operative_condition;
 
-    bool _changed=false;
+    int _operative_status = 0; // 2 - Pending Change
+                     // 1 - Changed
+                     // 0 - Stable
 
  public:
 
@@ -59,6 +61,8 @@ class Well : public Equation<Well>{
         Equation<Well>::_status = false;
 
         _operative_condition = std::make_shared<Operative_Condition>();
+
+        _operative_status = 2;
         
     };
 
@@ -85,7 +89,10 @@ class Well : public Equation<Well>{
         };
 
         Equation<Well>::_status = false;
-
+        
+        _operative_condition = std::make_shared<Operative_Condition>();
+        
+        _operative_status = 2;
     };
 
     void flow(const int& term, const double flow){
@@ -191,9 +198,7 @@ class Well : public Equation<Well>{
         double value;
         double next_change;
         
-        if(timestamp == "change" || timestamp == ""){
-
-            _changed=true;
+        if((timestamp == "change" || timestamp == "") && _status == 2){
             
             Value_Reader::myRead(std::string("Please insert the type of operative condition (Pressure or Flow)"), type, std::string("Please insert a valid option"));
 
@@ -216,6 +221,8 @@ class Well : public Equation<Well>{
             }else{
                 Equation<Well>::_status = true;
             };
+
+            _operative_status = 1; //
         };
             
     };
@@ -227,9 +234,7 @@ class Well : public Equation<Well>{
         double value;
         double next_change;
         
-        if(timestamp == "change" || timestamp == ""){
-
-            _changed=true;
+        if((timestamp == "change" || timestamp == "") && _status == 2){
 
             while(condition_reader >> element){
 
@@ -250,17 +255,19 @@ class Well : public Equation<Well>{
             _operative_condition->value(value);
             _operative_condition->nextChange(next_change);
             
-            if(type == "PRESSURE"){
+            if(type == "PRESSURE"  || type == "SHUT"){
                 Equation<Well>::_status = false;
             }else{
                 Equation<Well>::_status = true;
             };
+
+            _operative_status = 1;
         };
             
     };
 
-    void changed(const bool changed){_changed=changed;};
-    const bool changed() const {return _changed;};
+    void operativeStatus(const int operative_status){_operative_status=operative_status;};
+    const int& operativeStatus() const {return _operative_status;};
     
     Perforate_iterator begin() {return _perforates.begin();};
     Perforate_iterator end()   {return _perforates.end();};
