@@ -9,8 +9,8 @@ class Equilibrium_Relation : Value_Reader{
     
  private:
     int _index;
-    std::shared_ptr<Fluid> _contributor_fluid;
-    std::shared_ptr<Fluid> _receiver_fluid;
+    std::weak_ptr<Fluid> _contributor_fluid;
+    std::weak_ptr<Fluid> _receiver_fluid;
     std::vector<std::vector<double>>   _partition_coefficient;
     std::unique_ptr<Measured_Property> _measured_partition_coefficient;
  public:
@@ -18,14 +18,14 @@ class Equilibrium_Relation : Value_Reader{
     Equilibrium_Relation(){};
     void add(const int cells_number, std::vector<std::shared_ptr<Fluid>>& MyFluids);
     void addFromFile(std::ifstream& equilibrium_reader, const int cells_number, std::vector<std::shared_ptr<Fluid>>& MyFluids);
-    const std::shared_ptr<Fluid>& contributorFluid() const {return _contributor_fluid;}
-    const std::shared_ptr<Fluid>& receiverFluid()    const {return _receiver_fluid;}
+    const std::shared_ptr<Fluid> contributorFluid() const {return _contributor_fluid.lock();}
+    const std::shared_ptr<Fluid> receiverFluid()    const {return _receiver_fluid.lock();}
 
     const double& partitionCoefficient (const int& term, const int& cell_index) const {return _partition_coefficient[term][cell_index];};             
 
-    void partitionCoefficient(int& term, int& cell_index){
+    void partitionCoefficient(const int& term, const int& cell_index, const double pressure){
         _partition_coefficient[term][cell_index] =
-            _measured_partition_coefficient->interpolate(_contributor_fluid->pressure(term,cell_index));
+            _measured_partition_coefficient->interpolate(pressure);
     };
     
     void updateProperties(const int& term){
@@ -76,7 +76,7 @@ void Equilibrium_Relation::add(const int cells_number, std::vector<std::shared_p
             }
         };
 
-        ref_value << _receiver_fluid->print() << " in " << _contributor_fluid->print() << " ratio";
+        ref_value << _receiver_fluid.lock()->print() << " in " << _contributor_fluid.lock()->print() << " ratio";
         
         _measured_partition_coefficient =
             std::make_unique<Measured_Property>(Measured_Property(std::string("Pressure"),ref_value.str()));
@@ -133,7 +133,7 @@ void Equilibrium_Relation::addFromFile(std::ifstream& equilibrium_reader, const 
                 
             }else if(element == "PARTITION_COEFFICIENT"){
 
-                ref_value << _receiver_fluid->print() << " in " << _contributor_fluid->print() << " ratio";
+                ref_value << _receiver_fluid.lock()->print() << " in " << _contributor_fluid.lock()->print() << " ratio";
         
                 _measured_partition_coefficient =
                     std::make_unique<Measured_Property>(Measured_Property(std::string("Pressure"),ref_value.str()));

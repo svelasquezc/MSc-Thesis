@@ -8,8 +8,8 @@
 
 #include "Mesh.h"
 #include "Rock.h"
-#include "Well.h"
-#include "Equilibrium_Relation.h"
+#include "Producer_Well.h"
+#include "Injector_Well.h"
 
 template<typename PropertiesFunction_t, typename FlowFunction_t, typename AccumulationFunction_t, typename PerforationFunction_t, typename WellFunction_t, typename EstimatorFunction_t>
     class NewtonRaphson{
@@ -96,7 +96,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         };
     };
     
-    double calculateResidual(const int& term, Fluid& fluid, const Mesh& mesh, const std::shared_ptr<Cell>& cell, Rock& rock)
+    double calculateResidual(const int& term, Fluid& fluid, const Mesh& mesh, const std::shared_ptr<Cell>& cell, Rock& rock, std::vector<std::shared_ptr<Well>>& wells)
     {
         double flow=0;
         for (auto face = cell->begin(); face!=cell->end(); ++face){
@@ -104,7 +104,25 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         };
         double accumulation = _calculateAccumulation(term, fluid, cell, rock);
 
-        return accumulation - flow;
+        double well_contribution = 0;
+        
+        for (auto well : wells){
+            for(auto perforation = well->begin(); perforation !=well->end(); ++perforation){
+                if((*perforation)->index() == cell->index()){
+                    if((*perforation)->type() == typeid(Producer_Perforate).name()){
+                        auto producer_perf = std::dynamic_pointer_cast<Producer_Perforate, Perforate>(*perforation);
+                        well_contribution += producer_perf->flow(fluid.index());
+                    }else{
+                        auto injector_well = std::dynamic_pointer_cast<Injector_Well, Well>(well);
+                        if (injector_well->injectionFluid()->index() == fluid.index()){
+                            well_contribution += (*perforation)->totalFlow();
+                        };
+                    };
+                };
+            };
+        };
+
+        return accumulation - flow + well_contribution;
     };
 
     double inline calculateWellResidual(const int& term, std::shared_ptr<Well>& well){
@@ -166,7 +184,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     
                         row = locate(residual_type, residual_selector, residual_well->index());
                         _calculateWellFlow(term, residual_well);
-                        _residual(row) = calculateWellResidual(term, residual_well);;
+                        _residual(row) = calculateWellResidual(term, residual_well);
                     
                     }else{
                     
@@ -179,7 +197,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                             row = locate(residual_type, residual_selector, cell_index);
                         
-                            _residual(row) = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
+                            _residual(row) = calculateResidual(term,*residual_fluid, mesh, *cell, rock, wells);
                         
                         };
                     };
@@ -309,7 +327,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         well_variable->boreholePressure(term, well_variable->boreholePressure(term)+_machine_epsilon);
                                         _calculatePerforation(term, well_variable, *perforation);
                                     
-                                        modified_residual = calculateResidual(term,*residual_fluid, mesh,cell,rock);
+                                        modified_residual = calculateResidual(term,*residual_fluid, mesh,cell,rock, wells);
                                         
                                         double derivative = (modified_residual - _residual(row))/_machine_epsilon;
                                         if(derivative != 0){
@@ -341,7 +359,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                             int neighbor_index = neighbor_cell->index();
                                             row = locate(residual_type, residual_selector, neighbor_index);
                                             col = locate(variable_type, variable_selector, cell_index);
-                                            modified_residual = calculateResidual(term,*residual_fluid, mesh,neighbor_cell,rock);
+                                            modified_residual = calculateResidual(term,*residual_fluid, mesh,neighbor_cell,rock, wells);
 
                                             double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
                                             if(derivative != 0){
@@ -353,7 +371,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         
                                         int row = locate(residual_type, residual_selector, cell_index);
                                         int col = locate(variable_type, variable_selector, cell_index);
-                                        modified_residual = calculateResidual(term,*residual_fluid, mesh, *cell, rock);
+                                        modified_residual = calculateResidual(term,*residual_fluid, mesh, *cell, rock, wells);
 
                                         double derivative = (modified_residual - _residual(cell_index))/_machine_epsilon;
                                         if(derivative != 0){

@@ -7,9 +7,9 @@ class Interfluid_Interaction : protected Value_Reader {
  private:
     static int _count_of_interfluid_interactions;
     int _index;
-    std::shared_ptr<Fluid> _reference_fluid;
-    std::shared_ptr<Fluid> _wetting_fluid;
-    std::shared_ptr<Fluid> _non_wetting_fluid;
+    std::weak_ptr<Fluid> _reference_fluid;
+    std::weak_ptr<Fluid> _wetting_fluid;
+    std::weak_ptr<Fluid> _non_wetting_fluid;
     std::unique_ptr<Measured_Property> _measured_reference_relative_permeability;
     std::unique_ptr<Measured_Property> _measured_principal_relative_permeability;
     std::unique_ptr<Measured_Property> _measured_capillary_pressure;
@@ -39,9 +39,9 @@ class Interfluid_Interaction : protected Value_Reader {
 	return _measured_capillary_pressure->interpolate(saturation);
     };
 
-    const std::shared_ptr<Fluid>& referenceFluid()  const {return _reference_fluid;}
-    const std::shared_ptr<Fluid>& wettingFluid()    const {return _wetting_fluid;}
-    const std::shared_ptr<Fluid>& nonWettingFluid() const {return _non_wetting_fluid;}
+    const std::shared_ptr<Fluid> referenceFluid()  const {return _reference_fluid.lock();}
+    const std::shared_ptr<Fluid> wettingFluid()    const {return _wetting_fluid.lock();}
+    const std::shared_ptr<Fluid> nonWettingFluid() const {return _non_wetting_fluid.lock();}
 
     void add(std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
 
@@ -103,9 +103,9 @@ class Interfluid_Interaction : protected Value_Reader {
             
             };
 
-            ref_name << _reference_fluid->print() << " Saturation";
+            ref_name << _reference_fluid.lock()->print() << " Saturation";
 
-            ref_value << _reference_fluid->print() << "Reference Relative Permeability";
+            ref_value << _reference_fluid.lock()->print() << "Reference Relative Permeability";
         
             _measured_reference_relative_permeability =
                 std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
@@ -115,7 +115,7 @@ class Interfluid_Interaction : protected Value_Reader {
 
             for (auto fluid : characterized_fluids){
                 if(fluid->principal()){
-                    ref_value << fluid->print() << " Relative Permeability to " << _reference_fluid->print();
+                    ref_value << fluid->print() << " Relative Permeability to " << _reference_fluid.lock()->print();
 
                     _measured_principal_relative_permeability =
                         std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
@@ -123,7 +123,7 @@ class Interfluid_Interaction : protected Value_Reader {
                     ref_value.str("");
                     ref_value.clear();
 
-                    ref_value << _non_wetting_fluid->print() << "-" << _wetting_fluid->print() << "Capillary Pressure";
+                    ref_value << _non_wetting_fluid.lock()->print() << "-" << _wetting_fluid.lock()->print() << "Capillary Pressure";
 
                     _measured_capillary_pressure =
                         std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
@@ -167,9 +167,9 @@ class Interfluid_Interaction : protected Value_Reader {
                 }else{
                     _reference_fluid = characterized_fluids[reference-1];
 
-                    ref_name << _reference_fluid->print() << " Saturation";
+                    ref_name << _reference_fluid.lock()->print() << " Saturation";
 
-                    ref_value << _reference_fluid->print() << "Reference Relative Permeability";
+                    ref_value << _reference_fluid.lock()->print() << "Reference Relative Permeability";
         
                     _measured_reference_relative_permeability =
                         std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
@@ -179,7 +179,7 @@ class Interfluid_Interaction : protected Value_Reader {
 
                     for (auto fluid : characterized_fluids){
                         if(fluid->principal()){
-                            ref_value << fluid->print() << " Relative Permeability to " << _reference_fluid->print();
+                            ref_value << fluid->print() << " Relative Permeability to " << _reference_fluid.lock()->print();
 
                             _measured_principal_relative_permeability =
                                 std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));
@@ -226,7 +226,7 @@ class Interfluid_Interaction : protected Value_Reader {
                 
             }else if(element == "CAPILLARY_PRESSURE"){
                     
-                ref_value << _non_wetting_fluid->print() << "-" << _wetting_fluid->print() << "Capillary Pressure";
+                ref_value << _non_wetting_fluid.lock()->print() << "-" << _wetting_fluid.lock()->print() << "Capillary Pressure";
 
                 _measured_capillary_pressure =
                     std::make_unique<Measured_Property>(Measured_Property(ref_name.str(),ref_value.str()));

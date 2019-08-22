@@ -3,13 +3,12 @@
 
 #include "Perforate.h"
 #include <vector>
-#include <algorithm>
+#include <numeric>
 
 class Producer_Perforate : public Perforate{
 
  private:
 
-    std::vector<int> _ignore_indexes;
     std::vector<double> _flow;
 
  public:
@@ -21,17 +20,12 @@ class Producer_Perforate : public Perforate{
     const std::vector<double>& flow() const {return _flow;};
 
     const double totalFlow() const override{
-        double total=0;
-        for(int fluid_index=0; fluid_index<_flow.size(); ++fluid_index){
-            auto result = std::find(std::begin(_ignore_indexes), std::end(_ignore_indexes), fluid_index);
-            if(result != std::end(_ignore_indexes)){
-                total+=_flow[fluid_index];
-            };
-        };
+        return std::accumulate(_flow.begin(),_flow.end(),0);
     };
 
 
     const std::string type() const override {return typeid(Producer_Perforate).name();};
+    const double flow(const int fluid_index) const {return _flow[fluid_index];};
 };
 
 

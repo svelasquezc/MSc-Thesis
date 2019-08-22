@@ -1,10 +1,10 @@
+#include <ctime>
+
 #include "Global.h"
 
 #include "NewtonRaphson.h"
+#include "Equilibrium_Relation.h"
 #include "Interfluid_Interaction.h"
-
-#include "Producer_Well.h"
-#include "Injector_Well.h"
 
 
 int Fluid::_count_of_principals=0;
@@ -204,7 +204,19 @@ void calculateWellFlow(const int term, std::shared_ptr<Well>& well){
     
     for(auto perforation = well->begin(); perforation !=well->end(); ++perforation){
         calculatePerforation(term, well, *perforation);
-        totalFlow += (*perforation)->totalFlow();
+        if((*perforation)->type() == typeid(Producer_Perforate).name()){
+            
+            auto producer_perf = std::dynamic_pointer_cast<Producer_Perforate, Perforate>(*perforation);
+            
+            for (auto fluid : characterized_fluids){
+                if(fluid->type() != "Gas"){
+                    totalFlow += producer_perf->flow(fluid->index());
+                };
+            };
+            
+        }else{
+            totalFlow += (*perforation)->totalFlow();
+        };
     };
 
     well->flow(term, totalFlow);
@@ -520,18 +532,16 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
 
             for(auto well : perforated_wells){
                 
-                if(well->changed()){
+                if(well->operativeCondition()->type() == "Flow"){
+                    max_number_of_well_non_zeros += well->numberOfPerforates()*2+1;
+                    ++well_equations;
+                };                    
 
-                    if(well->operativeCondition()->type() == "Flow"){
-                        max_number_of_well_non_zeros += well->numberOfPerforates()*2+1;
-                        ++well_equations;
-                    };                    
-                    well->changed(false);
-                };
             };
             
             total_equations = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + well_equations;
             max_non_zeros = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + max_number_of_well_non_zeros;
+            my_newton.reset();
             my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
 
             Global::was_change=false;
@@ -552,12 +562,6 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
 };
 
 //Rock
-void launchTriggers(){
-    using namespace Global;
-    mymesh->appear(timestamp,stencil);
-    timePasses(timestamp, term, mytime, timedelta, simulationtime);
-    FluidPressureVaries(timestamp);
-};
 
 void launchGeomodeler(){
     int option;
@@ -649,7 +653,7 @@ void launchFluidsEngineer(){
 
 };
 
-void launchReservoirEngineer(){
+void launchReservoirEngineer(std::string& timestamp){
     int option;
     std::string type;
     
@@ -658,35 +662,43 @@ void launchReservoirEngineer(){
     int index=0;
     
     std::cout << "Select your action" << std::endl;
-    std::cout << "1. Perforate Well" << std::endl;
+    if(timestamp =="")std::cout << "1. Perforate Well" << std::endl;
     std::cout << "2. Establish Operative Condition ";
 
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
     
+    if(timestamp =="change"){
+        while(option != 2){
+            Value_Reader::myRead(std::string("Please insert a valid option"), option, std::string("Please insert a valid option"));
+        };
+    };
+    
     switch(option){
     case 1:
-        if(Global::fluids_quantity >= 1){
-            Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
-            while(type != "Producer" && type != "Injector"){
-                std::cout << "Only Injector or Producer wells";
+        if(timestamp ==""){
+            if(Global::fluids_quantity >= 1){
                 Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
-            };
-            ++Global::wells_quantity;
-            if(type == "Producer"){
-                well = std::make_shared<Producer_Well>(Producer_Well(Global::wells_quantity));
-            }else if(type == "Injector"){
-                well = std::make_shared<Injector_Well>(Injector_Well(Global::wells_quantity));
+                while(type != "Producer" && type != "Injector"){
+                    std::cout << "Only Injector or Producer wells";
+                    Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
+                };
+                ++Global::wells_quantity;
+                if(type == "Producer"){
+                    well = std::make_shared<Producer_Well>(Producer_Well(Global::wells_quantity));
+                }else if(type == "Injector"){
+                    well = std::make_shared<Injector_Well>(Injector_Well(Global::wells_quantity));
+                }else{
+                    std::cout << "Only Injector or Producer wells";
+                };
+            
+                well->perforate(*mymesh, characterized_fluids,type);
+                perforated_wells.push_back(well);
+                equations.push_back(well);
+            
             }else{
-                std::cout << "Only Injector or Producer wells";
+                std::cout << "It is not possible to perforate wells with no fluid characterized."
+                          << std::endl;
             };
-            
-            well->perforate(*mymesh, characterized_fluids,type);
-            perforated_wells.push_back(well);
-            equations.push_back(well);
-            
-        }else{
-            std::cout << "It is not possible to perforate wells with no fluid characterized."
-                      << std::endl;
         };
         break;
     case 2:
@@ -704,6 +716,24 @@ void launchReservoirEngineer(){
     default:
         break;
     }
+};
+
+void launchTriggers(){
+    using namespace Global;
+    mymesh->appear(timestamp,stencil);
+    timePasses(timestamp, term, mytime, timedelta, simulationtime);
+    FluidPressureVaries(timestamp);
+    if(timestamp == "change"){
+        launchReservoirEngineer(timestamp);
+    }
+};
+
+void launchTriggers(std::ifstream& file_reader){
+    using namespace Global;
+    mymesh->appear(timestamp,stencil);
+    timePasses(timestamp, term, mytime, timedelta, simulationtime);
+    FluidPressureVaries(timestamp);
+    
 };
 
 void launchMenu(){
@@ -727,7 +757,7 @@ void launchMenu(){
             launchFluidsEngineer();
             break;
         case 4:
-            launchReservoirEngineer();
+            launchReservoirEngineer(Global::timestamp);
             break;
         case -1:
             run=true;
@@ -738,8 +768,8 @@ void launchMenu(){
 };
 
 
-void launchFromFile(const char* filename){
-    std::ifstream file_reader(filename, std::ifstream::in);
+void launchFromFile(std::ifstream& file_reader){
+    
     std::string object;
     std::string type;
     
@@ -832,8 +862,7 @@ void launchFromFile(const char* filename){
                 
             };
             
-            
-            launchTriggers();
+            launchTriggers(file_reader);
             
         };
         file_reader.close();
@@ -844,20 +873,31 @@ void launchFromFile(const char* filename){
 };
 
 int main(int argc, char *argv[]){
+    std::time_t tstart;
+    std::time_t tend;
     if(argc <= 1){
         launchMenu();
         
         Global::timestamp="continue";
+        tstart = std::time(0);
         while(Global::mytime<Global::simulationtime){
             launchTriggers();
         };
+        tend = std::time(0);
+        
+        std::cout << "Elapsed time: "<< std::difftime(tend, tstart) <<" seconds(s)."<<std::endl;
         
     }else{
-        launchFromFile(argv[1]);
+        std::ifstream file_reader(argv[1], std::ifstream::in);
+        launchFromFile(file_reader);
         Global::timestamp="continue";
+        tstart = std::time(0);
         while(Global::mytime<Global::simulationtime){
-            launchTriggers();
+            launchTriggers(file_reader);
         };
+        tend = std::time(0);
+
+        std::cout << "Elapsed time: "<< std::difftime(tend, tstart) <<" seconds(s)."<<std::endl;
     };
     
     return 0;

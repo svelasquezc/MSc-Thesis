@@ -51,6 +51,8 @@ class Mesh : protected Value_Reader{
     Cell_const_iterator end()    const {return _cells.end();};
     Cell_const_iterator cbegin() const {return _cells.cbegin();};
     Cell_const_iterator cend()   const {return _cells.cend();};
+
+    //const Cells_t& cells() const {return _cells;};
 };
 
 Mesh::Mesh(){};

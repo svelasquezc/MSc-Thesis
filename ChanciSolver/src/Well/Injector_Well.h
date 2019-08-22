@@ -9,7 +9,7 @@ class Injector_Well : public Well{
 
  private:
 
-    std::shared_ptr<Fluid> _injection_fluid;
+    std::weak_ptr<Fluid> _injection_fluid;
     
     std::vector<double> _rate;
     std::vector<double> _total_accumulated;    
@@ -80,7 +80,7 @@ class Injector_Well : public Well{
         
     };
 
-    const std::shared_ptr<Fluid>& injectionFluid() const {return  _injection_fluid;};
+    const std::shared_ptr<Fluid> injectionFluid() const {return  _injection_fluid.lock();};
 
     void updateProperties(const int term){
         Well::updateProperties(term);
