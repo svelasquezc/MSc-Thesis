@@ -16,8 +16,8 @@ class Perforate{
     std::vector<double> _equivalent_radius;
 
     Perforate(){
-        _well_index = std::vector<double>();
-        _equivalent_radius = std::vector<double>();
+        _well_index = std::vector<double>(1);
+        _equivalent_radius = std::vector<double>(1);
     };
     
  public:

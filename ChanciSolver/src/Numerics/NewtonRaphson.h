@@ -132,8 +132,10 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     void solve(){
 
         _residual = -_residual;
+        //std::cout << "Jacobian: "<< _jacobian<<std::endl;
         _solver.compute(_jacobian);
         _solution_delta = _solver.solve(_residual);
+        //std::cout << "Solution Delta: "<< _solution_delta<<std::endl;
         _residual = -_residual;
     };
     
@@ -147,6 +149,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         int row;
         int col;
         int iteration=0;
+
+        double tolerance;
     
         do{
 
@@ -160,7 +164,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                 
                 if(well->operativeStatus()==1){
 
-                    if(well->operativeCondition()->type() == "Flow"){
+                    if(well->operativeCondition()->type() == "FLOW"){
                         _estimatePressure(term, well);
                     }else{
                         _calculateWellFlow(term, well);
@@ -207,6 +211,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                 };
             };
 
+            //std::cout << "Residual: "<< _residual << std::endl;
+            
             //Jacobian Calculation
 
             residual_selector = 0;
@@ -245,8 +251,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                     
                                     
                                         double derivative = (modified_residual - _residual(row))/_machine_epsilon;
-                                        if(derivative != 0){
-                                            _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                        if(derivative != 0 || row == col){
+                                            if(derivative == 0 && row == col){
+                                                _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
+                                            }else{
+                                                _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                            };
                                         };
                                                         
                                         well_variable->boreholePressure(term, well_variable->boreholePressure(term)-_machine_epsilon);
@@ -277,8 +287,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         auto modified_flow = (*perforation)->totalFlow();
 
                                         double derivative = (modified_flow - unmodified_flow)/_machine_epsilon;
-                                        if(derivative != 0){
-                                            _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                        if(derivative != 0 || row == col){
+                                            if(derivative == 0 && row == col){
+                                                _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
+                                            }else{
+                                                _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                            };
                                         };
                                         
                                         modified_epsilon = -_machine_epsilon;
@@ -330,8 +344,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         modified_residual = calculateResidual(term,*residual_fluid, mesh,cell,rock, wells);
                                         
                                         double derivative = (modified_residual - _residual(row))/_machine_epsilon;
-                                        if(derivative != 0){
-                                            _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                        if(derivative != 0 || row == col){
+                                            if(derivative == 0 && row == col){
+                                                _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
+                                            }else{
+                                                _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                            };
                                         };
                                         
                                     
@@ -362,8 +380,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                             modified_residual = calculateResidual(term,*residual_fluid, mesh,neighbor_cell,rock, wells);
 
                                             double derivative = (modified_residual - _residual(neighbor_index))/_machine_epsilon;
-                                            if(derivative != 0){
-                                                _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                            if(derivative != 0 || row == col){
+                                                if(derivative == 0 && row == col){
+                                                    _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
+                                                }else{
+                                                    _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                                };
                                             };
 
                                             neighbor_cell.reset();
@@ -374,8 +396,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         modified_residual = calculateResidual(term,*residual_fluid, mesh, *cell, rock, wells);
 
                                         double derivative = (modified_residual - _residual(cell_index))/_machine_epsilon;
-                                        if(derivative != 0){
-                                            _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                        if(derivative != 0 || row == col){
+                                            if(derivative == 0 && row == col){
+                                                _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
+                                            }else{
+                                                _non_zeros.push_back(Tripletd_t(row,col,derivative));
+                                            };
                                         };
 
                                         modified_epsilon = -_machine_epsilon;
@@ -411,8 +437,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             _non_zeros.clear();
 
             ++iteration;
-        
-        }while(_residual.squaredNorm()/_initial_residual.squaredNorm() > _relative_change_in_residual);
+
+            tolerance = _residual.squaredNorm()/_initial_residual.squaredNorm();
+
+            std::cout << "Tolerance: " << tolerance <<" at iteration: "<<iteration<<std::endl;
+            
+        }while(tolerance > _relative_change_in_residual);
     
     };
     

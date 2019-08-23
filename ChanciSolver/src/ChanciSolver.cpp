@@ -178,7 +178,7 @@ void calculatePerforation(const int term, std::shared_ptr<Well>& well, std::shar
         for(auto fluid : characterized_fluids){
             producer_perf->flow(fluid->index(), calculatePeaceman(term,
                                                                   fluid,
-                                                                  mymesh->cell(injector_perf->index()),
+                                                                  mymesh->cell(producer_perf->index()),
                                                                   producer_perf->wellIndex(term),
                                                                   well->boreholePressure(term),
                                                                   well->boreholeDepth()
@@ -506,7 +506,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
                 
                 if(well->operativeStatus() == 1){ //Just Changed
 
-                    if(well->operativeCondition()->type() == "Flow"){
+                    if(well->operativeCondition()->type() == "FLOW"){
                         estimateWellPressure(term, well);
                         max_number_of_well_non_zeros += well->numberOfPerforates()*2+1;
                         ++well_equations;
@@ -532,7 +532,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
 
             for(auto well : perforated_wells){
                 
-                if(well->operativeCondition()->type() == "Flow"){
+                if(well->operativeCondition()->type() == "FLOW"){
                     max_number_of_well_non_zeros += well->numberOfPerforates()*2+1;
                     ++well_equations;
                 };                    
@@ -804,12 +804,16 @@ void launchFromFile(std::ifstream& file_reader){
         while(file_reader>>object){
             
             std::transform(object.begin(), object.end(),object.begin(), ::toupper);
-            
-            if(object == "MESH"){
+            if(object == "TIME_DELTA"){
+                file_reader>>Global::timedelta;
+            }else if(object == "SIMULATION_TIME"){
+                file_reader>>Global::simulationtime;
+            }else if(object == "MESH"){
                 
                 mymesh = std::make_unique<Mesh>();
                 mymesh->defineFromFile(file_reader);
                 Global::cells_number = mymesh->getCellTotal();
+                launchTriggers(file_reader);
                 
             }else if(object == "ROCK"){
                 
@@ -890,17 +894,16 @@ void launchFromFile(std::ifstream& file_reader){
                         if(object == "WELL"){
                             int index;
                             file_reader >> index;
-                            if(well->index() == index){
+                            if(well->index() == index - 1){
                                 well->establishFromFile(file_reader, Global::term, Global::timestamp);
                             };
                         };
                     };
+                    break;
                 }else{
                     throw std::domain_error("There are no wells perforated or OPERATIVE_CONDITIONS appears before WELLS");
                 };
             };
-            
-            launchTriggers(file_reader);
             
         };
         file_reader.close();

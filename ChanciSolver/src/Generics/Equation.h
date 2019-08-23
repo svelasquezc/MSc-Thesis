@@ -30,7 +30,7 @@ class Equation : public Equation_Base{
     
     //TypeRef& reference() {return *_reference;};
 
-    const std::string type() override { return typeid(TypeRef).name();};
+    virtual const std::string type() override { return typeid(TypeRef).name();};
 
     const bool& status() const override {return _status;};
     const int& index() const override {return _index;};

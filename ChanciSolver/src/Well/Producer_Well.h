@@ -18,7 +18,7 @@ class Producer_Well : public Well{
     void perforate(Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
         
         Well::perforate(mesh, characterized_fluids, type);
-        insertPerforations<Producer_Perforate>(mesh);
+        insertPerforations<Producer_Perforate>(mesh, characterized_fluids.size());
 
         _rate = std::vector<std::vector<double>>(1,std::vector<double>(characterized_fluids.size()));
         _total_accumulated = std::vector<std::vector<double>>(1,std::vector<double>(characterized_fluids.size()));
@@ -28,7 +28,7 @@ class Producer_Well : public Well{
     void perforateFromFile(std::ifstream& well_reader, Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type) override{
         
         Well::perforateFromFile(well_reader, mesh, characterized_fluids, type);
-        insertPerforationsFromFile<Producer_Perforate>(well_reader, mesh);
+        insertPerforationsFromFile<Producer_Perforate>(well_reader, mesh, characterized_fluids.size());
 
         _rate = std::vector<std::vector<double>>(1,std::vector<double>(characterized_fluids.size()));
         _total_accumulated = std::vector<std::vector<double>>(1,std::vector<double>(characterized_fluids.size()));
@@ -42,6 +42,8 @@ class Producer_Well : public Well{
         _rate.push_back(_rate[term-1]);
         _total_accumulated.push_back(_total_accumulated[term-1]);
     };
+
+    const std::string type() const override {return typeid(Producer_Well).name();};
 };
 
 

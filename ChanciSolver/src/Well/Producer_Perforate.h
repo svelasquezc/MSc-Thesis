@@ -15,6 +15,10 @@ class Producer_Perforate : public Perforate{
 
  Producer_Perforate() : Perforate(){};
     
+ Producer_Perforate(const int& fluids_quantity) : Perforate(){
+        _flow = std::vector<double>(fluids_quantity);
+    };
+    
     void flow(const int fluid_index, const double flow){_flow[fluid_index] = flow;};
 
     const std::vector<double>& flow() const {return _flow;};

@@ -12,6 +12,8 @@ class Injector_Perforate : public Perforate{
  public:
 
  Injector_Perforate() : Perforate(){};
+    
+ Injector_Perforate(const int& fluids_quantity) : Perforate(){};
 
     void flow(double flow){_flow=flow;};
     

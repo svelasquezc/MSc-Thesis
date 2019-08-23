@@ -51,9 +51,9 @@ class Well : public Equation<Well>{
         
         _type = type;
 
-        _flow = std::vector<double>();
+        _flow = std::vector<double>(1,0.0);
 
-        _borehole_pressure=std::vector<double>();
+        _borehole_pressure=std::vector<double>(1,0.0);
         
         Value_Reader::myRead(std::string("Please insert the well radius "), _radius, std::string("Please insert a valid input"));
         Value_Reader::myRead(std::string("Please insert the number of perforations "), _number_of_perforates, std::string("Please insert a valid input"));
@@ -74,9 +74,9 @@ class Well : public Equation<Well>{
         
         _type = type;
 
-        _flow = std::vector<double>();
+        _flow = std::vector<double>(1,0.0);
 
-        _borehole_pressure=std::vector<double>();
+        _borehole_pressure=std::vector<double>(1,0.0);
         
         while(well_reader >> element){
             std::transform(element.begin(), element.end(), element.begin(), ::toupper);
@@ -112,7 +112,7 @@ class Well : public Equation<Well>{
 
     const int& numberOfPerforates() const {return _number_of_perforates;};
 
-    template<typename PerforationType> inline void insertPerforationsFromFile(std::ifstream& well_reader, Mesh& mesh){
+    template<typename PerforationType> inline void insertPerforationsFromFile(std::ifstream& well_reader, Mesh& mesh, const int& fluids_quantity){
         std::string element;
         double skin;
         
@@ -121,12 +121,13 @@ class Well : public Equation<Well>{
         std::vector<int> position = std::vector<int>(3);
 
         for(int perforate=0; perforate<_number_of_perforates; ++perforate){
-            aux_perforate = std::make_shared<PerforationType>(PerforationType());
+            aux_perforate = std::make_shared<PerforationType>(PerforationType(fluids_quantity));
             while(well_reader >> element){
                 std::transform(element.begin(), element.end(),element.begin(), ::toupper);                
                 if(element == "POSITION"){
                     for(int axis=0; axis<3; ++axis){
                         well_reader >> position[axis];
+                        --position[axis];
                     };
                 }else if(element == "SKIN_FACTOR"){
                     well_reader >> skin;
@@ -143,11 +144,13 @@ class Well : public Equation<Well>{
                 auto first_perforate_cell = mesh.cell(aux_perforate->index());
                 _borehole_depth = first_perforate_cell->depth();
             };
+
+            _perforates.push_back(aux_perforate);
             
         };
     };
 
-    template<typename PerforationType> inline void insertPerforations(Mesh& mesh){
+    template<typename PerforationType> inline void insertPerforations(Mesh& mesh, const int& fluids_quantity){
 
         double skin;
         
@@ -159,7 +162,7 @@ class Well : public Equation<Well>{
         std::vector<int> position = std::vector<int>(3);
 
         for(int perforate=0; perforate<_number_of_perforates; ++perforate){
-            aux_perforate = std::make_shared<PerforationType>(PerforationType());
+            aux_perforate = std::make_shared<PerforationType>(PerforationType(fluids_quantity));
             for(int axis=0; axis<3; ++axis){
                 
                 ss << "Please insert perforate "<< perforate + 1 << " position in axis " << axisnames[axis] << ": ";
@@ -180,6 +183,8 @@ class Well : public Equation<Well>{
                 auto first_perforate_cell = mesh.cell(aux_perforate->index());
                 _borehole_depth = first_perforate_cell->depth();
             };
+
+            _perforates.push_back(aux_perforate);
         };
     };
 
@@ -198,7 +203,7 @@ class Well : public Equation<Well>{
         double value;
         double next_change;
         
-        if((timestamp == "change" || timestamp == "") && _status == 2){
+        if((timestamp == "change" || timestamp == "") && _operative_status == 2){
             
             Value_Reader::myRead(std::string("Please insert the type of operative condition (Pressure or Flow)"), type, std::string("Please insert a valid option"));
 
@@ -234,7 +239,7 @@ class Well : public Equation<Well>{
         double value;
         double next_change;
         
-        if((timestamp == "change" || timestamp == "") && _status == 2){
+        if((timestamp == "change" || timestamp == "") && _operative_status == 2){
 
             while(condition_reader >> element){
 
@@ -266,6 +271,8 @@ class Well : public Equation<Well>{
             
     };
 
+    virtual const std::string type() const {return typeid(Well).name();};
+
     void operativeStatus(const int operative_status){_operative_status=operative_status;};
     const int& operativeStatus() const {return _operative_status;};
     
@@ -276,7 +283,6 @@ class Well : public Equation<Well>{
     Perforate_const_iterator end()    const {return _perforates.end();};
     Perforate_const_iterator cbegin() const {return _perforates.cbegin();};
     Perforate_const_iterator cend()   const {return _perforates.cend();};
-    
 };
 
 

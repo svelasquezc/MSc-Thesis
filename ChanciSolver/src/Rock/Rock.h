@@ -102,7 +102,7 @@ void Rock::updateProperties(const int& term){
 
 void Rock::porosity(const int term, const int cell_index, const double pressure){
     _porosity[term][cell_index] = _porosity[0][cell_index]
-        * ( 1 + _compressibility * (pressure - _reference_pressure));
+        * ( 1.0 + (_compressibility * (pressure - _reference_pressure)));
 };
 
 #endif /* ROCK_H */

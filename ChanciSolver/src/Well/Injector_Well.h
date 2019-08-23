@@ -22,7 +22,7 @@ class Injector_Well : public Well{
         
         Well::perforate(mesh, characterized_fluids, type);
 
-        insertPerforations<Injector_Perforate>(mesh);
+        insertPerforations<Injector_Perforate>(mesh, characterized_fluids.size());
 
         int injection;
         
@@ -42,8 +42,8 @@ class Injector_Well : public Well{
             
         };
 
-        _rate=std::vector<double>();
-        _total_accumulated=std::vector<double>();
+        _rate=std::vector<double>(1,0.0);
+        _total_accumulated=std::vector<double>(1,0.0);
         
     };
 
@@ -51,7 +51,7 @@ class Injector_Well : public Well{
         
         Well::perforateFromFile(well_reader, mesh, characterized_fluids, type);
 
-        insertPerforationsFromFile<Injector_Perforate>(well_reader, mesh);
+        insertPerforationsFromFile<Injector_Perforate>(well_reader, mesh, characterized_fluids.size());
 
         int injection;
         std::string element;
@@ -88,6 +88,8 @@ class Injector_Well : public Well{
         _rate.push_back(_rate[term-1]);
         _total_accumulated.push_back(_total_accumulated[term-1]);
     };
+
+    const std::string type() const override {return typeid(Injector_Well).name();};
 };
 
 
