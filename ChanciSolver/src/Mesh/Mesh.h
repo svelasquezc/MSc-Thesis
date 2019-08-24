@@ -116,6 +116,7 @@ void Mesh::defineFromFile(std::ifstream& mesh_reader){
             };
         }else if(element == "THICKNESS"){
             for(axis=0; axis<3; ++axis){
+                _thickness[axis].reserve(_cell_number[axis]);
                 for(int spacing=0; spacing<_cell_number[axis];++spacing){
                     mesh_reader >> aux_thickness;
                     _thickness[axis].push_back(aux_thickness);

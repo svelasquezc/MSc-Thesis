@@ -59,8 +59,8 @@ void calculateGeometry(const int term, std::shared_ptr<Well>& well, std::shared_
 
     perforation->calculateEquivalentRadius(term, absolute_permeability[1],
                                            absolute_permeability[0],
-                                           mymesh->thickness(0,axis_x),
-                                           mymesh->thickness(1,axis_y)
+                                           mymesh->thickness(1,axis_y),
+                                           mymesh->thickness(0,axis_x)
                                            );
     
     perforation->calculateWellIndex       (term,
@@ -108,7 +108,7 @@ void estimateWellPressure(const int term, std::shared_ptr<Well>& well){
 
                     hydrostatic_head = fluid->density(term, cell->index())*gravity*(producer_well->boreholeDepth()-cell->depth());
 
-                    estimated_flow = perforation_mobility*(fluid->pressure(term, cell->index()) - hydrostatic_head);
+                    estimated_flow = perforation_mobility*(fluid->pressure(term, cell->index()) + hydrostatic_head);
                     accumulated_flow += estimated_flow;
                     
                 };
@@ -124,23 +124,23 @@ void estimateWellPressure(const int term, std::shared_ptr<Well>& well){
         for(auto perforation = injector_well->begin(); perforation !=injector_well->end(); ++perforation){
             injector_perf = std::dynamic_pointer_cast<Injector_Perforate, Perforate>(*perforation);
 
-            auto cell = mymesh->cell(producer_perf->index());
+            auto cell = mymesh->cell(injector_perf->index());
             
-            perforation_mobility = producer_perf->wellIndex(term)*
+            perforation_mobility = injector_perf->wellIndex(term)*
                 fluid->relativePermeability(term, cell->index())/(fluid->volumetricFactor(term, cell->index())*fluid->viscosity(term, cell->index()));
 
             accumulated_mobility += perforation_mobility;
 
-            hydrostatic_head = fluid->density(term, cell->index())*gravity*(producer_well->boreholeDepth()-cell->depth());
+            hydrostatic_head = fluid->density(term, cell->index())*gravity*(injector_well->boreholeDepth()-cell->depth());
 
-            estimated_flow = perforation_mobility*(fluid->pressure(term, cell->index()) - hydrostatic_head);
+            estimated_flow = perforation_mobility*(fluid->pressure(term, cell->index()) + hydrostatic_head);
             accumulated_flow += estimated_flow;
                     
         };
         
     };
 
-    well->boreholePressure(term, (accumulated_flow - well->flow(term))/accumulated_mobility);
+    well->boreholePressure(term, (accumulated_flow + well->flow(term))/accumulated_mobility);
 };
 
 double calculatePeaceman(const int term, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
@@ -292,7 +292,8 @@ void calculateProperties(const int& term, const std::shared_ptr<Cell>& cell, Roc
     for(auto fluid : characterized_fluids){
 
         if(fluid->principal()){
-            rock.porosity(term, cell_index, fluid->pressure(term, cell_index));
+            if(term > 0) rock.porosity(term, cell_index, fluid->pressure(term, cell_index));
+            //rock.porosity(term, cell_index, fluid->pressure(term, cell_index));
         }else{
             remaining_saturation = remaining_saturation - fluid->saturation(term, cell_index);
 
@@ -310,7 +311,6 @@ void calculateProperties(const int& term, const std::shared_ptr<Cell>& cell, Roc
 
         fluid->volumetricFactor(term, cell_index, fluid->pressure(term, cell_index));
         fluid->viscosity(term, cell_index, fluid->pressure(term, cell_index));
-
         //Calculate density
 
         double density_contribution = fluid->standardConditionsDensity();
@@ -344,7 +344,7 @@ double calculateAccumulation(const int& term, Fluid& fluid, const std::shared_pt
     double past_contribution=0;
     double current_contribution=0;
 
-    const auto cell_index = cell->index();
+    const int cell_index = cell->index();
     
     for(auto& equilibrium_relation : added_equilibrium_relations ){
         
@@ -804,16 +804,12 @@ void launchFromFile(std::ifstream& file_reader){
         while(file_reader>>object){
             
             std::transform(object.begin(), object.end(),object.begin(), ::toupper);
-            if(object == "TIME_DELTA"){
-                file_reader>>Global::timedelta;
-            }else if(object == "SIMULATION_TIME"){
-                file_reader>>Global::simulationtime;
-            }else if(object == "MESH"){
+            
+            if(object == "MESH"){
                 
                 mymesh = std::make_unique<Mesh>();
                 mymesh->defineFromFile(file_reader);
                 Global::cells_number = mymesh->getCellTotal();
-                launchTriggers(file_reader);
                 
             }else if(object == "ROCK"){
                 
@@ -858,6 +854,14 @@ void launchFromFile(std::ifstream& file_reader){
                 }else{
                     std::cout << "There is only one fluid, INTERFLUID_INTERACTIONS will be omitted\n";
                 };
+                
+            }else if(object == "TIME_DELTA"){
+                
+                file_reader>>Global::timedelta;
+                
+            }else if(object == "SIMULATION_TIME"){
+                
+                file_reader>>Global::simulationtime;
                 
             }else if(object == "WELLS"){
                 if(Global::fluids_quantity >= 1){
@@ -904,7 +908,7 @@ void launchFromFile(std::ifstream& file_reader){
                     throw std::domain_error("There are no wells perforated or OPERATIVE_CONDITIONS appears before WELLS");
                 };
             };
-            
+            launchTriggers(file_reader);
         };
         file_reader.close();
     }else{

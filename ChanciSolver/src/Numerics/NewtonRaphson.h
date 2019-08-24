@@ -132,10 +132,10 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     void solve(){
 
         _residual = -_residual;
-        //std::cout << "Jacobian: "<< _jacobian<<std::endl;
+        std::cout << "Jacobian: "<< _jacobian<<std::endl;
         _solver.compute(_jacobian);
         _solution_delta = _solver.solve(_residual);
-        //std::cout << "Solution Delta: "<< _solution_delta<<std::endl;
+        std::cout << "Solution Delta: "<< _solution_delta<<std::endl;
         _residual = -_residual;
     };
     
@@ -155,6 +155,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         do{
 
             _residual.setZero();
+            _solution_delta.setZero();
 
             for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
                 _calculateProperties(term, *cell, rock);
@@ -166,12 +167,11 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                     if(well->operativeCondition()->type() == "FLOW"){
                         _estimatePressure(term, well);
-                    }else{
-                        _calculateWellFlow(term, well);
                     };
                     
                     well->operativeStatus(0);
                 };
+                _calculateWellFlow(term, well);
             };
             
             //Residual calculation
@@ -187,7 +187,6 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         auto residual_well = std::dynamic_pointer_cast<Well,Equation_Base>(equation);
                     
                         row = locate(residual_type, residual_selector, residual_well->index());
-                        _calculateWellFlow(term, residual_well);
                         _residual(row) = calculateWellResidual(term, residual_well);
                     
                     }else{
@@ -211,7 +210,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                 };
             };
 
-            //std::cout << "Residual: "<< _residual << std::endl;
+            std::cout << "Residual: "<< _residual << std::endl;
             
             //Jacobian Calculation
 

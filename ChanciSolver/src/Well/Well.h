@@ -191,6 +191,9 @@ class Well : public Equation<Well>{
     virtual void updateProperties(const int term){
         _borehole_pressure.push_back(_borehole_pressure[term-1]);
         _flow.push_back(_flow[term-1]);
+        for(auto perforate : _perforates){
+            perforate->updateProperties(term);
+        }
     };
 
     std::shared_ptr<Operative_Condition>& operativeCondition(){
@@ -256,14 +259,22 @@ class Well : public Equation<Well>{
                 };
             };
 
+            if(type == "PRESSURE" && type == "SHUT" && type != "FLOW"){
+                throw std::invalid_argument("Type of operative condition must be FLOW, or PRESSURE or SHUT");
+            };
+            
             _operative_condition->type(type);
             _operative_condition->value(value);
             _operative_condition->nextChange(next_change);
             
-            if(type == "PRESSURE"  || type == "SHUT"){
+            if(type == "PRESSURE" || type == "SHUT"){
                 Equation<Well>::_status = false;
+                if(type == "PRESSURE"){
+                    _borehole_pressure[term] = value;
+                };
             }else{
                 Equation<Well>::_status = true;
+                _flow[term] = value;
             };
 
             _operative_status = 1;

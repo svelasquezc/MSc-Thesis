@@ -24,7 +24,9 @@ class Producer_Perforate : public Perforate{
     const std::vector<double>& flow() const {return _flow;};
 
     const double totalFlow() const override{
-        return std::accumulate(_flow.begin(),_flow.end(),0);
+        double total_flow = 0;
+        for(auto& fluid_flow : _flow) total_flow+=fluid_flow;
+        return total_flow;//std::accumulate(_flow.begin(),_flow.end(),0);
     };
 
 
