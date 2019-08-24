@@ -149,8 +149,11 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         int row;
         int col;
         int iteration=0;
+        //decltype(_residual) past_residual = _residual;
 
         double tolerance;
+
+        
     
         do{
 
@@ -434,6 +437,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             update(term, mesh, equations);
             _jacobian.setZero();
             _non_zeros.clear();
+
+            //auto difference = past_residual - _residual;
+            //
+            //tolerance = difference.squaredNorm()/_residual.squaredNorm();
+            
+            //past_residual = _residual;
 
             ++iteration;
 
