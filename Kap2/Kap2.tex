@@ -23,7 +23,7 @@
 \section{Simulación Multifísica}
 \subsection{Modelo Black Oil Extendido}
 
-El Black Oil es un modelo de transporte simultáneo de tres fluidos en el que se asume que los hidrocarburos están distribuidos en un gas y un aceite en barril a condiciones de presión y temperatura estándar \citep{chen2007reservoir}. Este modelo considera que puede haber una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, el modelo Black Oil extendido, considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''.
+El \textit{Black Oil} es un modelo de transporte simultáneo de tres fluidos en el que se asume que los hidrocarburos se distribuyen en un gas y un aceite en barril a condiciones de presión y temperatura estándar \citep{chen2007reservoir}. Este modelo considera que puede haber una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''.
 
 \begin{align}
 \label{ec:aceite}
@@ -37,7 +37,7 @@ El Black Oil es un modelo de transporte simultáneo de tres fluidos en el que se
 \end{align}
 donde $\vec{v_{p}}$ corresponde la ley de Darcy para el fluido $p = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $:
 \begin{equation}
-\vec{v_{p}}=\frac{K_{f}kr_{p}}{\mu_{p} } \nabla{\Phi_{p,f}}
+\vec{v_{p}}=\frac{\mathbb{K} kr_{p}}{\mu_{p} } \nabla{\Phi_{p,f}}
 \end{equation}
 \subsection{Problema de Valores Iniciales}
 %
