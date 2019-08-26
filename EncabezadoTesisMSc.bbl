@@ -1,31 +1,66 @@
-\begin{thebibliography}{3}
-\providecommand{\natexlab}[1]{#1}
-\providecommand{\url}[1]{\texttt{#1}}
-\expandafter\ifx\csname urlstyle\endcsname\relax
-  \providecommand{\doi}[1]{doi: #1}\else
-  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+\begin{thebibliography}{}
 
-\bibitem[Calle(2016)]{JCalle}
-J.~Calle.
+\bibitem[Calle, 2016]{JCalle}
+Calle, J. (2016).
 \newblock Identificaci{\'o}n de patrones de dise{\~n}o para software
   cient{\'i}fico a partir de esquemas preconceptuales.
 \newblock Master's thesis, Universidad Nacional de Colombia - Sede
-  Medell{\'i}n, Noviembre 2016.
-\newblock URL \url{http://bdigital.unal.edu.co/56381/}.
+  Medell{\'i}n.
 \newblock L{\'i}nea de Investigaci{\'o}n: Ingenier{\'i}a de software.
 
-\bibitem[Chen(2007)]{chen2007reservoir}
-Z.~Chen.
-\newblock \emph{Reservoir simulation: mathematical techniques in oil recovery},
-  volume~77.
-\newblock Siam, 2007.
+\bibitem[Chaverra, 2011]{JChaverra}
+Chaverra, J. (2011).
+\newblock Generaci{\'o}n autom{\'a}tica de prototipos funcionales a partir de
+  esquemas preconceptuales.
+\newblock Master's thesis, Universidad Nacional de Colombia, Sede Medell{\'i}n.
 
-\bibitem[Zapata(2007)]{zapata2007phd}
-C.~Zapata.
-\newblock \emph{Definici{\'o}n de un esquema preconceptual para la
-  obtenci{\'o}n autom{\'a}tica de esquemas conceptuales de UML}.
+\bibitem[Chen, 2007]{chen2007reservoir}
+Chen, Z. (2007).
+\newblock {\em Reservoir simulation: mathematical techniques in oil recovery},
+  volume~77.
+\newblock Siam.
+
+\bibitem[Ertekin et~al., 2001]{ertekin2001basic}
+Ertekin, T., Abou-Kassem, J.~H., \& King, G.~R. (2001).
+\newblock {\em Basic applied reservoir simulation}.
+\newblock Number Sirsi) i9781555630898.
+
+\bibitem[Jamal et~al., 2006]{jamal2006petroleum}
+Jamal, H., SM, F.~A., M~Rafiq, I., et~al. (2006).
+\newblock {\em Petroleum reservoir simulation: a Basic Approach}.
+\newblock Gulf Publishing Company.
+
+\bibitem[Nore\~{n}a \& Zapata, 2018]{norena2018det}
+Nore\~{n}a, P. \& Zapata, C. (2018).
+\newblock Una representación basada en esquemas preconceptuales de eventos
+  determinísticos y aleatorios tipo señal desde dominios de software
+  científico.
+\newblock {\em Research in Computing Science}, 147, 207--220.
+
+\bibitem[Nore\~{n}a et~al., 2018]{norena2018Ling}
+Nore\~{n}a, P., Zapata, C., \& Villamizar, A. (2018).
+\newblock Representaci{\'o}n de eventos a partir de estructuras
+  ling{\"u}{\'i}sticas basadas en roles sem{\'a}nticos: Una extensi{\'o}n al
+  esquema preconceptual.
+\newblock {\em Investigaci\'{o}n e innovaci\'{o}n en Ingenier\'{i}a de
+  Software}, 2, 69--79.
+
+\bibitem[Zapata, 2007]{zapata2007phd}
+Zapata, C. (2007).
+\newblock {\em Definici{\'o}n de un esquema preconceptual para la obtenci{\'o}n
+  autom{\'a}tica de esquemas conceptuales de UML}.
 \newblock PhD thesis, Universidad Nacional de Colombia, Sede Medellin,
-  Medell{\'i}n, 2007.
-\newblock URL \url{http://bdigital.unal.edu.co/10296/}.
+  Medell{\'i}n.
+
+\bibitem[Zapata, 2012]{zapata2012unc}
+Zapata, C. (2012).
+\newblock {\em The UNC-Method revisited: elements of the new approach}.
+\newblock Saarbr{\"u}cken: Lambert Academic Publishing.
+
+\bibitem[Zapata et~al., 2013]{zapata2013Eventos}
+Zapata, C., Nore\~{n}a, P., \& Gonz{\'a}lez, N. (2013).
+\newblock Representaci{\'o}n de eventos disparadores y de resultado en el grafo
+  de interacci{\'o}n de eventos.
+\newblock {\em Ingenier{\'\i}as USBMed}, 4(2), 23--32.
 
 \end{thebibliography}

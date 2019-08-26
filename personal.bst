@@ -344,7 +344,7 @@ FUNCTION {format.names}
 		  'skip$
 	       if$
 	       t "{\sc others}" =
-%%                  { "et~al." * }     %% Geschmackssache
+%%                  { "\emph{et~al.}" * }     %% Geschmackssache
 		    { " [~u.~a.~] " * }%%   13/2/94
 		    { " ; " * t * }
 	       if$
@@ -744,11 +744,11 @@ FUNCTION {format.crossref.editor}
  { editor #1 "{ll}" format.name$ " (Hrsg.)" *
    editor num.names$ duplicate$
    #2 >
-    { pop$ " et~al." * }
+    { pop$ " \emph{et~al.}" * }
     { #2 <
 	'skip$
 	{ editor #2 "{ff }{vv }{ll}{ jj}" format.name$ "others" =
-	    { " et~al." * }
+	    { " \emph{et~al.}" * }
 	    { " ; " * editor #2 "{vv~}{ll}" format.name$ * " (Hrsg.)" * }
 	  if$
 	}

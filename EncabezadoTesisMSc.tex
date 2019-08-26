@@ -2,6 +2,8 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}%escribir con acentos sin necesidad de comandos \'{} .
+\usepackage[sort&compress]{natbib}
+\bibliographystyle{apalike2}
 \usepackage{fancyhdr}
 \usepackage{graphics}
 \usepackage{epsfig}
@@ -17,12 +19,9 @@
 \usepackage{tabularx}
 \usepackage{subfigure}
 \usepackage{longtable}
+\usepackage{float}
 %\usepackage{pdfcrop}
 
-\usepackage{natbib}
-\bibpunct{(}{)}{,}{a}{}{;}
-\bibliographystyle{abbrvnat}
-\renewcommand{\citep}[1]{[\citealp{#1}]}
 
 \usepackage{rotating} %Para rotar texto, objetos y tablas seite. No se ve en DVI solo en PS. Seite 328 Hundebuch
                         %se usa junto con \rotate, \sidewidestable ....
@@ -74,7 +73,6 @@
 \renewcommand{\listtablename}{Lista de Tablas}
 \renewcommand{\listfigurename}{Lista de Figuras}
 \renewcommand{\contentsname}{Contenido}
-
 
 %\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
 \cleardoublepage

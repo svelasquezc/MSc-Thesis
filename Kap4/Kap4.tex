@@ -25,7 +25,7 @@ En esta sección se explican los conceptos principales que resultan en la traduc
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/Conceptos.pdf}%
-	\caption{Conceptos principales en la simulación. Los autores.} \label{fig:Concepts}
+	\caption[Conceptos principales en la simulación.]{Conceptos principales en la simulación. Los autores.} \label{fig:Concepts}
 \end{figure}
 
 %\subsection{Mesh}
@@ -34,10 +34,10 @@ Al resolver el dominio espacial continuo como un conjunto discreto de celdas (di
 
 De la conceptualización de los elementos emergentes en la discretización, se encuentra que existe una malla. La cual, contiene todas las propiedades necesarias para generar el conjunto de celdas. Además, existe un actor ``Geomodelador'' que se encarga de definir el número de celdas en cada eje, sus espesores y topes tal como se presenta en \ref{fig:Mesh}. \\
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/Mesh.pdf}%
-	\caption{Definición de la malla. Los autores.} \label{fig:Mesh}
+	\caption[Definición de la malla.]{Definición de la malla. Los autores.} \label{fig:Mesh}
 \end{figure}
 
 %Este párrafo puede servirme más para la parte del evento.
@@ -54,10 +54,10 @@ Una vez definidas tales propiedades, la malla aparece en un proceso iterativo de
 La especificación de la relación dinámica ``Petrofísico caracteriza roca'' consiste de insertar las condiciones iniciales de porosidad y permeabilidad absoluta para la roca asociada al yacimiento, es posible notar que estos atributos de la roca están representados como arreglos por la cantidad de términos, derivados de los pasos de tiempo (estos se verán más adelante), y la cantidad de celdas definidas en la malla. \\
 Adicionalmente, el petrofísico define la compresibilidad de poro y la presión a la que esta se mide para el cálculo de la porosidad a los términos posteriores. El modelo considera la existencia de una única roca a la cual todas las propiedades por cada una de las celdas son asignadas. La caracterización de la roca se presenta en \ref{fig:Rock}.\\
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.90\linewidth]{Fig/Rock.pdf}%
-	\caption{Caracterización de la Roca. Los autores.} \label{fig:Rock}
+	\caption[Caracterización de la Roca.]{Caracterización de la Roca. Los autores.} \label{fig:Rock}
 \end{figure}
 
 %\subsection{Phase}\label{sec:PS_Phase}
@@ -65,16 +65,16 @@ Adicionalmente, el petrofísico define la compresibilidad de poro y la presión 
 
 Los fluidos tienen propiedades que son funciones de su presión y saturación, estas a su vez son función del tiempo y del espacio. Por lo que todas las propiedades que se proponen en la conceptualización se representan como arreglos dependientes de la cantidad de términos y de la cantidad de celdas, tal como se presenta en la figura \ref{fig:FluidProps}. La representación del fluido, su relación dinámica ``Ingeniero de fluidos caracteriza Fluido'' y su respectiva especificación se presentan en la figura \ref{fig:Fluid}.\\
 
-\begin{figure}[hbt]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/PropiedadesDeFluidos.pdf}%
-	\caption{Caracterización del fluido. Los autores.} \label{fig:FluidProps}
+	\caption[Caracterización del fluido.]{Caracterización del fluido. Los autores.} \label{fig:FluidProps}
 \end{figure}
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/Fluid.pdf}%
-	\caption{Caracterización del fluido. Los autores.} \label{fig:Fluid}
+	\caption[Caracterización del fluido.]{Caracterización del fluido. Los autores.} \label{fig:Fluid}
 \end{figure}
 
 En pos de la generalidad, la viscosidad del fluido y su factor volumétrico se definen como funciones directas de la presión. Con este fin, aparece el concepto de ``propiedad medida'', el cuál tiene una ``medida de referencia'' y un ``valor medido'' a esa referencia. Ambos son arreglos de la ``cantidad de medidas''. En la figura \ref{fig:Fluid} también es posible ver que el fluido tiene una ``viscosidad medida y un factor volumétrico medido''. Esto nos permite calcular de manera general estas propiedades, independientemente del fluido, como una interpolación en el conjunto de medidas a la presión del fluido correspondiente. El ingeniero de fluidos inserta la viscosidad medida y el factor volumétrico medido cuando caracteriza el fluido. \\
@@ -85,10 +85,10 @@ Es importante notar también, que el fluido tiene un tipo y un atributo de tipo 
 \subsection{Relación de Equilibrio}\label{sec:PS_Equilibrium}
 En las ecuaciones del BOM se relacionan la posible existencia de masa de gas en el aceite (Rs o gas disuelto), y, en el caso del BOM extendido, la de aceite en el gas (Rv o aceite volatilizado). En el concepto ``Relación de equilibrio'', se generaliza la existencia de masa de un fluido dentro de otro fluido como un coeficiente de partición, tal como se muestra en la conceptualización (ver \ref{sec:Concepts}). Se postula, también, que existe un fluido que aporta masa y otro que la recibe, tal como se ve en \ref{fig:EqRelation}. El coeficiente de partición cumple la mismas condiciones de la viscosidad del fluido y a su vez, tiene un coeficiente de partición medido. 
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/Equilibrium.pdf}%
-	\caption{Adición de Relaciones de equilibrio. Los autores.} \label{fig:EqRelation}
+	\caption[Adición de Relaciones de equilibrio.]{Adición de Relaciones de equilibrio. Los autores.} \label{fig:EqRelation}
 \end{figure}
 
 %\subsection{Inter-phase interaction}\label{sec:PS_Interphase}
@@ -108,10 +108,10 @@ En las ecuaciones del BOM se relacionan la posible existencia de masa de gas en 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Las interacciones entre fluidos se proponen como una generalización de los contactos entre fluidos. En el caso del modelo BOM, se deben especificar dos: los contactos gas-aceite y aceite-agua. En este concepto se relacionan directamente las dependencias de la permeabilidad relativa del fluido principal con su respectivo fluido de referencia en el contacto. Además, para el fluidos cuya incógnita es la saturación, se relaciona la presión del fluido principal con su respectiva presión capilar, con el fin de calcular la presión faltante. Para esto, es necesario saber de antemano cuál fluido es el mojante y cuál es el no mojante. Adicionalmente, todas las propiedades dependientes se calculan a la saturación del fluido de referencia. En la figura \ref{fig:Contact} se presenta la representación propuesta para las interacciones entre fluidos.
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/Equilibrium.pdf}%
-	\caption{Adición de Interacción entre fluidos. Los autores.} \label{fig:Contact}
+	\caption[Adición de Interacción entre fluidos.]{Adición de Interacción entre fluidos. Los autores.} \label{fig:Contact}
 \end{figure}
 %este concepto me relaciona un fluido de referencia, que se espera diferente del fluido con la propiedad de ser ``Principal'' y es respecto al cual se interpolarán las permeabilidades relativas, tanto propias como del fluido principal.
 %\subsection{Component}\label{sec:PS_Component} % This could be changed to Chemical
@@ -119,10 +119,10 @@ Las interacciones entre fluidos se proponen como una generalización de los cont
 \subsection{Pozo}\label{sec:PS_Well}
 Se proponen los pozos, de manera análoga a la malla, como un conjunto de perforados que a su vez tienen atributos adicionales como lo son la presión de fondo y el caudal. Estos pozos, tienen una caracterización distinta según el tipo, sea productor o inyector. Además, es posible notar que el pozo es un concepto abstracto, de cuál se instancia uno de los dos tipos. Más aún, los perforados dependerán del tipo de pozo, siendo estos también abstractos, con sus respectivos tipos ``perforado inyector'' o ``perforado productor''. En la figura \ref{fig:Well} se presenta la representación de los pozos.\\
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/Pozo.pdf}%
-	\caption{Perforación de Pozos. Los autores.} \label{fig:Well}
+	\caption[Perforación de Pozos.]{Perforación de Pozos. Los autores.} \label{fig:Well}
 \end{figure}
 
 La principal diferencia entre los pozos productores e inyectores radica en que el pozo inyector tiene un fluido de inyección. Además, la tasa y el acumulado del pozo inyector sólo dependen de este fluido, mientras que para el pozo productor dependerá de la cantidad de fluidos caracterizados. Estos pozos están sujetos a la restricción de no cambiar su tipo, además para un pozo productor, su conjunto de perforados corresponderá también a perforados productores. Así mismo para los pozos inyectores.\\
@@ -137,7 +137,7 @@ La ecuación es un concepto agrupador, tanto el fluido como el pozo son ecuacion
 
 %\section{PS Representation of Enhanced Oil Recovery Simulation}\label{sec:PS_EOR}
 \section{Representación en EP de la simulación de procesos EOR}\label{sec:PS_EOR}
-En esta sección se propone una representación basada en un EP para procesos EOR. En el esquema \ref{fig:PSComplete} se evidencia la solución del BOM discretizado usando volúmenes finitos en una malla cartesiana ortogonal. El paso a paso en la ejecución de los eventos se muestra en \ref{fig:Events}.  En el evento ``Presión del fluido varía'' se desarrollan las iteraciones del método de Newton-Raphson e internamente las iteraciones sobre las celdas requeridas para solucionar el sistema algebraico resultante de la discretización. En las secciones siguientes se explica el EP elaborado en las respectivas porciones correspondientes a eventos, subrutinas y funciones que procesan la simulación de procesos EOR. \\
+En esta sección se propone una representación basada en un EP para procesos EOR. En el esquema \ref{fig:PSComplete} se evidencia la solución del BOM discretizado usando volúmenes finitos en una malla cartesiana ortogonal. El paso a paso en la ejecución de los eventos se muestra en \ref{fig:EventsInteraction}.  En el evento ``Presión del fluido varía'' se desarrollan las iteraciones del método de Newton-Raphson e internamente las iteraciones sobre las celdas requeridas para solucionar el sistema algebraico resultante de la discretización. En las secciones siguientes se explica el EP elaborado en las respectivas porciones correspondientes a eventos, subrutinas y funciones que procesan la simulación de procesos EOR. \\
 
 Para el correcto desarrollo de la simulación, se establecen las siguientes precondiciones: existe una única malla y una única roca. En el caso de una simulación de dos fluidos debe existir una única interacción entre fluidos. En el caso de tres fluidos deben existir exactamente dos interacciones entre fluidos.
 
@@ -147,24 +147,24 @@ Para el correcto desarrollo de la simulación, se establecen las siguientes prec
 \centering%
 \includegraphics[width=0.9\linewidth]{Fig/PozosConEcuacion.pdf}%
 %\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-\caption{Representación en EP de la simulación de procesos EOR. Los autores.} \label{fig:PSComplete}
+\caption[Representación en EP de la simulación de procesos EOR.]{Representación en EP de la simulación de procesos EOR. Los autores.} \label{fig:PSComplete}
 \end{figure}
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/FlujoDeEventos.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Línea de Procesos. Los autores.} \label{fig:Events}
+	\caption[Diagrama basado en el grafo de interacción de eventos.]{Diagrama basado en el grafo de interacción de eventos. Los autores basados en \cite{zapata2013Eventos}.} \label{fig:EventsInteraction}
 \end{figure}
 %The rest of this section is as follows: In section \ref{sec:PS_Mesh} we present the Mesh concept as a collection of cells with additional elements needed for calculating the attributes of each cell. Furthermore, we develop the dynamical relationship ``Geomodeler defines Mesh'' as an interaction of the role ``Geomodeler'' with atomic\footnote{atomic as is stated by \cite{AG01} (Aca debe ir Zapata)} dynamical relationships. In section \ref{sec:PS_Rock} we present the Rock concept with its attributes and initial characterization. In section \ref{sec:PS_Phase} ... In section \ref{sec:PS_Interphase} ... In section \ref{sec:PS_Equilibrium} we define the partition coefficients as relations between two phases, one contributing mass and another receiving mass in the mass balance equation. In section \ref{sec:PS_Well}
 \subsection{Malla aparece}\label{sec:PS_MeshAppears}
 El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definida'', que sucede justo después de que el geomodelador defina la malla. En este evento, se desarrollan dos ciclos principales. El primer ciclo es anidado por cada eje coordenado, y en total se recorre el número de celdas a definir. En este ciclo, se calculan los volúmenes y profundidades de cada celda, además se asigna un índice único de celda y la numeración en cada eje (x,y,z). La especificación del evento ``Malla Aparece'' se presenta en la figura \ref{fig:Concepts}.\\
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[height=\textheight]{Fig/MallaAparece.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Representación de la aparición de la Malla. Los autores.} \label{fig:MeshAppears}
+	\caption[Representación de la aparición de la Malla.]{Representación de la aparición de la Malla. Los autores.} \label{fig:MeshAppears}
 \end{figure}
 
 En el segundo ciclo principal, se itera sobre las celdas definidas previamente y se calcula la conectividad, es decir la definición de caras. Para esto, se consulta la existencia de celdas adyacentes a la celda actual en todas las direcciones. Si existe una celda en alguna dirección, se crea y calcula su área y orientación. Adicionalmente, a la cara se le asigna un índice y también se le asigna la celda vecina. Es importante notar que cada celda almacena su conjunto de caras, por lo que las caras se duplican.
@@ -178,18 +178,18 @@ Se puede observar también que, en este evento se realiza el cálculo de las pro
 	\centering%
 	\includegraphics[width=0.7\linewidth]{Fig/TiempoPasa.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Representación del paso del tiempo. Los autores.} \label{fig:TimePasses}
+	\caption[Representación del paso del tiempo.]{Representación del paso del tiempo. Los autores.} \label{fig:TimePasses}
 \end{figure}
 
 
 \subsection{Presión del Fluido Varía}\label{sec:PS_FluidVaries}
 En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulación. En éste se llevan a cabo las iteraciones del método de Newton-Raphson para converger al próximo paso de tiempo. La especificación de este evento consta de cinco procesos principales: La actualización de propiedades al término actual, el recálculo de las mismas, el cálculo de los residuales en cada iteración, el cálculo de la matriz jacobiana, y la actualización de las incógnitas. La especificación del evento ``Presión del Fluido varía'' se presenta en la figura \ref{fig:FluidPressureVaries}.\\
 
-\begin{figure}[b]
+\begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/PresionVaria.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Especificación del evento Presión del fluido varía. Los autores.} \label{fig:FluidPressureVaries}
+	\caption[Especificación del evento Presión del fluido varía.]{Especificación del evento Presión del fluido varía. Los autores.} \label{fig:FluidPressureVaries}
 \end{figure}
 
 \subsubsection{Actualización de arreglos de propiedades}\label{subsec:PS_DefVars}
@@ -199,7 +199,7 @@ En la actualización de propiedades al término actual, se hace un incremento de
 	\centering%
 	\includegraphics[width=\linewidth]{Fig/ActualizacionDeVariables.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Actualización de propiedades al término actual. Los autores.} \label{fig:UpdateProperties}
+	\caption[Actualización de propiedades al término actual.]{Actualización de propiedades al término actual. Los autores.} \label{fig:UpdateProperties}
 \end{figure}
 
 
@@ -210,7 +210,7 @@ Posteriormente en la figura \ref{fig:TimeK} se muestra el recálculo de las prop
 	\centering%
 	\includegraphics[width=\linewidth]{Fig/TiempoK.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Recálculo de Propiedades al término actual para la iteración. Los autores.} \label{fig:TimeK}
+	\caption[Recálculo de Propiedades al término actual para la iteración.]{Recálculo de Propiedades al término actual para la iteración. Los autores.} \label{fig:TimeK}
 \end{figure}
 
 \subsubsection{Cálculo de Residuales}\label{subsec:Residual}
@@ -220,7 +220,7 @@ Luego \ref{fig:Residual} \\ % Residual
 	\centering%
 	\includegraphics[width=\linewidth]{Fig/Residual.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Cálculo de residual para la iteración. Los autores.} \label{fig:Residual}
+	\caption[Cálculo de residual para la iteración.]{Cálculo de residual para la iteración. Los autores.} \label{fig:Residual}
 \end{figure}
 
 \subsubsection{Cálculo de la Matriz del Jacobiano}\label{subsec:Jacobian}
@@ -230,7 +230,7 @@ Siguiendo \ref{fig:Jacobiano} \\ % Jacobiano
 	\centering%
 	\includegraphics[width=\linewidth]{Fig/Jacobiano.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Cálculo y armado de la matriz del jacobiano añ término actual para la iteración. Los autores.} \label{fig:Jacobiano}
+	\caption[Cálculo y armado de la matriz del jacobiano al término actual para la iteración.]{Cálculo y armado de la matriz del jacobiano al término actual para la iteración. Los autores.} \label{fig:Jacobiano}
 \end{figure}
 
 Por último \ref{fig:UpdateVariables} \\
@@ -239,7 +239,7 @@ Por último \ref{fig:UpdateVariables} \\
 	\centering%
 	\includegraphics[width=\linewidth]{Fig/ActualizacionDeIncognitas.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption{Recálculo de Propiedades al término actual para la iteración. Los autores.} \label{fig:UpdateVariables}
+	\caption[Recálculo de Propiedades al término actual para la iteración.]{Recálculo de Propiedades al término actual para la iteración. Los autores.} \label{fig:UpdateVariables}
 \end{figure}
 %includefigure{Graphical Representation of subroutine}
 

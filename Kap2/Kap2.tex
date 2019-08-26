@@ -18,12 +18,13 @@
 \chapter{Marco teórico}
 %
 %\section{Black Oil Model}
-\section{Procesos de Recobro Mejorado}
 
 \section{Simulación de Yacimientos de Petróleo}
+La simulación de yacimientos de petróleo es un proceso en el cual se resuelve un conjunto de ecuaciones diferenciales parciales para un dominio dado. La simulación involucra la elección de modelos, métodos de discretización, tanto en el tiempo como en el espacio; métodos de solución de sistemas no lineales, al igual que métodos de solución de sistemas lineales y precondicionamiento de los mismos. Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos, además del costo computacional implicado.
+
 \subsection{Modelo Black Oil Extendido}
 
-El \textit{Black Oil} es un modelo de transporte simultáneo de tres fluidos en el que se asume que los hidrocarburos se distribuyen en un gas y un aceite en barril a condiciones de presión y temperatura estándar \citep{chen2007reservoir}. Este modelo considera que puede haber una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''.
+El \textit{Black Oil Model} (BOM) es un modelo de transporte simultáneo de tres fluidos en el que se asume que los hidrocarburos se distribuyen en un gas y un aceite en barril a condiciones de presión y temperatura estándar \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. Este modelo considera que puede haber una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''.
 
 \begin{align}
 \label{ec:aceite}
@@ -43,16 +44,132 @@ donde $\vec{v_{p}}$ corresponde la ley de Darcy para el fluido $p = \left\lbrace
 %
 \subsection{Modelamiento de Pozos}
 %
-\subsection{Modelamiento del Químico}
 %
 \subsection{Discretización}
 %Algebraic Equations
 
 \subsection{Método de Newton-Raphson}
 %
+\section{Procesos de Recobro Mejorado}
+
+\subsection{Modelamiento del Químico}
 
 \section{Esquemas Preconceptuales}
-Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el lenguaje natural y un esquema conceptual o un lenguaje formal \citep{zapata2007phd}. Sirven para establecer un punto común de entendimiento entre un interesado y un analista.
-\subsection{Elementos Principales}
 
-\subsection{Representación Basada en Eventos}
+Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el lenguaje natural y un esquema conceptual o un lenguaje formal. Estos esquemas contienen todo el dominio de aplicación de un interesado, y por tanto, sirven para establecer un punto común de entendimiento entre un interesado y un analista de software \citep{zapata2007phd}.
+
+Los EP se desarrollan con la idea de mantener la coherencia y consistencia entre el discurso del interesado y el software desarrollado. 
+
+\subsection{Elementos del Esquema Preconceptual}
+\cite{zapata2012unc} define los elementos del EP tal como se observa en la figura \ref{fig:InitialPS} para la representación del dominio del interesado. Estos elementos se dividen en cuatro categorías: nodos, relaciones, enlaces, y agrupadores.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.51]{Fig/ElementosDelEP.pdf}%
+	\caption[Elementos del EP.]{Elementos del EP. Tomado de \citep{zapata2012unc}.} \label{fig:InitialPS}
+\end{figure}
+
+\subsubsection{Nodos}
+\begin{itemize}
+	\item \textbf{Concepto}:
+	Los conceptos son sustantivos o sintagmas nominales que representan un actor u objeto dentro del dominio del interesado, se subclasifican en conceptos clase y conceptos hoja, según su jerarquía \citep{zapata2007phd,zapata2012unc}. %En la figura \ref{fig:PS_Concept} se muestra la representación. Un ejemplo de su uso se presenta en la figura \ref{fig:ej_concept}.
+	
+	\item \textbf{Condicional}: Los condicionales establecen cuando ejecutar una relación dinámica o una especificación a partir de una expresión lógica formada por conceptos o variables, operadores, y valores o parámetros \citep{zapata2007phd,zapata2012unc}. %como se muestra en la figura \ref{fig:}
+	
+	\item \textbf{Operador}: Los operadores son símbolos lógicos o matemáticos que sirven para formar expresiones a evaluar \citep{zapata2012unc}.
+	
+	\item \textbf{Asignación}: Sirve para asignar el valor que resulta de una expresión matemática o lógica \citep{zapata2012unc}.
+	
+	\item \textbf{Atributo Compuesto}: Sirve para representar el acceso a un concepto hoja o atributo desde su concepto clase \citep{zapata2007phd}.
+\end{itemize}
+
+\subsubsection{Relaciones}
+\begin{itemize}
+	\item \textbf{Relación Estructural}: Relaciones permanentes entre dos conceptos, se asocian a los verbos ``ser'' o ``tener'' y establecen generalización o agregación, respectivamente \citep{zapata2007phd,zapata2012unc}.
+	\item \textbf{Relación Dinámica}: Se asocian a verbos que denotan acción u operaciones que modifican el dominio de estudio, establecen relaciones transitorias entre el concepto ejecutor de la acción con el concepto objeto de dicha acción \citep{zapata2007phd,zapata2012unc}.
+	\item \textbf{Relación Eventual}: Se relaciona con un verbo que denota ocurrencia \citep{zapata2012unc,norena2018Ling}.
+\end{itemize}
+
+\subsubsection{Enlaces}
+\begin{itemize}
+	\item \textbf{Conexión}: Es una flecha unidireccional que sirve para conectar conceptos con relaciones dinámicas o estructurales \citep{zapata2007phd,zapata2012unc}.
+	\item \textbf{Implicación}: Es una línea continua y dirigida que sirve para indicar una relación causa-efecto u orden entre relaciones dinámicas, condicionales o eventos. \citep{zapata2007phd,zapata2012unc}. 
+	\item \textbf{Línea}: Sirve para conectar un concepto a una nota o instancia \citep{zapata2007phd,zapata2012unc}.
+	\item \textbf{Conector de Operador}: Sirve para conectar un valor, concepto, atributo compuesto u otros operadores, a un operador \citep{zapata2012unc}. 
+	\item \textbf{Conjunción/Disyunción}: Sirve para agrupar o bifurcar implicaciones, estableciendo una causalidad conjunta o múltiples efectos \citep{zapata2007phd,zapata2012unc}. 
+\end{itemize}
+
+\subsubsection{Agrupadores}
+\begin{itemize}
+	\item \textbf{Nota o Instancia}: Sirve para limitar los valores para un concepto a un conjunto predefinido \citep{zapata2007phd,zapata2012unc}.
+	\item \textbf{Especificación}: Sirve para agrupar un conjunto de operaciones que describen una relación dinámica o eventual \citep{zapata2012unc}.
+	\item \textbf{Marco}: Sirve para asociar múltiples relaciones dinámicas a una responsabilidad o para agrupar conceptos \citep{zapata2012unc}.
+	\item \textbf{Restricción}: Sirve para establecer una condición sobre una especificación de operaciones \citep{zapata2012unc}. Adicionalmente, se usa para establecer ciclos sobre conceptos o condiciones \citep{JChaverra}.
+	\item \textbf{Evento}: Es una ocurrencia que habilita cambios de estado en los procesos  \citep{zapata2013Eventos}.
+\end{itemize}
+
+\subsection{Esquemas Preconceptuales en el contexto del software científico}
+
+\cite{JCalle, norena2018det} descubren la capacidad del EP para representar aplicaciones en el contexto del software científico. Para ello, definen elementos adicionales que permiten modelar dominios de mayor complejidad. En esta tesis de maestría se usan las condiciones iniciales, conceptos tipo arreglo, parámetros, variables, vectores, operadores predefinidos, operador ``push'', operador ``type'',  y funciones definidas por el analista. En la figura \ref{fig:NewElements} se presenta la representación de los elementos previamente mencionados. A continuación, se explican los elementos adicionales que se usan en el desarrollo de esta tesis.
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/NuevosElementosDelEP.pdf}%
+	\caption[Elementos para la representación de Software Científico.]{Elementos para la representación de Software Científico. Los autores a partir de \citep{JCalle,norena2018det}.} \label{fig:NewElements}
+\end{figure}
+
+\subsubsection{Condiciones Iniciales}
+Las condiciones iniciales son una especificación, de variables y parámetros globales, que se conoce desde el inicio de la simulación \citep{norena2018det}. Un ejemplo de uso se presenta en la figura \ref{fig:EjInitialConditions}.
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/EjInitialConditions.pdf}%
+	\caption[Condiciones Iniciales.]{Condiciones Iniciales. Los autores.} \label{fig:EjInitialConditions}
+\end{figure}
+
+\subsubsection{Concepto tipo arreglo}
+Los conceptos tipo arreglo permiten almacenar de manera permanente múltiples valores, y a su vez, iterar sobre ellos \citep{JCalle}. En esta tesis de maestría se usan conceptos tipo arreglos multidimensionales. En la figura \ref{fig:EjArrConcept} se expone un ejemplo de su uso.
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=1]{Fig/EjArrConcepts.pdf}%
+	\caption[Conceptos tipo arreglo.]{Conceptos tipo arreglo. Los autores.} \label{fig:EjArrConcept}
+\end{figure}
+
+\subsubsection{Parámetro}
+Los parámetros se usan para almacenar constantes o definir entradas en la especificación de relaciones dinámicas, especificaciones de tipo marco y, funciones, que reciben múltiples argumentos o parámetros \citep{JCalle, norena2018det}. Se expone un ejemplo de uso en \ref{fig:EjParameter}.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.5\linewidth]{Fig/EjParametro.pdf}%
+	\caption[Ejemplo de parámetros.]{Ejemplo de parámetros. Los autores.} \label{fig:EjParameter}
+\end{figure}
+
+\subsubsection{Variable Independiente}
+Las variables independientes permiten almacenar valores durante la ejecución de una especificación sin estar acopladas a un concepto. Si se definen en las condiciones iniciales, se pueden usan de manera global durante toda la simulación \citep{norena2018det}. En la figura \ref{fig:EjInitialConditions} se pueden ver ejemplos de variables independientes.\\
+
+\subsubsection{Vector independiente}
+Los vectores independientes cumplen la misma tarea y propiedades de las variables independientes pero permiten almacenar más de un valor \citep{norena2018det}. Un ejemplo de vector independiente se presenta en \ref{fig:EjVector}.
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.5\linewidth]{Fig/EjVectorIndependiente.pdf}%
+	\caption[Ejemplo de vector independiente.]{Ejemplo de vector independiente. Los autores.} \label{fig:EjVector}
+\end{figure}
+
+\subsubsection{Operadores Predefinidos}
+Son funciones algebraicas y trigonométricas predefinidas que se pueden usar como operadores en el EP \citep{JCalle}.
+
+\subsubsection{Operador Push}
+El operador Push sirve para insertar, valores, conceptos o parámetros dentro de un concepto tipo arreglo, el elemento que se inserta queda en la última posición del arreglo  \citep{JCalle}.
+\subsubsection{Operador Type}
+El operador Type tiene dos versiones, una como operador de asignación y otro como operador de información. En el caso de la asignación, sirve para otorgarle el tipo de una subclase a un concepto. Mientras que en el de información, consulta si el tipo del concepto corresponde con el tipo de una subclase definida \citep{JCalle}.
+\subsubsection{Funciones definidas por el analista}
+Las funciones definidas por el analista son especificaciones reutilizables en el EP a modo de un operador personalizado cuyo nombre define el analista. Éstas funciones llevan en su especificación un concepto ``return'' que corresponde al valor que devuelve la función al ser usada como operador \citep{JCalle}. En la figura \ref{fig:Potencial} se presenta un ejemplo de definición y uso de una función definida por el analista.
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.8]{Fig/EjFuncion.pdf}%
+	\caption[Ejemplo de función, cálculo del potencial.]{Ejemplo de función, cálculo del potencial. Los autores.} \label{fig:Potencial}
+\end{figure}
+

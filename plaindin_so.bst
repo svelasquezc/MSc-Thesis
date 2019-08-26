@@ -361,7 +361,7 @@ FUNCTION {format.names}
 %%                                %% n. schindle's hinweis 12/1/96 erweitert
                t "\textsc{others}" = t "\textsc{others} (Hrsg.)" = or
                     { " [u.~a.]" * }%%   13/2/94
-%%%%                  { "et~al." * } %% Geschmackssache, waehle eins von beiden
+%%%%                  { "\emph{et~al.}" * } %% Geschmackssache, waehle eins von beiden
                     { " ; " * t * }
                if$
                }
@@ -785,12 +785,12 @@ FUNCTION {format.crossref.editor}
    editor num.names$ duplicate$
    #2 >
     { pop$ " [u.~a.]" * }
-%%    { pop$ " et~al." * }
+%%    { pop$ " \emph{et~al.}" * }
     { #2 <
     'skip$
     { editor #2 "{ff }{vv }{ll}{ jj}" format.name$ "others" =
             { " [u.~a.]" }
-%%      { " et~al." * }
+%%      { " \emph{et~al.}" * }
         { " ; " * editor #2 "{vv~}{ll}" format.name$ * " (Hrsg.)" * }
       if$
     }
