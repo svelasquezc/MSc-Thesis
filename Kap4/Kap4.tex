@@ -2,9 +2,9 @@
 %\chapter{Cap\'{\i}tulo 3}
 %\chapter{Solution Proposal}
 \chapter{Propuesta de solución}
-En este capítulo se propone una representación basada en EP para la simulación de procesos de recobro mejorado. Con este fin, se extiende el elemento "función" definido en los EP para facilitar el desarrollo de la representación del dominio de la simulación de procesos EOR. Adicionalmente, se conceptualizan los términos derivados de las ecuaciones presentadas en el marco teórico, a partir de los cuales se generan las relaciones estructurales. Posteriormente, se muestra el EP completo de la simulación y se explica por secciones los eventos que procesan la simulación.
+En este capítulo se propone una representación basada en EP para la simulación de procesos de recobro mejorado. Con este fin, se extiende el elemento "función" definido en los EP para facilitar el desarrollo de la representación del dominio de la simulación de procesos EOR. Adicionalmente, se conceptualizan los términos derivados de las ecuaciones presentadas en el marco teórico. Posteriormente, se muestra el EP completo de la simulación y se explica por secciones los eventos que procesan la simulación.\\
 
-Esta sección se estructura así: en la sección \ref{sec:PSNew} se presentan las subrutinas definidas por el usuario como una extensión para las funciones de los EP que permite reutilizar una representación en múltiples secciones del EP y la regla para la obtención de código a partir del nuevo elemento. En la sección \ref{sec:Concepts} se revisan los términos de cada ecuación y su traducción a los conceptos presentes en el EP. En la sección \ref{sec:PS_EOR} se muestra el EP completo y se explican las relaciones dinámicas y eventuales por cada concepto principal.
+Esta sección se estructura así: en la sección \ref{sec:PSNew} se presentan las subrutinas definidas por el usuario como una extensión para las funciones de los EP que permite reutilizar una representación en múltiples secciones del EP y la regla para la obtención de código a partir del nuevo elemento. En la sección \ref{sec:Concepts} se revisan los términos de cada ecuación y su traducción a los conceptos presentes en el EP junto con sus respectivas relaciones estructurales y dinámicas. En la sección \ref{sec:PS_EOR} se muestra el EP completo y se explican los eventos que procesan la simulación.
 
 %In this section we propose one element as an extension for Preconceptual Schemas(PS) which aid the understanding of diverse elements in the oil reservoir simulation domain. In addition, we present further description of the concepts stated in the theoretical framework, with their respective representation in the elaborated PS.
 %This section is structured as follows: in section  we present the added elements to PS and their usage in our represented domain. In section  we propose the representation of structural and dynamical behavior of each developed concept in the theoretical framework using PS.
@@ -20,12 +20,12 @@ Las subrutinas definidas por el analista son funciones tal como \cite{JCalle} pr
 
 %\section{Conceptualization}\label{sec:Concepts}
 \section{Conceptualización}\label{sec:Concepts}
-En esta sección se explican los conceptos principales que resultan en la traducción de las ecuaciones algebraicas resultantes de la discretización del BOM extendido y las ecuaciones constitutivas usando el método de los volúmenes finitos. Es esta sección se explicarán los siguientes conceptos.
+En esta sección se explican los conceptos principales que resultan en la traducción de las ecuaciones algebraicas resultantes de la discretización del BOM extendido y las ecuaciones constitutivas usando el método de los volúmenes finitos. En la figura \ref{fig:Concepts} se presentan los conceptos a explicar.
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/Conceptos.pdf}%
-	\caption{Definición de la malla. Los autores.} \label{fig:Concepts}
+	\caption{Conceptos principales en la simulación. Los autores.} \label{fig:Concepts}
 \end{figure}
 
 %\subsection{Mesh}
@@ -33,6 +33,7 @@ En esta sección se explican los conceptos principales que resultan en la traduc
 Al resolver el dominio espacial continuo como un conjunto discreto de celdas (discretizar el espacio), aparecen propiedades tales como los volúmenes de las celdas y el área de las caras. Este conjunto discreto de celdas es el que se denomina como ``malla''. A su vez, la celda es vista como un conjunto discreto de caras que generan una superficie cerrada\footnote{En el caso tridimensional}. Cada celda cuenta con una numeración, esta sirve para identificar posiciones en el espacio y ubicar las vecindades correspondientes para el cálculo del flujo discretizado.\\
 
 De la conceptualización de los elementos emergentes en la discretización, se encuentra que existe una malla. La cual, contiene todas las propiedades necesarias para generar el conjunto de celdas. Además, existe un actor ``Geomodelador'' que se encarga de definir el número de celdas en cada eje, sus espesores y topes tal como se presenta en \ref{fig:Mesh}. \\
+
 \begin{figure}[b]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/Mesh.pdf}%
@@ -62,7 +63,13 @@ Adicionalmente, el petrofísico define la compresibilidad de poro y la presión 
 %\subsection{Phase}\label{sec:PS_Phase}
 \subsection{Fluido}\label{sec:PS_Phase}
 
-Los fluidos tienen propiedades que son funciones de su presión y saturación, estas a su vez son función del tiempo y del espacio. Por lo que todas las propiedades que se proponen en la conceptualización se representan como arreglos dependientes de la cantidad de términos y de la cantidad de celdas. La representación del fluido, su relación dinámica ``Ingeniero de fluidos caracteriza Fluido'' y su respectiva especificación se presentan en la figura \ref{fig:Fluid}.\\
+Los fluidos tienen propiedades que son funciones de su presión y saturación, estas a su vez son función del tiempo y del espacio. Por lo que todas las propiedades que se proponen en la conceptualización se representan como arreglos dependientes de la cantidad de términos y de la cantidad de celdas, tal como se presenta en la figura \ref{fig:FluidProps}. La representación del fluido, su relación dinámica ``Ingeniero de fluidos caracteriza Fluido'' y su respectiva especificación se presentan en la figura \ref{fig:Fluid}.\\
+
+\begin{figure}[hbt]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/PropiedadesDeFluidos.pdf}%
+	\caption{Caracterización del fluido. Los autores.} \label{fig:FluidProps}
+\end{figure}
 
 \begin{figure}[b]
 	\centering%
@@ -150,7 +157,7 @@ Para el correcto desarrollo de la simulación, se establecen las siguientes prec
 	\caption{Línea de Procesos. Los autores.} \label{fig:Events}
 \end{figure}
 %The rest of this section is as follows: In section \ref{sec:PS_Mesh} we present the Mesh concept as a collection of cells with additional elements needed for calculating the attributes of each cell. Furthermore, we develop the dynamical relationship ``Geomodeler defines Mesh'' as an interaction of the role ``Geomodeler'' with atomic\footnote{atomic as is stated by \cite{AG01} (Aca debe ir Zapata)} dynamical relationships. In section \ref{sec:PS_Rock} we present the Rock concept with its attributes and initial characterization. In section \ref{sec:PS_Phase} ... In section \ref{sec:PS_Interphase} ... In section \ref{sec:PS_Equilibrium} we define the partition coefficients as relations between two phases, one contributing mass and another receiving mass in the mass balance equation. In section \ref{sec:PS_Well}
-\subsection{Malla aparece}
+\subsection{Malla aparece}\label{sec:PS_MeshAppears}
 El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definida'', que sucede justo después de que el geomodelador defina la malla. En este evento, se desarrollan dos ciclos principales. El primer ciclo es anidado por cada eje coordenado, y en total se recorre el número de celdas a definir. En este ciclo, se calculan los volúmenes y profundidades de cada celda, además se asigna un índice único de celda y la numeración en cada eje (x,y,z). La especificación del evento ``Malla Aparece'' se presenta en la figura \ref{fig:Concepts}.\\
 
 \begin{figure}[b]
@@ -162,10 +169,10 @@ El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definid
 
 En el segundo ciclo principal, se itera sobre las celdas definidas previamente y se calcula la conectividad, es decir la definición de caras. Para esto, se consulta la existencia de celdas adyacentes a la celda actual en todas las direcciones. Si existe una celda en alguna dirección, se crea y calcula su área y orientación. Adicionalmente, a la cara se le asigna un índice y también se le asigna la celda vecina. Es importante notar que cada celda almacena su conjunto de caras, por lo que las caras se duplican.
 
-\subsection{Tiempo pasa}
+\subsection{Tiempo pasa}\label{sec:PS_TimePasses}
 El evento ``Tiempo pasa'' se dispara en el momento en que se tiene las suficientes realizaciones de los conceptos para ejecutar la simulación, es decir, se ejecutaron las mínimas relaciones dinámicas para poder disparar el evento, como se ve en la figura \ref{fig:Events}. En este evento se procesa el inicio y el final de la simulación, incrementando el ``tiempo'' y ``término'' al que se van a calcular las propiedades de los conceptos principales.\\
 
-Se puede observar también que, en este evento se realiza el cálculo de las propiedades iniciales para toda la malla. Debido a que, al término cero, sólo se tienen las propiedades que son insertadas en las relaciones dinámicas ejecutadas previamente. las demás propiedades deben ser calculadas, puesto que son necesarias para el término de acumulación en las ecuaciones de transporte para todos los fluidos existentes.
+Se puede observar también que, en este evento se realiza el cálculo de las propiedades iniciales para toda la malla. Debido a que, al término cero, sólo se tienen las propiedades que son insertadas en las relaciones dinámicas ejecutadas previamente. las demás propiedades deben ser calculadas como se presenta en la figura \ref{fig:Concepts}, puesto que son necesarias para el término de acumulación en las ecuaciones de transporte para todos los fluidos existentes.
 
 \begin{figure}[h]
 	\centering%
@@ -175,7 +182,7 @@ Se puede observar también que, en este evento se realiza el cálculo de las pro
 \end{figure}
 
 
-\subsection{Presión del Fluido Varía}
+\subsection{Presión del Fluido Varía}\label{sec:PS_FluidVaries}
 En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulación. En éste se llevan a cabo las iteraciones del método de Newton-Raphson para converger al próximo paso de tiempo. La especificación de este evento consta de cinco procesos principales: La actualización de propiedades al término actual, el recálculo de las mismas, el cálculo de los residuales en cada iteración, el cálculo de la matriz jacobiana, y la actualización de las incógnitas. La especificación del evento ``Presión del Fluido varía'' se presenta en la figura \ref{fig:FluidPressureVaries}.\\
 
 \begin{figure}[b]
@@ -185,7 +192,8 @@ En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulaci
 	\caption{Especificación del evento Presión del fluido varía. Los autores.} \label{fig:FluidPressureVaries}
 \end{figure}
 
-En la actualización de propiedades al término actual, se hace un incremento de tamaño y asignación del estimado inicial para el método de Newton-Raphson, para todas las celdas de la malla y en todos los fluidos para todas las propiedades dependientes del tiempo. Lo mismo se realiza para los pozos y cada uno de sus perforados. La actualización de propiedades se expone en la figura \ref{fig:UpdateProperties}. 
+\subsubsection{Actualización de arreglos de propiedades}\label{subsec:PS_DefVars}
+En la actualización de propiedades al término actual, se hace un incremento de tamaño y asignación del estimado inicial para el método de Newton-Raphson para todas las celdas de la malla y en todos los fluidos para todas las propiedades dependientes del tiempo. Lo mismo se realiza para los pozos y cada uno de sus perforados. La actualización de propiedades se expone en la figura \ref{fig:UpdateProperties}. 
 
 \begin{figure}[h]
 	\centering%
@@ -193,7 +201,11 @@ En la actualización de propiedades al término actual, se hace un incremento de
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
 	\caption{Actualización de propiedades al término actual. Los autores.} \label{fig:UpdateProperties}
 \end{figure}
-Posteriormente \ref{fig:TimeK}\\%Time K
+
+
+\subsubsection{Recálculo de propiedades de los fluidos}\label{subsec:PS_TimeK}
+Posteriormente en la figura \ref{fig:TimeK} se muestra el recálculo de las propiedades de los fluidos para cada celda. Como el sistema que se resuelve tiene por incógnitas la presión del fluido principal y la saturación de los demás fluidos, es necesario calcular el resto de las propiedades de los fluidos como funciones de estas. \\%Time K
+
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=\linewidth]{Fig/TiempoK.pdf}%
@@ -201,6 +213,7 @@ Posteriormente \ref{fig:TimeK}\\%Time K
 	\caption{Recálculo de Propiedades al término actual para la iteración. Los autores.} \label{fig:TimeK}
 \end{figure}
 
+\subsubsection{Cálculo de Residuales}\label{subsec:Residual}
 Luego \ref{fig:Residual} \\ % Residual
 
 \begin{figure}[h]
@@ -210,6 +223,7 @@ Luego \ref{fig:Residual} \\ % Residual
 	\caption{Cálculo de residual para la iteración. Los autores.} \label{fig:Residual}
 \end{figure}
 
+\subsubsection{Cálculo de la Matriz del Jacobiano}\label{subsec:Jacobian}
 Siguiendo \ref{fig:Jacobiano} \\ % Jacobiano
 
 \begin{figure}[h]

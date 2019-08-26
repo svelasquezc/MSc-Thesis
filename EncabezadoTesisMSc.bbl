@@ -1,4 +1,4 @@
-\begin{thebibliography}{2}
+\begin{thebibliography}{3}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -19,5 +19,13 @@ Z.~Chen.
 \newblock \emph{Reservoir simulation: mathematical techniques in oil recovery},
   volume~77.
 \newblock Siam, 2007.
+
+\bibitem[Zapata(2007)]{zapata2007phd}
+C.~Zapata.
+\newblock \emph{Definici{\'o}n de un esquema preconceptual para la
+  obtenci{\'o}n autom{\'a}tica de esquemas conceptuales de UML}.
+\newblock PhD thesis, Universidad Nacional de Colombia, Sede Medellin,
+  Medell{\'i}n, 2007.
+\newblock URL \url{http://bdigital.unal.edu.co/10296/}.
 
 \end{thebibliography}
