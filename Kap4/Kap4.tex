@@ -214,7 +214,9 @@ Posteriormente en la figura \ref{fig:TimeK} se muestra el recálculo de las prop
 \end{figure}
 
 \subsubsection{Cálculo de Residuales}\label{subsec:Residual}
-Luego \ref{fig:Residual} \\ % Residual
+Luego se hace un recorrido de todas las ecuaciones, y se calcula el residual dependiendo de si la ecuación es de tipo fluido o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado "Inactivas".\\
+
+Es importante notar también, que la función ubicar se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. Además el tipo de residual indica si se debe ubicar como una ecuación de fluido que se evalúa para todas las celdas o sólo es una ecuación de pozo y por tanto una sola fila en las últimas posiciones del residual, tal comportamiento se evidencia en \ref{fig:Residual}. \\ % Residual
 
 \begin{figure}[h]
 	\centering%
@@ -233,7 +235,15 @@ Siguiendo \ref{fig:Jacobiano} \\ % Jacobiano
 	\caption[Cálculo y armado de la matriz del jacobiano al término actual para la iteración.]{Cálculo y armado de la matriz del jacobiano al término actual para la iteración. Los autores.} \label{fig:Jacobiano}
 \end{figure}
 
-Por último \ref{fig:UpdateVariables} \\
+\subsubsection{Solución del sistema lineal y actualización de incógnitas}
+Por último una vez se tiene la matriz del jacobiano construida se soluciona usando el operador ``Bigradiente conjugado estabilizado", proveniente de alguna librería, que resuelve el sistema: $Jacobiano*DeltaDeSolucion = -Residual$ como se observa en \ref{fig:LinearSystem}. Posteriormente, se actualizan las incógnitas sumándoles el delta de solución de manera acorde al cálculo del residual. Esto se presenta en \ref{fig:UpdateVariables}. \\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=1]{Fig/SistemaLineal.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Sistema lineal resultante del método de Newton-Raphson.]{Sistema lineal resultante del método de Newton-Raphson. Los autores.} \label{fig:LinearSystem}
+\end{figure}
 
 \begin{figure}[h]
 	\centering%
