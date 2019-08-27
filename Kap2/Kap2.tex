@@ -21,26 +21,48 @@
 
 \section{El medio poroso}
 
-Para entender la física detrás de la simulación de yacimientos de petróleo es necesario revisar el concepto de medio poroso. Un medio poroso puede entenderse como un dominio espacial ocupado parcialmente por un sólido y con una porción ocupada por fluidos a la que se le llama espacio vacío o poroso. Un yacimiento es una formación geológica del subsuelo, que, a nivel microscópico, está compuesta por una red de poros que pueden estar interconectados y que en su espacio vacío almacenan fluidos \citep{Bear2018}.\\
+Para entender la física detrás de la simulación de yacimientos de petróleo es necesario revisar el concepto de medio poroso. Un medio poroso puede entenderse como un dominio espacial ocupado parcialmente por un sólido y con una porción ocupada por fluidos a la que se le llama espacio vacío o poroso. Un yacimiento es un medio poroso que ocurre naturalmente, una formación geológica del subsuelo, que, a nivel microscópico, está compuesta por una red de poros que pueden estar interconectados y que almacenan fluidos \citep{Bear2018}.\\
 
-Observando a nivel microscópico, si se toma una medida de espacio poroso en algún punto espacial arbitrario y luego se realiza otra en otro lugar del espacio, es posible encontrar una zona completamente ocupada por el sólido y otra vacía. Sin embargo, si se incrementa el tamaño de la muestra para la medida, es posible notar que las medidas toman valores menos oscilatorios. El mínimo tamaño de muestra al que el espacio poroso empieza a tomar un valor constante se le llama volumen elemental representativo (REV) \citep{Bear2018}. El espacio poroso medido en un REV, es lo que se denota porosidad, que corresponde a la capacidad de almacenamiento de fluidos a nivel macroscópico.(Acá sería supremamente chimba mostrarlo con un gráfico).\\
+La definición de medio poroso se extiende de la definición de un medio continuo. Un medio continuo, es tal que no pierde sus propiedades al ser dividido infinitamente, es decir, sus propiedades son continuas en todo punto. Sin embargo esta definición, depende del nivel de observación. A nivel microscópico, si se toman medidas de espacio poroso en diferentes puntos, es posible encontrar zonas vacías y otras ocupadas por la roca. Por otro lado, al incrementar el tamaño de la muestra para la medida, es posible notar que las medidas toman valores menos oscilatorios. El mínimo tamaño de muestra al que el espacio poroso empieza a tomar un valor constante se le llama volumen de elemento representativo (REV) \citep{Bear2018}. El espacio poroso medido en un REV, es lo que se denota porosidad ($\phi$), que corresponde a la capacidad de almacenamiento de fluidos a nivel macroscópico.(Acá sería supremamente chimba mostrarlo con un gráfico).\\
 
-Adicionalmente, existen gargantas de poro que conectan los poros de la roca, estas gargantas de poro indican la capacidad de la roca de permitir el transporte de los fluidos que puedan existir. La propiedad macroscópica que describe de la capacidad de transportar fluido es la permeabilidad absoluta. La permeabilidad absoluta es una propiedad direccional, es decir que puede variar según la dirección en la que se mida, si la permeabilidad varía su dirección en función del espacio, se dice que el medio es anisotrópico.
+%Adicionalmente, existen gargantas de poro que conectan los poros de la roca, estas gargantas de poro indican la capacidad de la roca de permitir el transporte de los fluidos que puedan existir. La propiedad macroscópica que describe de la capacidad de transportar fluido es la permeabilidad absoluta. La permeabilidad absoluta es una propiedad direccional, es decir que puede variar según la dirección en la que se mida, si la permeabilidad varía su dirección en función del espacio, se dice que el medio es anisotrópico.
 
 \section{Transporte de fluidos en medios porosos}
 
-Los fluidos almacenados en el yacimiento se encuentran en un estado estable, el cuál se ve afectado por la aplicación de diferentes campos actuando sobre el dominio físico. Así, los fluidos pueden transportarse debido a efectos gravitacionales, o cambios de presión, saturación, concentraciones, entre otros. %En esta tesis de maestría se estudia el flujo o transporte dominado por la advección, es decir, el flujo que se da principalmente por gradientes de presión.
+Los fluidos almacenados en el yacimiento en general se encuentran en un estado estable, el cuál se ve afectado por la aplicación de diferentes campos actuando sobre el dominio físico (el medio poroso). Así, los fluidos pueden transportarse debido a efectos gravitacionales, cambios de presión, saturación, entre otros.\\ %En esta tesis de maestría se estudia el flujo o transporte dominado por la advección, es decir, el flujo que se da principalmente por gradientes de presión.
 
+El flujo macroscópico de los fluidos se rige por la ley de conservación de momentum en medios porosos o ley de Darcy que se enuncia en la ecuación \ref{ec:DarcyMonofasico}. Esta ley establece que la velocidad Darcy ($\vec{u}$) de un fluido es proporcional a los gradientes de presión y gravitacionales ($\nabla{\Phi}$ con $\Phi = p - \rho g z$) de un fluido, e inversamente proporcional a su viscosidad ($\mu$). Además, depende de la conductividad del medio poroso, a la cuál, se le denomina permeabilidad absoluta ($\mathbb{K}$).
+\begin{align}
+	\label{ec:DarcyMonofasico} & \vec{u}=\frac{\mathbb{K}}{\mu } \left(\nabla{\Phi}\right)	
+\end{align}
 
+%con $\nabla{\Phi_{f}} = \nabla{p} - \rho g \nabla{z}$ 
+
+donde $\mathbb{K}(\vec{x},t)$ es una propiedad direccional con $\vec{x}=(x,y,z)$:
+ 
+\begin{align}
+	\mathbb{K} = \left(\begin{array}{ccc}k_{xx}& & \\
+	& k_{yy} & \\
+	& & k_{zz}
+	\end{array}\right)
+\end{align}
+
+Lo anteriormente mencionado, aplica para un solo fluido. En el caso de múltiples fluidos ocupando el espacio poroso se usa la ecuación \ref{ec:DarcyMultifasico}. En ésta, se introduce un término de permeabilidad relativa ($kr_{f}(S_{f})$), que depende de la proporción del volumen poroso ocupado por un fluido, el cuál se denomina saturación ($S_{f}$).
+
+\begin{align}
+\label{ec:DarcyMultifasico} & \vec{u_{f}}=\frac{\mathbb{K}kr_{f}}{\mu_{f} } \nabla{\Phi_{f}}
+\end{align}
 
 \section{Simulación de Yacimientos de Hidrocarburos}
-La simulación de yacimientos de hidrocarburos se rige por las leyes de conservación de la masa y del momentum. Estas leyes son descritas por un conjunto de ecuaciones diferenciales parciales para un dominio físico. La solución de tales ecuaciones considera la elección de métodos de discretización temporales y espaciales; métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
+El dominio de la simulación de yacimientos de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico porque apoya procesos industriales y de investigación de nuevas tecnologías. los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos.\\
 
-El dominio de la simulación de yacimientos de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico dado que requiere la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos. Además, el desarrollo de estos modelos apoya procesos de investigación de nuevas tecnologías. \\%Más aún, los resultados de la simulación deben ser contrastados con datos experimentales para verificar su concordancia con el fenómeno físico que modelan.\\
+La simulación de yacimientos de hidrocarburos se rige por las leyes de conservación de la masa y del momentum. Estas leyes describen la acumulación, transporte, y fuentes y sumideros de los fluidos como un sistema de ecuaciones diferenciales parciales acopladas para un dominio físico. Solucionar estos sistemas analíticamente, cuando es viable hacerlo, requiere imponer condiciones que se alejan de los problemas reales \citep{ertekin2001basic}. Por lo tanto, es necesario una solución numérica o simulación. Un modelo de simulación ampliamente utilizado en la industria es el \textit{Black Oil Model}.%, este hace una simplificación de la composición de los hidrocarburos existentes. Solucionar tales ecuaciones requiere discretizar el tiempo y el dominio físico; usar métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. \\ %Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
+%Más aún, los resultados de la simulación deben ser contrastados con datos experimentales para verificar su concordancia con el fenómeno físico que modelan.\\
+
 
 \subsection{Modelo Black Oil Extendido}
 
-El \textit{Black Oil Model} (BOM) es un modelo de transporte simultáneo de tres fluidos en el que se asume que los hidrocarburos se distribuyen en un gas y un aceite en barril a condiciones de presión y temperatura estándar \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. Éste modelo considera que puede haber una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''.
+El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a condiciones estándar que considera la solución de tres fluidos en el que se asume que los hidrocarburos se distribuyen en un gas y un aceite en barril a condiciones de presión y temperatura estándar \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. Éste modelo considera que puede haber una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''.
 
 \begin{align}
 \label{aceite}
@@ -52,26 +74,26 @@ El \textit{Black Oil Model} (BOM) es un modelo de transporte simultáneo de tres
 \label{agua}
 \text{agua: }&\frac{\partial}{\partial t} \left[\phi \left( \frac{S_{w}}{B_{w}} \right) \right] - \nabla \cdot \left( \frac{1}{B_{w}} \vec{u_{w}} \right) + \tilde{q}_{w} = 0 
 \end{align}
-donde $\vec{u_{p}}$ corresponde la ley de Darcy para el fluido $p = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $:
-\begin{equation*}
-\vec{u_{p}}=\frac{K_{f}kr_{p}}{\mu_{p} } \nabla{\Phi_{p,f}}
-\end{equation*}
+donde $\vec{u_{f}}$ corresponde a la velocidad Darcy para el fluido $f = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $.
+%\begin{equation*}
+%\vec{u_{f}}=\frac{\mathbb{K}kr_{f}}{\mu_{f} } \nabla{\Phi_{f}}
+%\end{equation*}
 
-
+%con $\nabla{\Phi_{f}} = \nabla{p} - \rho g \nabla{z}$.
 
 \subsection{Problema de Valores Iniciales}
 
 (Poner un dibujito de un yacimiento con pozos.)
 
-En el desarrollo de esta tesis se consideran yacimientos con condiciones de borde de no flujo, es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores.
+En el desarrollo de esta tesis, se consideran yacimientos con condiciones de borde cerradas o condiciones Neumann cero para todas las fronteras. Es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores.\\
 
-Se asume, también qué:
+Además para un tiempo $t=0$ se tiene que:
 \begin{align}
 	P_{p}(\vec{x},0) = P^{0}_{p}(\vec{x}) \qquad \forall p \in \left\lbrace o,g,w\right\rbrace\\
 	S_{p}(\vec{x},0) = S^{0}_{p}(\vec{x}) \qquad \forall p \in \left\lbrace o,g,w\right\rbrace
 \end{align}
 %
-Es decir, existe funciones que describen 
+Es decir, existe funciones en el espacio que describen las condiciones iniciales de presión $P^{0}_{p}(\vec{x})$ y saturación $S^{0}_{p}(\vec{x})$ para los fluidos $p$ del yacimiento.
 
 \subsection{Modelamiento de Pozos}
 %
@@ -82,19 +104,21 @@ Al establecer condiciones de frontera cerradas es necesario introducir un pozo p
 \end{align}
 %
 \subsection{Discretización}
+
+Se elije el método de los volúmenes finitos para las discretización espacial y un esquema implícito para la discretización del tiempo. El proceso de discretización se muestra en el anexo \ref{AnexoA}. La discretización de las ecuaciones \ref{aceite}, \ref{gas} y \ref{agua} es la siguiente:
 %Algebraic Equations
 \begin{align}
-&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}^{n+1}}{B_{o,i}^{n+1}} + \frac{Rv_{i}^{n+1}S_{g,i}^{n+1}}{B_{g,i}^{n+1}}\right)\right] + 
-\underbrace{\sum_{f \in S}\left[ T^{n+1}_{o,f} \nabla{\Phi_{o,f}^{n+1}} + Rv_{f}T^{n+1}_{g,f} \nabla{\Phi_{g,f}^{n+1}} \right] }_{\text{Flujo numérico - Aceite}}+ \dot{Q}_{o,i}^{n+1} = 0 \\
-&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}^{n+1}}{B_{g,i}^{n+1}} + \frac{Rs_{i}^{n+1}S_{o,i}^{n+1}}{B_{o,i}^{n+1}}\right)\right] + 
-\underbrace{\sum_{f \in S}\left[ T^{n+1}_{g,f}\nabla{\Phi_{g,f}^{n+1} + Rs_{f}T^{n+1}_{o,f} \nabla{\Phi_{o,f}^{n+1}}} \right] }_{\text{Flujo numérico - Gas}}+ \dot{Q}_{g,i}^{n+1} = 0 \\
-&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}^{k}}{B_{w,i}^{n+1}}\right)\right]
+\label{ec:aceiteDiscretizacion}&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}^{n+1}}{B_{o,i}^{n+1}} + \frac{Rv_{i}^{n+1}S_{g,i}^{n+1}}{B_{g,i}^{n+1}}\right)\right] + 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}} + Rv_{c}T^{n+1}_{g,c} \nabla{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo numérico - Aceite}}+ \dot{Q}_{o,i}^{n+1} = 0 \\
+\label{ec:gasDiscretizacion}&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}^{n+1}}{B_{g,i}^{n+1}} + \frac{Rs_{i}^{n+1}S_{o,i}^{n+1}}{B_{o,i}^{n+1}}\right)\right] + 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\nabla{\Phi_{g,c}^{n+1} + Rs_{c}T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo numérico - Gas}}+ \dot{Q}_{g,i}^{n+1} = 0 \\
+\label{ec:aguaDiscretizacion}&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}^{k}}{B_{w,i}^{n+1}}\right)\right]
 + 
-\underbrace{\sum_{f \in S}\left[ T^{n+1}_{w,f}\nabla{\Phi_{w,f}^{n+1}} \right]}_{\text{Flujo numérico - Agua}} + \dot{Q}_{g,i}^{n+1} = 0 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\nabla{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo numérico - Agua}} + \dot{Q}_{g,i}^{n+1} = 0 
 \end{align}
 \subsection{Método de Newton-Raphson}
 %
-
+El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal. Por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximándose por su derivada como se ilustra en la imagen \ref{fig:Newton}.
 \begin{equation}
 A \cdot {\Delta \vec{x}} = \vec{b} \Leftrightarrow J^{k}_{i,j} \cdot {\Delta \vec{x}} = -\vec{R^{k}_{i}}
 \end{equation}
@@ -116,9 +140,7 @@ J^k_{i,j}=\frac{\partial R^k_i}{\partial x^k_j}
 
 \section{Esquemas Preconceptuales}
 
-Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el lenguaje natural y un esquema conceptual o un lenguaje formal. Estos esquemas contienen todo el dominio de aplicación de un interesado, y por tanto, sirven para establecer un punto común de entendimiento entre un interesado y un analista de software \citep{zapata2007phd}.
-
-Los EP se desarrollan con la idea de mantener la coherencia y consistencia entre el discurso del interesado y el software desarrollado. 
+Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el lenguaje natural y un esquema conceptual o un lenguaje formal. Estos esquemas contienen todo el dominio de aplicación de un interesado, y por tanto, sirven para establecer un punto común de entendimiento entre un interesado y un analista de software \citep{zapata2007phd}. Los EP se desarrollan con la idea de mantener la coherencia y consistencia entre el discurso del interesado y el software desarrollado. 
 
 \subsection{Elementos del Esquema Preconceptual}
 \cite{zapata2012unc} define los elementos del EP tal como se observa en la figura \ref{fig:InitialPS} para la representación del dominio del interesado. Estos elementos se dividen en cuatro categorías: nodos, relaciones, enlaces, y agrupadores.\\
