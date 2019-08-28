@@ -62,19 +62,21 @@ La simulación de yacimientos de hidrocarburos se rige por las leyes de conserva
 
 \subsection{Modelo Black Oil Extendido}
 
-El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a condiciones estándar que considera la solución de tres fluidos en el que se asume que los hidrocarburos se distribuyen en un gas y un aceite en barril a condiciones de presión y temperatura estándar \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. Éste modelo considera que puede haber una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''.
+El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a condiciones estándar. Este considera la existencia de tres fluidos en el medio poroso: aceite, gas y agua. El BOM, asume que el aceite o petróleo, está a condiciones de barril estándar, es decir, a presión y temperatura atmosférica. Además, asume que no existen variaciones considerables en la composición del aceite y del gas \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. Éste modelo considera que puede haber una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''. Las ecuaciones de conservación de volumen del BOM se presentan en \ref{ec:aceite}, \ref{ec:gas}, \ref{ec:agua}.
 
 \begin{align}
-\label{aceite}
+\label{ec:aceite}
 \text{aceite: }&\frac{\partial}{\partial t} \left[ \phi \left( \frac{S_{o}}{B_{o}} + \frac{R_{v} S_{g}}{B_{g}} \right) \right]
 - \nabla \cdot \left( \frac{1}{B_{o}} \vec{u_{o}} + \frac{R_{v}}{B_{g}} \vec{u_{g}} \right) + \tilde{q}_{o}=0  \\
-\label{gas}
+\label{ec:gas}
 \text{gas: }&\frac{\partial}{\partial t} \left[ \phi \left( \frac{S_{g}}{B_{g}} + \frac{R_{s} S_{o}}{B_{o}} \right) \right]
 - \nabla \cdot \left( \frac{1}{B_{g}} \vec{u_{g}} + \frac{R_{s}}{B_{o}} \vec{u_{o}} \right) + \tilde{q}_{g} = 0 \\
-\label{agua}
+\label{ec:agua}
 \text{agua: }&\frac{\partial}{\partial t} \left[\phi \left( \frac{S_{w}}{B_{w}} \right) \right] - \nabla \cdot \left( \frac{1}{B_{w}} \vec{u_{w}} \right) + \tilde{q}_{w} = 0 
 \end{align}
-donde $\vec{u_{f}}$ corresponde a la velocidad Darcy para el fluido $f = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $.
+donde $\vec{u_{f}}$ corresponde a la velocidad Darcy, y, $\tilde{q}_{f}$ a los aportes de fuentes y sumideros, que posteriormente serán modelados como pozos, para el fluido $f = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $.\\
+
+En el BOM se establece también, que los fluidos tienen una compresibilidad, es decir que cambian su volumen según la presión a la que estén sometidos. La propiedad asociada a ese cambio de volumen es el factor volumétrico ($B_{f}$).
 %\begin{equation*}
 %\vec{u_{f}}=\frac{\mathbb{K}kr_{f}}{\mu_{f} } \nabla{\Phi_{f}}
 %\end{equation*}
@@ -83,39 +85,56 @@ donde $\vec{u_{f}}$ corresponde a la velocidad Darcy para el fluido $f = \left\l
 
 \subsection{Problema de Valores Iniciales}
 
-(Poner un dibujito de un yacimiento con pozos.)
+En el desarrollo de esta tesis, se consideran yacimientos con condiciones de borde cerradas o Neumann cero para todas las fronteras. Es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores.\\
 
-En el desarrollo de esta tesis, se consideran yacimientos con condiciones de borde cerradas o condiciones Neumann cero para todas las fronteras. Es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores.\\
+(Poner un dibujito de un yacimiento con pozos.)
 
 Además para un tiempo $t=0$ se tiene que:
 \begin{align}
-	P_{p}(\vec{x},0) = P^{0}_{p}(\vec{x}) \qquad \forall p \in \left\lbrace o,g,w\right\rbrace\\
-	S_{p}(\vec{x},0) = S^{0}_{p}(\vec{x}) \qquad \forall p \in \left\lbrace o,g,w\right\rbrace
+	P_{f}(\vec{x},0) = P^{0}_{f}(\vec{x}) \qquad \forall f \in \left\lbrace o,g,w\right\rbrace\\
+	S_{f}(\vec{x},0) = S^{0}_{f}(\vec{x}) \qquad \forall f \in \left\lbrace o,g,w\right\rbrace
 \end{align}
 %
-Es decir, existe funciones en el espacio que describen las condiciones iniciales de presión $P^{0}_{p}(\vec{x})$ y saturación $S^{0}_{p}(\vec{x})$ para los fluidos $p$ del yacimiento.
+Es decir, existe funciones en el espacio que describen las condiciones iniciales de presión $P^{0}_{f}(\vec{x})$ y saturación $S^{0}_{f}(\vec{x})$ para los fluidos $f$ del yacimiento.
 
-\subsection{Modelamiento de Pozos}
-%
-Al establecer condiciones de frontera cerradas es necesario introducir un pozo para generar diferencias de presión que induzcan al transporte de los hidrocarburos presentes en el yacimiento.  
-
-\begin{align}
-	q^{(v)} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi\rho\sqrt{k_{x}k_{y}}h_{z}}{\mu\left(r_{e}/r_{w} +s\right)}\left(p_{bh}^{(v)}-p_{m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
-\end{align}
-%
 \subsection{Discretización}
 
-Se elije el método de los volúmenes finitos para las discretización espacial y un esquema implícito para la discretización del tiempo. El proceso de discretización se muestra en el anexo \ref{AnexoA}. La discretización de las ecuaciones \ref{aceite}, \ref{gas} y \ref{agua} es la siguiente:
+Se elije el método de los volúmenes finitos para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
 %Algebraic Equations
 \begin{align}
-\label{ec:aceiteDiscretizacion}&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}^{n+1}}{B_{o,i}^{n+1}} + \frac{Rv_{i}^{n+1}S_{g,i}^{n+1}}{B_{g,i}^{n+1}}\right)\right] + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}} + Rv_{c}T^{n+1}_{g,c} \nabla{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo numérico - Aceite}}+ \dot{Q}_{o,i}^{n+1} = 0 \\
-\label{ec:gasDiscretizacion}&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}^{n+1}}{B_{g,i}^{n+1}} + \frac{Rs_{i}^{n+1}S_{o,i}^{n+1}}{B_{o,i}^{n+1}}\right)\right] + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\nabla{\Phi_{g,c}^{n+1} + Rs_{c}T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo numérico - Gas}}+ \dot{Q}_{g,i}^{n+1} = 0 \\
-\label{ec:aguaDiscretizacion}&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}^{k}}{B_{w,i}^{n+1}}\right)\right]
+\label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi^{t}_{i} \left( \frac{S_{o,i}^{t}}{B_{o,i}^{t}} + \frac{Rv_{i}^{t}S_{g,i}^{t}}{B_{g,i}^{t}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Aceite}} + 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}} + Rv_{c}T^{n+1}_{g,c} \nabla{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo - Aceite}}+ \dot{Q}_{o,i}^{n+1} = 0 \\
+\label{ec:gasDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi^{t}_{i} \left( \frac{S_{g,i}^{t}}{B_{g,i}^{t}} + \frac{Rs_{i}^{t}S_{o,i}^{t}}{B_{o,i}^{t}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Gas}} + 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\nabla{\Phi_{g,c}^{n+1} + Rs_{c}T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo - Gas}}+ Q_{g,i}^{n+1} = 0 \\
+\label{ec:aguaDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi^{t}_{i} \left( \frac{S_{w,i}^{t}}{B_{w,i}^{t}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Agua}}
 + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\nabla{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo numérico - Agua}} + \dot{Q}_{g,i}^{n+1} = 0 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\nabla{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo - Agua}} + Q_{w,i}^{n+1} = 0 
 \end{align}
+
+dónde:
+
+\begin{align*}
+	&\left[ \phi^{t}_{i} \left( \frac{S_{o,i}^{t}}{B_{o,i}^{t}} + \frac{Rv_{i}^{t}S_{g,i}^{t}}{B_{g,i}^{t}}\right)\right]^{n+1}_{n} = 
+	\phi^{n+1}_{i} \left( \frac{S_{o,i}^{n+1}}{B_{o,i}^{n+1}} + \frac{Rv_{i}^{n+1}S_{g,i}^{n+1}}{B_{g,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{o,i}^{n}}{B_{o,i}^{n}} + \frac{Rv_{i}^{n}S_{g,i}^{n}}{B_{g,i}^{n}}\right),\\
+	&\left[ \phi^{t}_{i} \left( \frac{S_{g,i}^{t}}{B_{g,i}^{t}} + \frac{Rs_{i}^{t}S_{o,i}^{t}}{B_{o,i}^{t}}\right)\right]^{n+1}_{n} = 
+	\phi^{n+1}_{i} \left( \frac{S_{g,i}^{n+1}}{B_{g,i}^{n+1}} + \frac{Rs_{i}^{n+1}S_{o,i}^{n+1}}{B_{o,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{g,i}^{n}}{B_{g,i}^{n}} + \frac{Rs_{i}^{n}S_{o,i}^{n}}{B_{o,i}^{n}}\right),\\
+	&\left[ \phi^{t}_{i} \left( \frac{S_{w,i}^{t}}{B_{w,i}^{t}}\right)\right]^{n+1}_{n} = 
+	\phi^{n+1}_{i} \left( \frac{S_{w,i}^{n+1}}{B_{w,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{w,i}^{n}}{B_{w,i}^{n}}\right)
+\end{align*}
+
+El término $T_{f,c}$ en la ecuación \ref{ec:Transmissibity} corresponde a la transmisividad en una cara $c$ que conecta una celda $i$ con otra celda $j$.
+
+\begin{align}
+	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{1}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{kr_{f}}{\mu_{f}B_{f}}
+\end{align}
+\subsection{Modelado de Pozos}
+%
+Al establecer condiciones de frontera cerradas es necesario perforar pozos para generar diferencias de presión que induzcan al transporte de los hidrocarburos presentes en el yacimiento. Los pozos tienen dos tipos, inyector o productor.
+
+\begin{align}
+	q^{(v)} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi\rho\sqrt{k_{xx}k_{yy}}h_{z}}{\mu\left(r_{e}/r_{w} +s\right)}\left(p_{bh}^{(v)}-p_{m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
+\end{align}
+%
 \subsection{Método de Newton-Raphson}
 %
 El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal. Por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximándose por su derivada como se ilustra en la imagen \ref{fig:Newton}.
