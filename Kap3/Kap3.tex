@@ -69,6 +69,58 @@
 %Para el manejo de cifras se debe seleccionar la norma seg\'{u}n el \'{a}rea de conocimiento de la tesis  o trabajo de %investigaci\'{o}n.\\
 
 %\chapter{Theoretical Framework}
-\chapter{Antecedentes}
+\chapter{Planteamiento del Problema}
 %
-\section{title}
+\section{Antecedentes}
+
+A continuación se mencionan los autores que presentan modelos matemáticos en el área de la simulación de procesos de recobro mejorado e ilustran el dominio de aplicación con diversas representaciones. \cite{ValenciaJD2016, valencia2018development} desarrollan un modelo de simulación para la generación de espumas \textit{in situ} inyectando químicos dispersos en gas. En este trabajo, describen los fenómenos físicos y mecanismos, de los fluidos y del químico inyectado, que se presentan en el yacimiento. Esto lo hacen por medio de un modelo y mapa conceptual, como se ve en la figura XXX. Adicionalmente, presentan las ecuaciones de su modelo matemático y un diagrama de flujo del proceso de solución de las mismas. Sin embargo, los conceptos que se enuncian en su modelo conceptual y matemático no son trazables en sus diagramas.\\
+
+\cite{MozoID2017} elabora un modelo de inyección de nanopartículas para la estimulación de pozos. En su trabajo, emplea un modelo conceptual para explicar los fenómenos que se describen en su modelo matemático, además, explica el proceso de solución de las ecuaciones de su modelo por medio de un algoritmo. Este trabajo también carece de trazabilidad en los conceptos que se explican. \cite{IsazaCN2017} desarrolla un modelo de remediación del daño generado por asfaltenos, en este se presenta el modelo conceptual para una simulación de tipo \textit{Black Oil} agregándole el transporte de los asfaltenos en el petróleo y su transferencia a la roca. En éste trabajo, también se presenta un algoritmo genérico de solución de las ecuaciones que se muestran en el modelo matemático.\\
+
+Por último, \cite{solano2019modeling}, presenta un modelo de generación de espumas para aplicación en yacimientos naturalmente fracturados, en este trabajo se desarrolla un \textit{Black Oil Model} con inyección de un surfactante disperso en una corriente de gas. Para describir los fenómenos físicos que \cite{solano2019modeling} modelan en el trabajo, presentan un mapa conceptual y las ecuaciones de su matemático. Este trabajo carece de trazabilidad en el proceso de solución de las ecuaciones.\\
+
+Los siguientes autores, elaboran \textit{frameworks} de simulación de yacimientos de petróleo. Sus esfuerzos, en su mayoría se enfocan en la velocidad de computo y procesamiento paralelo. \cite{Zaza2016} presenta un simulador Black Oil en paralelo utilizando la arquitectura CUDA. En este trabajo, \cite{Zaza2016} muestra en un diagrama general, la descripción de cómo se resuelven las ecuaciones de su modelo matemático, involucrando los conceptos que se relacionan con cada etapa de la solución. La descripción general se muestra en la figura YYY. En éste trabajo, también se muestra el esquema de solución, involucrando conceptos del modelo matemático. Sin embargo, no se involucran todos los conceptos.\\
+
+\cite{Wang2016, Wang2017} desarrolla un simulador \textit{Black Oil} en paralelo para múltiples dominios continuos que considera modelos de fracturas discretas en yacimientos no convencionales. En este trabajo se presentan todas las ecuaciones del modelo matemático que relaciona los múltiples dominios, aunque carece de representaciones que agrupen los conceptos, fenómenos físicos y procesos de solución. \cite{FANG2017} desarrolla un modelo flujo entre dos dominios para un sólo fluido. En éste, se calcula un sistema de mallas mezcladas y se definen términos de transmisividad media y total para las transferencias del fluido entre los dominios. En este trabajo, se ilustra un diagrama del proceso de solución de los dos dominios de flujo. Sin embargo, este no acopla todos los conceptos que se definen.
+
+
+
+%, que se generan durante la inyección de espumantes dispersos, por medio de un diagrama en el que sólo se mencionan los fenómenos y se agrupan sus mecanismos. 
+
+(Acá debo empezar a mencionar todos los trabajos, qué hacen y que fallas tienen)
+
+
+Posibles criterios para tabla de resumen de antecedentes.
+\begin{itemize}
+	\item  Trazabilidad de conceptos
+	\item  Trazabilidad de procesos
+	\item  Modelos matemáticos
+	\item  Representación de procesos
+	\item  Representación de Eventos
+\end{itemize}
+
+Posiblemente considerar también:
+\begin{itemize}
+	\item Representaciones Conceptuales.
+	\item Representaciones Matemáticas.
+	\item Gráficas
+	\subitem Diagramas
+	\subsubitem Estructura
+	\subsubitem Comportamiento
+\end{itemize}
+
+(Hablar de los esquemas preconceptuales como modelos ejecutables).
+
+\section{Problema}
+\textbf{Los simuladores de yacimientos de petróleo para procesos EOR se desarrollan de manera empírica}, no sigue un estándarm falta formalización del proceso de desarrollo, los modelos matemáticos no ofrecen toda la información, falta trazabilidad entre los conceptos en sus respectivas ecuaciones. 
+\section{Objetivos}
+\subsection{Objetivo general}
+En esta Tesis de Maestría se desarrolla un modelo ejecutable para la simulación multifísica de procesos de recobro mejorado en yacimientos de petróleo basado en esquemas preconceptuales.
+\subsection{Objetivos específicos}
+\begin{itemize}
+	\item Establecer los fenómenos de transporte, transferencia y de superficie más relevantes durante los procesos de recobro mejorado para yacimientos de petróleo.
+	\item Conceptualizar los elementos del sistema y las interacciones físicas y químicas que se presentan en los procesos de recobro mejorado para yacimientos de petróleo.
+	\item Diseñar una estrategia de solución numérica multipropósito de los sistemas de ecuaciones algebraicas y diferenciales que describen los mecanismos físicos y químicos que gobiernan los procesos de recobro mejorado.
+	\item Construir una simulación basada en esquemas preconceptuales ejecutables.
+	\item Validar el modelo ejecutable con un caso de literatura.
+\end{itemize}

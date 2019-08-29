@@ -31,10 +31,32 @@ Ertekin, T., Abou-Kassem, J.~H., \& King, G.~R. (2001).
 \newblock {\em Basic applied reservoir simulation}.
 \newblock Number Sirsi) i9781555630898.
 
+\bibitem[FANG et~al., 2017]{FANG2017}
+FANG, W., JIANG, H., LI, J., WANG, Q., KILLOUGH, J., LI, L., PENG, Y., \& YANG,
+  H. (2017).
+\newblock {A numerical simulation model for multi-scale flow in tight oil
+  reservoirs}.
+\newblock {\em Petroleum Exploration and Development}, 44(3), 446--453.
+
+\bibitem[Isaza, 2017]{IsazaCN2017}
+Isaza, C. (2017).
+\newblock Modelo fenomenol{\'o}gico y simulaci{\'o}n de la disoluci{\'o}n de
+  los asfaltenos depositados en formaci{\'o}n usando un solvente qu{\'i}mico.
+\newblock Master's thesis, Universidad Nacional de Colombia - Sede
+  Medell{\'i}n.
+\newblock Magister en Ingenier{\'i}a de Petr{\'o}leos.
+
 \bibitem[Jamal et~al., 2006]{jamal2006petroleum}
 Jamal, H., SM, F.~A., M~Rafiq, I., et~al. (2006).
 \newblock {\em Petroleum reservoir simulation: a Basic Approach}.
 \newblock Gulf Publishing Company.
+
+\bibitem[Mozo, 2017]{MozoID2017}
+Mozo, I. (2017).
+\newblock Desarrollo de un modelo matem{\'a}tico de la estimulaci{\'o}n de
+  pozos productores de crudo pesado con nano?uidos reductores de viscosidad.
+\newblock Master's thesis, Universidad Nacional de Colombia - Sede
+  Medell{\'i}n.
 
 \bibitem[Nore\~{n}a \& Zapata, 2018]{norena2018det}
 Nore\~{n}a, P. \& Zapata, C. (2018).
@@ -50,6 +72,38 @@ Nore\~{n}a, P., Zapata, C., \& Villamizar, A. (2018).
   esquema preconceptual.
 \newblock {\em Investigaci\'{o}n e innovaci\'{o}n en Ingenier\'{i}a de
   Software}, 2, 69--79.
+
+\bibitem[Solano et~al., 2019]{solano2019modeling}
+Solano, H., Valencia, J., Mej{\'\i}a, J., \& Ocampo, A. (2019).
+\newblock A modeling study for foam generation for eor applications in
+  naturally fractured reservoirs using disperse surfactant in the gas stream.
+\newblock In {\em IOR 2019--20th European Symposium on Improved Oil Recovery}.
+
+\bibitem[Valencia, 2016]{ValenciaJD2016}
+Valencia, J. (2016).
+\newblock Modelamiento del flujo y generaci{\'o}n de espumas en medios porosos
+  usando surfactante disperso en gas.
+\newblock Master's thesis, Universidad Nacional de Colombia - Sede
+  Medell{\'i}n.
+\newblock L{\'i}nea de Investigaci{\'o}n: Recobro Mejorado.
+
+\bibitem[Valencia et~al., 2018]{valencia2018development}
+Valencia, J., Ocampo, A., \& Mej{\'\i}a, J. (2018).
+\newblock Development and validation of a new model for in situ foam generation
+  using foamer droplets injection.
+\newblock {\em Transport in Porous Media}, (pp.\ 1--18).
+
+\bibitem[Wang et~al., 2016]{Wang2016}
+Wang, K., Liu, H., Luo, J., \& Chen, Z. (2016).
+\newblock {A multi-continuum multi-phase parallel simulator for large-scale
+  conventional and unconventional reservoirs}.
+\newblock {\em Journal of Natural Gas Science and Engineering}, 33, 483--496.
+
+\bibitem[Wang et~al., 2017]{Wang2017}
+Wang, K., Liu, H., Luo, J., \& Chen, Z. (2017).
+\newblock {Development of a Parallel Simulator Utilizing Multiple Interacting
+  Continua and Embedded Discrete Fracture Models in Fractured Unconventional
+  Reservoirs}.
 
 \bibitem[Zapata, 2007]{zapata2007phd}
 Zapata, C. (2007).
@@ -68,5 +122,10 @@ Zapata, C., Nore\~{n}a, P., \& Gonz{\'a}lez, N. (2013).
 \newblock Representaci{\'o}n de eventos disparadores y de resultado en el grafo
   de interacci{\'o}n de eventos.
 \newblock {\em Ingenier{\'\i}as USBMed}, 4(2), 23--32.
+
+\bibitem[Zaza et~al., 2016]{Zaza2016}
+Zaza, A., Awotunde, A.~A., Fairag, F.~A., \& Al-Mouhamed, M.~A. (2016).
+\newblock {A CUDA based parallel multi-phase oil reservoir simulator}.
+\newblock {\em Computer Physics Communications}, 206, 2--16.
 
 \end{thebibliography}

@@ -243,35 +243,175 @@
 	abstract = {ARRAY(0x55c25b231660)}
 }
 
-@article{ZAZA20162,
-	title = "A CUDA based parallel multi-phase oil reservoir simulator",
-	journal = "Computer Physics Communications",
-	volume = "206",
-	pages = "2 - 16",
-	year = "2016",
-	issn = "0010-4655",
-	doi = "https://doi.org/10.1016/j.cpc.2016.04.010",
-	url = "http://www.sciencedirect.com/science/article/pii/S0010465516300996",
-	author = "Ayham Zaza and Abeeb A. Awotunde and Faisal A. Fairag and Mayez A. Al-Mouhamed",
-	keywords = "Parallel computing, Oil reservoir simulation, CUDA, Krylov iterative solvers",
-	abstract = "Forward Reservoir Simulation (FRS) is a challenging process that models fluid flow and mass transfer in porous media to draw conclusions about the behavior of certain flow variables and well responses. Besides the operational cost associated with matrix assembly, FRS repeatedly solves huge and computationally expensive sparse, ill-conditioned and unsymmetrical linear system. Moreover, as the computation for practical reservoir dimensions lasts for long times, speeding up the process by taking advantage of parallel platforms is indispensable. By considering the state of art advances in massively parallel computing and the accompanying parallel architecture, this work aims primarily at developing a CUDA-based parallel simulator for oil reservoir. In addition to the initial reported 33 times speed gain compared to the serial version, running experiments showed that BiCGSTAB is a stable and fast solver which could be incorporated in such simulations instead of the more expensive, storage demanding and usually utilized GMRES."
+@inproceedings{solano2019modeling,
+	title={A Modeling Study for Foam Generation for EOR Applications in Naturally Fractured Reservoirs Using Disperse Surfactant in the Gas Stream},
+	author={Solano, H. and Valencia, J.D. and Mej{\'\i}a, J.M. and Ocampo, A.},
+	booktitle={IOR 2019--20th European Symposium on Improved Oil Recovery},
+	year={2019}
+}
+
+@article{valencia2018development,
+	title={Development and Validation of a New Model for In Situ Foam Generation Using Foamer Droplets Injection},
+	author={Valencia, J.D. and Ocampo, A. and Mej{\'\i}a, J.M.},
+	journal={Transport in Porous Media},
+	pages={1--18},
+	year={2018},
+	publisher={Springer}
+}
+
+@article{RANAEE20191161,
+	title = "Hysteresis effects of three-phase relative permeabilities on black-oil reservoir simulation under WAG injection protocols",
+	journal = "Journal of Petroleum Science and Engineering",
+	volume = "176",
+	pages = "1161 - 1174",
+	year = "2019",
+	issn = "0920-4105",
+	doi = "https://doi.org/10.1016/j.petrol.2019.01.044",
+	url = "http://www.sciencedirect.com/science/article/pii/S0920410519300518",
+	author = "Ehsan Ranaee and Fabio Inzoli and Monica Riva and Alberto Guadagnini",
+	keywords = "Relative permeability, Hysteresis effects, Black-oil reservoir simulation, WAG injection, Well control",
+	abstract = "We study the impact of explicitly including hysteresis effects (HEs) for relative permeabilities in numerical simulations of enhanced oil recovery approaches grounded on the application of Water Alternate Gas (WAG) injection protocols. Our work explores the significance of hysteresis exhibited by the relative permeability of the non-wetting and/or intermediate wetting phases on the results of reservoir simulations performed within a black-oil modeling approach. We consider four diverse strategies that can be employed to model relative permeabilities of fluid phases under WAG scenarios implemented in a water-wet system following primary waterflooding. The effects of all these modeling strategies are assessed in terms of field oil efficiency (FOE) and gas oil ratio (FGOR) evaluated at the total production lifetime of the reservoir, as compared against a base case where only waterflooding is applied to promote oil recovery. Two of these strategies are implemented and used in typical commercial black-oil reservoir simulators and either neglect hysteresis or consider it only for the gas phase. We then examine a procedure where only hysteresis for relative permeability of the oil phase is considered. Finally, we explicitly consider hysteresis of both non- and intermediate-wetting phases. Our results generally show that including HEs yields an increased FOE and a decreased FGOR. This is consistent with the observation that when injection well controls are set at an optimum value, a non-negligible portion of the domain is associated with saturation paths corresponding to three-phase flow conditions, where saturation history can play a significant role. As compared against a base case where waterflooding is considered as the sole strategy for oil recovery, including hysteresis on three-phase relative permeabilities in the numerical simulations of WAG promotes an increased net present value. We also analyze the impact on reservoir simulation responses of the main WAG injection parameters, i.e., (i) injection rate of gas and water, and duration of (ii) WAG cycles, and (iii) primary waterflooding."
+}
+
+@article{Yang2018,
+	abstract = {The modeling of multiphase fluid flow in porous medium is of interest in the field of reservoir simulation. The promising numerical methods in the literature are mostly based on the explicit or semi-implicit approach, which both have certain stability restrictions on the time step size. In this work, we introduce and study a scalable fully implicit solver for the simulation of two-phase flow in a porous medium with capillarity, gravity and compressibility, which is free from the limitations of the conventional methods. In the fully implicit framework, a mixed finite element method is applied to discretize the model equations for the spatial terms, and the implicit Backward Euler scheme with adaptive time stepping is used for the temporal integration. The resultant nonlinear system arising at each time step is solved in a monolithic way by using a Newton–Krylov type method. The corresponding linear system from the Newton iteration is large sparse, nonsymmetric and ill-conditioned, consequently posing a significant challenge to the fully implicit solver. To address this issue, the family of additive Schwarz preconditioners is taken into account to accelerate the convergence of the linear system, and thereby improves the robustness of the outer Newton method. Several test cases in one, two and three dimensions are used to validate the correctness of the scheme and examine the performance of the newly developed algorithm on parallel computers.},
+	author = {Yang, Haijian and Sun, Shuyu and Li, Yiteng and Yang, Chao},
+	doi = {10.1016/J.CMA.2017.10.016},
+	issn = {0045-7825},
+	journal = {Computer Methods in Applied Mechanics and Engineering},
+	month = {mar},
+	pages = {334--350},
+	publisher = {North-Holland},
+	title = {{A scalable fully implicit framework for reservoir simulation on parallel computers}},
+	url = {https://www.sciencedirect.com/science/article/pii/S0045782517306862},
+	volume = {330},
+	year = {2018}
+}
+
+@misc{Wang2017,
+	abstract = {Abstract Unconventional petroleum reservoirs, such as shale gas and tight oil reservoirs, have changed the entire energy equation in the world. An accurate and efficient reservoir simulator is essential for the development and management of these reservoirs and the optimization of their production schedules. However, the gas storage and transport mechanisms in ultra-tight matrix, including gas adsorption/desorption, non-Darcy flow, and surface diffusion, are different from those in conventional petroleum reservoirs. In addition, hydraulic fracturing techniques are often required to achieve their economical production, which leads to existence of complex fracture networks in the unconventional reservoirs. These features of unconventional reservoirs make their accurate numerical simulations a big challenge. In this paper, we develop a simulator for fractured unconventional reservoirs, which takes the specific gas storage and transport mechanisms into consideration, employs a multiple interacting continua (MINC) model to handle well connected natural fractures, utilizes an embedded discrete fracture model to simulate large-scale disconnected hydraulic fractures, and uses a coupled model to efficiently describe multi-scale fractures with irregular geometries. To reduce the computational time, parallel computing techniques are also employed, with which large-scale reservoir simulation cases can be finished in practical time. From the numerical experiments, we can see that reasonable physical phenomena is captured and accurate predictions are performed by this simulator.},
+	address = {Paris, France},
+	author = {Wang, Kun and Liu, Hui and Luo, Jia and Chen, Zhangxin},
+	booktitle = {SPE Europec featured at 79th EAGE Conference and Exhibition},
+	doi = {10.2118/185805-MS},
+	isbn = {978-1-61399-539-6},
+	publisher = {Society of Petroleum Engineers},
+	title = {{Development of a Parallel Simulator Utilizing Multiple Interacting Continua and Embedded Discrete Fracture Models in Fractured Unconventional Reservoirs}},
+	year = {2017}
+}
+
+@article{FANG2017,
+	abstract = {A discrete fracture model for multi-scale flow in large-scale fractured tight oil reservoirs is proposed considering the compressibility of reservoir rock and fluid, and the non-linear flow in the tight matrix. Validation of the model is performed, followed by the field application of the model. The two-point flux-approximation scheme is adopted in the model to calculate conductivity, and small grids at the fracture intersections are eliminated by the “star-delta” transformation method to improve the computational stability. The fully implicit discretization scheme is performed on the temporal domain. Automatic differentiation technique which can improve model establishment efficiency and computational accuracy is applied in the model to solve the numerical model. The model is validated with the simulation results of Eclipse and the historical production data of a long fractured horizontal well in a tight oil reservoir in Xinjiang oilfield. Simulation results of a field-scale reservoir show that the model proposed can simulate reservoirs with large-scale complex fracture systems; well productivity is positively correlated with the scale of the stimulated reservoir volume, and the difference in planar fracture density and fracture connectivity are proved to be the key factors that lead to the heterogeneous distribution of remaining oil in tight oil reservoirs.},
+	author = {FANG, Wenchao and JIANG, Hanqiao and LI, Junjian and WANG, Qing and KILLOUGH, John and LI, Linkai and PENG, Yongcan and YANG, Hanxu},
+	doi = {10.1016/S1876-3804(17)30051-4},
+	file = {:C$\backslash$:/Users/steve/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/FANG et al. - 2017 - A numerical simulation model for multi-scale flow in tight oil reservoirs.pdf:pdf},
+	issn = {18763804},
+	journal = {Petroleum Exploration and Development},
+	keywords = {discrete fracture model,fracture network,multi-scale coupling,tight oil reservoir,volume fracturing},
+	month = {jun},
+	number = {3},
+	pages = {446--453},
+	publisher = {Elsevier},
+	title = {{A numerical simulation model for multi-scale flow in tight oil reservoirs}},
+	url = {https://www.sciencedirect.com/science/article/pii/S1876380417300514},
+	volume = {44},
+	year = {2017}
+}
+
+@inproceedings{Qiao2017,
+	author = {Qiao, Changhe and Khorsandi, Saeid and Johns, Russell T},
+	booktitle = {SPE Reservoir Simulation Conference},
+	isbn = {1613994834},
+	publisher = {Society of Petroleum Engineers},
+	title = {{A General Purpose Reservoir Simulation Framework for Multiphase Multicomponent Reactive Fluids}},
+	year = {2017}
+}
+
+@article{Zaza2016,
+	abstract = {Forward Reservoir Simulation (FRS) is a challenging process that models fluid flow and mass transfer in porous media to draw conclusions about the behavior of certain flow variables and well responses. Besides the operational cost associated with matrix assembly, FRS repeatedly solves huge and computationally expensive sparse, ill-conditioned and unsymmetrical linear system. Moreover, as the computation for practical reservoir dimensions lasts for long times, speeding up the process by taking advantage of parallel platforms is indispensable. By considering the state of art advances in massively parallel computing and the accompanying parallel architecture, this work aims primarily at developing a CUDA-based parallel simulator for oil reservoir. In addition to the initial reported 33 times speed gain compared to the serial version, running experiments showed that BiCGSTAB is a stable and fast solver which could be incorporated in such simulations instead of the more expensive, storage demanding and usually utilized GMRES.},
+	author = {Zaza, Ayham and Awotunde, Abeeb A. and Fairag, Faisal A. and Al-Mouhamed, Mayez A.},
+	doi = {10.1016/J.CPC.2016.04.010},
+	issn = {0010-4655},
+	journal = {Computer Physics Communications},
+	month = {sep},
+	pages = {2--16},
+	publisher = {North-Holland},
+	title = {{A CUDA based parallel multi-phase oil reservoir simulator}},
+	url = {https://www.sciencedirect.com/science/article/pii/S0010465516300996},
+	volume = {206},
+	year = {2016}
+}
+
+@article{Wang2016,
+	abstract = {Reservoir simulation is considered as the core of data analysis during the development of an oilfield. With higher requirements from reservoir engineers, high-resolution geological model problems are commonly used in reservoir simulation. To simulate this kind of large-scale reservoir problems, based on black-oil models and compositional model, a parallel simulator is developed in this paper. Cartesian and corner point grids are supported by our simulator to describe complex geology, including faults and pinch-outs. The multi-continuum models (including a dual-porosity model, a dual-porosity dual-permeability model, and a multiple interacting continua model) are used to simulate fractured reservoirs. Geomechanics effects are successfully involved through a flexible and convenient interface provided by our simulator. Krylov subspace linear solvers, restricted additive Schwarz method, incomplete LU factorization (ILU) preconditioner, and a family of CPR (constrained pressure residual)-type preconditioners are implemented to provide flexibility of the linear system solution processes. Moreover, a new adaptive preconditioning strategy, which can automatically select and change preconditioner between a CPR-type preconditioner and an ILU preconditioner, is designed to accelerate the solution processes and is considered as the most efficient preconditioning technique to our knowledge. MPI-based parallel implementation is employed for each module of the simulator. With the simulator we developed, various conventional and unconventional reservoir simulation problems with large-scale geological models can be achieved on parallel computers within practical computational time. The computational efficiency and parallel scalability are achieved by our high-quality parallel implementation and efficient nonlinear and linear solution techniques.},
+	author = {Wang, Kun and Liu, Hui and Luo, Jia and Chen, Zhangxin},
+	doi = {10.1016/j.jngse.2016.05.040},
+	issn = {18755100},
+	journal = {Journal of Natural Gas Science and Engineering},
+	keywords = {Adaptive linear solver,Black oil models and compositional model,Fractured reservoirs,Large-scale reservoir simulation,Nonlinear and linear solvers,Parallel simulator},
+	month = {jul},
+	pages = {483--496},
+	publisher = {Elsevier},
+	title = {{A multi-continuum multi-phase parallel simulator for large-scale conventional and unconventional reservoirs}},
+	url = {https://www.sciencedirect.com/science/article/pii/S1875510016303547},
+	volume = {33},
+	year = {2016}
+}
+
+@inproceedings{Liu2015,
+	author = {Liu, Hui and Wang, Kun and Chen, Zhangxin and Jordan, Kirk E and Luo, Jia and Deng, Hui},
+	booktitle = {SPE/IATMI Asia Pacific Oil {\&} Gas Conference and Exhibition},
+	isbn = {1613993900},
+	publisher = {Society of Petroleum Engineers},
+	title = {{A parallel framework for reservoir simulators on distributed-memory supercomputers}},
+	year = {2015}
+}
+
+
+@phdthesis{Cao2002,
+	author = {Cao, H},
+	file = {:C$\backslash$:/Users/steve/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Cao - 2002 - Development of Techniques for General Purpose Research Simulator.pdf:pdf},
+	number = {June},
+	publisher = {Ph. D. Thesis, Stanford University},
+	title = {{Development of Techniques for General Purpose Research Simulator}},
+	year = {2002}
+}
+@article{DeBaun2005,
+	abstract = {AbstractWe discuss an object-oriented, component-based architecture for a parallel reservoir simulator. The architecture successfully balances the need for extensibility, maintainability, and reuse with the need for efficient computation. Parallelism is hidden from the application developer via a set of abstractions and a unifying framework that supports static and dynamic load balancing on unstructured and structured grids. We explain how the simulator architecture supports black oil and compositional models within a general formulation, and how it achieves parallel scalability for all the major components: property calculation, Jacobian construction, linear solver, well model, input/output etc. Some initial results are discussed for a selection of models ranging from standard benchmarks to large complex field cases.MotivationCurrent generation reservoir simulators typically have a lifespan of at least 10 years. As a result, many of the simulators in widespread use have their roots in petroleum engineering, software engineering and computing technologies that were originally targeted at structured grids and scalar architectures. Advances in software and hardware technologies, parallel computing, advanced gridding and modern software engineering techniques have created new opportunities. At the same time, evolving workflows involving complex geological models, large full-field simulations, near well studies, production and facilities optimization, and stochastic modeling have placed new demands on reservoir simulation technology.Although object-oriented design has been the main staple of software development for quite some time, its application to scientific programming has been hindered somewhat by the perceived inefficiency of run-time polymorphism. However, in recent years the emergence of compilers that are in full compliance with the C++ standard has made use of generic programming techniques commercially practical. Generic programming offers the benefits of encapsulation and code reuse without the overhead of virtual function calls1,2 . Object-oriented and generic programming techniques using C++ have been shown to be useful in the development of scientific and numerical applications3,4.Large-scale object-oriented frameworks for scientific computing have been developed in many contexts5, and parallelism has been addressed for example in the POOMA project6. Object-oriented architectures for flow simulations have been developed in other industries7 and these techniques have been applied to reservoir simulators by several practitioners within academia8,9,10,11,12 and also in industry 13.IntroductionIn order to take advantage of the trends in reservoir simulation and computing technology described earlier, we have invested in a next generation simulator. The key features of this simulator, referred to as Intersect (or IX) are:parallel scalabilitythe ability to handle large and/or complex reservoirsunified treatment of structured and unstructured gridsmulti-purpose implementationadaptable software architecture.coupled surface networksIn this context, complexity can arise from modeling of structure, advanced wells, heterogeneity, compositional fluid behavior etc. Underpinning our simulator is extensive research in collaboration with industry and academia on: architectural frameworks; formulation of nonlinear equations in the reservoir and wells; linear solvers; parallel communication models; compositional phase behavior; object oriented design and framework development; unified well model; load balancing; and longer term initiatives such as multi-scale modeling14.We chose an approach that takes advantage of the object-oriented and generic programming capabilities of C++ to provide maximum reuse and extensibility without sacrificing computational efficiency.},
+	author = {DeBaun, D and Byer, T and Childs, P and Chen, J},
+	doi = {10.2118/93274-MS},
+	file = {:C$\backslash$:/Users/steve/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/DeBaun et al. - 2005 - An extensible architecture for next generation scalable parallel reservoir simulation.pdf:pdf},
+	isbn = {9781613990100},
+	journal = {{\ldots} Reservoir Simulation {\ldots}},
+	title = {{An extensible architecture for next generation scalable parallel reservoir simulation}},
+	url = {http://www.onepetro.org/mslib/servlet/onepetropreview?id=00093274},
+	year = {2005}
 }
 
 
 
 
+%%%%%%%%%%%%%%%%% C++ %%%%%%%%%%%%%%%%%%%%%
 
-
-
-
-
-
-
-
-
-
-
-
+@Book{ISO:2017:IIIa,
+	author =       "{ISO}",
+	title =        "{ISO\slash IEC 14882:2017 Information technology ---
+	Programming languages --- C++}",
+	publisher =    pub-ISO,
+	address =      pub-ISO:adr,
+	edition =      "Fifth",
+	pages =        "1605",
+	month =        dec,
+	year =         "2017",
+	ISBN =         "????",
+	ISBN-13 =      "????",
+	LCCN =         "????",
+	bibdate =      "Wed Feb 21 06:49:12 2018",
+	bibsource =    "http://www.math.utah.edu/pub/tex/bib/isostd.bib",
+	URL =          "https://www.iso.org/standard/68564.html",
+	acknowledgement = ack-nhfb,
+	remark =       "Revises ISO/IEC 14882:2014.",
+}
 
 
 
