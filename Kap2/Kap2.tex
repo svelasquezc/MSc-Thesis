@@ -23,8 +23,13 @@
 
 Para entender la física detrás de la simulación de yacimientos de petróleo es necesario revisar el concepto de medio poroso. Un medio poroso puede entenderse como un dominio espacial ocupado parcialmente por un sólido y con una porción ocupada por fluidos a la que se le llama espacio vacío o poroso. Un yacimiento es un medio poroso que ocurre naturalmente, una formación geológica del subsuelo, que, a nivel microscópico, está compuesta por una red de poros que pueden estar interconectados y que almacenan fluidos \citep{Bear2018}.\\
 
-La definición de medio poroso se extiende de la definición de un medio continuo. Un medio continuo, es aquel que no pierde sus propiedades al ser cuando se divide infinitamente, es decir, sus propiedades son continuas en todo punto. Sin embargo, esta definición depende del nivel de observación. A nivel microscópico, si se toman medidas de espacio poroso en diferentes puntos, es posible encontrar zonas vacías y otras ocupadas por la roca. Por otro lado, al incrementar el tamaño de la muestra para la medida, es posible notar que las medidas toman valores menos oscilatorios. El mínimo tamaño de muestra al que el espacio poroso empieza a tomar un valor constante se le llama volumen de elemento representativo (REV) \citep{Bear2018}. El espacio poroso medido en un REV, es lo que se denota porosidad ($\phi$), que corresponde a la capacidad de almacenamiento de fluidos a nivel macroscópico.(Acá sería supremamente chimba mostrarlo con un gráfico).\\
+La definición de medio poroso se extiende de la definición de un medio continuo. Un medio continuo, es aquel que no pierde sus propiedades al ser cuando se divide infinitamente, es decir, sus propiedades son continuas en todo punto. Sin embargo, esta definición depende del nivel de observación. A nivel microscópico, si se toman medidas de espacio poroso en diferentes puntos, es posible encontrar zonas vacías y otras ocupadas por la roca. Por otro lado, al incrementar el tamaño de la muestra para la medida, es posible notar que las medidas toman valores menos oscilatorios, tal como se muestra en la figura \ref{fig:medioporoso}. El mínimo tamaño de muestra al que el espacio poroso empieza a tomar un valor constante se le llama volumen de elemento representativo (REV) \citep{Bear2018}. El espacio poroso medido en un REV, es lo que se denota porosidad ($\phi$), que corresponde a la capacidad de almacenamiento de fluidos a nivel macroscópico.\\
 
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.8]{Fig/porous_media.pdf}%
+	\caption[Medio poroso y volumen de elemento representativo.]{Medio poroso y volumen de elemento representativo. Los autores.} \label{fig:medioporoso}
+\end{figure}
 %Adicionalmente, existen gargantas de poro que conectan los poros de la roca, estas gargantas de poro indican la capacidad de la roca de permitir el transporte de los fluidos que puedan existir. La propiedad macroscópica que describe de la capacidad de transportar fluido es la permeabilidad absoluta. La permeabilidad absoluta es una propiedad direccional, es decir que puede variar según la dirección en la que se mida, si la permeabilidad varía su dirección en función del espacio, se dice que el medio es anisotrópico.
 
 \section{Transporte de fluidos en medios porosos}
@@ -54,7 +59,7 @@ Lo anterior, aplica para un solo fluido. En el caso de múltiples fluidos ocupan
 \end{align}
 
 \section{Simulación de Yacimientos de Petróleo}
-El dominio de la simulación de petróleo de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico porque apoya procesos industriales y de investigación de nuevas tecnologías (citar a Kelly, 2015); los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos.\\
+El dominio de la simulación de petróleo de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico porque apoya procesos industriales y de investigación de nuevas tecnologías \citep{Kelly2015}; los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos.\\
 
 La simulación de yacimientos de petróleo se rige por las leyes de conservación de la masa y del momentum. Estas leyes describen la acumulación, transporte, y, fuentes y sumideros de los fluidos como un sistema de ecuaciones diferenciales parciales acopladas para un dominio físico. Solucionar estos sistemas analíticamente, cuando es viable, requiere imponer condiciones que se alejan de los problemas reales \citep{ertekin2001basic}. Por lo tanto, es necesario una solución numérica o simulación. Un modelo de simulación ampliamente utilizado en la industria es el \textit{Black Oil Model}.%, este hace una simplificación de la composición de los hidrocarburos existentes. Solucionar tales ecuaciones requiere discretizar el tiempo y el dominio físico; usar métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. \\ %Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
 %Más aún, los resultados de la simulación deben ser contrastados con datos experimentales para verificar su concordancia con el fenómeno físico que modelan.\\
@@ -76,7 +81,7 @@ El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a con
 \end{align}
 donde $\vec{u_{f}}$ corresponde a la velocidad Darcy, y, $\tilde{q}_{f}$ a los aportes de fuentes y sumideros, que posteriormente se modelan como pozos, para el fluido $f = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $.\\
 
-En el BOM se establece, también, que los fluidos tienen una compresibilidad, es decir que cambian su volumen según la presión a la que se someten. La propiedad que se asocia a ese cambio de volumen es el factor volumétrico ($B_{f}$).
+En el BOM se establece, también, que los fluidos tienen una compresibilidad, es decir que cambian su volumen debido a cambios de presión o transferencia de masa a otros fluidos (gas). La propiedad que se asocia a ese cambio de volumen es el factor volumétrico ($B_{f}$).
 
 (Poner suposiciones del \textit{Black Oil})
 
@@ -88,9 +93,14 @@ En el BOM se establece, también, que los fluidos tienen una compresibilidad, es
 
 \subsection{Condiciones iniciales}
 
-En el desarrollo de esta Tesis de Maestría, se consideran yacimientos con condiciones de borde cerradas o Neumann cero para todas las fronteras. Es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores.\\
+En el desarrollo de esta Tesis de Maestría, se consideran yacimientos con condiciones de borde cerradas o Neumann cero para todas las fronteras. Es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores. En la figura \ref{fig:empanada} se ejemplifica un yacimiento con condiciones de borde cerradas.\\
 
-(Poner un dibujito de un yacimiento con pozos.)
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.8]{Fig/yacimiento.pdf}%
+	\caption[Esquemático de un yacimiento cerrado.]{Esquemático de un yacimiento cerrado. Los autores.}
+	\label{fig:empanada}
+\end{figure}
 
 Además para un tiempo $t=0$ se tiene que:
 \begin{align}
@@ -128,11 +138,17 @@ dónde:
 El término $T_{f,c}$ en la ecuación \ref{ec:Transmissibity} corresponde a la transmisividad en una cara $c$ que conecta una celda $i$ con otra celda $j$.
 
 \begin{align}
-	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{1}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{kr_{f}}{\mu_{f}B_{f}}
+	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{1}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{kr_{f,c}}{\mu_{f,c}B_{f,c}}
 \end{align}
 \subsection{Modelado de Pozos}
 %
 Al establecer condiciones de frontera cerradas es necesario perforar pozos para generar diferencias de presión que induzcan al transporte de los hidrocarburos presentes en el yacimiento. Los pozos tienen dos tipos, inyector o productor.
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.8]{Fig/pozo_multi_perf.pdf}%
+	\caption[Esquemático de pozo multiperforado.]{Esquemático de pozo multiperforado. Los autores.} \label{fig:mulperfwell}
+\end{figure}
 
 \begin{align}
 	q^{(v)} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi\rho\sqrt{k_{xx}k_{yy}}h_{z}}{\mu\left(r_{e}/r_{w} +s\right)}\left(p_{bh}^{(v)}-p_{m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
@@ -140,7 +156,14 @@ Al establecer condiciones de frontera cerradas es necesario perforar pozos para 
 %
 \subsection{Método de Newton-Raphson}
 %
-El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal. Por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximándose por su derivada como se ilustra en la imagen \ref{fig:Newton}.
+El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal. Por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximándose por su derivada, como se ilustra en la imagen \ref{fig:NewtonR}.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.8]{Fig/NewtonR.pdf}%
+	\caption[Aproximación a la derivada de una función.]{Aproximación a la derivada de una función. Los autores.} \label{fig:NewtonR}
+\end{figure}
+~\\
 \begin{equation}
 A \cdot {\Delta \vec{x}} = \vec{b} \Leftrightarrow J^{k}_{i,j} \cdot {\Delta \vec{x}} = -\vec{R^{k}_{i}}
 \end{equation}
@@ -170,7 +193,7 @@ Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el leng
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=0.51]{Fig/ElementosDelEP.pdf}%
-	\caption[Elementos del EP.]{Elementos del EP (Cambiar atributo compuesto por concepto clase). Tomado de \citep{zapata2012unc}.} \label{fig:InitialPS}
+	\caption[Elementos del EP.]{Elementos del EP. \citep{zapata2012unc}.} \label{fig:InitialPS}
 \end{figure}
 
 \subsubsection{Nodos}
@@ -219,7 +242,7 @@ Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el leng
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/NuevosElementosDelEP.pdf}%
-	\caption[Elementos para la representación de Software Científico.]{Elementos para la representación de Software Científico. Los autores a partir de \citep{JCalle,norena2018det}.} \label{fig:NewElements}
+	\caption[Elementos para la representación de Software Científico.]{Elementos para la representación de Software Científico. \citep{JCalle,norena2018det}.} \label{fig:NewElements}
 \end{figure}
 
 \subsubsection{Condiciones Iniciales}

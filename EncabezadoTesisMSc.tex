@@ -19,8 +19,9 @@
 \usepackage{subfigure}
 \usepackage{longtable}
 \usepackage{float}
+\usepackage{multirow}
 %\usepackage{pdfcrop}
-
+\usepackage{soul, color}
 
 \usepackage{rotating} %Para rotar texto, objetos y tablas seite. No se ve en DVI solo en PS. Seite 328 Hundebuch
                         %se usa junto con \rotate, \sidewidestable ....
@@ -62,6 +63,12 @@
 %Neue Kommandos
 \usepackage{Befehle}
 %Inicio del documento. Tener en cuenta que hay archivos auxiliares
+
+%%%%%%%%%%%%%%dont hyphenize%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
 
 \begin{document}
 \pagenumbering{roman}
