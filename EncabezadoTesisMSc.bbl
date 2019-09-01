@@ -1,25 +1,42 @@
 \begin{thebibliography}{}
 
-\bibitem[Abou-Kassem et~al., 2006]{jamal2006petroleum}
-Abou-Kassem, J, H., Farouq-Ali, S., Rafiqul~Islam, M., et~al. (2006).
+\bibitem[\protect\astroncite{Abou-Kassem
+  \textit{et~al.}}{2006}]{jamal2006petroleum}
+Abou-Kassem, J, H., Farouq-Ali, S., Rafiqul~Islam, M., \textit{et~al.} (2006).
 \newblock {\em Petroleum reservoir simulation: a Basic Approach}.
 \newblock Gulf Publishing Company.
 
-\bibitem[Bear, 2018]{Bear2018}
+\bibitem[\protect\astroncite{Atkinson}{2008}]{atkinson2008introduction}
+Atkinson, K.~E. (2008).
+\newblock {\em An introduction to numerical analysis}.
+\newblock John Wiley \& Sons.
+
+\bibitem[\protect\astroncite{Baker}{1988}]{Baker1988}
+Baker, L. (1988).
+\newblock {Three-Phase Relative Permeability Correlations}.
+\newblock In {\em SPE Enhanced Oil Recovery Symposium}. Society of Petroleum
+  Engineers.
+
+\bibitem[\protect\astroncite{Bear}{2018}]{Bear2018}
 Bear, J. (2018).
 \newblock {\em {Modeling Phenomena of Flow and Transport in Porous Media}},
   volume~31 of {\em Theory and Applications of Transport in Porous Media}.
-\newblock Cham: Springer International Publishing.
+\newblock Springer International Publishing, Cham.
 
-\bibitem[Blatt et~al., 2016]{DUNE24:16}
+\bibitem[\protect\astroncite{Blatt \textit{et~al.}}{2016}]{DUNE24:16}
 Blatt, M., Burchardt, A., Dedner, A., Engwer, C., Fahlke, J., Flemisch, B.,
   Gersbacher, C., Gr\"aser, C., Gruber, F., Gr\"uninger, C., Kempf, D.,
-  Kl{\"o}fkorn, R., Malkmus, T., Müthing, S., Nolte, M., Piatkowski, M., \&
+  Kl{\"o}fkorn, R., Malkmus, T., Müthing, S., Nolte, M., Piatkowski, M., y
   Sander, O. (2016).
 \newblock {The Distributed and Unified Numerics Environment, Version 2.4}.
-\newblock {\em Archive of Numerical Software}, 4(100), 13--29.
+\newblock {\em Archive of Numerical Software}, 4(100):13--29.
 
-\bibitem[Calle, 2016]{JCalle}
+\bibitem[\protect\astroncite{Blunt}{2000}]{Blunt2000}
+Blunt, M. (2000).
+\newblock {An Empirical Model for Three-Phase Relative Permeability}.
+\newblock {\em SPE Journal}, 5(04):435--445.
+
+\bibitem[\protect\astroncite{Calle}{2016}]{JCalle}
 Calle, J. (2016).
 \newblock Identificaci{\'o}n de patrones de dise{\~n}o para software
   cient{\'i}fico a partir de esquemas preconceptuales.
@@ -27,56 +44,73 @@ Calle, J. (2016).
   Medell{\'i}n.
 \newblock L{\'i}nea de Investigaci{\'o}n: Ingenier{\'i}a de software.
 
-\bibitem[Cao, 2002]{Cao2002}
+\bibitem[\protect\astroncite{Cao}{2002}]{Cao2002}
 Cao, H. (2002).
 \newblock {\em {Development of Techniques for General Purpose Research
   Simulator}}.
 \newblock PhD thesis.
 
-\bibitem[Chaverra, 2011]{JChaverra}
+\bibitem[\protect\astroncite{Chaverra}{2011}]{JChaverra}
 Chaverra, J. (2011).
 \newblock Generaci{\'o}n autom{\'a}tica de prototipos funcionales a partir de
   esquemas preconceptuales.
 \newblock Master's thesis, Universidad Nacional de Colombia, Sede Medell{\'i}n.
 
-\bibitem[Chen, 2007]{chen2007reservoir}
+\bibitem[\protect\astroncite{Chen}{2007}]{chen2007reservoir}
 Chen, Z. (2007).
 \newblock {\em Reservoir simulation: mathematical techniques in oil recovery},
   volume~77.
 \newblock Siam.
 
-\bibitem[DeBaun et~al., 2005]{DeBaun2005}
-DeBaun, D., Byer, T., Childs, P., \& Chen, J. (2005).
+\bibitem[\protect\astroncite{DeBaun \textit{et~al.}}{2005}]{DeBaun2005}
+DeBaun, D., Byer, T., Childs, P., y Chen, J. (2005).
 \newblock {An extensible architecture for next generation scalable parallel
   reservoir simulation}.
 \newblock {\em {\ldots} Reservoir Simulation {\ldots}}.
 
-\bibitem[Ertekin et~al., 2001]{ertekin2001basic}
-Ertekin, T., Abou-Kassem, J.~H., \& King, G.~R. (2001).
+\bibitem[\protect\astroncite{Delshad y Pope}{1989}]{Delshad1989}
+Delshad, M. y Pope, G.~A. (1989).
+\newblock Comparison of the three-phase oil relative permeability models.
+\newblock {\em Transport in Porous Media}, 4(1):59--83.
+
+\bibitem[\protect\astroncite{Durango \textit{et~al.}}{2018}]{norena2018ruido}
+Durango, C., Nore\~{n}a, P., y Zapata, C. (2018).
+\newblock Representación de eventos de ruido ambiental a partir de esquemas
+  preconceptuales y buenas prácticas de educción geoespacial de requisitos.
+\newblock {\em Research in Computing Science}, 147:337--341.
+
+\bibitem[\protect\astroncite{Ertekin \textit{et~al.}}{2001}]{ertekin2001basic}
+Ertekin, T., Abou-Kassem, J.~H., y King, G.~R. (2001).
 \newblock {\em Basic applied reservoir simulation}.
 \newblock Number Sirsi) i9781555630898.
 
-\bibitem[Fang et~al., 2017]{FANG2017}
-Fang, W., Jiang, H., Li, J., Wang, Q., Killough, J., Li, L., Peng, Y., \& Yang,
+\bibitem[\protect\astroncite{Fanchi}{2002}]{FANCHI2002108}
+Fanchi, J.~R. (2002).
+\newblock Chapter 7 - measures of rock-fluid interactions.
+\newblock In Fanchi, J.~R., editor, {\em Shared Earth Modeling}, pages 108 --
+  132. Butterworth-Heinemann, Woburn.
+
+\bibitem[\protect\astroncite{Fang \textit{et~al.}}{2017}]{FANG2017}
+Fang, W., Jiang, H., Li, J., Wang, Q., Killough, J., Li, L., Peng, Y., y Yang,
   H. (2017).
 \newblock {A numerical simulation model for multi-scale flow in tight oil
   reservoirs}.
-\newblock {\em Petroleum Exploration and Development}, 44(3), 446--453.
+\newblock {\em Petroleum Exploration and Development}, 44(3):446--453.
 
-\bibitem[Flemisch et~al., 2011]{Flemisch2011}
+\bibitem[\protect\astroncite{Flemisch \textit{et~al.}}{2011}]{Flemisch2011}
 Flemisch, B., Darcis, M., Erbertseder, K., Faigle, B., Lauser, A., Mosthaf, K.,
-  M{\"{u}}thing, S., Nuske, P., Tatomir, A., Wolff, M., \& Helmig, R. (2011).
+  M{\"{u}}thing, S., Nuske, P., Tatomir, A., Wolff, M., y Helmig, R. (2011).
 \newblock {DuMux: DUNE for multi-{\{}phase,component,scale,physics,...{\}} flow
   and transport in porous media}.
-\newblock {\em Advances in Water Resources}, 34(9), 1102--1112.
+\newblock {\em Advances in Water Resources}, 34(9):1102--1112.
 
-\bibitem[Hu et~al., 2013]{Hu2013}
-Hu, X., Xu, J., \& Zhang, C. (2013).
+\bibitem[\protect\astroncite{Hu \textit{et~al.}}{2013}]{Hu2013}
+Hu, X., Xu, J., y Zhang, C. (2013).
 \newblock Application of auxiliary space preconditioning in field-scale
   reservoir simulation.
-\newblock {\em Science China Mathematics}, 56(12), 2737--2751.
+\newblock {\em Science China Mathematics}, 56(12):2737--2751.
 
-\bibitem[Isaza, 2017]{IsazaCN2017}
+\bibitem[\protect\astroncite{Isaza}{2017}]{IsazaCN2017}
 Isaza, C. (2017).
 \newblock Modelo fenomenol{\'o}gico y simulaci{\'o}n de la disoluci{\'o}n de
   los asfaltenos depositados en formaci{\'o}n usando un solvente qu{\'i}mico.
@@ -84,65 +118,76 @@ Isaza, C. (2017).
   Medell{\'i}n.
 \newblock Magister en Ingenier{\'i}a de Petr{\'o}leos.
 
-\bibitem[Kelly, 2015]{Kelly2015}
+\bibitem[\protect\astroncite{{ISO}}{2017}]{ISO:2017:IIIa}
+{ISO} (2017).
+\newblock {\em {ISO\slash IEC 14882:2017 Information technology --- Programming
+  languages --- C++}}.
+\newblock Fifth edition.
+
+\bibitem[\protect\astroncite{Kelly}{2015}]{Kelly2015}
 Kelly, D. (2015).
 \newblock Scientific software development viewed as knowledge acquisition.
-\newblock {\em J. Syst. Softw.}, 109(C), 50--61.
+\newblock {\em J. Syst. Softw.}, 109(C):50--61.
 
-\bibitem[Mohammad et~al., 2017]{Mohammad2017}
-Mohammad, R.~S., Zhao, X., Zhang, S., \& Shah, S. J.-u.-D. (2017).
+\bibitem[\protect\astroncite{Mohammad \textit{et~al.}}{2017}]{Mohammad2017}
+Mohammad, R.~S., Zhao, X., Zhang, S., y Shah, S. J.-u.-D. (2017).
 \newblock Bubble point simulation of reservoir oil and carbon dioxide mixtures.
-\newblock {\em Arabian Journal for Science and Engineering}, 42(4), 1633--1641.
+\newblock {\em Arabian Journal for Science and Engineering}, 42(4):1633--1641.
 
-\bibitem[Mozo, 2017]{MozoID2017}
+\bibitem[\protect\astroncite{Mozo}{2017}]{MozoID2017}
 Mozo, I. (2017).
 \newblock Desarrollo de un modelo matem{\'a}tico de la estimulaci{\'o}n de
   pozos productores de crudo pesado con nano?uidos reductores de viscosidad.
 \newblock Master's thesis, Universidad Nacional de Colombia - Sede
   Medell{\'i}n.
 
-\bibitem[Nore\~{n}a \& Zapata, 2018a]{norena2018timrep}
-Nore\~{n}a, P. \& Zapata, C. (2018a).
+\bibitem[\protect\astroncite{Nore\~{n}a y Zapata}{2018a}]{norena2018timrep}
+Nore\~{n}a, P. y Zapata, C. (2018a).
 \newblock A pre-conceptual-schema-based representation of time events coming
   from scientific software domain.
 \newblock In {\em Proceedings of The 22nd World Multi-Conference on Systemics,
-  Cybernetics and Informatics (WMSCI 2018)}  (pp.\ 53--58).
+  Cybernetics and Informatics (WMSCI 2018)}, pages 53--58.
 
-\bibitem[Nore\~{n}a \& Zapata, 2018b]{norena2018det}
-Nore\~{n}a, P. \& Zapata, C. (2018b).
+\bibitem[\protect\astroncite{Nore\~{n}a y Zapata}{2018b}]{norena2018det}
+Nore\~{n}a, P. y Zapata, C. (2018b).
 \newblock Una representación basada en esquemas preconceptuales de eventos
   determinísticos y aleatorios tipo señal desde dominios de software
   científico.
-\newblock {\em Research in Computing Science}, 147, 207--220.
+\newblock {\em Research in Computing Science}, 147:207--220.
 
-\bibitem[Nore\~{n}a \& Zapata, 2019]{norena2018bs}
-Nore\~{n}a, P. \& Zapata, C. (2019).
+\bibitem[\protect\astroncite{Nore\~{n}a y Zapata}{2019}]{norena2018bs}
+Nore\~{n}a, P. y Zapata, C. (2019).
 \newblock Business simulation by using events from pre-conceptual schemas.
 \newblock In {\em Developments in business simulation and experiential
-  learning: proceedings of the annual Absel conference}  (pp.\ 258--263).
+  learning: proceedings of the annual Absel conference}, pages 258--263.
 
-\bibitem[Nore\~{n}a et~al., 2018]{norena2018Ling}
-Nore\~{n}a, P., Zapata, C., \& Villamizar, A. (2018).
+\bibitem[\protect\astroncite{Nore\~{n}a \textit{et~al.}}{2018}]{norena2018Ling}
+Nore\~{n}a, P., Zapata, C., y Villamizar, A. (2018).
 \newblock Representaci{\'o}n de eventos a partir de estructuras
   ling{\"u}{\'i}sticas basadas en roles sem{\'a}nticos: Una extensi{\'o}n al
   esquema preconceptual.
 \newblock {\em Investigaci\'{o}n e innovaci\'{o}n en Ingenier\'{i}a de
-  Software}, 2, 69--79.
+  Software}, 2:69--79.
 
-\bibitem[Qiao et~al., 2017]{Qiao2017}
-Qiao, C., Khorsandi, S., \& Johns, R.~T. (2017).
+\bibitem[\protect\astroncite{Qiao \textit{et~al.}}{2017}]{Qiao2017}
+Qiao, C., Khorsandi, S., y Johns, R.~T. (2017).
 \newblock {A General Purpose Reservoir Simulation Framework for Multiphase
   Multicomponent Reactive Fluids}.
-\newblock In {\em SPE Reservoir Simulation Conference}: Society of Petroleum
+\newblock In {\em SPE Reservoir Simulation Conference}. Society of Petroleum
   Engineers.
 
-\bibitem[Solano et~al., 2019]{solano2019modeling}
-Solano, H., Valencia, J., Mej{\'\i}a, J., \& Ocampo, A. (2019).
+\bibitem[\protect\astroncite{Solano \textit{et~al.}}{2019}]{solano2019modeling}
+Solano, H., Valencia, J., Mej{\'\i}a, J., y Ocampo, A. (2019).
 \newblock A modeling study for foam generation for eor applications in
   naturally fractured reservoirs using disperse surfactant in the gas stream.
 \newblock In {\em IOR 2019--20th European Symposium on Improved Oil Recovery}.
 
-\bibitem[Valencia, 2016]{ValenciaJD2016}
+\bibitem[\protect\astroncite{Stephen J.~Mellor}{2002}]{ExecutableUML}
+Stephen J.~Mellor, M. J.~B. (2002).
+\newblock {\em Executable UML: A Foundation for Model-Driven Architecture}.
+\newblock Addison-Wesley Professional.
+
+\bibitem[\protect\astroncite{Valencia}{2016}]{ValenciaJD2016}
 Valencia, J. (2016).
 \newblock Modelamiento del flujo y generaci{\'o}n de espumas en medios porosos
   usando surfactante disperso en gas.
@@ -150,71 +195,82 @@ Valencia, J. (2016).
   Medell{\'i}n.
 \newblock L{\'i}nea de Investigaci{\'o}n: Recobro Mejorado.
 
-\bibitem[Valencia et~al., 2018]{valencia2018development}
-Valencia, J., Ocampo, A., \& Mej{\'\i}a, J. (2018).
+\bibitem[\protect\astroncite{Valencia
+  \textit{et~al.}}{2018}]{valencia2018development}
+Valencia, J., Ocampo, A., y Mej{\'\i}a, J. (2018).
 \newblock Development and validation of a new model for in situ foam generation
   using foamer droplets injection.
-\newblock {\em Transport in Porous Media}, (pp.\ 1--18).
+\newblock {\em Transport in Porous Media}, pages 1--18.
 
-\bibitem[Wang et~al., 2015]{WANG201519}
-Wang, K., Liu, H., \& Chen, Z. (2015).
+\bibitem[\protect\astroncite{Wang \textit{et~al.}}{2015}]{WANG201519}
+Wang, K., Liu, H., y Chen, Z. (2015).
 \newblock A scalable parallel black oil simulator on distributed memory
   parallel computers.
-\newblock {\em Journal of Computational Physics}, 301, 19 -- 34.
+\newblock {\em Journal of Computational Physics}, 301:19 -- 34.
 
-\bibitem[Wang et~al., 2016]{Wang2016}
-Wang, K., Liu, H., Luo, J., \& Chen, Z. (2016).
+\bibitem[\protect\astroncite{Wang \textit{et~al.}}{2016}]{Wang2016}
+Wang, K., Liu, H., Luo, J., y Chen, Z. (2016).
 \newblock {A multi-continuum multi-phase parallel simulator for large-scale
   conventional and unconventional reservoirs}.
-\newblock {\em Journal of Natural Gas Science and Engineering}, 33, 483--496.
+\newblock {\em Journal of Natural Gas Science and Engineering}, 33:483--496.
 
-\bibitem[Wang et~al., 2017]{Wang2017}
-Wang, K., Liu, H., Luo, J., \& Chen, Z. (2017).
+\bibitem[\protect\astroncite{Wang \textit{et~al.}}{2017}]{Wang2017}
+Wang, K., Liu, H., Luo, J., y Chen, Z. (2017).
 \newblock {Development of a Parallel Simulator Utilizing Multiple Interacting
   Continua and Embedded Discrete Fracture Models in Fractured Unconventional
   Reservoirs}.
 
-\bibitem[{Wang} et~al., 2016]{Wang2016Pol}
-{Wang}, K., {Liu}, H., {Luo}, J., {Yu}, S., {Chen}, Z., \& {Zhang}, P. (2016).
+\bibitem[\protect\astroncite{{Wang} \textit{et~al.}}{2016}]{Wang2016Pol}
+{Wang}, K., {Liu}, H., {Luo}, J., {Yu}, S., {Chen}, Z., y {Zhang}, P. (2016).
 \newblock Parallel simulation of full-field polymer flooding.
 \newblock In {\em 2016 IEEE 2nd International Conference on Big Data Security
   on Cloud (BigDataSecurity), IEEE International Conference on High Performance
   and Smart Computing (HPSC), and IEEE International Conference on Intelligent
-  Data and Security (IDS)}  (pp.\ 220--225).
+  Data and Security (IDS)}, pages 220--225.
 
-\bibitem[Zapata, 2007]{zapata2007phd}
+\bibitem[\protect\astroncite{Whitaker}{1986}]{Whitaker1986}
+Whitaker, S. (1986).
+\newblock Flow in porous media i: A theoretical derivation of darcy's law.
+\newblock {\em Transport in Porous Media}, 1(1):3--25.
+
+\bibitem[\protect\astroncite{Zapata}{2007}]{zapata2007phd}
 Zapata, C. (2007).
 \newblock {\em Definici{\'o}n de un esquema preconceptual para la obtenci{\'o}n
   autom{\'a}tica de esquemas conceptuales de UML}.
 \newblock PhD thesis, Universidad Nacional de Colombia, Sede Medellin,
   Medell{\'i}n.
 
-\bibitem[Zapata, 2012]{zapata2012unc}
+\bibitem[\protect\astroncite{Zapata}{2012}]{zapata2012unc}
 Zapata, C. (2012).
 \newblock {\em The UNC-Method revisited: elements of the new approach}.
 \newblock Saarbr{\"u}cken: Lambert Academic Publishing.
 
-\bibitem[Zapata et~al., 2013]{zapata2013Eventos}
-Zapata, C., Nore\~{n}a, P., \& Gonz{\'a}lez, N. (2013).
+\bibitem[\protect\astroncite{Zapata \textit{et~al.}}{2013}]{zapata2013Eventos}
+Zapata, C., Nore\~{n}a, P., y Gonz{\'a}lez, N. (2013).
 \newblock Representaci{\'o}n de eventos disparadores y de resultado en el grafo
   de interacci{\'o}n de eventos.
-\newblock {\em Ingenier{\'\i}as USBMed}, 4(2), 23--32.
+\newblock {\em Ingenier{\'\i}as USBMed}, 4(2):23--32.
 
-\bibitem[Zaydullin et~al., 2014]{ZAYDULLIN201451}
-Zaydullin, R., Voskov, D.~V., James, S.~C., Henley, H., \& Lucia, A. (2014).
+\bibitem[\protect\astroncite{Zaydullin \textit{et~al.}}{2014}]{ZAYDULLIN201451}
+Zaydullin, R., Voskov, D.~V., James, S.~C., Henley, H., y Lucia, A. (2014).
 \newblock Fully compositional and thermal reservoir simulation.
-\newblock {\em Computers and Chemical Engineering}, 63, 51 -- 65.
+\newblock {\em Computers and Chemical Engineering}, 63:51 -- 65.
 
-\bibitem[Zaza et~al., 2016]{Zaza2016}
-Zaza, A., Awotunde, A.~A., Fairag, F.~A., \& Al-Mouhamed, M.~A. (2016).
+\bibitem[\protect\astroncite{Zaza \textit{et~al.}}{2016}]{Zaza2016}
+Zaza, A., Awotunde, A.~A., Fairag, F.~A., y Al-Mouhamed, M.~A. (2016).
 \newblock {A CUDA based parallel multi-phase oil reservoir simulator}.
-\newblock {\em Computer Physics Communications}, 206, 2--16.
+\newblock {\em Computer Physics Communications}, 206:2--16.
 
-\bibitem[Zhang et~al., 2007]{ZHANG2007135}
-Zhang, J., Delshad, M., \& Sepehrnoori, K. (2007).
+\bibitem[\protect\astroncite{Zhang \textit{et~al.}}{2007}]{ZHANG2007135}
+Zhang, J., Delshad, M., y Sepehrnoori, K. (2007).
 \newblock Development of a framework for optimization of reservoir simulation
   studies.
-\newblock {\em Journal of Petroleum Science and Engineering}, 59(1), 135 --
-  146.
+\newblock {\em Journal of Petroleum Science and Engineering}, 59(1):135 -- 146.
+
+\bibitem[\protect\astroncite{Zuo \textit{et~al.}}{2014}]{Zuo2014}
+Zuo, L., Chen, Y., Dengen, Z., y Kamath, J. (2014).
+\newblock {Three-Phase Relative Permeability Modeling in the Simulation of WAG
+  Injection}.
+\newblock {\em SPE Reservoir Evaluation {\&} Engineering}, 17(03):326--339.
 
 \end{thebibliography}

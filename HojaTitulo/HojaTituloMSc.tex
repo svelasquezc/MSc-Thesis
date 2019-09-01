@@ -14,24 +14,23 @@ Medellín, Colombia\\
 2019\\
 \end{center}
 
-\newpage{\pagestyle{empty}\cleardoublepage}
-
 \newpage
 \begin{center}
 \thispagestyle{empty} \vspace*{0cm} \textbf{\LARGE
 Un modelo ejecutable para la simulación multi-f\'{\i}sica de procesos de recobro mejorado en yacimientos de petr\'{o}leo basado en esquemas preconceptuales}\\[2.0cm]
 \Large\textbf{Steven Velásquez Chancí}\\[2.0cm]
-\small Tesis o trabajo de grado presentada(o) como requisito parcial para optar al
+\small Tesis de investigación presentada como requisito parcial para optar al
 t\'{\i}tulo de:\\
-\textbf{Magíster en Ingeniería - Ingeniería de Sistemas}\\[2.0cm]
+\textbf{Magíster en Ingeniería de Sistemas}\\[2.0cm]
 Director:\\
 Ph.D. Juan Manuel Mejía Cárdenas\\
 Co-Director:\\
 Ph.D. Carlos Mario Zapata Jaramillo\\[2.0cm]
 L\'{\i}nea de Investigaci\'{o}n:\\
-Inteligencia de Software\\
-Grupo de Investigaci\'{o}n:\\
-Dinámicas de Flujo y Transporte en medios porosos\\[2.5cm]
+Ingeniería de Software\\
+Grupos de Investigaci\'{o}n:\\
+Dinámicas de Flujo y Transporte en medios porosos\\
+Lenguajes Computacionales\\[2.0cm]
 Universidad Nacional de Colombia\\
 Facultad de Minas, Departamento de Ciencias de la Computación y la Decisión\\
 Medellín, Colombia\\
@@ -43,18 +42,17 @@ Medellín, Colombia\\
 \newpage
 \thispagestyle{empty} \textbf{}\normalsize
 \\\\\\%
-\textbf{(Dedicatoria o un lema)}\\[4.0cm]
+~\\[4.0cm]
 
 \begin{flushright}
 \begin{minipage}{8cm}
     \noindent
         \small
-        Su uso es opcional y cada autor podr\'{a} determinar la distribuci\'{o}n del texto en la p\'{a}gina, se sugiere esta presentaci\'{o}n. En ella el autor dedica su trabajo en forma especial a personas y/o entidades.\\[1.0cm]\\
-        Por ejemplo:\\[1.0cm]
-        A mis padres\\[1.0cm]\\
-        o\\[1.0cm]
-        La vida es dura, pero es más dura...\\
-        la verdura.
+        ~\\[2.0cm]
+        A mi familia, amigos y a todos los que\\
+        estuvieron pendientes de este proceso.\\
+        ¡Se logró!
+        
         %La preocupaci\'{o}n por el hombre y su destino siempre debe ser el
         %inter\'{e}s primordial de todo esfuerzo t\'{e}cnico. Nunca olvides esto
         %entre tus diagramas y ecuaciones.\\\\
@@ -62,44 +60,51 @@ Medellín, Colombia\\
 \end{minipage}
 \end{flushright}
 
-\newpage{\pagestyle{empty}\cleardoublepage}
-
 \newpage
 \thispagestyle{empty} \textbf{}\normalsize
 \\\\\\%
 \textbf{\LARGE Agradecimientos}
 \addcontentsline{toc}{chapter}{\numberline{}Agradecimientos}\\\\
-Agradecimientos eternos a Paola Andrea Nore\~{n}a Cardona, por su constante fé, apoyo y asesoría durante el desarrollo de esta tesis.
+Agradezco a mi Director Juan Manuel Mejía Cardenas por su supervisión y confianza durante este proceso, a mi Codirector Carlos Mario Zapata Jaramillo por su guía y por saberme centrar cuando lo he requerido, a Juan David Valencia Londoño, cuya constante disposición para solucionar mis dudas me ayudaron a llevar un avance continuo, a Paola Andrea Nore\~{n}a Cardona, por su fé, apoyo, asesoría y acompañamiento constante durante el desarrollo de esta Tesis.\\
 
-Esta secci\'{o}n es opcional, en ella el autor agradece a las personas o instituciones que colaboraron en la realizaci\'{o}n de la tesis  o trabajo de investigaci\'{o}n. Si se incluye esta secci\'{o}n, deben aparecer los nombres completos, los cargos y su aporte al documento.\\
-
-Finalmente agradezco a la alianza formada por el Departamento Administrativo de Ciencia, Tecnología e Innovación (COLCIENCIAS), la Agencia Nacional de Hidrocarburos (ANH) y la Universidad Nacional de Colombia por el financiamiento del "Plan Nacional para el Potenciamiento de la Tecnología CEOR con Gas Mejorado Químicamente" bajo el acuerdo 273-2017, dentro del cual se enmarca la investigación asociada a esta tesis de maestría.
+Finalmente, agradezco al Departamiento de Ciencias de la Computación y la Decisión por financiar mis estudios por medio de la beca de Facultad y a la alianza formada por el Departamento Administrativo de Ciencia, Tecnología e Innovación (COLCIENCIAS), la Agencia Nacional de Hidrocarburos (ANH) y la Universidad Nacional de Colombia por el financiamiento del "Plan Nacional para el Potenciamiento de la Tecnología CEOR con Gas Mejorado Químicamente" bajo el acuerdo 273-2017, dentro del cual se enmarca la investigación asociada a esta Tesis de Maestría.
 
 \newpage{\pagestyle{empty}\cleardoublepage}
 
 \newpage
 \textbf{\LARGE Resumen}
 \addcontentsline{toc}{chapter}{\numberline{}Resumen}\\\\
-El resumen es una presentaci\'{o}n abreviada y precisa (la NTC 1486 de 2008 recomienda revisar la norma ISO 214 de 1976). Se debe usar una extensi\'{o}n m\'{a}xima de 12 renglones. Se recomienda que este resumen sea anal\'{\i}tico, es decir, que sea completo, con informaci\'{o}n cuantitativa y cualitativa, generalmente incluyendo los siguientes aspectos: objetivos, dise\~{n}o, lugar y circunstancias, pacientes (u objetivo del estudio), intervenci\'{o}n, mediciones y principales resultados, y conclusiones. Al final del resumen se deben usar palabras claves tomadas del texto (m\'{\i}nimo 3 y m\'{a}ximo 7 palabras), las cuales permiten la recuperaci\'{o}n de la informaci\'{o}n.\\
 
-\textbf{\small Palabras clave: (m\'{a}ximo 10 palabras, preferiblemente seleccionadas de las listas internacionales que permitan el indizado cruzado)}.\\
+La simulación de procesos de recobro mejorado se rige por las leyes en las que se describe el transporte de fluidos en medios porosos. Existen múltiples propuestas de elaboración de \textit{frameworks} y simuladores para procesos de recobro mejorado. Sin embargo, carecen de elementos de trazabilidad de conceptos, procesos y de representación de eventos que surgen de la física. En los Esquemas Preconceptuales (EP) se incluye toda la estructura de un dominio de aplicación y, también se pueden representar los procesos que se dan en tal dominio. Estos, aportan cohesión, consistencia y elementos de trazabilidad entre conceptos y procesos. Por lo que, en esta Tesis de Maestría se propone un modelo ejecutable para la simulación de procesos de recobro mejorado basado en esquemas preconceptuales. El modelo ejecutable se valida con el noveno \textit{SPE Comparative Solution Project}. Los resultados del modelo ejecutable se ajustan a los datos reportados en la literatura. \\
 
-A continuaci\'{o}n se presentan algunos ejemplos de tesauros que se pueden consultar para asignar las palabras clave, seg\'{u}n el \'{a}rea tem\'{a}tica:\\
 
-\textbf{Artes}: AAT: Art y Architecture Thesaurus.
+\textbf{\small Palabras clave: Modelo Ejecutable, Esquemas Preconceptuales, Simulación de Yacimientos de Petróleo, Procesos de Recobro Mejorado, Representación Basada en Eventos}.\\
 
-\textbf{Ciencias agropecuarias}: 1) Agrovoc: Multilingual Agricultural Thesaurus - F.A.O. y 2)GEMET: General Multilingual Environmental Thesaurus.
+%El resumen es una presentaci\'{o}n abreviada y precisa (la NTC 1486 de 2008 recomienda revisar la norma ISO 214 de 1976). Se debe usar una extensi\'{o}n m\'{a}xima de 12 renglones. Se recomienda que este resumen sea anal\'{\i}tico, es decir, que sea completo, con informaci\'{o}n cuantitativa y cualitativa, generalmente incluyendo los siguientes aspectos: objetivos, dise\~{n}o, lugar y circunstancias, pacientes (u objetivo del estudio), intervenci\'{o}n, mediciones y principales resultados, y conclusiones. Al final del resumen se deben usar palabras claves tomadas del texto (m\'{\i}nimo 3 y m\'{a}ximo 7 palabras), las cuales permiten la recuperaci\'{o}n de la informaci\'{o}n.\\
 
-\textbf{Ciencias sociales y humanas}: 1) Tesauro de la UNESCO y 2) Population Multilingual Thesaurus.
 
-\textbf{Ciencia y tecnolog\'{\i}a}: 1) Astronomy Thesaurus Index. 2) Life Sciences Thesaurus, 3) Subject Vocabulary, Chemical Abstracts Service y 4) InterWATER: Tesauro de IRC - Centro Internacional de Agua Potable y Saneamiento.
+%\textbf{\small Palabras clave: (m\'{a}ximo 10 palabras, preferiblemente seleccionadas de las listas internacionales que permitan el indizado cruzado)}.\\
 
-\textbf{Tecnolog\'{\i}as y ciencias m\'{e}dicas}: 1) MeSH: Medical Subject Headings (National Library of Medicine's USA) y 2) DECS: Descriptores en ciencias de la Salud (Biblioteca Regional de Medicina BIREME-OPS).
+%A continuaci\'{o}n se presentan algunos ejemplos de tesauros que se pueden consultar para asignar las palabras clave, seg\'{u}n el \'{a}rea tem\'{a}tica:\\
 
-\textbf{Multidisciplinarias}: 1) LEMB - Listas de Encabezamientos de Materia y 2) LCSH- Library of Congress Subject Headings.\\
+%\textbf{Artes}: AAT: Art y Architecture Thesaurus.
 
-Tambi\'{e}n se pueden encontrar listas de temas y palabras claves, consultando las distintas bases de datos disponibles a trav\'{e}s del Portal del Sistema Nacional de Bibliotecas\footnote{ver: www.sinab.unal.edu.co}, en la secci\'{o}n "Recursos bibliogr\'{a}ficos" opci\'{o}n "Bases de datos".\\
+%\textbf{Ciencias agropecuarias}: 1) Agrovoc: Multilingual Agricultural Thesaurus - F.A.O. y 2)GEMET: General Multilingual Environmental Thesaurus.
+
+%\textbf{Ciencias sociales y humanas}: 1) Tesauro de la UNESCO y 2) Population Multilingual Thesaurus.
+
+%\textbf{Ciencia y tecnolog\'{\i}a}: 1) Astronomy Thesaurus Index. 2) Life Sciences Thesaurus, 3) Subject Vocabulary, Chemical Abstracts Service y 4) InterWATER: Tesauro de IRC - Centro Internacional de Agua Potable y Saneamiento.
+
+%\textbf{Tecnolog\'{\i}as y ciencias m\'{e}dicas}: 1) MeSH: Medical Subject Headings (National Library of Medicine's USA) y 2) DECS: Descriptores en ciencias de la Salud (Biblioteca Regional de Medicina BIREME-OPS).
+
+%\textbf{Multidisciplinarias}: 1) LEMB - Listas de Encabezamientos de Materia y 2) LCSH- Library of Congress Subject Headings.\\
+
+%Tambi\'{e}n se pueden encontrar listas de temas y palabras claves, consultando las distintas bases de datos disponibles a trav\'{e}s del Portal del Sistema Nacional de Bibliotecas\footnote{ver: www.sinab.unal.edu.co}, en la secci\'{o}n "Recursos bibliogr\'{a}ficos" opci\'{o}n "Bases de datos".\\
 
 \textbf{\LARGE Abstract}\\\\
-Es el mismo resumen pero traducido al ingl\'{e}s. Se debe usar una extensi\'{o}n m\'{a}xima de 12 renglones. Al final del Abstract se deben traducir las anteriores palabras claves tomadas del texto (m\'{\i}nimo 3 y m\'{a}ximo 7 palabras), llamadas keywords. Es posible incluir el resumen en otro idioma diferente al espa\~{n}ol o al ingl\'{e}s, si se considera como importante dentro del tema tratado en la investigaci\'{o}n, por ejemplo: un trabajo dedicado a problemas ling\"{u}\'{\i}sticos del mandar\'{\i}n seguramente estar\'{\i}a mejor con un resumen en mandar\'{\i}n.\\[2.0cm]
-\textbf{\small Keywords: palabras clave en ingl\'{e}s(m\'{a}ximo 10 palabras, preferiblemente seleccionadas de las listas internacionales que permitan el indizado cruzado)}\\
+Enhanced oil recovery processes simulation is governed by mass conservation laws. In these, flow, accumulation, sources and sinks phenomena in porous media are described. Multiple proposals for framework and simulation elaboration exist. Nonetheless, they lack concepts and processes tracing, and, event representation for physical phenomena. In Preconceptual Schemas (PS) is included the complete structure of an application domain, also, processes emerging in such domain can be represented using PS. Cohesion, consistency and tracing between concepts and processes, can be obtained using PS. This is why we propose an executable model for enhanced oil recovery processes simulation based on preconceptual schemas. The executable model is validated by running the ninth SPE Comparative Solution Project. The results are in accordance with data reported in the literature.\\
+
+\textbf{\small Palabras clave: Executable Models, Preconceptual Schemas, Oil Reservoir Simulation, Enhanced Oil Recovery Processes, Event based Representation}.\\
+
+%Es el mismo resumen pero traducido al ingl\'{e}s. Se debe usar una extensi\'{o}n m\'{a}xima de 12 renglones. Al final del Abstract se deben traducir las anteriores palabras claves tomadas del texto (m\'{\i}nimo 3 y m\'{a}ximo 7 palabras), llamadas keywords. Es posible incluir el resumen en otro idioma diferente al espa\~{n}ol o al ingl\'{e}s, si se considera como importante dentro del tema tratado en la investigaci\'{o}n, por ejemplo: un trabajo dedicado a problemas ling\"{u}\'{\i}sticos del mandar\'{\i}n seguramente estar\'{\i}a mejor con un resumen en mandar\'{\i}n.\\[2.0cm]
+%\textbf{\small Keywords: palabras clave en ingl\'{e}s(m\'{a}ximo 10 palabras, preferiblemente seleccionadas de las listas internacionales que permitan el indizado cruzado)}\\

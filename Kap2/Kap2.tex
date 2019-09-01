@@ -15,28 +15,28 @@
 %\item En caso que sea necesario utilizar vi\~{n}etas, use este formato (vi\~{n}etas cuadradas).
 %\end{itemize}
 
-\chapter{Marco teórico}
+\chapter{Marco teórico}\label{cap:Marco}
 %
 %\section{Black Oil Model}
 
 \section{El medio poroso}
 
-Para entender la física detrás de la simulación de yacimientos de petróleo es necesario revisar el concepto de medio poroso. Un medio poroso puede entenderse como un dominio espacial ocupado parcialmente por un sólido y con una porción ocupada por fluidos a la que se le llama espacio vacío o poroso. Un yacimiento es un medio poroso que ocurre naturalmente, una formación geológica del subsuelo, que, a nivel microscópico, está compuesta por una red de poros que pueden estar interconectados y que almacenan fluidos \citep{Bear2018}.\\
+La física en que se apoya la simulación de yacimientos de petróleo incluye el concepto de medio poroso. Un medio poroso se puede entender como un dominio espacial que ocupa parcialmente un sólido y una porción que ocupan fluidos a la que se le llama espacio vacío o poroso. Un yacimiento es un medio poroso que ocurre naturalmente, una formación geológica del subsuelo, que, a nivel microscópico, se compone por una red de poros que se pueden interconectar y que permiten almacenar fluidos \citep{Bear2018}.\\
 
-La definición de medio poroso se extiende de la definición de un medio continuo. Un medio continuo, es aquel que no pierde sus propiedades al ser cuando se divide infinitamente, es decir, sus propiedades son continuas en todo punto. Sin embargo, esta definición depende del nivel de observación. A nivel microscópico, si se toman medidas de espacio poroso en diferentes puntos, es posible encontrar zonas vacías y otras ocupadas por la roca. Por otro lado, al incrementar el tamaño de la muestra para la medida, es posible notar que las medidas toman valores menos oscilatorios, tal como se muestra en la figura \ref{fig:medioporoso}. El mínimo tamaño de muestra al que el espacio poroso empieza a tomar un valor constante se le llama volumen de elemento representativo (REV) \citep{Bear2018}. El espacio poroso medido en un REV, es lo que se denota porosidad ($\phi$), que corresponde a la capacidad de almacenamiento de fluidos a nivel macroscópico.\\
+La definición de medio poroso se extiende de la definición de un medio continuo. Un medio continuo, es aquel que no pierde sus propiedades cuando se divide infinitamente, es decir, sus propiedades son continuas en todo punto. Sin embargo, esta definición depende del nivel de observación. A nivel microscópico, si se toman medidas de espacio poroso en diferentes puntos, es posible encontrar unas zonas vacías y otras ocupadas por la roca. Por otro lado, al incrementar el tamaño de la muestra para la medida, es posible notar que las medidas toman valores menos oscilatorios, tal como se muestra en la Figura \ref{fig:medioporoso}. El mínimo tamaño de muestra al que el espacio poroso empieza a tomar un valor constante se le llama volumen de elemento representativo (REV, \cite{Bear2018}). El espacio poroso medido en un REV se denota porosidad ($\phi$), que corresponde a la capacidad de almacenamiento de fluidos a nivel macroscópico.\\
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=0.8]{Fig/porous_media.pdf}%
-	\caption[Medio poroso y volumen de elemento representativo.]{Medio poroso y volumen de elemento representativo. Los autores.} \label{fig:medioporoso}
+	\caption[Medio poroso y volumen de elemento representativo.]{Medio poroso y volumen de elemento representativo. Elaboración a partir de \cite{Bear2018}.} \label{fig:medioporoso}
 \end{figure}
 %Adicionalmente, existen gargantas de poro que conectan los poros de la roca, estas gargantas de poro indican la capacidad de la roca de permitir el transporte de los fluidos que puedan existir. La propiedad macroscópica que describe de la capacidad de transportar fluido es la permeabilidad absoluta. La permeabilidad absoluta es una propiedad direccional, es decir que puede variar según la dirección en la que se mida, si la permeabilidad varía su dirección en función del espacio, se dice que el medio es anisotrópico.
 
 \section{Transporte de fluidos en medios porosos}
 
-Los fluidos que se almacenan en el yacimiento, en general, se encuentran en un estado estable, el cuál se ve afectado por la aplicación de diferentes campos actuando sobre el dominio físico (el medio poroso). Así, los fluidos pueden transportarse debido a efectos gravitacionales, cambios de presión, saturación, entre otros.\\ %En esta tesis de maestría se estudia el flujo o transporte dominado por la advección, es decir, el flujo que se da principalmente por gradientes de presión.
+Los fluidos que se almacenan en un yacimiento, en general, se encuentran en un estado estable, el cual se afecta con la aplicación de diferentes campos actuando sobre el dominio físico (el medio poroso). Así, los fluidos se pueden desplazar debido a efectos gravitacionales, cambios de presión y saturación o capilaridad, entre otros.\\ %En esta tesis de maestría se estudia el flujo o transporte dominado por la advección, es decir, el flujo que se da principalmente por gradientes de presión.
 
-El flujo macroscópico de los fluidos se rige por la ley de conservación de momentum en medios porosos o ley de Darcy que se enuncia en la ecuación \ref{ec:DarcyMonofasico}. En esta ley se establece que la velocidad Darcy ($\vec{u}$) de un fluido es proporcional a los gradientes de presión y gravitacionales ($\nabla{\Phi}$ con $\Phi = p - \rho g z$) de un fluido, e inversamente proporcional a su viscosidad ($\mu$). Además, depende de la conductividad del medio poroso, a la cuál, se le denomina permeabilidad absoluta ($\mathbb{K}$).
+El flujo macroscópico de los fluidos se rige por la ley de conservación de momentum en medios porosos o ley de Darcy que se enuncia en la ecuación \ref{ec:DarcyMonofasico}. En esta ley se establece que la velocidad Darcy ($\vec{u}$) de un fluido es proporcional a los gradientes de presión y gravitacionales ($\nabla{\Phi}$ con $\Phi = p + \rho g z$) de un fluido, e inversamente proporcional a su viscosidad ($\mu$). Además, depende de la conductividad del medio poroso, a la cual se le denomina permeabilidad absoluta ($\mathbb{K}$) \citep{Whitaker1986, FANCHI2002108}.
 \begin{align}
 	\label{ec:DarcyMonofasico} & \vec{u}=\frac{\mathbb{K}}{\mu } \left(\nabla{\Phi}\right)	
 \end{align}
@@ -52,22 +52,45 @@ donde $\mathbb{K}(\vec{x},t)$ es una propiedad direccional con $\vec{x}=(x,y,z)$
 	\end{array}\right)
 \end{align}
 
-Lo anterior, aplica para un solo fluido. En el caso de múltiples fluidos ocupando el espacio poroso se usa la ecuación \ref{ec:DarcyMultifasico}. En ésta, se introduce un término de permeabilidad relativa ($kr_{f}(S_{f})$), que depende de la proporción del volumen poroso ocupado por un fluido, el cuál se denomina saturación ($S_{f}$).
+Estas ecuaciones se aplican para un solo fluido. En el caso de múltiples fluidos ocupando el espacio poroso se usa la ecuación \ref{ec:DarcyMultifasico}, en la cual, se introduce un término de permeabilidad relativa ($kr_{f}(S_{f})$), que depende de la fracción del volumen poroso que ocupa un fluido, la cual se denomina saturación ($S_{f}$).
 
 \begin{align}
 \label{ec:DarcyMultifasico} & \vec{u_{f}}=\frac{\mathbb{K}kr_{f}}{\mu_{f} } \nabla{\Phi_{f}}
 \end{align}
 
-\section{Simulación de Yacimientos de Petróleo}
-El dominio de la simulación de petróleo de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico porque apoya procesos industriales y de investigación de nuevas tecnologías \citep{Kelly2015}; los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos.\\
+\subsection{Mojabilidad}
+La mojabilidad mide la preferencia de la superficie de una roca ser mojada por determinado fluido o por una combinación de fluidos (mojabilidad intermedia) \citep{chen2007reservoir}. El fluido de preferencia o fluido mojante se atrapa en los poros más pequeños de la roca, generando una capa del fluido sobre la superficie de la roca \citep{chen2007reservoir}. A la fracción del fluido que se queda atrapado en la roca se le denomina ``saturación irreducible'' ($S_{fc}$) \citep{chen2007reservoir}. \\
 
-La simulación de yacimientos de petróleo se rige por las leyes de conservación de la masa y del momentum. Estas leyes describen la acumulación, transporte, y, fuentes y sumideros de los fluidos como un sistema de ecuaciones diferenciales parciales acopladas para un dominio físico. Solucionar estos sistemas analíticamente, cuando es viable, requiere imponer condiciones que se alejan de los problemas reales \citep{ertekin2001basic}. Por lo tanto, es necesario una solución numérica o simulación. Un modelo de simulación ampliamente utilizado en la industria es el \textit{Black Oil Model}.%, este hace una simplificación de la composición de los hidrocarburos existentes. Solucionar tales ecuaciones requiere discretizar el tiempo y el dominio físico; usar métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. \\ %Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
+\subsubsection{Presión Capilar}
+Cuando existe flujo de dos fluidos, se genera una discontinuidad en la presión de ambos, la cuál se denomina ``presión capilar''. Ésta se calcula como la resta de la presión del ``fluido no mojante'' con la del ``fluido mojante''\citep{chen2007reservoir, FANCHI2002108}. En la Ecuación \ref{ec:presioncapilar} se presenta el cálculo de la ``presión capilar''.
+
+\begin{align}
+	\label{ec:presioncapilar}&p_c = p_{\text{fluido no mojante}} - p_{\text{fluido mojante}}
+\end{align}\\
+
+La presión capilar es función de la saturación de uno de los fluidos que relaciona, según el caso: $p_c(S_{f})$. En el caso de un sistema de tres fluidos, se requieren dos presiones capilares \citep{chen2007reservoir}.
+
+\subsubsection{Permeabilidad Relativa}
+La permeabilidad relativa ($k_{r}$) es una relación o fracción de movimiento de un fluido respecto a otro u otros \citep{chen2007reservoir}. Cuando sólo existen dos fluidos, la permeabilidad relativa es función directa de la saturación del fluido correspondiente ($k_{rf}(S_{f})$). Sin embargo, cuando hay tres o más fluidos, ésta puede depender de otras saturaciones ($k_{rf}(S_{f}, ...)$) \citep{chen2007reservoir}.
+
+Cuando existen tres fluidos en un yacimiento de petróleo, obtener información experimental que relacione la permeabilidad relativa conjunta es difícil. En práctica, lo que se hace es medir permeabilidades relativas entre dos fluidos, es decir, los contactos, e interpolar la permeabilidad del fluido de mojabilidad intermedia entre ellas. \citep{Zuo2014}.\\
+
+Existen múltiples métodos de interpolación para obtener la permeabilidad relativa del fluido con más de un contacto \citep{Delshad1989, Blunt2000, Zuo2014}. Para el desarrollo de esta Tesis de Maestría se usa la interpolación de \cite{Baker1988}, la cuál se muestra en la Ecuación \ref{ec:Baker}.
+
+\begin{align}
+	\label{ec:Baker}&k_{ro}(S_{g}, S_{w}) = \frac{\left(S_{w}-S_{wc}\right)*k_{row} + \left(S_{g}-S_{gc}\right)*k_{rgo}}{\left(S_{w}-S_{wc}\right) + \left(S_{g}-S_{gc}\right)}
+\end{align}\\
+
+En un sistema de agua, gas y petróleo, se obtiene la permeabilidad relativa del petróleo al agua $k_{row}(S_{w})$ y la permeabilidad relativa del petróleo al gas $k_{rgo}(S_{g})$ y se pondera la permeabilidad relativa del petróleo por la saturación del gas y del agua.
+
+\section{Simulación de Yacimientos de Petróleo}
+El dominio de la simulación de petróleo de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico referido a procesos industriales y de investigación de nuevas tecnologías \citep{Kelly2015}; los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos. La simulación de yacimientos de petróleo se rige por las leyes de conservación de la masa y del momentum. En estas leyes se describe la acumulación, transporte, fuentes y sumideros de los fluidos como un sistema de ecuaciones diferenciales parciales acopladas para un dominio físico. La solución analítica de estos sistemas, cuando es viable, requiere condiciones que se alejan de los problemas reales \citep{ertekin2001basic}. Por ello, es necesario una solución numérica o simulación. Un modelo de simulación que se usa en la industria es el \textit{Black Oil Model}.%, este hace una simplificación de la composición de los hidrocarburos existentes. Solucionar tales ecuaciones requiere discretizar el tiempo y el dominio físico; usar métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. \\ %Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
 %Más aún, los resultados de la simulación deben ser contrastados con datos experimentales para verificar su concordancia con el fenómeno físico que modelan.\\
 
 
-\subsection{Modelo Black Oil Extendido}
+\subsection{Modelo \emph{Black Oil} Extendido}
 
-El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a condiciones estándar. En éste, se considera la existencia de tres fluidos en el medio poroso: aceite, gas y agua. En el BOM, se asume que el aceite o petróleo, está a condiciones de barril estándar, es decir, a presión y temperatura atmosférica. Además, se supone que no existen variaciones considerables en la composición del aceite y del gas \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. En éste modelo se considera que puede existir una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''. Las ecuaciones de conservación de volumen del BOM se presentan en \ref{ec:aceite}, \ref{ec:gas}, \ref{ec:agua}.
+El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a condiciones estándar, en el cual, se considera la existencia de tres fluidos en el medio poroso: aceite, gas y agua. En el BOM, se asume que el aceite o petróleo tiene condiciones de barril estándar, es decir, presión y temperatura atmosférica \citep{chen2007reservoir}. Además, se supone que no existen variaciones considerables en la composición del aceite y del gas \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. En éste modelo se considera que puede existir una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''. Las siguientes son las ecuaciones de conservación de volumen del BOM \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}.
 
 \begin{align}
 \label{ec:aceite}
@@ -79,9 +102,23 @@ El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a con
 \label{ec:agua}
 \text{agua: }&\frac{\partial}{\partial t} \left[\phi \left( \frac{S_{w}}{B_{w}} \right) \right] - \nabla \cdot \left( \frac{1}{B_{w}} \vec{u_{w}} \right) + \tilde{q}_{w} = 0 
 \end{align}
-donde $\vec{u_{f}}$ corresponde a la velocidad Darcy, y, $\tilde{q}_{f}$ a los aportes de fuentes y sumideros, que posteriormente se modelan como pozos, para el fluido $f = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $.\\
+donde $\vec{u_{f}}$ corresponde a la velocidad Darcy y $\tilde{q}_{f}$ a los aportes de fuentes y sumideros, que posteriormente se modelan como pozos, para el fluido $f = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $.\\
 
-En el BOM se establece, también, que los fluidos tienen una compresibilidad, es decir que cambian su volumen debido a cambios de presión o transferencia de masa a otros fluidos (gas). La propiedad que se asocia a ese cambio de volumen es el factor volumétrico ($B_{f}$).
+En el BOM se establece, también, que los fluidos tienen una compresibilidad, es decir que cambian su volumen y densidad debido a cambios de presión o transferencia de masa a otros fluidos (gas). La propiedad que se asocia a ese cambio de volumen es el factor volumétrico ($B_{f}$ \citep{chen2007reservoir}).\\
+
+Para calcular las densidades del gas y del aceite en el BOM extendido, que se requieren en el cálculo de potencial de cada fluido, se tiene en cuenta la masa existente de aceite en el gas y viceversa. Para esto, se mide una densidad a condiciones estándar (condiciones a las cuales el gas y el aceite no son miscibles) y se aplican la siguientes ecuaciones:
+
+\begin{align}
+	\label{ec:oildensity}&\rho_{o} = \frac{\rho_{o,sc} + Rs*\rho_{g,sc}}{B_{o}}\\
+	\label{ec:gasdensity}&\rho_{g} = \frac{\rho_{g,sc} + Rv*\rho_{o,sc}}{B_{g}}\\
+	\label{ec:watdensity}&\rho_{w} = \frac{\rho_{w,sc}}{B_{w}}
+\end{align}
+
+Cabe anotar que no se considera existencia de masa de ningún fluido en el agua, por lo que su densidad sólo depende de su factor volumétrico ($B_{w}$) y su densidad a condiciones estándar.
+
+
+
+
 
 (Poner suposiciones del \textit{Black Oil})
 
@@ -93,7 +130,7 @@ En el BOM se establece, también, que los fluidos tienen una compresibilidad, es
 
 \subsection{Condiciones iniciales}
 
-En el desarrollo de esta Tesis de Maestría, se consideran yacimientos con condiciones de borde cerradas o Neumann cero para todas las fronteras. Es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores. En la figura \ref{fig:empanada} se ejemplifica un yacimiento con condiciones de borde cerradas.\\
+En el desarrollo de esta Tesis de Maestría, se consideran yacimientos con condiciones de borde cerradas o Neumann cero para todas las fronteras, es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores. En la Figura \ref{fig:empanada} se ejemplifica un yacimiento con condiciones de borde cerradas.\\
 
 \begin{figure}[h]
 	\centering%
@@ -112,7 +149,7 @@ Es decir, existe funciones en el espacio que describen las condiciones iniciales
 
 \subsection{Discretización}
 
-Se elije el método de los volúmenes finitos para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
+Se elige el método de los volúmenes finitos para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
 %Algebraic Equations
 \begin{align}
 \label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi^{t}_{i} \left( \frac{S_{o,i}^{t}}{B_{o,i}^{t}} + \frac{Rv_{i}^{t}S_{g,i}^{t}}{B_{g,i}^{t}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Aceite}} + 
@@ -135,19 +172,21 @@ dónde:
 	\phi^{n+1}_{i} \left( \frac{S_{w,i}^{n+1}}{B_{w,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{w,i}^{n}}{B_{w,i}^{n}}\right)
 \end{align*}
 
-El término $T_{f,c}$ en la ecuación \ref{ec:Transmissibity} corresponde a la transmisividad en una cara $c$ que conecta una celda $i$ con otra celda $j$.
+El término $T_{f,c}$ en la Ecuación \ref{ec:Transmissibity} corresponde a la transmisividad en una cara $c$ que conecta una celda $i$ con otra celda $j$.
 
 \begin{align}
 	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{1}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{kr_{f,c}}{\mu_{f,c}B_{f,c}}
 \end{align}
 \subsection{Modelado de Pozos}
 %
-Al establecer condiciones de frontera cerradas es necesario perforar pozos para generar diferencias de presión que induzcan al transporte de los hidrocarburos presentes en el yacimiento. Los pozos tienen dos tipos, inyector o productor.
+Los pozos son el principal objeto de estudio de la simulación de yacimientos de petróleo, debido a que 
+
+Al establecer condiciones de frontera cerradas es necesario perforar pozos para generar diferencias de presión que induzcan al transporte de los hidrocarburos presentes en el yacimiento. Los pozos tienen dos tipos, inyector o productor. Los pozos se forman por un conjunto vertical de bloques perforados en los que existe un flujo radial (Peaceman...).
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=0.8]{Fig/pozo_multi_perf.pdf}%
-	\caption[Esquemático de pozo multiperforado.]{Esquemático de pozo multiperforado. Los autores.} \label{fig:mulperfwell}
+	\caption[Esquemático de pozo multiperforado.]{Esquemático de pozo multiperforado. Elaboración a partir de ...} \label{fig:mulperfwell}
 \end{figure}
 
 \begin{align}
@@ -156,12 +195,12 @@ Al establecer condiciones de frontera cerradas es necesario perforar pozos para 
 %
 \subsection{Método de Newton-Raphson}
 %
-El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal. Por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximándose por su derivada, como se ilustra en la imagen \ref{fig:NewtonR}.\\
+El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal \hl{aproximando su derivada}, como se ilustra en la Figura \ref{fig:NewtonR}.\\
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=0.8]{Fig/NewtonR.pdf}%
-	\caption[Aproximación a la derivada de una función.]{Aproximación a la derivada de una función. Los autores.} \label{fig:NewtonR}
+	\caption[Aproximación a la derivada de una función.]{Aproximación a la derivada de una función. Elaboración a partir de .} \label{fig:NewtonR}
 \end{figure}
 ~\\
 \begin{equation}
@@ -183,12 +222,14 @@ J^k_{i,j}=\frac{\partial R^k_i}{\partial x^k_j}
 
 %\subsection{Modelamiento del Químico}
 
+%\section{Procesos de Recobro Mejorado}
+
 \section{Esquemas Preconceptuales}
 
-Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el lenguaje natural y un esquema conceptual o un lenguaje formal. Estos esquemas contienen todo el dominio de aplicación de un interesado, y por tanto, sirven para establecer un punto común de entendimiento entre un interesado y un analista de software \citep{zapata2007phd}. Los EP se desarrollan con la idea de mantener la coherencia y consistencia entre el discurso del interesado y el software que se desarrolla. 
+Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el lenguaje natural y un esquema conceptual o un lenguaje formal. Estos esquemas contienen todo el dominio de aplicación de un interesado y, por tanto, sirven para establecer un punto común de entendimiento entre un interesado y un analista de software \citep{zapata2007phd}. Los EP se desarrollan con la idea de mantener la coherencia y consistencia entre el discurso del interesado y el software que se desarrolla. 
 
 \subsection{Elementos del Esquema Preconceptual}
-\cite{zapata2012unc} define los elementos del EP tal como se observa en la figura \ref{fig:InitialPS} para la representación del dominio del interesado. Estos elementos se dividen en cuatro categorías: nodos, relaciones, enlaces, y aglutinadores.\\
+\cite{zapata2012unc} define los elementos del EP tal como se observa en la Figura \ref{fig:InitialPS} para la representación del dominio del interesado. Estos elementos se dividen en cuatro categorías: nodos, relaciones, enlaces, y aglutinadores.\\
 
 \begin{figure}[h]
 	\centering%
@@ -199,11 +240,11 @@ Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el leng
 \subsubsection{Nodos}
 \begin{itemize}
 	\item \textbf{Concepto}:
-	Los conceptos son sustantivos o sintagmas nominales que representan un actor u objeto dentro del dominio del interesado, se subclasifican en conceptos clase y conceptos hoja, según su jerarquía \citep{zapata2007phd,zapata2012unc}. %En la figura \ref{fig:PS_Concept} se muestra la representación. Un ejemplo de su uso se presenta en la figura \ref{fig:ej_concept}.
+	sustantivo o sintagma nominal que representa un actor u objeto dentro del dominio del interesado. Se subclasifican en conceptos clase y conceptos hoja, según su jerarquía \citep{zapata2007phd,zapata2012unc}. %En la figura \ref{fig:PS_Concept} se muestra la representación. Un ejemplo de su uso se presenta en la figura \ref{fig:ej_concept}.
 	
-	\item \textbf{Condicional}: Los condicionales establecen cuando ejecutar una relación dinámica o una especificación a partir de una expresión lógica formada por conceptos o variables, operadores, y valores o parámetros \citep{zapata2007phd,zapata2012unc}. %como se muestra en la figura \ref{fig:}
+	\item \textbf{Condicional}: condición para ejecutar una relación dinámica o una especificación a partir de una expresión lógica formada por conceptos o variables, operadores, y valores o parámetros \citep{zapata2007phd,zapata2012unc}. %como se muestra en la figura \ref{fig:}
 	
-	\item \textbf{Operador}: Los operadores son símbolos lógicos o matemáticos que sirven para formar expresiones a evaluar \citep{zapata2012unc}.
+	\item \textbf{Operador}: símbolo lógico o matemático que sirve para formar expresiones a evaluar \citep{zapata2012unc}.
 	
 	\item \textbf{Asignación}: Sirve para asignar el valor que resulta de una expresión matemática o lógica \citep{zapata2012unc}.
 	
@@ -212,8 +253,8 @@ Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el leng
 
 \subsubsection{Relaciones}
 \begin{itemize}
-	\item \textbf{Relación Estructural}: Relaciones permanentes entre dos conceptos, se asocian a los verbos ``ser'' o ``tener'' y establecen generalización o agregación, respectivamente \citep{zapata2007phd,zapata2012unc}.
-	\item \textbf{Relación Dinámica}: Se asocian a verbos que denotan acción u operaciones que modifican el dominio de estudio, establecen relaciones transitorias entre el concepto ejecutor de la acción con el concepto objeto de dicha acción \citep{zapata2007phd,zapata2012unc}.
+	\item \textbf{Relación Estructural}: Relación permanente entre dos conceptos. Se asocia con los verbos ``ser'' o ``tener'', y que significan generalización o agregación, respectivamente \citep{zapata2007phd,zapata2012unc}.
+	\item \textbf{Relación Dinámica}: Se asocia con verbos que denotan acción u operaciones que modifican el dominio de estudio; permite establecer relaciones transitorias entre el concepto ejecutor de la acción y el concepto objeto de dicha acción \citep{zapata2007phd,zapata2012unc}.
 	\item \textbf{Relación Eventual}: Se relaciona con un verbo que denota ocurrencia, el cuál no se asocia a un concepto ejecutor. \citep{zapata2012unc,norena2018Ling}.
 \end{itemize}
 
@@ -237,7 +278,7 @@ Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el leng
 
 \subsection{Esquemas Preconceptuales en el contexto del software científico}
 
-\cite{JCalle, norena2018det} descubren la capacidad del EP para representar aplicaciones en el contexto del software científico. Para ello, definen elementos adicionales que permiten modelar dominios de mayor complejidad. En esta Tesis de Maestría se usan las condiciones iniciales, conceptos tipo arreglo, parámetros, variables, vectores, operadores predefinidos, operador ``push'', operador ``type'',  y funciones definidas por el analista. En la figura \ref{fig:NewElements} se presenta la representación de los elementos previamente mencionados. A continuación, se explican los elementos adicionales que se usan en el desarrollo de esta tesis.
+\cite{JCalle} y \cite{norena2018det} descubren la capacidad del EP para representar aplicaciones en el contexto del software científico. Para ello, definen elementos adicionales que permiten modelar dominios de mayor complejidad. En esta Tesis de Maestría se usan las condiciones iniciales, conceptos tipo arreglo, parámetros, variables, vectores, operadores predefinidos, operador ``\textit{push}'', operador ``\textit{type}'',  y funciones que define el analista. En la Figura \ref{fig:NewElements} se representan los elementos previamente mencionados. A continuación, se explican los elementos adicionales que se usan en el desarrollo de esta Tesis de Maestría.
 
 \begin{figure}[h]
 	\centering%
@@ -246,25 +287,25 @@ Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el leng
 \end{figure}
 
 \subsubsection{Condiciones Iniciales}
-Las condiciones iniciales son una especificación, de variables y parámetros globales, que se conoce desde el inicio de la simulación \citep{norena2018det}. Un ejemplo de uso se presenta en la figura \ref{fig:EjInitialConditions}.
+Las condiciones iniciales son especificaciones, de variables y parámetros globales, que se conoce desde el inicio de la simulación \citep{norena2018det}. Un ejemplo de uso se presenta en la Figura \ref{fig:EjInitialConditions}.
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/EjInitialConditions.pdf}%
-	\caption[Condiciones Iniciales.]{Condiciones Iniciales. Los autores.} \label{fig:EjInitialConditions}
+	\caption[Ejemplo de Condiciones Iniciales.]{Ejemplo de Condiciones Iniciales. Los autores.} \label{fig:EjInitialConditions}
 \end{figure}
 
 \subsubsection{Concepto tipo arreglo}
-Los conceptos tipo arreglo permiten almacenar de manera permanente múltiples valores, y a su vez, iterar sobre ellos \citep{JCalle}. En esta tesis de maestría se usan conceptos tipo arreglos multidimensionales. En la figura \ref{fig:EjArrConcept} se expone un ejemplo de su uso.
+Los conceptos tipo arreglo permiten almacenar de manera permanente múltiples valores, y a su vez, iterar sobre ellos \citep{JCalle}. En esta Tesis de Maestría se usan conceptos tipo arreglos multidimensionales. En la Figura \ref{fig:EjArrConcept} se expone un ejemplo de su uso.
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=1]{Fig/EjArrConcepts.pdf}%
-	\caption[Conceptos tipo arreglo.]{Conceptos tipo arreglo. Los autores.} \label{fig:EjArrConcept}
+	\caption[Ejemplo de Conceptos tipo arreglo.]{Ejemplo de Conceptos tipo arreglo. Los autores.} \label{fig:EjArrConcept}
 \end{figure}
 
 \subsubsection{Parámetro}
-Los parámetros se usan para almacenar constantes o definir entradas en la especificación de relaciones dinámicas, especificaciones de tipo marco y, funciones, que reciben múltiples argumentos o parámetros \citep{JCalle, norena2018det}. Se expone un ejemplo de uso en \ref{fig:EjParameter}.\\
+Los parámetros se usan para almacenar constantes o definir entradas en la especificación de relaciones dinámicas, especificaciones de tipo marco y funciones, que reciben múltiples argumentos o parámetros \citep{JCalle, norena2018det}. Se expone un ejemplo de uso en la Figura \ref{fig:EjParameter}.\\
 
 \begin{figure}[h]
 	\centering%
@@ -273,10 +314,10 @@ Los parámetros se usan para almacenar constantes o definir entradas en la espec
 \end{figure}
 
 \subsubsection{Variable Independiente}
-Las variables independientes permiten almacenar valores durante la ejecución de una especificación sin estar acopladas a un concepto. Si se definen en las condiciones iniciales, se pueden usan de manera global durante toda la simulación \citep{norena2018det}. En la figura \ref{fig:EjInitialConditions} se pueden ver ejemplos de variables independientes.\\
+Las variables independientes permiten almacenar valores durante la ejecución de una especificación sin estar acopladas a un concepto. Si se definen en las condiciones iniciales, se pueden usan de manera global durante toda la simulación \citep{norena2018det}. En la Figura \ref{fig:EjInitialConditions} se pueden ver ejemplos de variables independientes.\\
 
 \subsubsection{Vector independiente}
-Los vectores independientes cumplen la misma tarea y propiedades de las variables independientes pero permiten almacenar más de un valor \citep{norena2018det}. Un ejemplo de vector independiente se presenta en \ref{fig:EjVector}.
+Los vectores independientes cumplen la misma tarea y propiedades de las variables independientes, pero permiten almacenar más de un valor \citep{norena2018det}. Un ejemplo de vector independiente se presenta en la Figura \ref{fig:EjVector}.
 
 \begin{figure}[h]
 	\centering%
@@ -287,12 +328,12 @@ Los vectores independientes cumplen la misma tarea y propiedades de las variable
 \subsubsection{Operadores Predefinidos}
 Son funciones algebraicas y trigonométricas predefinidas que se pueden usar como operadores en el EP \citep{JCalle}.
 
-\subsubsection{Operador Push}
-El operador Push sirve para insertar, valores, conceptos o parámetros dentro de un concepto tipo arreglo, el elemento que se inserta queda en la última posición del arreglo  \citep{JCalle}.
+\subsubsection{Operador \textit{Push}}
+El operador \textit{Push} sirve para insertar, valores, conceptos o parámetros dentro de un concepto tipo arreglo, el elemento que se inserta queda en la última posición del arreglo  \citep{JCalle}.
 \subsubsection{Operador Type}
-El operador Type tiene dos versiones, una como operador de asignación y otro como operador de información. En el caso de la asignación, sirve para otorgarle el tipo de una subclase a un concepto. Mientras que en el de información, consulta si el tipo del concepto corresponde con el tipo de una subclase definida \citep{JCalle}.
-\subsubsection{Funciones definidas por el analista}
-Las funciones definidas por el analista son especificaciones reutilizables en el EP a modo de un operador personalizado cuyo nombre define el analista. Éstas funciones llevan en su especificación un concepto ``return'' que corresponde al valor que devuelve la función al ser usada como operador \citep{JCalle}. En la figura \ref{fig:Potencial} se presenta un ejemplo de definición y uso de una función definida por el analista.
+El operador \textit{Type} tiene dos versiones: una como operador de asignación y otra como operador de información. En el caso de la asignación, sirve para otorgarle el tipo de una subclase a un concepto. Mientras que en el de información, permite consultar si el tipo del concepto corresponde con el tipo de una subclase definida \citep{JCalle}.
+\subsubsection{Funciones que define el analista}
+Las funciones que define el analista son especificaciones reutilizables en el EP a modo de un operador personalizado cuyo nombre define el analista. Estas funciones llevan en su especificación un concepto ``\textit{return}'' que corresponde al valor que devuelve la función cuando se usa como operador \citep{JCalle}. En la figura \ref{fig:Potencial} se presenta un ejemplo de definición y uso de una función que define el analista.
 
 \begin{figure}[h]
 	\centering%
@@ -300,3 +341,5 @@ Las funciones definidas por el analista son especificaciones reutilizables en el
 	\caption[Ejemplo de función, cálculo del potencial.]{Ejemplo de función, cálculo del potencial. Los autores.} \label{fig:Potencial}
 \end{figure}
 
+\subsection{Modelo Ejecutable}
+Un modelo ejecutable es una abstracción que permite describir y definir la conceptualización y comportamiento de un dominio real o hipotético de estudio. Además, cuentan con semánticas que permiten definir acciones \citep{ExecutableUML}. El EP se enmarca dentro de esta definición, puesto que los EP ejecutables tienen elementos que permiten representar acciones que se procesan internamente en el modelo \citep{JChaverra}. 
