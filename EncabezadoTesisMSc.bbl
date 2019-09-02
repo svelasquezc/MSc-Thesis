@@ -169,6 +169,12 @@ Nore\~{n}a, P., Zapata, C., y Villamizar, A. (2018).
 \newblock {\em Investigaci\'{o}n e innovaci\'{o}n en Ingenier\'{i}a de
   Software}, 2:69--79.
 
+\bibitem[\protect\astroncite{Peaceman}{1983}]{peaceman1983interpretation}
+Peaceman, D.~W. (1983).
+\newblock Interpretation of well-block pressures in numerical reservoir
+  simulation with nonsquare grid blocks and anisotropic permeability.
+\newblock {\em Society of Petroleum Engineers Journal}, 23(03):531--543.
+
 \bibitem[\protect\astroncite{Qiao \textit{et~al.}}{2017}]{Qiao2017}
 Qiao, C., Khorsandi, S., y Johns, R.~T. (2017).
 \newblock {A General Purpose Reservoir Simulation Framework for Multiphase
@@ -186,6 +192,10 @@ Solano, H., Valencia, J., Mej{\'\i}a, J., y Ocampo, A. (2019).
 Stephen J.~Mellor, M. J.~B. (2002).
 \newblock {\em Executable UML: A Foundation for Model-Driven Architecture}.
 \newblock Addison-Wesley Professional.
+
+\bibitem[\protect\astroncite{Takhanov}{2011}]{takhanov2011forchheimer}
+Takhanov, D. (2011).
+\newblock Forchheimer model for non-darcy flow in porous media and fractures.
 
 \bibitem[\protect\astroncite{Valencia}{2016}]{ValenciaJD2016}
 Valencia, J. (2016).

@@ -59,7 +59,7 @@ Estas ecuaciones se aplican para un solo fluido. En el caso de múltiples fluido
 \end{align}
 
 \subsection{Mojabilidad}
-La mojabilidad mide la preferencia de la superficie de una roca ser mojada por determinado fluido o por una combinación de fluidos (mojabilidad intermedia) \citep{chen2007reservoir}. El fluido de preferencia o fluido mojante se atrapa en los poros más pequeños de la roca, generando una capa del fluido sobre la superficie de la roca \citep{chen2007reservoir}. A la fracción del fluido que se queda atrapado en la roca se le denomina ``saturación irreducible'' ($S_{fc}$) \citep{chen2007reservoir}. \\
+La mojabilidad mide la preferencia de la superficie de una roca a ser mojada por determinado fluido o por una combinación de fluidos (mojabilidad intermedia) \citep{chen2007reservoir}. El fluido de preferencia o ``fluido mojante'' se atrapa en los poros más pequeños de la roca, generando una capa del fluido sobre la superficie de la roca \citep{chen2007reservoir}. A la fracción del fluido que se queda atrapado en la roca se le denomina ``saturación irreducible'' ($S_{fc}$) \citep{chen2007reservoir}. \\
 
 \subsubsection{Presión Capilar}
 Cuando existe flujo de dos fluidos, se genera una discontinuidad en la presión de ambos, la cuál se denomina ``presión capilar''. Ésta se calcula como la resta de la presión del ``fluido no mojante'' con la del ``fluido mojante''\citep{chen2007reservoir, FANCHI2002108}. En la Ecuación \ref{ec:presioncapilar} se presenta el cálculo de la ``presión capilar''.
@@ -81,14 +81,14 @@ Existen múltiples métodos de interpolación para obtener la permeabilidad rela
 	\label{ec:Baker}&k_{ro}(S_{g}, S_{w}) = \frac{\left(S_{w}-S_{wc}\right)*k_{row} + \left(S_{g}-S_{gc}\right)*k_{rgo}}{\left(S_{w}-S_{wc}\right) + \left(S_{g}-S_{gc}\right)}
 \end{align}\\
 
-En un sistema de agua, gas y petróleo, se obtiene la permeabilidad relativa del petróleo al agua $k_{row}(S_{w})$ y la permeabilidad relativa del petróleo al gas $k_{rgo}(S_{g})$ y se pondera la permeabilidad relativa del petróleo por la saturación del gas y del agua.
+En un sistema de agua, gas y petróleo, se obtiene la permeabilidad relativa del petróleo al agua $k_{row}(S_{w})$ y la permeabilidad relativa del petróleo al gas $k_{rgo}(S_{g})$ y se pondera la permeabilidad relativa del petróleo por la saturación del gas y del agua \citep{Baker1988}.
 
 \section{Simulación de Yacimientos de Petróleo}
 El dominio de la simulación de petróleo de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico referido a procesos industriales y de investigación de nuevas tecnologías \citep{Kelly2015}; los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos. La simulación de yacimientos de petróleo se rige por las leyes de conservación de la masa y del momentum. En estas leyes se describe la acumulación, transporte, fuentes y sumideros de los fluidos como un sistema de ecuaciones diferenciales parciales acopladas para un dominio físico. La solución analítica de estos sistemas, cuando es viable, requiere condiciones que se alejan de los problemas reales \citep{ertekin2001basic}. Por ello, es necesario una solución numérica o simulación. Un modelo de simulación que se usa en la industria es el \textit{Black Oil Model}.%, este hace una simplificación de la composición de los hidrocarburos existentes. Solucionar tales ecuaciones requiere discretizar el tiempo y el dominio físico; usar métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. \\ %Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
 %Más aún, los resultados de la simulación deben ser contrastados con datos experimentales para verificar su concordancia con el fenómeno físico que modelan.\\
 
 
-\subsection{Modelo \emph{Black Oil} Extendido}
+\subsection[Modelo \emph{Black Oil} Extendido]{Modelo {\normalfont \bfseries \itshape Black Oil} Extendido}
 
 El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a condiciones estándar, en el cual, se considera la existencia de tres fluidos en el medio poroso: aceite, gas y agua. En el BOM, se asume que el aceite o petróleo tiene condiciones de barril estándar, es decir, presión y temperatura atmosférica \citep{chen2007reservoir}. Además, se supone que no existen variaciones considerables en la composición del aceite y del gas \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. En éste modelo se considera que puede existir una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''. Las siguientes son las ecuaciones de conservación de volumen del BOM \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}.
 
@@ -104,9 +104,9 @@ El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a con
 \end{align}
 donde $\vec{u_{f}}$ corresponde a la velocidad Darcy y $\tilde{q}_{f}$ a los aportes de fuentes y sumideros, que posteriormente se modelan como pozos, para el fluido $f = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $.\\
 
-En el BOM se establece, también, que los fluidos tienen una compresibilidad, es decir que cambian su volumen y densidad debido a cambios de presión o transferencia de masa a otros fluidos (gas). La propiedad que se asocia a ese cambio de volumen es el factor volumétrico ($B_{f}$ \citep{chen2007reservoir}).\\
+En el BOM se establece, también, que los fluidos tienen una compresibilidad, es decir que cambian su volumen y densidad debido a cambios de presión o transferencia de masa a otros fluidos (gas). La propiedad que se asocia a ese cambio de volumen es el factor volumétrico ($B_{f}$) \citep{chen2007reservoir}.\\
 
-Para calcular las densidades del gas y del aceite en el BOM extendido, que se requieren en el cálculo de potencial de cada fluido, se tiene en cuenta la masa existente de aceite en el gas y viceversa. Para esto, se mide una densidad a condiciones estándar (condiciones a las cuales el gas y el aceite no son miscibles) y se aplican la siguientes ecuaciones:
+Para calcular las densidades del gas y del aceite en el BOM extendido, que se requieren en el cálculo de potencial de cada fluido, se tiene en cuenta la masa existente de aceite en el gas y viceversa. Para esto, se mide una densidad a condiciones estándar y se aplican la siguientes ecuaciones:
 
 \begin{align}
 	\label{ec:oildensity}&\rho_{o} = \frac{\rho_{o,sc} + Rs*\rho_{g,sc}}{B_{o}}\\
@@ -116,11 +116,14 @@ Para calcular las densidades del gas y del aceite en el BOM extendido, que se re
 
 Cabe anotar que no se considera existencia de masa de ningún fluido en el agua, por lo que su densidad sólo depende de su factor volumétrico ($B_{w}$) y su densidad a condiciones estándar.
 
+En la versión del \textit{Black Oil Model} que se usa en esta Tesis de Maestría se asume lo siguiente:
+\begin{itemize}
+	\item La ley de Darcy es aplicable al tipo de flujo (Número de Reynolds $\le$ 1) \citep{takhanov2011forchheimer}.
+	\item El yacimiento está en un estado 
+\end{itemize}
 
 
-
-
-(Poner suposiciones del \textit{Black Oil})
+%(Poner suposiciones del \textit{Black Oil})
 
 %\begin{equation*}
 %\vec{u_{f}}=\frac{\mathbb{K}kr_{f}}{\mu_{f} } \nabla{\Phi_{f}}
@@ -179,23 +182,21 @@ El término $T_{f,c}$ en la Ecuación \ref{ec:Transmissibity} corresponde a la t
 \end{align}
 \subsection{Modelado de Pozos}
 %
-Los pozos son el principal objeto de estudio de la simulación de yacimientos de petróleo, debido a que 
-
-Al establecer condiciones de frontera cerradas es necesario perforar pozos para generar diferencias de presión que induzcan al transporte de los hidrocarburos presentes en el yacimiento. Los pozos tienen dos tipos, inyector o productor. Los pozos se forman por un conjunto vertical de bloques perforados en los que existe un flujo radial (Peaceman...).
+Los pozos son el principal objeto de estudio de la simulación de yacimientos de petróleo debido a que en ellos se concentra el propósito de cualquier operación de campo. Los pozos tienen dos tipos, inyector o productor, y se forman por un conjunto de bloques perforados en los que existe un flujo radial \citep{peaceman1983interpretation}. El cálculo que \cite{peaceman1983interpretation} describe para flujo en pozos con varias capas de perforados se muestra en la Ecuación \ref{ec:peaceman}. En la Figura \ref{fig:mulperfwell} se ilustra un pozo vertical con múltiples perforados.
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=0.8]{Fig/pozo_multi_perf.pdf}%
-	\caption[Esquemático de pozo multiperforado.]{Esquemático de pozo multiperforado. Elaboración a partir de ...} \label{fig:mulperfwell}
+	\caption[Esquemático de pozo multiperforado.]{Esquemático de pozo multiperforado. Elaboración a partir de \cite{chen2007reservoir}} \label{fig:mulperfwell}
 \end{figure}
 
 \begin{align}
-	q^{(v)} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi\rho\sqrt{k_{xx}k_{yy}}h_{z}}{\mu\left(r_{e}/r_{w} +s\right)}\left(p_{bh}^{(v)}-p_{m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
+	\label{ec:peaceman}&q^{(v)}_{f} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi\rho_{f} \sqrt{k_{xx}k_{yy}}h_{z}}{\mu_{f}\left(r_{e}/r_{w} +s\right)}\left(p_{bh}^{(v)}-p_{f,m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
 \end{align}
 %
 \subsection{Método de Newton-Raphson}
 %
-El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal \hl{aproximando su derivada}, como se ilustra en la Figura \ref{fig:NewtonR}.\\
+El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximando su derivada, como se ilustra en la Figura \ref{fig:NewtonR}.\\
 
 \begin{figure}[h]
 	\centering%
@@ -218,9 +219,10 @@ J^k_{i,j}=\frac{\partial R^k_i}{\partial x^k_j}
 \begin{equation}
 \frac{\partial R^k}{\partial x^k} \approx \frac{R\left(x^k + \xi \right) - R\left(x^k \right)}{\xi}
 \end{equation}
-%\section{Procesos de Recobro Mejorado}
 
-%\subsection{Modelamiento del Químico}
+\section{Procesos de Recobro Mejorado}
+
+\subsection{Modelado del Químico}
 
 %\section{Procesos de Recobro Mejorado}
 
@@ -328,9 +330,9 @@ Los vectores independientes cumplen la misma tarea y propiedades de las variable
 \subsubsection{Operadores Predefinidos}
 Son funciones algebraicas y trigonométricas predefinidas que se pueden usar como operadores en el EP \citep{JCalle}.
 
-\subsubsection{Operador \textit{Push}}
+\subsubsection[Operador \emph{Push}]{Operador {\normalfont \bfseries \itshape Push}}
 El operador \textit{Push} sirve para insertar, valores, conceptos o parámetros dentro de un concepto tipo arreglo, el elemento que se inserta queda en la última posición del arreglo  \citep{JCalle}.
-\subsubsection{Operador Type}
+\subsubsection[Operador \emph{Type}]{Operador {\normalfont \bfseries \itshape Type}}
 El operador \textit{Type} tiene dos versiones: una como operador de asignación y otra como operador de información. En el caso de la asignación, sirve para otorgarle el tipo de una subclase a un concepto. Mientras que en el de información, permite consultar si el tipo del concepto corresponde con el tipo de una subclase definida \citep{JCalle}.
 \subsubsection{Funciones que define el analista}
 Las funciones que define el analista son especificaciones reutilizables en el EP a modo de un operador personalizado cuyo nombre define el analista. Estas funciones llevan en su especificación un concepto ``\textit{return}'' que corresponde al valor que devuelve la función cuando se usa como operador \citep{JCalle}. En la figura \ref{fig:Potencial} se presenta un ejemplo de definición y uso de una función que define el analista.
@@ -341,5 +343,5 @@ Las funciones que define el analista son especificaciones reutilizables en el EP
 	\caption[Ejemplo de función, cálculo del potencial.]{Ejemplo de función, cálculo del potencial. Los autores.} \label{fig:Potencial}
 \end{figure}
 
-\subsection{Modelo Ejecutable}
+\section{Modelo Ejecutable}
 Un modelo ejecutable es una abstracción que permite describir y definir la conceptualización y comportamiento de un dominio real o hipotético de estudio. Además, cuentan con semánticas que permiten definir acciones \citep{ExecutableUML}. El EP se enmarca dentro de esta definición, puesto que los EP ejecutables tienen elementos que permiten representar acciones que se procesan internamente en el modelo \citep{JChaverra}. 

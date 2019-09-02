@@ -20,8 +20,13 @@
 \usepackage{longtable}
 \usepackage{float}
 \usepackage{multirow}
-%\usepackage{pdfcrop}
+
+%\usepackage{titlesec}
+
 \usepackage{soul, color}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{latexsym}
 
 \usepackage{listings}
 \usepackage{xcolor}
@@ -94,11 +99,15 @@
 
 %\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
 \cleardoublepage
+\addcontentsline{toc}{chapter}{Contenido} % para que aparezca en el indice de contenidos
+\tableofcontents % indice de contenido
+
 \addcontentsline{toc}{chapter}{Lista de figuras} % para que aparezca en el indice de contenidos
 \listoffigures % indice de figuras
 
 \addcontentsline{toc}{chapter}{Lista de tablas} % para que aparezca en el indice de contenidos
 \listoftables % indice de tablas
+
 
 %\include{Tab_Simbolos/TabSimbolosMSc}
 %\include{Resumen}%\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
