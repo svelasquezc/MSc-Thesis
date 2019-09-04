@@ -16,7 +16,7 @@
 @mastersthesis{JCalle,
 	month = {Noviembre},
 	title = {Identificaci{\'o}n de patrones de dise{\~n}o para software cient{\'i}fico a partir de esquemas preconceptuales},
-	school = {Universidad Nacional de Colombia - Sede Medell{\'i}n},
+	school = {Universidad Nacional de Colombia, Sede Medell{\'i}n},
 	author = {Calle, J.M.},
 	year = {2016},
 	note = {L{\'i}nea de Investigaci{\'o}n: Ingenier{\'i}a de software},
@@ -83,16 +83,19 @@
 
 @book{jamal2006petroleum,
 	title={Petroleum reservoir simulation: a Basic Approach},
-	author={Abou-Kassem, J,H and Farouq-Ali, S.M. and  Rafiqul Islam, M. and others},
+	author={Abou-Kassem, J.H. and Farouq-Ali, S.M. and Islam, M.R.},
 	year={2006},
 	publisher={Gulf Publishing Company}
 }
 
 @book{ertekin2001basic,
-	title={Basic applied reservoir simulation},
-	author={Ertekin, Turgay and Abou-Kassem, Jamal H and King, Gregory R},
-	number={Sirsi) i9781555630898},
-	year={2001}
+	author = {Ertekin, Turgay. and Abou-Kassem, Jamal H. and King, Gregory R.},
+	isbn = {1-55563-089-8},
+	pages = {406},
+	publisher = {Society of Petroleum Engineers},
+	title = {{Basic Applied Reservoir Simulation}},
+	url = {https://store.spe.org/Basic-Applied-Reservoir-Simulation--P12.aspx},
+	year = {2001}
 }
 
 @book{ryaben2006theoretical,
@@ -513,22 +516,18 @@
 
 @phdthesis{Cao2002,
 	author = {Cao, H},
-	file = {:C$\backslash$:/Users/steve/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Cao - 2002 - Development of Techniques for General Purpose Research Simulator.pdf:pdf},
 	number = {June},
 	publisher = {Ph. D. Thesis, Stanford University},
 	title = {{Development of Techniques for General Purpose Research Simulator}},
+	school={Stanford University. Stanford, CA}
 	year = {2002}
 }
-@article{DeBaun2005,
-	abstract = {AbstractWe discuss an object-oriented, component-based architecture for a parallel reservoir simulator. The architecture successfully balances the need for extensibility, maintainability, and reuse with the need for efficient computation. Parallelism is hidden from the application developer via a set of abstractions and a unifying framework that supports static and dynamic load balancing on unstructured and structured grids. We explain how the simulator architecture supports black oil and compositional models within a general formulation, and how it achieves parallel scalability for all the major components: property calculation, Jacobian construction, linear solver, well model, input/output etc. Some initial results are discussed for a selection of models ranging from standard benchmarks to large complex field cases.MotivationCurrent generation reservoir simulators typically have a lifespan of at least 10 years. As a result, many of the simulators in widespread use have their roots in petroleum engineering, software engineering and computing technologies that were originally targeted at structured grids and scalar architectures. Advances in software and hardware technologies, parallel computing, advanced gridding and modern software engineering techniques have created new opportunities. At the same time, evolving workflows involving complex geological models, large full-field simulations, near well studies, production and facilities optimization, and stochastic modeling have placed new demands on reservoir simulation technology.Although object-oriented design has been the main staple of software development for quite some time, its application to scientific programming has been hindered somewhat by the perceived inefficiency of run-time polymorphism. However, in recent years the emergence of compilers that are in full compliance with the C++ standard has made use of generic programming techniques commercially practical. Generic programming offers the benefits of encapsulation and code reuse without the overhead of virtual function calls1,2 . Object-oriented and generic programming techniques using C++ have been shown to be useful in the development of scientific and numerical applications3,4.Large-scale object-oriented frameworks for scientific computing have been developed in many contexts5, and parallelism has been addressed for example in the POOMA project6. Object-oriented architectures for flow simulations have been developed in other industries7 and these techniques have been applied to reservoir simulators by several practitioners within academia8,9,10,11,12 and also in industry 13.IntroductionIn order to take advantage of the trends in reservoir simulation and computing technology described earlier, we have invested in a next generation simulator. The key features of this simulator, referred to as Intersect (or IX) are:parallel scalabilitythe ability to handle large and/or complex reservoirsunified treatment of structured and unstructured gridsmulti-purpose implementationadaptable software architecture.coupled surface networksIn this context, complexity can arise from modeling of structure, advanced wells, heterogeneity, compositional fluid behavior etc. Underpinning our simulator is extensive research in collaboration with industry and academia on: architectural frameworks; formulation of nonlinear equations in the reservoir and wells; linear solvers; parallel communication models; compositional phase behavior; object oriented design and framework development; unified well model; load balancing; and longer term initiatives such as multi-scale modeling14.We chose an approach that takes advantage of the object-oriented and generic programming capabilities of C++ to provide maximum reuse and extensibility without sacrificing computational efficiency.},
-	author = {DeBaun, D and Byer, T and Childs, P and Chen, J},
-	doi = {10.2118/93274-MS},
-	file = {:C$\backslash$:/Users/steve/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/DeBaun et al. - 2005 - An extensible architecture for next generation scalable parallel reservoir simulation.pdf:pdf},
-	isbn = {9781613990100},
-	journal = {{\ldots} Reservoir Simulation {\ldots}},
-	title = {{An extensible architecture for next generation scalable parallel reservoir simulation}},
-	url = {http://www.onepetro.org/mslib/servlet/onepetropreview?id=00093274},
-	year = {2005}
+@inproceedings{DeBaun2005,
+	title={An extensible architecture for next generation scalable parallel reservoir simulation},
+	author={DeBaun, David and Byer, T and Childs, P and Chen, J and Saaf, F and Wells, M and Liu, J and Cao, H and Pianelo, L and Tilakraj, V and Crumpton, P and Walsh, D and Yardumian, H and Zorzynski, R and Lim, K.-T. and Schrader, M and Zapata,V and Nolen, J and Tchelepi, H},
+	booktitle={SPE Reservoir Simulation Symposium},
+	year={2005},
+	organization={Society of Petroleum Engineers}
 }
 
 @Article{Mohammad2017,

@@ -2,7 +2,7 @@
 
 \bibitem[\protect\astroncite{Abou-Kassem
   \textit{et~al.}}{2006}]{jamal2006petroleum}
-Abou-Kassem, J, H., Farouq-Ali, S., Rafiqul~Islam, M., \textit{et~al.} (2006).
+Abou-Kassem, J., Farouq-Ali, S., y Islam, M. (2006).
 \newblock {\em Petroleum reservoir simulation: a Basic Approach}.
 \newblock Gulf Publishing Company.
 
@@ -40,15 +40,14 @@ Blunt, M. (2000).
 Calle, J. (2016).
 \newblock Identificaci{\'o}n de patrones de dise{\~n}o para software
   cient{\'i}fico a partir de esquemas preconceptuales.
-\newblock Master's thesis, Universidad Nacional de Colombia - Sede
-  Medell{\'i}n.
+\newblock Master's thesis, Universidad Nacional de Colombia, Sede Medell{\'i}n.
 \newblock L{\'i}nea de Investigaci{\'o}n: Ingenier{\'i}a de software.
 
-\bibitem[\protect\astroncite{Cao}{2002}]{Cao2002}
-Cao, H. (2002).
+\bibitem[\protect\astroncite{Cao}{}]{Cao2002}
+Cao, H.
 \newblock {\em {Development of Techniques for General Purpose Research
   Simulator}}.
-\newblock PhD thesis.
+\newblock PhD thesis, Stanford University. Stanford, CA.
 
 \bibitem[\protect\astroncite{Chaverra}{2011}]{JChaverra}
 Chaverra, J. (2011).
@@ -63,10 +62,14 @@ Chen, Z. (2007).
 \newblock Siam.
 
 \bibitem[\protect\astroncite{DeBaun \textit{et~al.}}{2005}]{DeBaun2005}
-DeBaun, D., Byer, T., Childs, P., y Chen, J. (2005).
-\newblock {An extensible architecture for next generation scalable parallel
-  reservoir simulation}.
-\newblock {\em {\ldots} Reservoir Simulation {\ldots}}.
+DeBaun, D., Byer, T., Childs, P., Chen, J., Saaf, F., Wells, M., Liu, J., Cao,
+  H., Pianelo, L., Tilakraj, V., Crumpton, P., Walsh, D., Yardumian, H.,
+  Zorzynski, R., Lim, K.-T., Schrader, M., Zapata, V., Nolen, J., y Tchelepi,
+  H. (2005).
+\newblock An extensible architecture for next generation scalable parallel
+  reservoir simulation.
+\newblock In {\em SPE Reservoir Simulation Symposium}. Society of Petroleum
+  Engineers.
 
 \bibitem[\protect\astroncite{Delshad y Pope}{1989}]{Delshad1989}
 Delshad, M. y Pope, G.~A. (1989).
@@ -81,8 +84,8 @@ Durango, C., Nore\~{n}a, P., y Zapata, C. (2018).
 
 \bibitem[\protect\astroncite{Ertekin \textit{et~al.}}{2001}]{ertekin2001basic}
 Ertekin, T., Abou-Kassem, J.~H., y King, G.~R. (2001).
-\newblock {\em Basic applied reservoir simulation}.
-\newblock Number Sirsi) i9781555630898.
+\newblock {\em {Basic Applied Reservoir Simulation}}.
+\newblock Society of Petroleum Engineers.
 
 \bibitem[\protect\astroncite{Fanchi}{2002}]{FANCHI2002108}
 Fanchi, J.~R. (2002).

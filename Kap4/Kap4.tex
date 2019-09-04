@@ -2,7 +2,7 @@
 %\chapter{Cap\'{\i}tulo 3}
 %\chapter{Solution Proposal}
 \chapter{Propuesta de solución}\label{cap:Solucion}
-En este Capítulo se propone un modelo ejecutable para la simulación multifísica de procesos de recobro mejorado en yacimientos de petróleo basado en esquemas preconceptuales. Con este fin, se extiende el elemento "función" definido en los EP para facilitar el desarrollo de la representación del dominio de la simulación de procesos EOR. Adicionalmente, se conceptualizan los términos derivados de las ecuaciones presentadas en el marco teórico. Posteriormente, se muestra el EP completo de la simulación y se explica por secciones los eventos que procesan la simulación.\\
+En este Capítulo se propone un modelo ejecutable para la simulación multifísica de procesos de recobro mejorado en yacimientos de petróleo basado en esquemas preconceptuales. Con este fin, se presenta un uso adicional del elemento ``función'' definido en los EP. Además, se plantea usar operadores sobre arreglos para facilitar el desarrollo de la representación del dominio de la simulación de procesos EOR. Luego, se conceptualizan los términos derivados de las ecuaciones que se presentan en el marco teórico. Posteriormente, se muestra el EP completo de la simulación y se explica por secciones los eventos que procesan la simulación.
 
 %Este Capítulo se estructura así: en la Sección \ref{sec:PSNew} se presentan las subrutinas definidas por el usuario como una extensión para las funciones de los EP que permite reutilizar una representación en múltiples secciones del EP y la regla para la obtención de código a partir del nuevo elemento. En la sección \ref{sec:Concepts} se revisan los términos de cada ecuación y su traducción a los conceptos presentes en el EP junto con sus respectivas relaciones estructurales y dinámicas. En la sección \ref{sec:PS_EOR} se muestra el EP completo y se explican los eventos que procesan la simulación.
 
@@ -16,14 +16,39 @@ En este Capítulo se propone un modelo ejecutable para la simulación multifísi
 %\subsection{Analyst defined subroutines}\label{sec:PS_ADS}
 %Analyst defined subroutines are analyst defined functions as proposed by (ref Calle) without the return argument. They use global elements and parameters of the subroutine definition. They are defined for re-using dynamical behavior elements which appear more than once in the PS. Names of both subroutines and functions must differ from operators predefined in the PS. Graphic symbol used for subroutines is the same as used for operators and functions. In figure \# we present graphical representation of analyst defined subroutines.
 
-\section{Extensión a las Funciones del Esquema Preconceptual}\label{sec:PSNew}
-\subsection{Subrutinas definidas por el analista}\label{sec:PS_ADS}
-Las subrutinas definidas por el analista son funciones tal como \cite{JCalle} propone, pero carecen de un concepto retorno ``return''. Estas utilizan elementos globales y también pueden recibir parámetros adicionales, su representación gráfica es igual a la de una función, pero en su uso no hay una asignación. En la figura \ref{fig:Subroutine} se presenta la representación gráfica y su traducción a código. %\citep{AG01}.
+%\section{Extensión a las Funciones del Esquema Preconceptual}\label{sec:PSNew}
+\section{Subrutinas que define el analista}\label{sec:PS_ADS}
+Las subrutinas que define el analista son funciones tal como \cite{JCalle} propone, pero carecen de un concepto de retorno. Estas utilizan elementos globales y también pueden recibir parámetros adicionales; su representación gráfica es igual a la de una función, pero éstas carecen de asignación cuando se usan como operadores. En la Figura \ref{fig:Subroutine} se ilustra un ejemplo de subrutina que se usa en el desarrollo de esta Tesis. %\citep{AG01}.
 %Nota: Poner tabla y gráfica de uso
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.6]{Fig/SubrutinaEjemplo.pdf}%
+	\caption[Subrutina Modificar Variable.]{Subrutina Modificar Variable. Los autores.} \label{fig:Subroutine}
+\end{figure}
+
+En la parte izquierda de la Figura \ref{fig:Subroutine} se ve  la definición de la subrutina ``Modificar Variable'', mientras que en la derecha se ve su uso en el EP, que posteriormente aparece en el evento ``Presión del fluido varía''. Es posible notar que la subrutina recibe tres parámetros de entrada, el ``contador del fluido'', el ``índice de entrada'' y el ``épsilon modificado''. Además, en esta se accede a atributos del concepto fluido; y no tiene concepto de retorno.
+
+\section{Operadores sobre arreglos}\label{sec:PS_Operators}
+Los operadores sobre arreglos son aquellos que pueden tomar un arreglo por parámetro y evaluar expresiones matemáticas con los elementos del mismo. Para indicar que se está accediendo a todos los elementos del arreglo, se usa un ``\textbf{*}'' en el índice del mismo, tal como se muestra en la Figura \ref{fig:Access}.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=1]{Fig/EjemploAcceso.pdf}%
+	\caption[Índice de acceso ``*'' en arreglos.]{Índice de acceso ``*'' en arreglos. Los autores.} \label{fig:Access}
+\end{figure}
+
+En la Figura \ref{fig:Operators} se muestran tres ejemplos de uso, uno en conceptos tipo arreglo, y otros dos de arreglos independientes. Se destaca que las operaciones no se definen en el EP. En la programación, éstas se usan desde alguna librería o función del lenguaje.
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.6]{Fig/OperadoresArreglos.pdf}%
+	\caption[Ejemplos de operadores sobre arreglos.]{Ejemplos de operadores sobre arreglos. Los autores.} \label{fig:Operators}
+\end{figure}
 
 %\section{Conceptualization}\label{sec:Concepts}
 \section{Conceptualización}\label{sec:Concepts}
-En esta sección se explican los conceptos principales que resultan en la traducción de las ecuaciones algebraicas resultantes de la discretización del BOM extendido y las ecuaciones constitutivas usando el método de los volúmenes finitos. En la figura \ref{fig:Concepts} se presentan los conceptos a explicar.
+En esta sección se explican los conceptos principales que resultan en la traducción de las ecuaciones algebraicas resultantes de la discretización del BOM extendido y las ecuaciones constitutivas usando el método de los volúmenes finitos. En la Figura \ref{fig:Concepts} se presentan los conceptos a explicar.
 
 \begin{figure}[h]
 	\centering%
@@ -35,11 +60,11 @@ En esta sección se explican los conceptos principales que resultan en la traduc
 \subsection{Malla}
 Al resolver el dominio espacial continuo como un conjunto discreto de celdas (discretizar el espacio), aparecen propiedades tales como los volúmenes de las celdas y el área de las caras. Este conjunto discreto de celdas es el que se denomina como ``malla''. A su vez, la celda es un conjunto discreto de caras que generan una superficie cerrada\footnote{En el caso tridimensional}. Cada celda cuenta con una numeración, que sirve para identificar posiciones en el espacio y ubicar las vecindades correspondientes para el cálculo del flujo discretizado.\\
 
-Una malla existe a partir de la conceptualización de los elementos emergentes en la discretización, que contiene todas las propiedades necesarias para generar el conjunto de celdas. Además, existe un actor ``geomodelador'' que se usa para definir el número de celdas en cada eje, sus espesores y topes tal como se presenta en  la Figura \ref{fig:Mesh}. Una vez se definen tales propiedades, la malla aparece en un proceso iterativo de creación de la cantidad de celdas y el respectivo cálculo de volúmenes, profundidades y numeración para cada una. Posteriormente, las caras se crean en otro proceso iterativo, conteniendo la información sobre las vecindades de cada celda, donde cada celda tiene un conjunto de caras\footnote{Es posible notar que la cara existente entre dos celdas vecinas se crea dos veces, una por cada celda.}.\\
+Una malla existe a partir de la conceptualización de los elementos emergentes en la discretización, que contiene todas las propiedades necesarias para generar el conjunto de celdas. Además, existe un actor ``geomodelador'' que se usa para definir el número de celdas en cada eje, sus espesores y topes tal como se presenta en  la Figura \ref{fig:Mesh}. Una vez se definen tales propiedades, la ``malla aparece'' en un proceso iterativo de creación de la cantidad de celdas y el respectivo cálculo de volúmenes, profundidades y numeración para cada una. Posteriormente, las caras se crean en otro proceso iterativo, conteniendo la información sobre las vecindades de cada celda, donde cada celda tiene un conjunto de caras\footnote{Es posible notar que la cara existente entre dos celdas vecinas se crea dos veces, una por cada celda.}.\\
 
 \begin{figure}[h]
 	\centering%
-	\includegraphics[width=0.9\linewidth]{Fig/Mesh.pdf}%
+	\includegraphics[width=0.8\linewidth]{Fig/Mesh.pdf}%
 	\caption[Definición de la malla.]{Definición de la malla. Los autores.} \label{fig:Mesh}
 \end{figure}
 
@@ -54,11 +79,11 @@ Una malla existe a partir de la conceptualización de los elementos emergentes e
 %\subsection{Rock}\label{sec:PS_Rock}
 \subsection{Roca}\label{sec:PS_Rock}
 
-La especificación de la relación dinámica ``Petrofísico caracteriza roca'' se especifica con la inserción de las condiciones iniciales de porosidad y permeabilidad absoluta para la roca asociada en el yacimiento. Es posible notar que estos atributos de la roca se representan como arreglos por la cantidad de términos, que se derivan de los pasos de tiempo y la cantidad de celdas definidas en la malla. Adicionalmente, el petrofísico define la compresibilidad de poro y la presión a la que ésta se mide para el cálculo de la porosidad a los términos posteriores. El modelo incluye una única roca a la cual se asignan todas las propiedades de cada una de las celdas. La caracterización de la roca se presenta en la Figura \ref{fig:Rock}.\\
+La especificación de la relación dinámica ``petrofísico caracteriza roca'' se especifica con la inserción de las condiciones iniciales de ``porosidad'' y ``permeabilidad absoluta'' para la roca que se asocia al yacimiento. Es posible notar que, estos atributos de la roca se representan como arreglos por la cantidad de términos, que se derivan de los pasos de tiempo, y la cantidad de celdas definidas en la malla. Adicionalmente, el petrofísico define la ``compresibilidad de poro'' y la ``presión de referencia'' a la que ésta se mide para el cálculo de la porosidad a los términos posteriores. El modelo incluye una única roca, a la cual se asignan todas las propiedades de cada una de las celdas. La caracterización de la roca se presenta en la Figura \ref{fig:Rock}.\\
 
 \begin{figure}[h]
 	\centering%
-	\includegraphics[width=0.90\linewidth]{Fig/Rock.pdf}%
+	\includegraphics[width=0.7\linewidth]{Fig/Rock.pdf}%
 	\caption[Caracterización de la Roca.]{Caracterización de la Roca. Los autores.} \label{fig:Rock}
 \end{figure}
 
@@ -79,13 +104,13 @@ Los fluidos tienen propiedades que son funciones de su presión y saturación, l
 	\caption[Caracterización del fluido.]{Caracterización del fluido. Los autores.} \label{fig:Fluid}
 \end{figure}
 
-En pos de la generalidad, la ``viscosidad'' del fluido y su ``factor volumétrico'' se definen como funciones directas de la presión. Con este fin, aparece el concepto de ``propiedad medida'', el cuál tiene una ``medida de referencia'' y un ``valor medido'' a esa referencia. Ambos son arreglos de la ``cantidad de medidas''. En la Figura \ref{fig:Fluid} también es posible ver que el fluido tiene una ``viscosidad medida y un factor volumétrico medido''. Esto permite calcular de manera general estas propiedades, independientemente del fluido, como una interpolación en el conjunto de medidas a la presión del fluido correspondiente. El ingeniero de fluidos inserta la viscosidad medida y el factor volumétrico medido cuando caracteriza el fluido. \\
+En pos de la generalidad, la ``viscosidad'' del ``fluido'' y su ``factor volumétrico'' se definen como funciones directas de su ``presión''. Con este fin, aparece el concepto de ``propiedad medida'', el cuál tiene una ``medida de referencia'' y un ``valor medido'' a esa referencia. Ambos son arreglos de la ``cantidad de medidas''. En la Figura \ref{fig:Fluid} también es posible ver que el fluido tiene una ``viscosidad medida'' y un ``factor volumétrico medido''. Esto permite calcular de manera general estas propiedades, independientemente del fluido, como una interpolación en el conjunto de medidas a la presión del fluido correspondiente. El ingeniero de fluidos inserta la viscosidad medida y el factor volumétrico medido cuando ``caracteriza el fluido''. \\
 
-Es importante notar también, que el fluido tiene un tipo y un atributo de tipo lógico ``principal''. El tipo del fluido puede ser ``petróleo'', ``gas'' o ``agua''. Sin embargo, el fluido cuyo atributo principal sea ``sí'' o ``\textit{true}'', incluye la presión en su respectiva ecuación. Los demás fluidos incluyen su saturación. 
+Es importante notar también, que el fluido tiene un ``tipo'' y un atributo de tipo lógico ``principal''. El tipo del fluido puede ser ``petróleo'', ``gas'' o ``agua''. Sin embargo, el fluido cuyo atributo principal sea ``sí'' o ``\textit{true}'', incluye su ``presión'' en su respectiva ecuación. Los demás fluidos incluyen su ``saturación''. 
 
 %\subsection{Equilibrium Relation}\label{sec:PS_Equilibrium}
 \subsection{Relación de Equilibrio}\label{sec:PS_Equilibrium}
-En las ecuaciones del BOM se considera existencia de masa de gas en el aceite (Rs o gas disuelto), y, en el caso del BOM extendido, la de aceite en el gas (Rv o aceite volatilizado). En el concepto ``Relación de equilibrio'', se generaliza la existencia de masa de un fluido dentro de otro fluido como un coeficiente de partición, tal como se muestra en la conceptualización (véase Sección \ref{sec:Concepts}). Se postula, también, que existe un fluido que aporta masa y otro que la recibe, tal como se ve en la Figura \ref{fig:EqRelation}. El coeficiente de partición cumple la mismas condiciones de la viscosidad o el factor volumétrico del fluido. Además, la relación de equilibrio tiene un coeficiente de partición medido. Tal definición de las relaciones de equilibrio tiene implicaciones en el cálculo de la densidad de
+En las ecuaciones del BOM se considera existencia de masa de gas en el aceite (Rs o gas disuelto), y, en el caso del BOM extendido, la de aceite en el gas (Rv o aceite volatilizado). En el concepto ``Relación de equilibrio'', se generaliza la existencia de masa de un fluido dentro de otro fluido como un ``coeficiente de partición''. Se postula, también, que existe un ``fluido aportante'' y un ``fluido receptor'', tal como se ve en la Figura \ref{fig:EqRelation}. El coeficiente de partición cumple la mismas condiciones de la viscosidad o el factor volumétrico del fluido. Además, la relación de equilibrio tiene un ``coeficiente de partición medido''.\\
 
 \begin{figure}[h]
 	\centering%
@@ -93,6 +118,7 @@ En las ecuaciones del BOM se considera existencia de masa de gas en el aceite (R
 	\caption[Adición de Relaciones de equilibrio.]{Adición de Relaciones de equilibrio. Los autores.} \label{fig:EqRelation}
 \end{figure}
 
+{\color{red} Tal definición de las relaciones de equilibrio tiene implicaciones en el cálculo de la densidad de}
 %\subsection{Inter-phase interaction}\label{sec:PS_Interphase}
 \subsection{Interacción entre fluidos}\label{sec:PS_Interphase}
 %
@@ -108,7 +134,7 @@ En las ecuaciones del BOM se considera existencia de masa de gas en el aceite (R
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %NOTA: Es posible que este párrafo me sirva más para la parte de conceptualización de las Krs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Las interacciones entre fluidos se proponen como una generalización de los contactos entre fluidos. En el caso del modelo BOM, se deben especificar dos: los contactos gas-aceite y aceite-agua. En este concepto se relacionan directamente las dependencias de la permeabilidad relativa del fluido principal con su respectivo fluido de referencia en el contacto. Además, para el fluidos cuya incógnita es la saturación, se relaciona la presión del fluido principal con su respectiva presión capilar, con el fin de calcular la presión faltante. Para esto, es necesario saber de antemano cuál fluido es el mojante y cuál es el no mojante. Adicionalmente, todas las propiedades dependientes se calculan a la saturación del fluido de referencia. En la figura \ref{fig:Contact} se presenta la representación propuesta para las interacciones entre fluidos.
+Las interacciones entre fluidos se proponen como una generalización de los contactos entre fluidos. En el caso del modelo BOM, se deben especificar dos: los contactos gas-aceite y aceite-agua. En este concepto, se relacionan directamente las dependencias de la ``permeabilidad relativa del fluido principal'' con su respectivo ``fluido de referencia'' en el contacto. Además, para el fluidos cuya incógnita es la saturación, se relaciona la presión del fluido principal con su respectiva ``presión capilar'', con el fin de calcular la presión faltante. Para esto, es necesario saber de antemano cuál es el ``fluido mojante'' y cuál es el ``fluido no mojante''. Adicionalmente, todas las propiedades dependientes se calculan a la saturación del fluido de referencia. En la Figura \ref{fig:Contact} se presenta la representación propuesta para las interacciones entre fluidos.
 
 \begin{figure}[h]
 	\centering%
@@ -119,7 +145,7 @@ Las interacciones entre fluidos se proponen como una generalización de los cont
 %\subsection{Component}\label{sec:PS_Component} % This could be changed to Chemical
 %\subsection{Well}\label{sec:PS_Well}
 \subsection{Pozo}\label{sec:PS_Well}
-Se proponen los pozos, de manera análoga a la malla, como un conjunto de perforados que a su vez tienen atributos adicionales como lo son la presión de fondo y el caudal. Estos pozos, tienen una caracterización distinta según el tipo, sea productor o inyector. Además, es posible notar que el pozo es un concepto abstracto, de cuál se instancia uno de los dos tipos. Más aún, los perforados dependerán del tipo de pozo, siendo estos también abstractos, con sus respectivos tipos ``perforado inyector'' o ``perforado productor''. En la figura \ref{fig:Well} se presenta la representación de los pozos.\\
+Se proponen los pozos, de manera análoga a la malla, como un conjunto de ``perforados'' que a su vez tienen atributos adicionales como lo son la ``presión de fondo'' y el ``caudal''. Estos pozos, tienen una caracterización distinta según el tipo, sea productor o inyector. Además, es posible notar que el ``pozo'' es un concepto abstracto, de cuál se instancia uno de los dos tipos. Más aún, los perforados dependerán del tipo de pozo, siendo estos también abstractos, con sus respectivos tipos ``perforado inyector'' o ``perforado productor''. En la Figura \ref{fig:Well} se presenta la representación de los pozos.\\
 
 \begin{figure}[h]
 	\centering%
@@ -127,12 +153,12 @@ Se proponen los pozos, de manera análoga a la malla, como un conjunto de perfor
 	\caption[Perforación de Pozos.]{Perforación de Pozos. Los autores.} \label{fig:Well}
 \end{figure}
 
-La principal diferencia entre los pozos productores e inyectores radica en que el pozo inyector tiene un fluido de inyección. Además, la tasa y el acumulado del pozo inyector sólo dependen de este fluido, mientras que para el pozo productor dependerá de la cantidad de fluidos caracterizados. Estos pozos están sujetos a la restricción de no cambiar su tipo, además para un pozo productor, su conjunto de perforados corresponderá también a perforados productores. Así mismo para los pozos inyectores.\\
+La principal diferencia entre los pozos productores e inyectores radica en que el pozo inyector tiene un ``fluido de inyección''. Además, la ``tasa'' y el ``acumulado'' del pozo inyector sólo dependen de este fluido, mientras que para el pozo productor dependerá de la cantidad de fluidos caracterizados. Estos pozos están sujetos a la restricción de no cambiar su tipo, además para un pozo productor, su conjunto de perforados corresponderá también a perforados productores. Así, para los pozos inyectores serán perforados inyectores.\\
 
-Los pozos funcionan bajo una condición operativa, que permite regular la presión o el caudal al que estos inyectan o producen fluido. Estas condiciones definen si un pozo genera una ecuación (Peaceman), o si su caudal se puede resolver directamente usando la presión de fondo. Por otro lado, las condiciones operativas pueden variar en el tiempo, por lo que se requiere calcular o resolver el atributo que no está sujeto a la condición operativa cada que se establezca un cambio en esta. Adicionalmente, se reconfigura la simulación cada que se establezca un cambio en la condición operativa.
+Los pozos funcionan bajo una ``condición operativa'', que permite regular la presión o el caudal al que estos inyectan o producen fluido. Estas condiciones definen, si un pozo genera una ecuación (Peaceman), o si su caudal se puede resolver directamente usando la presión de fondo. Por otro lado, las condiciones operativas pueden variar en el tiempo. Por esto, se requiere calcular o resolver el atributo que no está sujeto a la condición operativa cada que se establezca un cambio en la condición.
 
 \subsection{Ecuación}\label{sec:PS_Equation}
-La ecuación es un concepto agrupador, tanto el fluido como el pozo son ecuaciones (Posteriormente los químicos). Sirve para iterar sobre todos los conceptos que generan un residual en el método de Newton. Tienen un índice y estado. Este último permite que todos los pozos generen ecuación pero no necesariamente se resuelva en el jacobiano. Sólo se resuelven las ecuaciones cuyo estado sea ``activo''. (Se verá más adelante).
+La ecuación es un concepto agrupador, tanto el fluido como el pozo son ecuaciones {\color{red} (¡Posteriormente los químicos!)}. Sirve para iterar sobre todos los conceptos que generan un residual en el método de Newton. Tienen un índice y estado. Este último permite que todos los pozos generen ecuación pero no necesariamente se resuelva en el jacobiano. Sólo se resuelven las ecuaciones cuyo estado sea ``activo''.
 %Poner ecuación acá con Volumen de celda ya como concepto
 
 %\subsection{Rock}
@@ -160,7 +186,7 @@ Para el correcto desarrollo de la simulación, se establecen las siguientes prec
 \end{figure}
 %The rest of this section is as follows: In section \ref{sec:PS_Mesh} we present the Mesh concept as a collection of cells with additional elements needed for calculating the attributes of each cell. Furthermore, we develop the dynamical relationship ``Geomodeler defines Mesh'' as an interaction of the role ``Geomodeler'' with atomic\footnote{atomic as is stated by \cite{AG01} (Aca debe ir Zapata)} dynamical relationships. In section \ref{sec:PS_Rock} we present the Rock concept with its attributes and initial characterization. In section \ref{sec:PS_Phase} ... In section \ref{sec:PS_Interphase} ... In section \ref{sec:PS_Equilibrium} we define the partition coefficients as relations between two phases, one contributing mass and another receiving mass in the mass balance equation. In section \ref{sec:PS_Well}
 \subsection{Malla aparece}\label{sec:PS_MeshAppears}
-El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definida'', que sucede justo después de que el geomodelador defina la malla. En este evento, se desarrollan dos ciclos principales. El primer ciclo es anidado por cada eje coordenado, y en total se recorre el número de celdas a definir. En este ciclo, se calculan los volúmenes y profundidades de cada celda, además se asigna un índice único de celda y la numeración en cada eje (x,y,z). La especificación del evento ``Malla Aparece'' se presenta en la figura \ref{fig:Concepts}.\\
+El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definida'', que sucede justo después de que el geomodelador defina la malla. En este evento, se desarrollan dos ciclos principales. El primer ciclo es anidado por cada eje coordenado, y en total se recorre el número de celdas a definir. En este ciclo, se calculan los volúmenes y profundidades de cada celda, además se asigna un índice único de celda y la numeración en cada eje $(x,y,z)$. La especificación del evento ``Malla Aparece'' se presenta en la Figura \ref{fig:Concepts}.\\
 
 \begin{figure}[h]
 	\centering%
@@ -169,12 +195,12 @@ El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definid
 	\caption[Representación de la aparición de la Malla.]{Representación de la aparición de la Malla. Los autores.} \label{fig:MeshAppears}
 \end{figure}
 
-En el segundo ciclo principal, se itera sobre las celdas definidas previamente y se calcula la conectividad, es decir la definición de caras. Para esto, se consulta la existencia de celdas adyacentes a la celda actual en todas las direcciones. Si existe una celda en alguna dirección, se crea y calcula su área y orientación. Adicionalmente, a la cara se le asigna un índice y también se le asigna la celda vecina. Es importante notar que cada celda almacena su conjunto de caras, por lo que las caras se duplican.
+En el segundo ciclo principal, se itera sobre las celdas que se definen previamente y se calcula la conectividad, es decir la definición de caras. Para esto, se consulta la existencia de celdas adyacentes a la celda actual en todas las direcciones. Si existe una celda en alguna dirección, se crea y calcula su área y orientación. Adicionalmente, a la cara se le asigna un índice y también se le asigna la celda vecina. Es importante notar que cada celda almacena su conjunto de caras, por lo que las caras se duplican.
 
 \subsection{Tiempo pasa}\label{sec:PS_TimePasses}
-El evento ``Tiempo pasa'' se dispara en el momento en que se tiene las suficientes realizaciones de los conceptos para ejecutar la simulación, es decir, se ejecutaron las mínimas relaciones dinámicas para poder disparar el evento, como se ve en la figura \ref{fig:Events}. En este evento se procesa el inicio y el final de la simulación, incrementando el ``tiempo'' y ``término'' al que se van a calcular las propiedades de los conceptos principales.\\
+El evento ``Tiempo pasa'' se dispara en el momento en que se tienen las suficientes realizaciones de los conceptos para ejecutar la simulación, es decir, se ejecutaron las mínimas relaciones dinámicas para poder disparar el evento, como se ve en la figura \ref{fig:TimePasses}. En este evento se procesa el inicio y el final de la simulación, incrementando el ``tiempo'' y ``término'' al que se van a calcular las propiedades de los conceptos principales.\\
 
-Se puede observar también que, en este evento se realiza el cálculo de las propiedades iniciales para toda la malla. Debido a que, al término cero, sólo se tienen las propiedades que son insertadas en las relaciones dinámicas ejecutadas previamente. las demás propiedades deben ser calculadas como se presenta en la figura \ref{fig:Concepts}, puesto que son necesarias para el término de acumulación en las ecuaciones de transporte para todos los fluidos existentes.
+Se puede observar también que, en este evento se realiza el cálculo de las propiedades iniciales para toda la malla. Debido a que, al término cero, sólo se tienen las propiedades que se insertan en las relaciones dinámicas ejecutadas previamente. las demás propiedades deben ser calculadas como se presenta en la figura \ref{fig:Concepts}, puesto que se requieren para el término de acumulación en las ecuaciones de transporte para todos los fluidos existentes.
 
 \begin{figure}[h]
 	\centering%
@@ -184,8 +210,8 @@ Se puede observar también que, en este evento se realiza el cálculo de las pro
 \end{figure}
 
 
-\subsection{Presión del Fluido Varía}\label{sec:PS_FluidVaries}
-En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulación. En éste se llevan a cabo las iteraciones del método de Newton-Raphson para converger al próximo paso de tiempo. La especificación de este evento consta de cinco procesos principales: La actualización de propiedades al término actual, el recálculo de las mismas, el cálculo de los residuales en cada iteración, el cálculo de la matriz jacobiana, y la actualización de las incógnitas. La especificación del evento ``Presión del Fluido varía'' se presenta en la figura \ref{fig:FluidPressureVaries}.\\
+\subsection{Presión del Fluido varía}\label{sec:PS_FluidVaries}
+En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulación. En éste, se llevan a cabo las iteraciones del método de Newton-Raphson para converger al próximo paso de tiempo. La especificación de este evento consta de cinco procesos principales: La actualización de propiedades al término actual, el recálculo de las mismas, el cálculo de los residuales en cada iteración, el cálculo de la matriz jacobiana, y la actualización de las incógnitas. La especificación del evento ``Presión del Fluido varía'' se presenta en la figura \ref{fig:FluidPressureVaries}.\\
 
 \begin{figure}[h]
 	\centering%
@@ -195,7 +221,7 @@ En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulaci
 \end{figure}
 
 \subsubsection{Actualización de arreglos de propiedades}\label{subsec:PS_DefVars}
-En la actualización de propiedades al término actual, se hace un incremento de tamaño y asignación del estimado inicial para el método de Newton-Raphson para todas las celdas de la malla y en todos los fluidos para todas las propiedades dependientes del tiempo. Lo mismo se realiza para los pozos y cada uno de sus perforados. La actualización de propiedades se expone en la figura \ref{fig:UpdateProperties}. 
+En la actualización de propiedades al término actual, se hace un incremento de tamaño y asignación del estimado inicial para el método de Newton-Raphson para todas las celdas de la malla, fluidos y propiedades dependientes del tiempo. Lo mismo sucede para los pozos y cada uno de sus perforados. La actualización de propiedades se expone en la figura \ref{fig:UpdateProperties}. 
 
 \begin{figure}[h]
 	\centering%
@@ -206,7 +232,7 @@ En la actualización de propiedades al término actual, se hace un incremento de
 
 
 \subsubsection{Recálculo de propiedades de los fluidos}\label{subsec:PS_TimeK}
-Posteriormente en la figura \ref{fig:TimeK} se muestra el recálculo de las propiedades de los fluidos para cada celda. Como el sistema que se resuelve tiene por incógnitas la presión del fluido principal y la saturación de los demás fluidos, es necesario calcular el resto de las propiedades de los fluidos como funciones de estas. \\%Time K
+Posteriormente, en la figura \ref{fig:TimeK} se muestra el recálculo de las propiedades de los fluidos para cada celda. Como el sistema que se resuelve tiene por incógnitas la presión del fluido principal y la saturación de los demás fluidos, es necesario calcular el resto de las propiedades de los fluidos como funciones de la presión y las saturaciones. \\%Time K
 
 \begin{figure}[h]
 	\centering%
@@ -216,9 +242,9 @@ Posteriormente en la figura \ref{fig:TimeK} se muestra el recálculo de las prop
 \end{figure}
 
 \subsubsection{Cálculo de Residuales}\label{subsec:Residual}
-Luego se hace un recorrido de todas las ecuaciones, y se calcula el residual dependiendo de si la ecuación es de tipo fluido o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado "Inactivas".\\
+Luego se hace un recorrido de todas las ecuaciones, y se calcula el residual dependiendo de si la ecuación es de tipo fluido o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado ``Inactivas''.\\
 
-Es importante notar también, que la función ubicar se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. Además el tipo de residual indica si se debe ubicar como una ecuación de fluido que se evalúa para todas las celdas o sólo es una ecuación de pozo y por tanto una sola fila en las últimas posiciones del residual, tal comportamiento se evidencia en \ref{fig:Residual}. \\ % Residual
+Es importante notar también, que la función ``ubicar'' se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. {\color{red} Además, el tipo de residual indica si se debe ubicar como una ecuación de fluido que se evalúa para todas las celdas o sólo es una ecuación de pozo y por tanto una sola fila en las últimas posiciones del residual, tal comportamiento se evidencia} en \ref{fig:Residual}. \\ % Residual
 
 \begin{figure}[h]
 	\centering%

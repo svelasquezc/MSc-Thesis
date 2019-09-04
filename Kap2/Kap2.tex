@@ -21,7 +21,7 @@
 
 \section{El medio poroso}
 
-La física en que se apoya la simulación de yacimientos de petróleo incluye el concepto de medio poroso. Un medio poroso se puede entender como un dominio espacial que ocupa parcialmente un sólido y una porción que ocupan fluidos a la que se le llama espacio vacío o poroso. Un yacimiento es un medio poroso que ocurre naturalmente, una formación geológica del subsuelo, que, a nivel microscópico, se compone por una red de poros que se pueden interconectar y que permiten almacenar fluidos \citep{Bear2018}.\\
+La física en que se apoya la simulación de yacimientos de petróleo incluye el concepto de medio poroso. Un medio poroso se puede entender como un dominio espacial que ocupa parcialmente un sólido y una porción que ocupan los fluidos, a la que se le llama espacio vacío o poroso. Un yacimiento es un medio poroso que ocurre naturalmente, una formación geológica del subsuelo, que, a nivel microscópico, se compone por una red de poros que se pueden interconectar y que permiten almacenar fluidos \citep{Bear2018}.\\
 
 La definición de medio poroso se extiende de la definición de un medio continuo. Un medio continuo, es aquel que no pierde sus propiedades cuando se divide infinitamente, es decir, sus propiedades son continuas en todo punto. Sin embargo, esta definición depende del nivel de observación. A nivel microscópico, si se toman medidas de espacio poroso en diferentes puntos, es posible encontrar unas zonas vacías y otras ocupadas por la roca. Por otro lado, al incrementar el tamaño de la muestra para la medida, es posible notar que las medidas toman valores menos oscilatorios, tal como se muestra en la Figura \ref{fig:medioporoso}. El mínimo tamaño de muestra al que el espacio poroso empieza a tomar un valor constante se le llama volumen de elemento representativo (REV, \cite{Bear2018}). El espacio poroso medido en un REV se denota porosidad ($\phi$), que corresponde a la capacidad de almacenamiento de fluidos a nivel macroscópico.\\
 
@@ -59,7 +59,7 @@ Estas ecuaciones se aplican para un solo fluido. En el caso de múltiples fluido
 \end{align}
 
 \subsection{Mojabilidad}
-La mojabilidad mide la preferencia de la superficie de una roca a ser mojada por determinado fluido o por una combinación de fluidos (mojabilidad intermedia) \citep{chen2007reservoir}. El fluido de preferencia o ``fluido mojante'' se atrapa en los poros más pequeños de la roca, generando una capa del fluido sobre la superficie de la roca \citep{chen2007reservoir}. A la fracción del fluido que se queda atrapado en la roca se le denomina ``saturación irreducible'' ($S_{fc}$) \citep{chen2007reservoir}. \\
+En la mojabilidad se mide la preferencia de la superficie de una roca cuando se moja por determinado fluido o por una combinación de fluidos (mojabilidad intermedia) \citep{chen2007reservoir}. El fluido de preferencia o ``fluido mojante'' se atrapa en los poros más pequeños de la roca, generando una capa del fluido sobre la superficie de la roca \citep{chen2007reservoir}. A la fracción del fluido que se queda atrapado en la roca se le denomina ``saturación irreducible'' ($S_{fc}$) \citep{chen2007reservoir}. \\
 
 \subsubsection{Presión Capilar}
 Cuando existe flujo de dos fluidos, se genera una discontinuidad en la presión de ambos, la cuál se denomina ``presión capilar''. Ésta se calcula como la resta de la presión del ``fluido no mojante'' con la del ``fluido mojante''\citep{chen2007reservoir, FANCHI2002108}. En la Ecuación \ref{ec:presioncapilar} se presenta el cálculo de la ``presión capilar''.
@@ -68,7 +68,7 @@ Cuando existe flujo de dos fluidos, se genera una discontinuidad en la presión 
 	\label{ec:presioncapilar}&p_c = p_{\text{fluido no mojante}} - p_{\text{fluido mojante}}
 \end{align}\\
 
-La presión capilar es función de la saturación de uno de los fluidos que relaciona, según el caso: $p_c(S_{f})$. En el caso de un sistema de tres fluidos, se requieren dos presiones capilares \citep{chen2007reservoir}.
+La presión capilar es función de la saturación de uno de los fluidos que se relaciona, según el caso: $p_c(S_{f})$. En el caso de un sistema de tres fluidos, se requieren dos presiones capilares \citep{chen2007reservoir}.
 
 \subsubsection{Permeabilidad Relativa}
 La permeabilidad relativa ($k_{r}$) es una relación o fracción de movimiento de un fluido respecto a otro u otros \citep{chen2007reservoir}. Cuando sólo existen dos fluidos, la permeabilidad relativa es función directa de la saturación del fluido correspondiente ($k_{rf}(S_{f})$). Sin embargo, cuando hay tres o más fluidos, ésta puede depender de otras saturaciones ($k_{rf}(S_{f}, ...)$) \citep{chen2007reservoir}.
@@ -78,7 +78,7 @@ Cuando existen tres fluidos en un yacimiento de petróleo, obtener información 
 Existen múltiples métodos de interpolación para obtener la permeabilidad relativa del fluido con más de un contacto \citep{Delshad1989, Blunt2000, Zuo2014}. Para el desarrollo de esta Tesis de Maestría se usa la interpolación de \cite{Baker1988}, la cuál se muestra en la Ecuación \ref{ec:Baker}.
 
 \begin{align}
-	\label{ec:Baker}&k_{ro}(S_{g}, S_{w}) = \frac{\left(S_{w}-S_{wc}\right)*k_{row} + \left(S_{g}-S_{gc}\right)*k_{rgo}}{\left(S_{w}-S_{wc}\right) + \left(S_{g}-S_{gc}\right)}
+	\label{ec:Baker}&k_{ro}(S_{g}, S_{w}) = \frac{\left(S_{w}-S_{wc}\right)k_{row} + \left(S_{g}-S_{gc}\right)k_{rgo}}{\left(S_{w}-S_{wc}\right) + \left(S_{g}-S_{gc}\right)}
 \end{align}\\
 
 En un sistema de agua, gas y petróleo, se obtiene la permeabilidad relativa del petróleo al agua $k_{row}(S_{w})$ y la permeabilidad relativa del petróleo al gas $k_{rgo}(S_{g})$ y se pondera la permeabilidad relativa del petróleo por la saturación del gas y del agua \citep{Baker1988}.
@@ -114,14 +114,17 @@ Para calcular las densidades del gas y del aceite en el BOM extendido, que se re
 	\label{ec:watdensity}&\rho_{w} = \frac{\rho_{w,sc}}{B_{w}}
 \end{align}
 
-Cabe anotar que no se considera existencia de masa de ningún fluido en el agua, por lo que su densidad sólo depende de su factor volumétrico ($B_{w}$) y su densidad a condiciones estándar.
+Cabe notar que no se considera existencia de masa de ningún fluido en el agua, por lo que su densidad sólo depende de su factor volumétrico ($B_{w}$) y su densidad a condiciones estándar.
 
 En la versión del \textit{Black Oil Model} que se usa en esta Tesis de Maestría se asume lo siguiente:
 \begin{itemize}
 	\item La ley de Darcy es aplicable al tipo de flujo (Número de Reynolds $\le$ 1) \citep{takhanov2011forchheimer}.
-	\item El yacimiento está en un estado 
+	\item El estado de los yacimientos que se simulan es sobresaturado \citep{chen2007reservoir}.
+	\item No hay segregación de fluidos.
 \end{itemize}
 
+\subsubsection{Ecuaciones constitutivas}
+{\color{red} (¡Ojo que acá no he mostrado la restricción de volumen ni las presiones capilares)}
 
 %(Poner suposiciones del \textit{Black Oil})
 
@@ -133,7 +136,7 @@ En la versión del \textit{Black Oil Model} que se usa en esta Tesis de Maestrí
 
 \subsection{Condiciones iniciales}
 
-En el desarrollo de esta Tesis de Maestría, se consideran yacimientos con condiciones de borde cerradas o Neumann cero para todas las fronteras, es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores. En la Figura \ref{fig:empanada} se ejemplifica un yacimiento con condiciones de borde cerradas.\\
+En el desarrollo de esta Tesis de Maestría se consideran yacimientos con condiciones de borde cerradas o Neumann cero para todas las fronteras, es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores. En la Figura \ref{fig:empanada} se ejemplifica un yacimiento con condiciones de borde cerradas.\\
 
 \begin{figure}[h]
 	\centering%
@@ -155,23 +158,23 @@ Es decir, existe funciones en el espacio que describen las condiciones iniciales
 Se elige el método de los volúmenes finitos para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
 %Algebraic Equations
 \begin{align}
-\label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi^{t}_{i} \left( \frac{S_{o,i}^{t}}{B_{o,i}^{t}} + \frac{Rv_{i}^{t}S_{g,i}^{t}}{B_{g,i}^{t}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Aceite}} + 
+\label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{Rv_{i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Aceite}} + 
 \underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}} + Rv_{c}T^{n+1}_{g,c} \nabla{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo - Aceite}}+ \dot{Q}_{o,i}^{n+1} = 0 \\
-\label{ec:gasDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi^{t}_{i} \left( \frac{S_{g,i}^{t}}{B_{g,i}^{t}} + \frac{Rs_{i}^{t}S_{o,i}^{t}}{B_{o,i}^{t}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Gas}} + 
+\label{ec:gasDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{Rs_{i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Gas}} + 
 \underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\nabla{\Phi_{g,c}^{n+1} + Rs_{c}T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo - Gas}}+ Q_{g,i}^{n+1} = 0 \\
-\label{ec:aguaDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi^{t}_{i} \left( \frac{S_{w,i}^{t}}{B_{w,i}^{t}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Agua}}
+\label{ec:aguaDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Agua}}
 + 
 \underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\nabla{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo - Agua}} + Q_{w,i}^{n+1} = 0 
-\end{align}
+\end{align}\\
 
 dónde:
 
 \begin{align*}
-	&\left[ \phi^{t}_{i} \left( \frac{S_{o,i}^{t}}{B_{o,i}^{t}} + \frac{Rv_{i}^{t}S_{g,i}^{t}}{B_{g,i}^{t}}\right)\right]^{n+1}_{n} = 
+	&\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{Rv_{i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n} = 
 	\phi^{n+1}_{i} \left( \frac{S_{o,i}^{n+1}}{B_{o,i}^{n+1}} + \frac{Rv_{i}^{n+1}S_{g,i}^{n+1}}{B_{g,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{o,i}^{n}}{B_{o,i}^{n}} + \frac{Rv_{i}^{n}S_{g,i}^{n}}{B_{g,i}^{n}}\right),\\
-	&\left[ \phi^{t}_{i} \left( \frac{S_{g,i}^{t}}{B_{g,i}^{t}} + \frac{Rs_{i}^{t}S_{o,i}^{t}}{B_{o,i}^{t}}\right)\right]^{n+1}_{n} = 
+	&\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{Rs_{i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n} = 
 	\phi^{n+1}_{i} \left( \frac{S_{g,i}^{n+1}}{B_{g,i}^{n+1}} + \frac{Rs_{i}^{n+1}S_{o,i}^{n+1}}{B_{o,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{g,i}^{n}}{B_{g,i}^{n}} + \frac{Rs_{i}^{n}S_{o,i}^{n}}{B_{o,i}^{n}}\right),\\
-	&\left[ \phi^{t}_{i} \left( \frac{S_{w,i}^{t}}{B_{w,i}^{t}}\right)\right]^{n+1}_{n} = 
+	&\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n} = 
 	\phi^{n+1}_{i} \left( \frac{S_{w,i}^{n+1}}{B_{w,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{w,i}^{n}}{B_{w,i}^{n}}\right)
 \end{align*}
 
@@ -182,7 +185,7 @@ El término $T_{f,c}$ en la Ecuación \ref{ec:Transmissibity} corresponde a la t
 \end{align}
 \subsection{Modelado de Pozos}
 %
-Los pozos son el principal objeto de estudio de la simulación de yacimientos de petróleo debido a que en ellos se concentra el propósito de cualquier operación de campo. Los pozos tienen dos tipos, inyector o productor, y se forman por un conjunto de bloques perforados en los que existe un flujo radial \citep{peaceman1983interpretation}. El cálculo que \cite{peaceman1983interpretation} describe para flujo en pozos con varias capas de perforados se muestra en la Ecuación \ref{ec:peaceman}. En la Figura \ref{fig:mulperfwell} se ilustra un pozo vertical con múltiples perforados.
+Los pozos son el principal objeto de estudio de la simulación de yacimientos de petróleo, debido a que en ellos, se concentra el propósito de cualquier operación de campo. Los pozos tienen dos tipos, inyector o productor, y se forman por un conjunto de bloques perforados en los que existe un flujo radial \citep{peaceman1983interpretation}. \cite{peaceman1983interpretation} describe el flujo en pozos con varias capas de perforados como se muestra en la Ecuación \ref{ec:peaceman}. En la Figura \ref{fig:mulperfwell} se ilustra un pozo vertical con múltiples perforados.
 
 \begin{figure}[h]
 	\centering%
@@ -191,12 +194,12 @@ Los pozos son el principal objeto de estudio de la simulación de yacimientos de
 \end{figure}
 
 \begin{align}
-	\label{ec:peaceman}&q^{(v)}_{f} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi\rho_{f} \sqrt{k_{xx}k_{yy}}h_{z}}{\mu_{f}\left(r_{e}/r_{w} +s\right)}\left(p_{bh}^{(v)}-p_{f,m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
+	\label{ec:peaceman}&q^{(v)}_{f} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi k_{r,f} \rho_{f} \sqrt{k_{xx}k_{yy}}h_{z}}{\mu_{f}\left(\ln \left(r_{e}/r_{w}\right) +s\right)}\left(p_{bh}^{(v)}-p_{f,m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
 \end{align}
 %
 \subsection{Método de Newton-Raphson}
 %
-El sistema de ecuaciones algebraicas formado por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximando su derivada, como se ilustra en la Figura \ref{fig:NewtonR}.\\
+El sistema de ecuaciones algebraicas que se forman por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximando su derivada, como se ilustra en la Figura \ref{fig:NewtonR}.\\
 
 \begin{figure}[h]
 	\centering%
