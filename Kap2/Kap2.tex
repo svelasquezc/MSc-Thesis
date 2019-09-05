@@ -84,7 +84,7 @@ Existen múltiples métodos de interpolación para obtener la permeabilidad rela
 En un sistema de agua, gas y petróleo, se obtiene la permeabilidad relativa del petróleo al agua $k_{row}(S_{w})$ y la permeabilidad relativa del petróleo al gas $k_{rgo}(S_{g})$ y se pondera la permeabilidad relativa del petróleo por la saturación del gas y del agua \citep{Baker1988}.
 
 \section{Simulación de Yacimientos de Petróleo}\label{sec:Simulation}
-El dominio de la simulación de petróleo de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico referido a procesos industriales y de investigación de nuevas tecnologías \citep{Kelly2015}; los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos. La simulación de yacimientos de petróleo se rige por las leyes de conservación de la masa y del momentum. En estas leyes se describe la acumulación, transporte, fuentes y sumideros de los fluidos como un sistema de ecuaciones diferenciales parciales acopladas para un dominio físico. La solución analítica de estos sistemas, cuando es viable, requiere condiciones que se alejan de los problemas reales \citep{ertekin2001basic}. Por ello, es necesario una solución numérica o simulación. Un modelo de simulación que se usa en la industria es el \textit{Black Oil Model}.%, este hace una simplificación de la composición de los hidrocarburos existentes. Solucionar tales ecuaciones requiere discretizar el tiempo y el dominio físico; usar métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. \\ %Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
+El dominio de la simulación de yacimientos de petróleo se enmarca dentro del contexto del desarrollo de software científico referido a procesos industriales y de investigación de nuevas tecnologías \citep{Kelly2015}; los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos. La simulación de yacimientos de petróleo se rige por las leyes de conservación de la masa y del momentum. En estas leyes se describe la acumulación, transporte, fuentes y sumideros de los fluidos como un sistema de ecuaciones diferenciales parciales acopladas para un dominio físico. La solución analítica de estos sistemas, cuando es viable, requiere condiciones que se alejan de los problemas reales \citep{ertekin2001basic}. Por ello, es necesario una solución numérica o simulación. Un modelo de simulación que se usa en la industria es el \textit{Black Oil Model}.%, este hace una simplificación de la composición de los hidrocarburos existentes. Solucionar tales ecuaciones requiere discretizar el tiempo y el dominio físico; usar métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. \\ %Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
 %Más aún, los resultados de la simulación deben ser contrastados con datos experimentales para verificar su concordancia con el fenómeno físico que modelan.\\
 
 
@@ -114,7 +114,7 @@ Para calcular las densidades del gas y del aceite en el BOM extendido, que se re
 	\label{ec:watdensity}&\rho_{w} = \frac{\rho_{w,sc}}{B_{w}}
 \end{align}
 
-Cabe notar que no se considera existencia de masa de ningún fluido en el agua, por lo que su densidad sólo depende de su factor volumétrico ($B_{w}$) y su densidad a condiciones estándar.
+Cabe notar que no se considera existencia de masa de ningún fluido hidrocarburo en el agua, por lo que su densidad sólo depende de su factor volumétrico ($B_{w}$) y su densidad a condiciones estándar.
 
 En la versión del \textit{Black Oil Model} que se usa en esta Tesis de Maestría se asume lo siguiente:
 \begin{itemize}
@@ -207,6 +207,8 @@ Los pozos son el principal objeto de estudio de la simulación de yacimientos de
 	\label{ec:peaceman}&q^{(v)}_{f} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi k_{rf} \rho_{f} \sqrt{k_{xx}k_{yy}}h_{z}}{\mu_{f}\left(\ln \left(r_{e}/r_{w}\right) +s\right)}\left(p_{bh}^{(v)}-p_{f,m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
 \end{align}
 %
+{\color{red} No he hablado de condiciones operativas}
+
 \subsection{Método de Newton-Raphson}\label{subsec:N-R}
 %
 El sistema de ecuaciones algebraicas que se forman por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximando su derivada, como se ilustra en la Figura \ref{fig:NewtonR}.\\

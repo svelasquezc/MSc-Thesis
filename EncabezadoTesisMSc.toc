@@ -1,5 +1,5 @@
 \contentsline {chapter}{\hbox to\@tempdima {\hfil }Agradecimientos}{\es@scroman {iv}}% 
-\contentsline {chapter}{Resumen}{\es@scroman {v}}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Resumen}{\es@scroman {v}}% 
 \contentsline {chapter}{\hbox to\@tempdima {\hfil }Abstract}{\es@scroman {vi}}% 
 \babel@toc {spanish}{}
 \contentsline {chapter}{Contenido}{\es@scroman {vii}}% 
@@ -53,24 +53,24 @@
 \contentsline {subsection}{\numberline {4.3.3}Roca}{26}% 
 \contentsline {subsection}{\numberline {4.3.4}Fluido}{26}% 
 \contentsline {subsection}{\numberline {4.3.5}Interacci\IeC {\'o}n entre fluidos}{27}% 
-\contentsline {subsection}{\numberline {4.3.6}Relaci\IeC {\'o}n de Equilibrio}{27}% 
-\contentsline {subsection}{\numberline {4.3.7}Pozo}{28}% 
-\contentsline {subsection}{\numberline {4.3.8}Ecuaci\IeC {\'o}n}{29}% 
-\contentsline {section}{\numberline {4.4}Representaci\IeC {\'o}n en EP de la simulaci\IeC {\'o}n de procesos EOR}{29}% 
+\contentsline {subsection}{\numberline {4.3.6}Relaci\IeC {\'o}n de Equilibrio}{28}% 
+\contentsline {subsection}{\numberline {4.3.7}Pozo}{29}% 
+\contentsline {subsection}{\numberline {4.3.8}Ecuaci\IeC {\'o}n}{30}% 
+\contentsline {section}{\numberline {4.4}Representaci\IeC {\'o}n en EP de la simulaci\IeC {\'o}n de procesos EOR}{30}% 
 \contentsline {subsection}{\numberline {4.4.1}Tiempo pasa}{30}% 
-\contentsline {subsection}{\numberline {4.4.2}Presi\IeC {\'o}n del Fluido var\IeC {\'\i }a}{30}% 
-\contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{30}% 
-\contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{30}% 
+\contentsline {subsection}{\numberline {4.4.2}Presi\IeC {\'o}n del Fluido var\IeC {\'\i }a}{31}% 
+\contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{31}% 
+\contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{31}% 
 \contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{31}% 
 \contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de la Matriz del Jacobiano}{31}% 
-\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{31}% 
-\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{46}% 
-\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C++ y consistencia}{46}% 
-\contentsline {section}{\numberline {5.2}Simulaci\IeC {\'o}n y resultados}{47}% 
-\contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{51}% 
-\contentsline {section}{\numberline {6.1}Conclusiones}{51}% 
-\contentsline {section}{\numberline {6.2}Trabajo futuro}{51}% 
-\contentsline {chapter}{\numberline {A}Anexo: Nombrar el anexo A de acuerdo con su contenido}{52}% 
-\contentsline {chapter}{\numberline {B}Anexo: Nombrar el anexo B de acuerdo con su contenido}{53}% 
-\contentsline {chapter}{\numberline {C}Anexo: Nombrar el anexo C de acuerdo con su contenido}{54}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{56}% 
+\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{32}% 
+\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{48}% 
+\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C++ y consistencia}{48}% 
+\contentsline {section}{\numberline {5.2}Simulaci\IeC {\'o}n y resultados}{49}% 
+\contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{53}% 
+\contentsline {section}{\numberline {6.1}Conclusiones}{53}% 
+\contentsline {section}{\numberline {6.2}Trabajo futuro}{53}% 
+\contentsline {chapter}{\numberline {A}Anexo: Nombrar el anexo A de acuerdo con su contenido}{54}% 
+\contentsline {chapter}{\numberline {B}Anexo: Nombrar el anexo B de acuerdo con su contenido}{55}% 
+\contentsline {chapter}{\numberline {C}Anexo: Nombrar el anexo C de acuerdo con su contenido}{56}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{58}% 
