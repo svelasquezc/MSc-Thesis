@@ -1,5 +1,6 @@
 \contentsline {chapter}{\hbox to\@tempdima {\hfil }Agradecimientos}{\es@scroman {iv}}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Resumen}{\es@scroman {v}}% 
+\contentsline {chapter}{Resumen}{\es@scroman {v}}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Abstract}{\es@scroman {vi}}% 
 \babel@toc {spanish}{}
 \contentsline {chapter}{Contenido}{\es@scroman {vii}}% 
 \contentsline {chapter}{Lista de figuras}{\es@scroman {viii}}% 
@@ -9,67 +10,67 @@
 \contentsline {section}{\numberline {2.1}El medio poroso}{4}% 
 \contentsline {section}{\numberline {2.2}Transporte de fluidos en medios porosos}{5}% 
 \contentsline {subsection}{\numberline {2.2.1}Mojabilidad}{5}% 
-\contentsline {subsubsection}{\nonumberline Presi\IeC {\'o}n Capilar}{6}% 
-\contentsline {subsubsection}{\nonumberline Permeabilidad Relativa}{6}% 
+\contentsline {subsection}{\numberline {2.2.2}Presi\IeC {\'o}n Capilar}{6}% 
+\contentsline {subsection}{\numberline {2.2.3}Permeabilidad Relativa}{6}% 
 \contentsline {section}{\numberline {2.3}Simulaci\IeC {\'o}n de Yacimientos de Petr\IeC {\'o}leo}{7}% 
 \contentsline {subsection}{\numberline {2.3.1}Modelo \emph {Black Oil} Extendido}{7}% 
 \contentsline {subsubsection}{\nonumberline Ecuaciones constitutivas}{8}% 
-\contentsline {subsection}{\numberline {2.3.2}Condiciones iniciales}{8}% 
+\contentsline {subsection}{\numberline {2.3.2}Condiciones iniciales}{9}% 
 \contentsline {subsection}{\numberline {2.3.3}Discretizaci\IeC {\'o}n}{9}% 
 \contentsline {subsection}{\numberline {2.3.4}Modelado de Pozos}{10}% 
-\contentsline {subsection}{\numberline {2.3.5}M\IeC {\'e}todo de Newton-Raphson}{10}% 
-\contentsline {section}{\numberline {2.4}Procesos de Recobro Mejorado}{11}% 
-\contentsline {subsection}{\numberline {2.4.1}Modelado del Qu\IeC {\'\i }mico}{11}% 
-\contentsline {section}{\numberline {2.5}Esquemas Preconceptuales}{11}% 
-\contentsline {subsection}{\numberline {2.5.1}Elementos del Esquema Preconceptual}{11}% 
+\contentsline {subsection}{\numberline {2.3.5}M\IeC {\'e}todo de Newton-Raphson}{11}% 
+\contentsline {section}{\numberline {2.4}Procesos de Recobro Mejorado}{12}% 
+\contentsline {subsection}{\numberline {2.4.1}Modelado del Qu\IeC {\'\i }mico}{12}% 
+\contentsline {section}{\numberline {2.5}Esquemas Preconceptuales}{12}% 
+\contentsline {subsection}{\numberline {2.5.1}Elementos del Esquema Preconceptual}{12}% 
 \contentsline {subsubsection}{\nonumberline Nodos}{12}% 
 \contentsline {subsubsection}{\nonumberline Relaciones}{13}% 
 \contentsline {subsubsection}{\nonumberline Enlaces}{13}% 
 \contentsline {subsubsection}{\nonumberline Aglutinadores}{14}% 
 \contentsline {subsection}{\numberline {2.5.2}Esquemas Preconceptuales en el contexto del software cient\IeC {\'\i }fico}{14}% 
-\contentsline {subsubsection}{\nonumberline Condiciones Iniciales}{14}% 
-\contentsline {subsubsection}{\nonumberline Concepto tipo arreglo}{14}% 
-\contentsline {subsubsection}{\nonumberline Par\IeC {\'a}metro}{15}% 
-\contentsline {subsubsection}{\nonumberline Variable Independiente}{15}% 
+\contentsline {subsubsection}{\nonumberline Condiciones Iniciales}{15}% 
+\contentsline {subsubsection}{\nonumberline Concepto tipo arreglo}{16}% 
+\contentsline {subsubsection}{\nonumberline Par\IeC {\'a}metro}{16}% 
+\contentsline {subsubsection}{\nonumberline Variable Independiente}{16}% 
 \contentsline {subsubsection}{\nonumberline Vector independiente}{16}% 
-\contentsline {subsubsection}{\nonumberline Operadores Predefinidos}{16}% 
-\contentsline {subsubsection}{\nonumberline Operador \emph {Push}}{16}% 
-\contentsline {subsubsection}{\nonumberline Operador \emph {Type}}{16}% 
-\contentsline {subsubsection}{\nonumberline Funciones que define el analista}{16}% 
+\contentsline {subsubsection}{\nonumberline Operadores Predefinidos}{17}% 
+\contentsline {subsubsection}{\nonumberline Operador \emph {Push}}{17}% 
+\contentsline {subsubsection}{\nonumberline Operador \emph {Type}}{17}% 
+\contentsline {subsubsection}{\nonumberline Funciones que define el analista}{17}% 
 \contentsline {section}{\numberline {2.6}Modelo Ejecutable}{17}% 
-\contentsline {chapter}{\numberline {3}Planteamiento del Problema}{18}% 
-\contentsline {section}{\numberline {3.1}Antecedentes}{18}% 
-\contentsline {section}{\numberline {3.2}Problema}{19}% 
-\contentsline {section}{\numberline {3.3}Objetivos}{21}% 
-\contentsline {subsection}{\numberline {3.3.1}Objetivo general}{21}% 
-\contentsline {subsection}{\numberline {3.3.2}Objetivos espec\IeC {\'\i }ficos}{21}% 
-\contentsline {chapter}{\numberline {4}Propuesta de soluci\IeC {\'o}n}{22}% 
-\contentsline {section}{\numberline {4.1}Subrutinas que define el analista}{22}% 
-\contentsline {section}{\numberline {4.2}Operadores sobre arreglos}{23}% 
-\contentsline {section}{\numberline {4.3}Conceptualizaci\IeC {\'o}n}{23}% 
-\contentsline {subsection}{\numberline {4.3.1}Malla}{24}% 
-\contentsline {subsection}{\numberline {4.3.2}Roca}{24}% 
-\contentsline {subsection}{\numberline {4.3.3}Fluido}{25}% 
-\contentsline {subsection}{\numberline {4.3.4}Relaci\IeC {\'o}n de Equilibrio}{25}% 
-\contentsline {subsection}{\numberline {4.3.5}Interacci\IeC {\'o}n entre fluidos}{26}% 
-\contentsline {subsection}{\numberline {4.3.6}Pozo}{26}% 
-\contentsline {subsection}{\numberline {4.3.7}Ecuaci\IeC {\'o}n}{27}% 
-\contentsline {section}{\numberline {4.4}Representaci\IeC {\'o}n en EP de la simulaci\IeC {\'o}n de procesos EOR}{27}% 
-\contentsline {subsection}{\numberline {4.4.1}Malla aparece}{27}% 
-\contentsline {subsection}{\numberline {4.4.2}Tiempo pasa}{28}% 
-\contentsline {subsection}{\numberline {4.4.3}Presi\IeC {\'o}n del Fluido var\IeC {\'\i }a}{28}% 
-\contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{28}% 
-\contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{28}% 
-\contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{29}% 
-\contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de la Matriz del Jacobiano}{29}% 
-\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{29}% 
-\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{44}% 
-\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C++ y consistencia}{44}% 
-\contentsline {section}{\numberline {5.2}Simulaci\IeC {\'o}n y resultados}{45}% 
-\contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{49}% 
-\contentsline {section}{\numberline {6.1}Conclusiones}{49}% 
-\contentsline {section}{\numberline {6.2}Trabajo futuro}{49}% 
-\contentsline {chapter}{\numberline {A}Anexo: Nombrar el anexo A de acuerdo con su contenido}{50}% 
-\contentsline {chapter}{\numberline {B}Anexo: Nombrar el anexo B de acuerdo con su contenido}{51}% 
-\contentsline {chapter}{\numberline {C}Anexo: Nombrar el anexo C de acuerdo con su contenido}{52}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{54}% 
+\contentsline {chapter}{\numberline {3}Planteamiento del Problema}{19}% 
+\contentsline {section}{\numberline {3.1}Antecedentes}{19}% 
+\contentsline {section}{\numberline {3.2}Problema}{20}% 
+\contentsline {section}{\numberline {3.3}Objetivos}{22}% 
+\contentsline {subsection}{\numberline {3.3.1}Objetivo general}{22}% 
+\contentsline {subsection}{\numberline {3.3.2}Objetivos espec\IeC {\'\i }ficos}{22}% 
+\contentsline {chapter}{\numberline {4}Propuesta de soluci\IeC {\'o}n}{23}% 
+\contentsline {section}{\numberline {4.1}Subrutinas que define el analista}{23}% 
+\contentsline {section}{\numberline {4.2}Operadores sobre arreglos}{24}% 
+\contentsline {section}{\numberline {4.3}Conceptualizaci\IeC {\'o}n}{24}% 
+\contentsline {subsection}{\numberline {4.3.1}Malla}{25}% 
+\contentsline {subsection}{\numberline {4.3.2}Malla aparece}{25}% 
+\contentsline {subsection}{\numberline {4.3.3}Roca}{26}% 
+\contentsline {subsection}{\numberline {4.3.4}Fluido}{26}% 
+\contentsline {subsection}{\numberline {4.3.5}Interacci\IeC {\'o}n entre fluidos}{27}% 
+\contentsline {subsection}{\numberline {4.3.6}Relaci\IeC {\'o}n de Equilibrio}{27}% 
+\contentsline {subsection}{\numberline {4.3.7}Pozo}{28}% 
+\contentsline {subsection}{\numberline {4.3.8}Ecuaci\IeC {\'o}n}{29}% 
+\contentsline {section}{\numberline {4.4}Representaci\IeC {\'o}n en EP de la simulaci\IeC {\'o}n de procesos EOR}{29}% 
+\contentsline {subsection}{\numberline {4.4.1}Tiempo pasa}{30}% 
+\contentsline {subsection}{\numberline {4.4.2}Presi\IeC {\'o}n del Fluido var\IeC {\'\i }a}{30}% 
+\contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{30}% 
+\contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{30}% 
+\contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{31}% 
+\contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de la Matriz del Jacobiano}{31}% 
+\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{31}% 
+\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{46}% 
+\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C++ y consistencia}{46}% 
+\contentsline {section}{\numberline {5.2}Simulaci\IeC {\'o}n y resultados}{47}% 
+\contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{51}% 
+\contentsline {section}{\numberline {6.1}Conclusiones}{51}% 
+\contentsline {section}{\numberline {6.2}Trabajo futuro}{51}% 
+\contentsline {chapter}{\numberline {A}Anexo: Nombrar el anexo A de acuerdo con su contenido}{52}% 
+\contentsline {chapter}{\numberline {B}Anexo: Nombrar el anexo B de acuerdo con su contenido}{53}% 
+\contentsline {chapter}{\numberline {C}Anexo: Nombrar el anexo C de acuerdo con su contenido}{54}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{56}% 

@@ -19,7 +19,7 @@
 %
 %\section{Black Oil Model}
 
-\section{El medio poroso}
+\section{El medio poroso}\label{sec:porousmedium}
 
 La física en que se apoya la simulación de yacimientos de petróleo incluye el concepto de medio poroso. Un medio poroso se puede entender como un dominio espacial que ocupa parcialmente un sólido y una porción que ocupan los fluidos, a la que se le llama espacio vacío o poroso. Un yacimiento es un medio poroso que ocurre naturalmente, una formación geológica del subsuelo, que, a nivel microscópico, se compone por una red de poros que se pueden interconectar y que permiten almacenar fluidos \citep{Bear2018}.\\
 
@@ -32,7 +32,7 @@ La definición de medio poroso se extiende de la definición de un medio continu
 \end{figure}
 %Adicionalmente, existen gargantas de poro que conectan los poros de la roca, estas gargantas de poro indican la capacidad de la roca de permitir el transporte de los fluidos que puedan existir. La propiedad macroscópica que describe de la capacidad de transportar fluido es la permeabilidad absoluta. La permeabilidad absoluta es una propiedad direccional, es decir que puede variar según la dirección en la que se mida, si la permeabilidad varía su dirección en función del espacio, se dice que el medio es anisotrópico.
 
-\section{Transporte de fluidos en medios porosos}
+\section{Transporte de fluidos en medios porosos}\label{sec:Darcy}
 
 Los fluidos que se almacenan en un yacimiento, en general, se encuentran en un estado estable, el cual se afecta con la aplicación de diferentes campos actuando sobre el dominio físico (el medio poroso). Así, los fluidos se pueden desplazar debido a efectos gravitacionales, cambios de presión y saturación o capilaridad, entre otros.\\ %En esta tesis de maestría se estudia el flujo o transporte dominado por la advección, es decir, el flujo que se da principalmente por gradientes de presión.
 
@@ -58,10 +58,10 @@ Estas ecuaciones se aplican para un solo fluido. En el caso de múltiples fluido
 \label{ec:DarcyMultifasico} & \vec{u_{f}}=\frac{\mathbb{K}kr_{f}}{\mu_{f} } \nabla{\Phi_{f}}
 \end{align}
 
-\subsection{Mojabilidad}
-En la mojabilidad se mide la preferencia de la superficie de una roca cuando se moja por determinado fluido o por una combinación de fluidos (mojabilidad intermedia) \citep{chen2007reservoir}. El fluido de preferencia o ``fluido mojante'' se atrapa en los poros más pequeños de la roca, generando una capa del fluido sobre la superficie de la roca \citep{chen2007reservoir}. A la fracción del fluido que se queda atrapado en la roca se le denomina ``saturación irreducible'' ($S_{fc}$) \citep{chen2007reservoir}. \\
+\subsection{Mojabilidad}\label{subsec:Wettability}
+En la mojabilidad se mide la preferencia de la superficie de una roca cuando se moja por determinado fluido o por una combinación de fluidos (mojabilidad intermedia) \citep{chen2007reservoir}. El fluido de preferencia o ``fluido mojante'' se atrapa en los poros más pequeños de la roca, generando una capa del fluido sobre la superficie de la misma \citep{chen2007reservoir}. A la fracción del fluido que se queda atrapado en la roca se le denomina ``saturación irreducible'' ($S_{fc}$) \citep{chen2007reservoir}. \\
 
-\subsubsection{Presión Capilar}
+\subsection{Presión Capilar}\label{subsec:Capillary}
 Cuando existe flujo de dos fluidos, se genera una discontinuidad en la presión de ambos, la cuál se denomina ``presión capilar''. Ésta se calcula como la resta de la presión del ``fluido no mojante'' con la del ``fluido mojante''\citep{chen2007reservoir, FANCHI2002108}. En la Ecuación \ref{ec:presioncapilar} se presenta el cálculo de la ``presión capilar''.
 
 \begin{align}
@@ -70,10 +70,10 @@ Cuando existe flujo de dos fluidos, se genera una discontinuidad en la presión 
 
 La presión capilar es función de la saturación de uno de los fluidos que se relaciona, según el caso: $p_c(S_{f})$. En el caso de un sistema de tres fluidos, se requieren dos presiones capilares \citep{chen2007reservoir}.
 
-\subsubsection{Permeabilidad Relativa}
+\subsection{Permeabilidad Relativa}\label{subsec:Krs}
 La permeabilidad relativa ($k_{r}$) es una relación o fracción de movimiento de un fluido respecto a otro u otros \citep{chen2007reservoir}. Cuando sólo existen dos fluidos, la permeabilidad relativa es función directa de la saturación del fluido correspondiente ($k_{rf}(S_{f})$). Sin embargo, cuando hay tres o más fluidos, ésta puede depender de otras saturaciones ($k_{rf}(S_{f}, ...)$) \citep{chen2007reservoir}.
 
-Cuando existen tres fluidos en un yacimiento de petróleo, obtener información experimental que relacione la permeabilidad relativa conjunta es difícil. En práctica, lo que se hace es medir permeabilidades relativas entre dos fluidos, es decir, los contactos, e interpolar la permeabilidad del fluido de mojabilidad intermedia entre ellas. \citep{Zuo2014}.\\
+Cuando existen tres fluidos en un yacimiento de petróleo, obtener información experimental que relacione la permeabilidad relativa conjunta es difícil. En práctica, lo que se hace es medir permeabilidades relativas entre dos fluidos, es decir, los ``contactos'', e interpolar la permeabilidad del fluido de mojabilidad intermedia entre ellas. \citep{Zuo2014}.\\
 
 Existen múltiples métodos de interpolación para obtener la permeabilidad relativa del fluido con más de un contacto \citep{Delshad1989, Blunt2000, Zuo2014}. Para el desarrollo de esta Tesis de Maestría se usa la interpolación de \cite{Baker1988}, la cuál se muestra en la Ecuación \ref{ec:Baker}.
 
@@ -83,12 +83,12 @@ Existen múltiples métodos de interpolación para obtener la permeabilidad rela
 
 En un sistema de agua, gas y petróleo, se obtiene la permeabilidad relativa del petróleo al agua $k_{row}(S_{w})$ y la permeabilidad relativa del petróleo al gas $k_{rgo}(S_{g})$ y se pondera la permeabilidad relativa del petróleo por la saturación del gas y del agua \citep{Baker1988}.
 
-\section{Simulación de Yacimientos de Petróleo}
+\section{Simulación de Yacimientos de Petróleo}\label{sec:Simulation}
 El dominio de la simulación de petróleo de hidrocarburos se enmarca dentro del contexto del desarrollo de software científico referido a procesos industriales y de investigación de nuevas tecnologías \citep{Kelly2015}; los cuales requieren la implementación de modelos matemáticos complejos que representan múltiples fenómenos físicos y químicos entre los fluidos. La simulación de yacimientos de petróleo se rige por las leyes de conservación de la masa y del momentum. En estas leyes se describe la acumulación, transporte, fuentes y sumideros de los fluidos como un sistema de ecuaciones diferenciales parciales acopladas para un dominio físico. La solución analítica de estos sistemas, cuando es viable, requiere condiciones que se alejan de los problemas reales \citep{ertekin2001basic}. Por ello, es necesario una solución numérica o simulación. Un modelo de simulación que se usa en la industria es el \textit{Black Oil Model}.%, este hace una simplificación de la composición de los hidrocarburos existentes. Solucionar tales ecuaciones requiere discretizar el tiempo y el dominio físico; usar métodos de solución de sistemas no lineales, y métodos de solución de sistemas lineales así como el precondicionamiento de los mismos. \\ %Estas elecciones tienen un impacto en las capacidades de solución de ecuaciones que surgen de los diferentes problemas físicos.\\
 %Más aún, los resultados de la simulación deben ser contrastados con datos experimentales para verificar su concordancia con el fenómeno físico que modelan.\\
 
 
-\subsection[Modelo \emph{Black Oil} Extendido]{Modelo {\normalfont \bfseries \itshape Black Oil} Extendido}
+\subsection[Modelo \emph{Black Oil} Extendido]{Modelo {\normalfont \bfseries \itshape Black Oil} Extendido}\label{subsec:BOM}
 
 El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a condiciones estándar, en el cual, se considera la existencia de tres fluidos en el medio poroso: aceite, gas y agua. En el BOM, se asume que el aceite o petróleo tiene condiciones de barril estándar, es decir, presión y temperatura atmosférica \citep{chen2007reservoir}. Además, se supone que no existen variaciones considerables en la composición del aceite y del gas \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}. En éste modelo se considera que puede existir una transferencia de masa en equilibrio desde aceite al gas, lo que se denomina ``Gas disuelto''. Adicionalmente, en el modelo \textit{Black Oil} extendido, se considera una transferencia de masa desde el gas al aceite, lo que se denomina ``aceite volatilizado''. Las siguientes son las ecuaciones de conservación de volumen del BOM \citep{jamal2006petroleum, chen2007reservoir, ertekin2001basic}.
 
@@ -109,8 +109,8 @@ En el BOM se establece, también, que los fluidos tienen una compresibilidad, es
 Para calcular las densidades del gas y del aceite en el BOM extendido, que se requieren en el cálculo de potencial de cada fluido, se tiene en cuenta la masa existente de aceite en el gas y viceversa. Para esto, se mide una densidad a condiciones estándar y se aplican la siguientes ecuaciones:
 
 \begin{align}
-	\label{ec:oildensity}&\rho_{o} = \frac{\rho_{o,sc} + Rs*\rho_{g,sc}}{B_{o}}\\
-	\label{ec:gasdensity}&\rho_{g} = \frac{\rho_{g,sc} + Rv*\rho_{o,sc}}{B_{g}}\\
+	\label{ec:oildensity}&\rho_{o} = \frac{\rho_{o,sc} + R_{s}\rho_{g,sc}}{B_{o}}\\
+	\label{ec:gasdensity}&\rho_{g} = \frac{\rho_{g,sc} + R_{v}\rho_{o,sc}}{B_{g}}\\
 	\label{ec:watdensity}&\rho_{w} = \frac{\rho_{w,sc}}{B_{w}}
 \end{align}
 
@@ -124,7 +124,17 @@ En la versión del \textit{Black Oil Model} que se usa en esta Tesis de Maestrí
 \end{itemize}
 
 \subsubsection{Ecuaciones constitutivas}
-{\color{red} (¡Ojo que acá no he mostrado la restricción de volumen ni las presiones capilares)}
+
+Las ecuaciones del BOM son tres ecuaciones gobernantes, en las cuales se involucran seis incógnitas a resolver $\left(P_{o}, P_{g}, P_{w}, S_{o}, S_{g}, S_{w}\right)$ para el sistema de ecuaciones diferenciales parciales acopladas que se establece. Por tanto, se requieren ecuaciones adicionales en las que se relacionen las incógnitas libres. Esas ecuaciones son la restricción de volumen y las dos ecuaciones de capilaridad.
+
+\begin{align}
+	\label{ec:volumeRes}&S_{o}+S_{g}+S_{w} = 1\\
+	\label{ec:CapillaryGas}&P_{cgo} = P_{g} - P_{o}\\
+	\label{ec:CapillaryWater}&P_{cow} = P_{o} - P_{w}
+\end{align}
+
+En esta Tesis de Maestría se consideran las siguientes incógnitas $\left(P_{o}, S_{g}, S_{w}\right)$. Así, usando la Ecuación \ref{ec:volumeRes}, se obtiene $S_{o} = 1 - S_{g} - S_{w}$, a partir de la Ecuación \ref{ec:CapillaryGas}, se logra $P_{g} = P_{o} + P_{cgo}$, y de la Ecuación \ref{ec:CapillaryWater} se despeja $P_{w} = P_{o} - P_{cow}$.
+
 
 %(Poner suposiciones del \textit{Black Oil})
 
@@ -134,7 +144,7 @@ En la versión del \textit{Black Oil Model} que se usa en esta Tesis de Maestrí
 
 %con $\nabla{\Phi_{f}} = \nabla{p} - \rho g \nabla{z}$.
 
-\subsection{Condiciones iniciales}
+\subsection{Condiciones iniciales}\label{subsec:InitialCond}
 
 En el desarrollo de esta Tesis de Maestría se consideran yacimientos con condiciones de borde cerradas o Neumann cero para todas las fronteras, es decir, no existen acuíferos aportando presión o caudal en yacimiento. Las diferencias de presión se generan por la presencia de pozos productores e inyectores. En la Figura \ref{fig:empanada} se ejemplifica un yacimiento con condiciones de borde cerradas.\\
 
@@ -153,15 +163,15 @@ Además para un tiempo $t=0$ se tiene que:
 %
 Es decir, existe funciones en el espacio que describen las condiciones iniciales de presión $P^{0}_{f}(\vec{x})$ y saturación $S^{0}_{f}(\vec{x})$ para los fluidos $f$ del yacimiento.
 
-\subsection{Discretización}
+\subsection{Discretización}\label{subsec:Discretization}
 
 Se elige el método de los volúmenes finitos para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
 %Algebraic Equations
 \begin{align}
-\label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{Rv_{i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Aceite}} + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}} + Rv_{c}T^{n+1}_{g,c} \nabla{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo - Aceite}}+ \dot{Q}_{o,i}^{n+1} = 0 \\
-\label{ec:gasDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{Rs_{i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Gas}} + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\nabla{\Phi_{g,c}^{n+1} + Rs_{c}T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo - Gas}}+ Q_{g,i}^{n+1} = 0 \\
+\label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{R_{v,i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Aceite}} + 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}} + R_{v,c}T^{n+1}_{g,c} \nabla{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo - Aceite}}+ \dot{Q}_{o,i}^{n+1} = 0 \\
+\label{ec:gasDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{R_{s,i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Gas}} + 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\nabla{\Phi_{g,c}^{n+1} + R_{s,c}T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo - Gas}}+ Q_{g,i}^{n+1} = 0 \\
 \label{ec:aguaDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Agua}}
 + 
 \underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\nabla{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo - Agua}} + Q_{w,i}^{n+1} = 0 
@@ -170,10 +180,10 @@ Se elige el método de los volúmenes finitos para las discretización espacial 
 dónde:
 
 \begin{align*}
-	&\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{Rv_{i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n} = 
-	\phi^{n+1}_{i} \left( \frac{S_{o,i}^{n+1}}{B_{o,i}^{n+1}} + \frac{Rv_{i}^{n+1}S_{g,i}^{n+1}}{B_{g,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{o,i}^{n}}{B_{o,i}^{n}} + \frac{Rv_{i}^{n}S_{g,i}^{n}}{B_{g,i}^{n}}\right),\\
-	&\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{Rs_{i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n} = 
-	\phi^{n+1}_{i} \left( \frac{S_{g,i}^{n+1}}{B_{g,i}^{n+1}} + \frac{Rs_{i}^{n+1}S_{o,i}^{n+1}}{B_{o,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{g,i}^{n}}{B_{g,i}^{n}} + \frac{Rs_{i}^{n}S_{o,i}^{n}}{B_{o,i}^{n}}\right),\\
+	&\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{R_{v,i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n} = 
+	\phi^{n+1}_{i} \left( \frac{S_{o,i}^{n+1}}{B_{o,i}^{n+1}} + \frac{R_{v,i}^{n+1}S_{g,i}^{n+1}}{B_{g,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{o,i}^{n}}{B_{o,i}^{n}} + \frac{R_{v,i}^{n}S_{g,i}^{n}}{B_{g,i}^{n}}\right),\\
+	&\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{R_{s,i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n} = 
+	\phi^{n+1}_{i} \left( \frac{S_{g,i}^{n+1}}{B_{g,i}^{n+1}} + \frac{R_{s,i}^{n+1}S_{o,i}^{n+1}}{B_{o,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{g,i}^{n}}{B_{g,i}^{n}} + \frac{R_{s,i}^{n}S_{o,i}^{n}}{B_{o,i}^{n}}\right),\\
 	&\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n} = 
 	\phi^{n+1}_{i} \left( \frac{S_{w,i}^{n+1}}{B_{w,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{w,i}^{n}}{B_{w,i}^{n}}\right)
 \end{align*}
@@ -181,7 +191,7 @@ dónde:
 El término $T_{f,c}$ en la Ecuación \ref{ec:Transmissibity} corresponde a la transmisividad en una cara $c$ que conecta una celda $i$ con otra celda $j$.
 
 \begin{align}
-	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{1}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{kr_{f,c}}{\mu_{f,c}B_{f,c}}
+	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{1}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{k_{rf,c}}{\mu_{f,c}B_{f,c}}
 \end{align}
 \subsection{Modelado de Pozos}
 %
@@ -194,17 +204,17 @@ Los pozos son el principal objeto de estudio de la simulación de yacimientos de
 \end{figure}
 
 \begin{align}
-	\label{ec:peaceman}&q^{(v)}_{f} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi k_{r,f} \rho_{f} \sqrt{k_{xx}k_{yy}}h_{z}}{\mu_{f}\left(\ln \left(r_{e}/r_{w}\right) +s\right)}\left(p_{bh}^{(v)}-p_{f,m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
+	\label{ec:peaceman}&q^{(v)}_{f} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi k_{rf} \rho_{f} \sqrt{k_{xx}k_{yy}}h_{z}}{\mu_{f}\left(\ln \left(r_{e}/r_{w}\right) +s\right)}\left(p_{bh}^{(v)}-p_{f,m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
 \end{align}
 %
-\subsection{Método de Newton-Raphson}
+\subsection{Método de Newton-Raphson}\label{subsec:N-R}
 %
 El sistema de ecuaciones algebraicas que se forman por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximando su derivada, como se ilustra en la Figura \ref{fig:NewtonR}.\\
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=0.8]{Fig/NewtonR.pdf}%
-	\caption[Aproximación a la derivada de una función.]{Aproximación a la derivada de una función. Elaboración a partir de .} \label{fig:NewtonR}
+	\caption[Aproximación a la derivada de una función.]{Aproximación a la derivada de una función. {\color{red} Elaboración a partir de .}} \label{fig:NewtonR}
 \end{figure}
 ~\\
 \begin{equation}
@@ -223,17 +233,17 @@ J^k_{i,j}=\frac{\partial R^k_i}{\partial x^k_j}
 \frac{\partial R^k}{\partial x^k} \approx \frac{R\left(x^k + \xi \right) - R\left(x^k \right)}{\xi}
 \end{equation}
 
-\section{Procesos de Recobro Mejorado}
+\section{Procesos de Recobro Mejorado}\label{sec:EOR}
 
-\subsection{Modelado del Químico}
+\subsection{Modelado del Químico}\label{subsec:Chemical}
 
 %\section{Procesos de Recobro Mejorado}
 
-\section{Esquemas Preconceptuales}
+\section{Esquemas Preconceptuales}\label{sec:EP}
 
 Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el lenguaje natural y un esquema conceptual o un lenguaje formal. Estos esquemas contienen todo el dominio de aplicación de un interesado y, por tanto, sirven para establecer un punto común de entendimiento entre un interesado y un analista de software \citep{zapata2007phd}. Los EP se desarrollan con la idea de mantener la coherencia y consistencia entre el discurso del interesado y el software que se desarrolla. 
 
-\subsection{Elementos del Esquema Preconceptual}
+\subsection{Elementos del Esquema Preconceptual}\label{subsec:ElementsEP}
 \cite{zapata2012unc} define los elementos del EP tal como se observa en la Figura \ref{fig:InitialPS} para la representación del dominio del interesado. Estos elementos se dividen en cuatro categorías: nodos, relaciones, enlaces, y aglutinadores.\\
 
 \begin{figure}[h]
@@ -281,7 +291,7 @@ Los Esquemas Preconceptuales (EP) son representaciones intermedias entre el leng
 	\item \textbf{Evento}: Es una ocurrencia que habilita cambios de estado en los procesos  \citep{zapata2013Eventos}.
 \end{itemize}
 
-\subsection{Esquemas Preconceptuales en el contexto del software científico}
+\subsection{Esquemas Preconceptuales en el contexto del software científico}\label{subsec:EPScientific}
 
 \cite{JCalle} y \cite{norena2018det} descubren la capacidad del EP para representar aplicaciones en el contexto del software científico. Para ello, definen elementos adicionales que permiten modelar dominios de mayor complejidad. En esta Tesis de Maestría se usan las condiciones iniciales, conceptos tipo arreglo, parámetros, variables, vectores, operadores predefinidos, operador ``\textit{push}'', operador ``\textit{type}'',  y funciones que define el analista. En la Figura \ref{fig:NewElements} se representan los elementos previamente mencionados. A continuación, se explican los elementos adicionales que se usan en el desarrollo de esta Tesis de Maestría.
 
@@ -346,5 +356,5 @@ Las funciones que define el analista son especificaciones reutilizables en el EP
 	\caption[Ejemplo de función, cálculo del potencial.]{Ejemplo de función, cálculo del potencial. Los autores.} \label{fig:Potencial}
 \end{figure}
 
-\section{Modelo Ejecutable}
+\section{Modelo Ejecutable}\label{sec:Executable}
 Un modelo ejecutable es una abstracción que permite describir y definir la conceptualización y comportamiento de un dominio real o hipotético de estudio. Además, cuentan con semánticas que permiten definir acciones \citep{ExecutableUML}. El EP se enmarca dentro de esta definición, puesto que los EP ejecutables tienen elementos que permiten representar acciones que se procesan internamente en el modelo \citep{JChaverra}. 

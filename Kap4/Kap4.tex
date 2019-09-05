@@ -70,7 +70,17 @@ Una malla existe a partir de la conceptualización de los elementos emergentes e
 
 %Este párrafo puede servirme más para la parte del evento.
 
+\subsection{Malla aparece}\label{sec:PS_MeshAppears}
+El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definida'', que sucede justo después de que el geomodelador defina la malla. En este evento, se desarrollan dos ciclos principales. El primer ciclo es anidado por cada eje coordenado, y en total se recorre el número de celdas a definir. En este ciclo, se calculan los volúmenes y profundidades de cada celda, además se asigna un índice único de celda y la numeración en cada eje $(x,y,z)$. La especificación del evento ``Malla Aparece'' se presenta en la Figura \ref{fig:Concepts}.\\
 
+\begin{figure}[h]
+	\centering%
+	\includegraphics[height=0.9\textheight]{Fig/MallaAparece.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Representación de la aparición de la Malla.]{Representación de la aparición de la Malla. Los autores.} \label{fig:MeshAppears}
+\end{figure}
+
+En el segundo ciclo principal, se itera sobre las celdas que se definen previamente y se calcula la conectividad, es decir la definición de caras. Para esto, se consulta la existencia de celdas adyacentes a la celda actual en todas las direcciones. Si existe una celda en alguna dirección, se crea y calcula su área y orientación. Adicionalmente, a la cara se le asigna un índice y también se le asigna la celda vecina. Es importante notar que cada celda almacena su conjunto de caras, por lo que las caras se duplican.
 %We propose a representation of a mesh as a collection of cells which are represented likewise. collection of faces plus their respective attributes. This representation accounts for orthogonal cartesian meshes. Those are generated using the number of cells in each axis or direction, the thickness and top for each cell. Nevertheless, the thickness is only needed for the number of cells defined in every axis, because we work with regular meshes. Therefore the rest of the cells will have the same thickness.
 %The top of the mesh is required for the first XY plane, and needs to be filled with the depths of each cell in that plane, the rest of the cells are calculated using the depth of the first plane.
 
@@ -106,19 +116,8 @@ Los fluidos tienen propiedades que son funciones de su presión y saturación, l
 
 En pos de la generalidad, la ``viscosidad'' del ``fluido'' y su ``factor volumétrico'' se definen como funciones directas de su ``presión''. Con este fin, aparece el concepto de ``propiedad medida'', el cuál tiene una ``medida de referencia'' y un ``valor medido'' a esa referencia. Ambos son arreglos de la ``cantidad de medidas''. En la Figura \ref{fig:Fluid} también es posible ver que el fluido tiene una ``viscosidad medida'' y un ``factor volumétrico medido''. Esto permite calcular de manera general estas propiedades, independientemente del fluido, como una interpolación en el conjunto de medidas a la presión del fluido correspondiente. El ingeniero de fluidos inserta la viscosidad medida y el factor volumétrico medido cuando ``caracteriza el fluido''. \\
 
-Es importante notar también, que el fluido tiene un ``tipo'' y un atributo de tipo lógico ``principal''. El tipo del fluido puede ser ``petróleo'', ``gas'' o ``agua''. Sin embargo, el fluido cuyo atributo principal sea ``sí'' o ``\textit{true}'', incluye su ``presión'' en su respectiva ecuación. Los demás fluidos incluyen su ``saturación''. 
-
-%\subsection{Equilibrium Relation}\label{sec:PS_Equilibrium}
-\subsection{Relación de Equilibrio}\label{sec:PS_Equilibrium}
-En las ecuaciones del BOM se considera existencia de masa de gas en el aceite (Rs o gas disuelto), y, en el caso del BOM extendido, la de aceite en el gas (Rv o aceite volatilizado). En el concepto ``Relación de equilibrio'', se generaliza la existencia de masa de un fluido dentro de otro fluido como un ``coeficiente de partición''. Se postula, también, que existe un ``fluido aportante'' y un ``fluido receptor'', tal como se ve en la Figura \ref{fig:EqRelation}. El coeficiente de partición cumple la mismas condiciones de la viscosidad o el factor volumétrico del fluido. Además, la relación de equilibrio tiene un ``coeficiente de partición medido''.\\
-
-\begin{figure}[h]
-	\centering%
-	\includegraphics[width=0.9\linewidth]{Fig/Equilibrium.pdf}%
-	\caption[Adición de Relaciones de equilibrio.]{Adición de Relaciones de equilibrio. Los autores.} \label{fig:EqRelation}
-\end{figure}
-
-{\color{red} Tal definición de las relaciones de equilibrio tiene implicaciones en el cálculo de la densidad de}
+Es importante notar también, que el fluido tiene un ``tipo'' y un atributo de tipo lógico ``principal''. El tipo del fluido puede ser ``petróleo'', ``gas'' o ``agua''. Sin embargo, el fluido cuyo atributo principal sea ``sí'' o ``\textit{true}'', incluye su ``presión'' en su respectiva ecuación. Los demás fluidos incluyen su ``saturación''.
+ 
 %\subsection{Inter-phase interaction}\label{sec:PS_Interphase}
 \subsection{Interacción entre fluidos}\label{sec:PS_Interphase}
 %
@@ -134,7 +133,7 @@ En las ecuaciones del BOM se considera existencia de masa de gas en el aceite (R
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %NOTA: Es posible que este párrafo me sirva más para la parte de conceptualización de las Krs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Las interacciones entre fluidos se proponen como una generalización de los contactos entre fluidos. En el caso del modelo BOM, se deben especificar dos: los contactos gas-aceite y aceite-agua. En este concepto, se relacionan directamente las dependencias de la ``permeabilidad relativa del fluido principal'' con su respectivo ``fluido de referencia'' en el contacto. Además, para el fluidos cuya incógnita es la saturación, se relaciona la presión del fluido principal con su respectiva ``presión capilar'', con el fin de calcular la presión faltante. Para esto, es necesario saber de antemano cuál es el ``fluido mojante'' y cuál es el ``fluido no mojante''. Adicionalmente, todas las propiedades dependientes se calculan a la saturación del fluido de referencia. En la Figura \ref{fig:Contact} se presenta la representación propuesta para las interacciones entre fluidos.
+Las interacciones entre fluidos se proponen como una generalización de los contactos entre fluidos (véase Subsección \ref{subsec:Krs}). En el caso del modelo BOM, se deben especificar dos: los contactos gas-aceite y aceite-agua. En este concepto, se relacionan directamente las dependencias de la ``permeabilidad relativa del fluido principal'' con su respectivo ``fluido de referencia'' en el contacto. Además, para el fluido cuya incógnita es la saturación, se relaciona la presión del fluido principal con su respectiva ``presión capilar'', con el fin de calcular la presión faltante. Para esto, es necesario saber de antemano cuál es el ``fluido mojante'' y cuál es el ``fluido no mojante''. Adicionalmente, todas las propiedades que se mencionan son ``propiedades medidas'' que se calculan a la saturación del fluido de referencia. En la Figura \ref{fig:Contact} se presenta la representación propuesta para las interacciones entre fluidos.\\
 
 \begin{figure}[h]
 	\centering%
@@ -142,6 +141,40 @@ Las interacciones entre fluidos se proponen como una generalización de los cont
 	\caption[Adición de Interacción entre fluidos.]{Adición de Interacción entre fluidos. Los autores.} \label{fig:Contact}
 \end{figure}
 %este concepto me relaciona un fluido de referencia, que se espera diferente del fluido con la propiedad de ser ``Principal'' y es respecto al cual se interpolarán las permeabilidades relativas, tanto propias como del fluido principal.
+
+La permeabilidad relativa conjunta $k_{rp}$, es decir, la del fluido principal considerando todos sus contactos, se calcula usando la interpolación de \cite{Baker1988}, tal como se presenta en la Ecuación \ref{ec:Baker}. Se define la saturación del fluido de referencia como $S_{r}$, la saturación irreducible del fluido como $S_{rc}$, y la permeabilidad relativa del fluido principal al fluido de referencia como $k_{rpr}$. Así, la interpolación de \cite{Baker1988} para todas las interacciones entre fluidos $in$:
+
+\begin{align}
+	k_{rp} = \frac{\sum_{in \in I}\left[\left(S_{r,in} - S_{rc,in}\right)k_{rpr,in}\left(S_{r,in}\right)\right]}{\sum_{in \in I}\left[\left(S_{r,in} - S_{rc,in}\right)\right]}
+\end{align}
+
+%\subsection{Equilibrium Relation}\label{sec:PS_Equilibrium}
+\subsection{Relación de Equilibrio}\label{sec:PS_Equilibrium}
+En las ecuaciones del BOM se considera existencia de masa de gas en el aceite ($R_{s}$ o gas disuelto), y, en el caso del BOM extendido, la de aceite en el gas ($R_{v}$ o aceite volatilizado). En el concepto ``Relación de equilibrio'', se generaliza la existencia de masa de un fluido dentro de otro fluido con un ``coeficiente de partición''. Se postula, también, que existe un ``fluido aportante'' y un ``fluido receptor'', tal como se ve en la Figura \ref{fig:EqRelation}. El coeficiente de partición cumple la mismas condiciones de la viscosidad o el factor volumétrico del fluido. Además, la relación de equilibrio tiene un ``coeficiente de partición medido''.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/Equilibrium.pdf}%
+	\caption[Adición de Relaciones de equilibrio.]{Adición de Relaciones de equilibrio. Los autores.} \label{fig:EqRelation}
+\end{figure}
+
+Tal definición de las relaciones de equilibrio tiene implicaciones en el cálculo de la densidad de los fluidos, de la acumulación y del flujo. En el cálculo de densidad de un fluido se debe considerar la masa de cualquier otro fluido que esté presente dentro del mismo. Así, en el caso concreto del BOM, existe gas en el aceite, y en el BOM Extendido,
+aceite en el gas. Recordando los cálculos de densidades en \ref{ec:oildensity}, \ref{ec:gasdensity}, \ref{ec:watdensity} como se explican en la Subsección \ref{subsec:BOM}:
+
+\begin{align*}
+&\rho_{o} = \frac{\rho_{o,sc} + R_{s}\rho_{g,sc}}{B_{o}}\\
+&\rho_{g} = \frac{\rho_{g,sc} + R_{v}\rho_{o,sc}}{B_{g}}\\
+&\rho_{w} = \frac{\rho_{w,sc}}{B_{w}}
+\end{align*}
+
+En las relaciones de equilibrio se propone que puede existir cualquier transferencia de masa en equilibrio de un fluido a otro. Por tanto, la densidad de un fluido debe calcularse con los aportes de densidad de los fluidos receptores por todas las relaciones de equilibrio en las que éste es el fluido aportante. Tal como se presenta en:
+
+\begin{align}
+	\label{ec:generaldensity}&\rho_{a} = \dfrac{\rho_{a,sc} + \sum_{r \in R}\left[\chi_{a,r}\rho_{r,sc}\right]}{B_{a}}
+\end{align}
+
+donde $\chi$ es el coeficiente de partición en el que se relacionan el fluido aportante $a$, y el fluido receptor $r$, y $R$ el conjunto de relaciones de equilibrio en las que $a$ es el fluido aportante. Se destaca que $\chi$ es una relación volumétrica a condiciones estándar y es función de la presión del fluido aportante $a$ ($\chi_{a,r}\left(P_{a}\right)$).
+
 %\subsection{Component}\label{sec:PS_Component} % This could be changed to Chemical
 %\subsection{Well}\label{sec:PS_Well}
 \subsection{Pozo}\label{sec:PS_Well}
@@ -185,17 +218,6 @@ Para el correcto desarrollo de la simulación, se establecen las siguientes prec
 	\caption[Diagrama basado en el grafo de interacción de eventos.]{Diagrama basado en el grafo de interacción de eventos. Los autores basados en \cite{zapata2013Eventos}.} \label{fig:EventsInteraction}
 \end{figure}
 %The rest of this section is as follows: In section \ref{sec:PS_Mesh} we present the Mesh concept as a collection of cells with additional elements needed for calculating the attributes of each cell. Furthermore, we develop the dynamical relationship ``Geomodeler defines Mesh'' as an interaction of the role ``Geomodeler'' with atomic\footnote{atomic as is stated by \cite{AG01} (Aca debe ir Zapata)} dynamical relationships. In section \ref{sec:PS_Rock} we present the Rock concept with its attributes and initial characterization. In section \ref{sec:PS_Phase} ... In section \ref{sec:PS_Interphase} ... In section \ref{sec:PS_Equilibrium} we define the partition coefficients as relations between two phases, one contributing mass and another receiving mass in the mass balance equation. In section \ref{sec:PS_Well}
-\subsection{Malla aparece}\label{sec:PS_MeshAppears}
-El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definida'', que sucede justo después de que el geomodelador defina la malla. En este evento, se desarrollan dos ciclos principales. El primer ciclo es anidado por cada eje coordenado, y en total se recorre el número de celdas a definir. En este ciclo, se calculan los volúmenes y profundidades de cada celda, además se asigna un índice único de celda y la numeración en cada eje $(x,y,z)$. La especificación del evento ``Malla Aparece'' se presenta en la Figura \ref{fig:Concepts}.\\
-
-\begin{figure}[h]
-	\centering%
-	\includegraphics[height=0.9\textheight]{Fig/MallaAparece.pdf}%
-	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption[Representación de la aparición de la Malla.]{Representación de la aparición de la Malla. Los autores.} \label{fig:MeshAppears}
-\end{figure}
-
-En el segundo ciclo principal, se itera sobre las celdas que se definen previamente y se calcula la conectividad, es decir la definición de caras. Para esto, se consulta la existencia de celdas adyacentes a la celda actual en todas las direcciones. Si existe una celda en alguna dirección, se crea y calcula su área y orientación. Adicionalmente, a la cara se le asigna un índice y también se le asigna la celda vecina. Es importante notar que cada celda almacena su conjunto de caras, por lo que las caras se duplican.
 
 \subsection{Tiempo pasa}\label{sec:PS_TimePasses}
 El evento ``Tiempo pasa'' se dispara en el momento en que se tienen las suficientes realizaciones de los conceptos para ejecutar la simulación, es decir, se ejecutaron las mínimas relaciones dinámicas para poder disparar el evento, como se ve en la figura \ref{fig:TimePasses}. En este evento se procesa el inicio y el final de la simulación, incrementando el ``tiempo'' y ``término'' al que se van a calcular las propiedades de los conceptos principales.\\
