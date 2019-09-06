@@ -180,7 +180,7 @@ En las ecuaciones del BOM se considera existencia de masa de gas en el aceite ($
 	\caption[Adición de Relaciones de equilibrio.]{Adición de Relaciones de equilibrio. Los autores.} \label{fig:EqRelation}
 \end{figure}
 
-Tal definición de las relaciones de equilibrio tiene implicaciones en el cálculo de la densidad de los fluidos, de la acumulación y del flujo. En el cálculo de densidad de un fluido se debe considerar la masa de cualquier otro fluido que esté presente dentro del mismo. Así, en el caso concreto del BOM, existe gas en el aceite, y en el BOM Extendido,
+Tal definición de las relaciones de equilibrio tiene implicaciones en el cálculo de la densidad de los fluidos, de la acumulación y del flujo. En el cálculo de densidad de un fluido, se debe considerar la masa de cualquier otro fluido que esté presente dentro del mismo. Así, en el caso concreto del BOM, existe gas en el aceite, y en el BOM Extendido,
 aceite en el gas. Se recuerdan los cálculos de densidades en \ref{ec:oildensity}, \ref{ec:gasdensity}, \ref{ec:watdensity} como se explican en la Subsección \ref{subsec:BOM}:
 
 \begin{align*}
@@ -197,13 +197,11 @@ En las relaciones de equilibrio se propone que puede existir cualquier transfere
 
 donde $\chi$ es el coeficiente de partición en el que se relacionan el fluido aportante $a$, y el fluido receptor $r$, y $R$ el conjunto de relaciones de equilibrio en las que $a$ es el fluido aportante. Se destaca que $\chi$ es una relación volumétrica a condiciones estándar y es función de la presión del fluido aportante $a$ ($\chi_{a,r}\left(P_{a}\right)$).\\
 
-
-
 Para el cálculo del flujo y de la acumulación, se recuerdan las Ecuaciones que se discretizan del BOM Extendido \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion}, \ref{ec:aguaDiscretizacion} en las que se considera la existencia de gas disuelto ($R_{s}$) y aceite volatilizado ($R_v$), como se muestra en la Subsección \ref{subsec:BOM}. Éstas ecuaciones se generalizan para un fluido receptor $r$ arbitrario como sigue:
 
 \begin{align}
 	\label{ec:acumulacion_releq}\text{Acumulación: }&\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{r,i}}{B_{r,i}} + \sum_{a \in R}\frac{\chi_{a,r,i}S_{a,i}}{B_{a,i}}\right)\right]^{n+1}_{n}\\
-	\label{ec:flujo_releq}\text{Flujo: }&\sum_{c \in S}\left[ T^{n+1}_{r,c} \nabla{\Phi_{r,c}^{n+1}} + \sum_{a \in R}\chi_{a,r,c} T^{n+1}_{a,c} \nabla{\Phi_{a,c}^{n+1}} \right]
+	\label{ec:flujo_releq}\text{Flujo: }&\sum_{c \in S}\left[ T^{n+1}_{r,c} \Delta{\Phi_{r,c}^{n+1}} + \sum_{a \in R}\chi_{a,r,c} T^{n+1}_{a,c} \Delta{\Phi_{a,c}^{n+1}} \right]
 \end{align}
 
 %\subsection{Component}\label{sec:PS_Component} % This could be changed to Chemical

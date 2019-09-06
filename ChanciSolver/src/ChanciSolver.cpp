@@ -256,6 +256,7 @@ double calculateBaker(const int& term, const int& cell_index){
     double irreducible_saturation = 0;
     double mobile_saturation=0;
     double interpolated_principal_relative_permeability=0;
+    double maximum_principal_relative_permeability=1;
     
 
     for(auto& interfluid_interaction : added_interfluid_interactions )
