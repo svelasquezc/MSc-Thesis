@@ -12,27 +12,27 @@
 \contentsline {subsection}{\numberline {2.2.1}Mojabilidad}{5}{subsection.2.2.1}% 
 \contentsline {subsection}{\numberline {2.2.2}Presi\IeC {\'o}n Capilar}{6}{subsection.2.2.2}% 
 \contentsline {subsection}{\numberline {2.2.3}Permeabilidad Relativa}{6}{subsection.2.2.3}% 
-\contentsline {section}{\numberline {2.3}Simulaci\IeC {\'o}n de Yacimientos de Petr\IeC {\'o}leo}{7}{section.2.3}% 
+\contentsline {section}{\numberline {2.3}Simulaci\IeC {\'o}n de Yacimientos de Petr\IeC {\'o}leo}{6}{section.2.3}% 
 \contentsline {subsection}{\numberline {2.3.1}Modelo \emph {Black Oil} Extendido}{7}{subsection.2.3.1}% 
 \contentsline {subsubsection}{\nonumberline Ecuaciones constitutivas}{8}{section*.7}% 
-\contentsline {subsection}{\numberline {2.3.2}Condiciones iniciales}{9}{subsection.2.3.2}% 
+\contentsline {subsection}{\numberline {2.3.2}Condiciones iniciales}{8}{subsection.2.3.2}% 
 \contentsline {subsection}{\numberline {2.3.3}Discretizaci\IeC {\'o}n}{9}{subsection.2.3.3}% 
-\contentsline {subsection}{\numberline {2.3.4}Modelado de Pozos}{10}{subsection.2.3.4}% 
+\contentsline {subsection}{\numberline {2.3.4}Modelado de Pozos}{11}{subsection.2.3.4}% 
 \contentsline {subsection}{\numberline {2.3.5}M\IeC {\'e}todo de Newton-Raphson}{11}{subsection.2.3.5}% 
 \contentsline {section}{\numberline {2.4}Procesos de Recobro Mejorado}{12}{section.2.4}% 
 \contentsline {subsection}{\numberline {2.4.1}Modelado del Qu\IeC {\'\i }mico}{12}{subsection.2.4.1}% 
 \contentsline {section}{\numberline {2.5}Esquemas Preconceptuales}{12}{section.2.5}% 
 \contentsline {subsection}{\numberline {2.5.1}Elementos del Esquema Preconceptual}{12}{subsection.2.5.1}% 
-\contentsline {subsubsection}{\nonumberline Nodos}{12}{section*.8}% 
+\contentsline {subsubsection}{\nonumberline Nodos}{13}{section*.8}% 
 \contentsline {subsubsection}{\nonumberline Relaciones}{13}{section*.9}% 
-\contentsline {subsubsection}{\nonumberline Enlaces}{13}{section*.10}% 
+\contentsline {subsubsection}{\nonumberline Enlaces}{14}{section*.10}% 
 \contentsline {subsubsection}{\nonumberline Aglutinadores}{14}{section*.11}% 
-\contentsline {subsection}{\numberline {2.5.2}Esquemas Preconceptuales en el contexto del software cient\IeC {\'\i }fico}{14}{subsection.2.5.2}% 
+\contentsline {subsection}{\numberline {2.5.2}Esquemas Preconceptuales en el contexto del software cient\IeC {\'\i }fico}{15}{subsection.2.5.2}% 
 \contentsline {subsubsection}{\nonumberline Condiciones Iniciales}{15}{section*.12}% 
 \contentsline {subsubsection}{\nonumberline Concepto tipo arreglo}{16}{section*.13}% 
 \contentsline {subsubsection}{\nonumberline Par\IeC {\'a}metro}{16}{section*.14}% 
 \contentsline {subsubsection}{\nonumberline Variable Independiente}{16}{section*.15}% 
-\contentsline {subsubsection}{\nonumberline Vector independiente}{16}{section*.16}% 
+\contentsline {subsubsection}{\nonumberline Vector independiente}{17}{section*.16}% 
 \contentsline {subsubsection}{\nonumberline Operadores Predefinidos}{17}{section*.17}% 
 \contentsline {subsubsection}{\nonumberline Operador \emph {Push}}{17}{section*.18}% 
 \contentsline {subsubsection}{\nonumberline Operador \emph {Type}}{17}{section*.19}% 
@@ -70,7 +70,8 @@
 \contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{53}{chapter.6}% 
 \contentsline {section}{\numberline {6.1}Conclusiones}{53}{section.6.1}% 
 \contentsline {section}{\numberline {6.2}Trabajo futuro}{53}{section.6.2}% 
-\contentsline {chapter}{\numberline {A}Anexo: Nombrar el anexo A de acuerdo con su contenido}{54}{appendix.Alph1}% 
-\contentsline {chapter}{\numberline {B}Anexo: Nombrar el anexo B de acuerdo con su contenido}{55}{appendix.Alph2}% 
-\contentsline {chapter}{\numberline {C}Anexo: Nombrar el anexo C de acuerdo con su contenido}{56}{appendix.Alph3}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{58}{appendix.Alph3}% 
+\contentsline {chapter}{\numberline {A}Anexo: Discretizaci\IeC {\'o}n de las Ecuaciones del BOM}{54}{appendix.Alph1}% 
+\contentsline {chapter}{\numberline {B}Anexo: Traducciones a c\IeC {\'o}digo de la representaci\IeC {\'o}n}{57}{appendix.Alph2}% 
+\contentsline {chapter}{\numberline {C}Anexo: Nombrar el anexo C de acuerdo con su contenido}{58}{appendix.Alph3}% 
+\contentsline {chapter}{\numberline {D}Sizas Tikz}{60}{appendix.Alph4}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{61}{figure.Alph4.1}% 

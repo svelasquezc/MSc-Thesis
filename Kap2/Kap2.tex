@@ -63,10 +63,9 @@ En la mojabilidad se mide la preferencia de la superficie de una roca cuando se 
 
 \subsection{Presión Capilar}\label{subsec:Capillary}
 Cuando existe flujo de dos fluidos, se genera una discontinuidad en la presión de ambos, la cuál se denomina ``presión capilar''. Ésta se calcula como la resta de la presión del ``fluido no mojante'' con la del ``fluido mojante''\citep{chen2007reservoir, FANCHI2002108}. En la Ecuación \ref{ec:presioncapilar} se presenta el cálculo de la ``presión capilar''.
-
 \begin{align}
 	\label{ec:presioncapilar}&p_c = p_{\text{fluido no mojante}} - p_{\text{fluido mojante}}
-\end{align}\\
+\end{align}
 
 La presión capilar es función de la saturación de uno de los fluidos que se relaciona, según el caso: $p_c(S_{f})$. En el caso de un sistema de tres fluidos, se requieren dos presiones capilares \citep{chen2007reservoir}.
 
@@ -95,12 +94,12 @@ El \textit{Black Oil Model} (BOM) es un modelo de conservación de volumen a con
 \begin{align}
 \label{ec:aceite}
 \text{aceite: }&\frac{\partial}{\partial t} \left[ \phi \left( \frac{S_{o}}{B_{o}} + \frac{R_{v} S_{g}}{B_{g}} \right) \right]
-- \nabla \cdot \left( \frac{1}{B_{o}} \vec{u_{o}} + \frac{R_{v}}{B_{g}} \vec{u_{g}} \right) + \tilde{q}_{o}=0  \\
+- \nabla \cdot \left( \frac{1}{B_{o}} \vec{u_{o}} + \frac{R_{v}}{B_{g}} \vec{u_{g}} \right) - \tilde{q}_{o}=0  \\
 \label{ec:gas}
 \text{gas: }&\frac{\partial}{\partial t} \left[ \phi \left( \frac{S_{g}}{B_{g}} + \frac{R_{s} S_{o}}{B_{o}} \right) \right]
-- \nabla \cdot \left( \frac{1}{B_{g}} \vec{u_{g}} + \frac{R_{s}}{B_{o}} \vec{u_{o}} \right) + \tilde{q}_{g} = 0 \\
+- \nabla \cdot \left( \frac{1}{B_{g}} \vec{u_{g}} + \frac{R_{s}}{B_{o}} \vec{u_{o}} \right) - \tilde{q}_{g} = 0 \\
 \label{ec:agua}
-\text{agua: }&\frac{\partial}{\partial t} \left[\phi \left( \frac{S_{w}}{B_{w}} \right) \right] - \nabla \cdot \left( \frac{1}{B_{w}} \vec{u_{w}} \right) + \tilde{q}_{w} = 0 
+\text{agua: }&\frac{\partial}{\partial t} \left[\phi \left( \frac{S_{w}}{B_{w}} \right) \right] - \nabla \cdot \left( \frac{1}{B_{w}} \vec{u_{w}} \right) - \tilde{q}_{w} = 0 
 \end{align}
 donde $\vec{u_{f}}$ corresponde a la velocidad Darcy y $\tilde{q}_{f}$ a los aportes de fuentes y sumideros, que posteriormente se modelan como pozos, para el fluido $f = \left\lbrace o:\text{ aceite}, g:\text{ gas}, w:\text{ agua} \right\rbrace $.\\
 
@@ -165,16 +164,22 @@ Es decir, existe funciones en el espacio que describen las condiciones iniciales
 
 \subsection{Discretización}\label{subsec:Discretization}
 
-Se elige el método de los volúmenes finitos para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
+Existen múltiples métodos numéricos para resolver las ecuaciones diferenciales parciales que se describen en el BOM, tales como las diferencias finitas (FDM), los volúmenes finitos (FVM), los elementos finitos (FEM), entre otros. Éstos consisten en construir un sistema de ecuaciones algebraicas para un dominio discreto, es decir, con un número finito de celdas o volúmenes de control, a partir de un dominio físico continuo, cuya solución se aproxime a la del sistema de ecuaciones diferenciales parciales original. Al proceso de construir el sistema de ecuaciones algebraico para dominios discretos se le llama discretización. En la Figura \ref{fig:EmpanadaDiscretizada} se muestra un ejemplo de un dominio discreto.\\
+
+Para las ecuaciones diferenciales que son dependientes del tiempo, como lo son las de BOM, se requiere también obtener un conjunto finito de intervalos de tiempo, para los cuales resolver las ecuaciones.
+
+{\color{red} Hablar de que significa la discretización y por qué es necesario, hablar de discretización espacial y discretización temporal acá. quizá sea necesario mostrar un dominio discretizado}
+
+En esta Tesis de Maestría se elige el método de los volúmenes finitos para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
 %Algebraic Equations
 \begin{align}
 \label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{R_{v,i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Aceite}} + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}} + R_{v,c}T^{n+1}_{g,c} \nabla{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo - Aceite}}+ \dot{Q}_{o,i}^{n+1} = 0 \\
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \Delta{\Phi_{o,c}^{n+1}} + R_{v,c}T^{n+1}_{g,c} \Delta{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo - Aceite}} - Q_{o,i}^{n+1} = 0 \\
 \label{ec:gasDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{R_{s,i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Gas}} + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\nabla{\Phi_{g,c}^{n+1} + R_{s,c}T^{n+1}_{o,c} \nabla{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo - Gas}}+ Q_{g,i}^{n+1} = 0 \\
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\Delta{\Phi_{g,c}^{n+1} + R_{s,c}T^{n+1}_{o,c} \Delta{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo - Gas}} - Q_{g,i}^{n+1} = 0 \\
 \label{ec:aguaDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Agua}}
 + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\nabla{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo - Agua}} + Q_{w,i}^{n+1} = 0 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\Delta{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo - Agua}} - Q_{w,i}^{n+1} = 0 
 \end{align}\\
 
 dónde:
@@ -191,11 +196,11 @@ dónde:
 El término $T_{f,c}$ en la Ecuación \ref{ec:Transmissibity} corresponde a la transmisividad en una cara $c$ que conecta una celda $i$ con otra celda $j$.
 
 \begin{align}
-	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{1}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{k_{rf,c}}{\mu_{f,c}B_{f,c}}
+	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{2}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{k_{rf,c}}{\mu_{f,c}B_{f,c}}
 \end{align}
 \subsection{Modelado de Pozos}
 %
-Los pozos son el principal objeto de estudio de la simulación de yacimientos de petróleo, debido a que en ellos, se concentra el propósito de cualquier operación de campo. Los pozos tienen dos tipos, inyector o productor, y se forman por un conjunto de bloques perforados en los que existe un flujo radial \citep{peaceman1983interpretation}. \cite{peaceman1983interpretation} describe el flujo en pozos con varias capas de perforados como se muestra en la Ecuación \ref{ec:peaceman}. En la Figura \ref{fig:mulperfwell} se ilustra un pozo vertical con múltiples perforados.
+Los pozos son el principal objeto de estudio de la simulación de yacimientos de petróleo, debido a que en ellos, se concentra el propósito de cualquier operación de campo. Éstos tienen dos tipos, inyector o productor, y se forman por un conjunto de bloques perforados en los que existe un flujo radial \citep{peaceman1983interpretation}. \cite{peaceman1983interpretation} describe el flujo en pozos con varias capas de perforados como se muestra en la Ecuación \ref{ec:peaceman}. En la Figura \ref{fig:mulperfwell} se ilustra un pozo vertical con múltiples perforados.
 
 \begin{figure}[h]
 	\centering%
