@@ -21,7 +21,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     Eigen::BiCGSTAB<SparseMat_t, Eigen::IncompleteLUT<double, int> > _solver;
 
     const double _machine_epsilon = std::sqrt(std::numeric_limits<double>::epsilon());
-    const double _relative_change_in_residual=1e-4;
+    const double _relative_change_in_residual=1e-15;
 
     std::vector<Tripletd_t> _non_zeros;
     
@@ -122,7 +122,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             };
         };
 
-        return accumulation - flow + well_contribution;
+        return accumulation - flow - well_contribution;
     };
 
     double inline calculateWellResidual(const int& term, std::shared_ptr<Well>& well){
