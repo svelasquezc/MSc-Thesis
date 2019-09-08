@@ -132,7 +132,7 @@ En el BOM se consideran tres ecuaciones gobernantes, en las cuales se involucran
 	\label{ec:CapillaryWater}&P_{cow} = P_{o} - P_{w}
 \end{align}
 
-En esta Tesis de Maestría se consideran las siguientes incógnitas $\left(P_{o}, S_{g}, S_{w}\right)$. Así, usando la Ecuación \ref{ec:volumeRes}, se obtiene $S_{o} = 1 - S_{g} - S_{w}$, a partir de la Ecuación \ref{ec:CapillaryGas}, se logra $P_{g} = P_{o} + P_{cgo}$, y de la Ecuación \ref{ec:CapillaryWater} se despeja $P_{w} = P_{o} - P_{cow}$.
+En esta Tesis de Maestría se consideran las siguientes incógnitas $\left(P_{o}, S_{g}, S_{w}\right)$. Así, usando la Ecuación \ref{ec:volumeRes}, se obtiene $S_{o} = 1 - S_{g} - S_{w}$, a partir de la Ecuación \ref{ec:CapillaryGas} se logra $P_{g} = P_{o} + P_{cgo}$, y de la Ecuación \ref{ec:CapillaryWater} se despeja $P_{w} = P_{o} - P_{cow}$.
 
 
 %(Poner suposiciones del \textit{Black Oil})
@@ -166,11 +166,28 @@ Es decir, existe funciones en el espacio que describen las condiciones iniciales
 
 Existen múltiples métodos numéricos para resolver las ecuaciones diferenciales parciales que se describen en el BOM, tales como las diferencias finitas (FDM), los volúmenes finitos (FVM), los elementos finitos (FEM), entre otros. Éstos consisten en construir un sistema de ecuaciones algebraicas para un dominio discreto, es decir, con un número finito de celdas o volúmenes de control, a partir de un dominio físico continuo, cuya solución se aproxime a la del sistema de ecuaciones diferenciales parciales original. Al proceso de construir el sistema de ecuaciones algebraico para dominios discretos se le llama discretización. En la Figura \ref{fig:EmpanadaDiscretizada} se muestra un ejemplo de un dominio discreto.\\
 
-Para las ecuaciones diferenciales que son dependientes del tiempo, como lo son las de BOM, se requiere también obtener un conjunto finito de intervalos de tiempo, para los cuales resolver las ecuaciones.
+Para las ecuaciones diferenciales que son dependientes del tiempo, como lo son las de BOM, se requiere, también, obtener un conjunto finito de intervalos de tiempo, para los cuales resolver las ecuaciones. Así, para un término $F(t)$ dependiente del tiempo, su integral en un intervalo $\left[t;t+\Delta t\right]$ se puede expresar, usando el teorema del valor medio como:
+\begin{align}
+	\int_{t}^{t+\Delta t} F(t) dt = F_{m}|\Delta t|
+\end{align}
+donde $F_{m} = F(t^{*})$ denota el valor promedio de la función $F$, con $t^{*} \in  \left[t;t+\Delta t\right]$. Este $t^{*}$ no se conoce, por tanto, se necesita una aproximación numérica para calcular tal valor promedio. Según la aproximación que se tome, se define el esquema de aproximación para el tiempo. Pudiendo ser:
+\begin{itemize}
+	\item Esquema Explícito
+	\begin{align}
+		\label{ec:Explicit}&F_{m} = F^{n} = F(t_{n}) = F(t)
+	\end{align}
+	\item Esquema Implícito
+	\begin{align}
+	\label{ec:Implicit}&F_{m} = F^{n+1} = F(t_{n+1}) = F(t+\Delta t)
+	\end{align}
+	\item Esquema Crank-Nicholson
+	\begin{align}
+	\label{ec:C-N}&F_{m} = \frac{F(t_{n})+F(t_{n+1})}{2} = \frac{F(t)+F(t + \Delta t)}{2}
+	\end{align}
+\end{itemize}
+%{\color{red} Hablar de que significa la discretización y por qué es necesario, hablar de discretización espacial y discretización temporal acá. quizá sea necesario mostrar un dominio discretizado}
 
-{\color{red} Hablar de que significa la discretización y por qué es necesario, hablar de discretización espacial y discretización temporal acá. quizá sea necesario mostrar un dominio discretizado}
-
-En esta Tesis de Maestría se elige el método de los volúmenes finitos para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
+En esta Tesis de Maestría se elige el método de los volúmenes finitos (FVM) para las discretización espacial de las ecuaciones \ref{ec:aceite}, \ref{ec:gas} y \ref{ec:agua} y un esquema implícito (\ref{ec:Implicit}) para la discretización del tiempo, es decir, elección del tiempo al $n+1$ (futuro). El proceso de discretización se muestra en el anexo \ref{AnexoA}. Para una celda con índice $i$ con superficie $S$ como un conjunto de caras $c$, la discretización de las ecuaciones es la siguiente:
 %Algebraic Equations
 \begin{align}
 \label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{R_{v,i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Aceite}} + 
@@ -180,10 +197,8 @@ En esta Tesis de Maestría se elige el método de los volúmenes finitos para la
 \label{ec:aguaDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Agua}}
 + 
 \underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\Delta{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo - Agua}} - Q_{w,i}^{n+1} = 0 
-\end{align}\\
-
+\end{align}
 dónde:
-
 \begin{align*}
 	&\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{R_{v,i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n} = 
 	\phi^{n+1}_{i} \left( \frac{S_{o,i}^{n+1}}{B_{o,i}^{n+1}} + \frac{R_{v,i}^{n+1}S_{g,i}^{n+1}}{B_{g,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{o,i}^{n}}{B_{o,i}^{n}} + \frac{R_{v,i}^{n}S_{g,i}^{n}}{B_{g,i}^{n}}\right),\\
@@ -192,9 +207,7 @@ dónde:
 	&\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n} = 
 	\phi^{n+1}_{i} \left( \frac{S_{w,i}^{n+1}}{B_{w,i}^{n+1}}\right) - \phi^{n}_{i} \left( \frac{S_{w,i}^{n}}{B_{w,i}^{n}}\right)
 \end{align*}
-
 El término $T_{f,c}$ en la Ecuación \ref{ec:Transmissibity} corresponde a la transmisividad en una cara $c$ que conecta una celda $i$ con otra celda $j$.
-
 \begin{align}
 	\label{ec:Transmissibity}& T_{f,c} = \left(\frac{2}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{k_{rf,c}}{\mu_{f,c}B_{f,c}}
 \end{align}
@@ -205,14 +218,31 @@ Los pozos son el principal objeto de estudio de la simulación de yacimientos de
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=0.8]{Fig/pozo_multi_perf.pdf}%
-	\caption[Esquemático de pozo multiperforado.]{Esquemático de pozo multiperforado. Elaboración a partir de \cite{chen2007reservoir}} \label{fig:mulperfwell}
+	\caption[Esquemático de pozo multiperforado.]{Esquemático de pozo multiperforado. Elaboración a partir de \cite{chen2007reservoir}.} \label{fig:mulperfwell}
 \end{figure}
+\begin{footnotesize}
+	\begin{align}
+	\label{ec:peaceman}&q^{(v)}_{f, sc} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi k_{rf,m} \rho_{f,m} \sqrt{k_{xx,m}k_{yy,m}}h_{z,m}}{B_{f,m}\mu_{f,m}\left(\ln \left(r_{e,m}/r_{w}\right) +s_{m}\right)}\left(p_{bh}^{(v)}-p_{p,m}-\gamma_{f,bh}\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
+	\end{align}
+\end{footnotesize}
+Donde $v$ corresponde al índice del pozo, $M_{w}$ a la cantidad de perforados y $m$ al índice de cada perforado, que debe coincidir con el de una celda; y $P_{p}$ es la presión del perforado.\\
 
+Además, los pozos se controlan por condiciones operativas, que permiten mantener un régimen conocido de presión o caudal, tanto en inyección como producción. Las condiciones operativas también dependen del tipo del pozo. Sin embargo, en esta Tesis de Maestría sólo se consideran dos tipos de condición operativa, presión y caudal a condiciones estándar. Donde, para un pozo productor es caudal de líquido, es decir, caudal de aceite más el de agua; y para un pozo inyector es el caudal del fluido de inyección. Luego para el caudal de un pozo productor:
 \begin{align}
-	\label{ec:peaceman}&q^{(v)}_{f} = \sum_{m=1}^{M^{(v)}_{w}}\frac{2\pi k_{rf} \rho_{f} \sqrt{k_{xx}k_{yy}}h_{z}}{\mu_{f}\left(\ln \left(r_{e}/r_{w}\right) +s\right)}\left(p_{bh}^{(v)}-p_{f,m}-\gamma\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
+	q^{v}_{prod,sc} = q^{v}_{o,sc} + q^{v}_{w,sc}
 \end{align}
-%
-{\color{red} No he hablado de condiciones operativas}
+Donde $q^{v}_{f,sc}$ para $f \in \left\lbrace o,w \right\rbrace$ se calcula usando la Ecuación \ref{ec:peaceman}.\\
+
+Para un pozo inyector, se necesita calcular la movilidad del fluido de inyección, sumando las movilidades de los fluidos que debe desplazar en el mismo, porque el influjo está dominado por los fluidos que se desplazan. Por tanto, el caudal de inyección es:
+
+\begin{scriptsize}
+	\begin{align}
+	\label{ec:peacemaniny}&q^{(v)}_{iny, sc} = \sum_{m=1}^{M^{(v)}_{w}}\left(\sum_{f \in F}\frac{k_{rf,m}}{\mu_{f,m}}\right)\frac{2\pi \rho_{iny,m} \sqrt{k_{xx,m}k_{yy,m}}h_{z,m}}{B_{iny,m}\left(\ln \left(r_{e,m}/r_{w}\right) +s_{m}\right)}\left(p_{bh}^{(v)}-p_{p,m}-\gamma_{iny,bh}\left(z_{bh}^{(v)}-z_{m}\right)\right)\delta\left(x-x_{m}^{(v)}\right)
+	\end{align}
+\end{scriptsize}
+
+Donde $iny$ corresponde al fluido de inyección y $f \in F:\left\lbrace o,g,w,... \right\rbrace$ a los fluidos en el dominio físico.
+%{\color{red} No he hablado de condiciones operativas}
 
 \subsection{Método de Newton-Raphson}\label{subsec:N-R}
 %
