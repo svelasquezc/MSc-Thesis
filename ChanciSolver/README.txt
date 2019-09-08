@@ -36,6 +36,28 @@ INITIAL_SATURATION
 X*Y*Z Saturaciones (-)
 PRINCIPAL 1/0 (1 o 0) Siempre debe haber uno en 1
 
+EQUILIBRIUM_RELATIONS # (De relaciones de equilibrio)
+CONTRIBUTOR_FLUID 1 - índice del fluido (supongamos aceite)
+RECEIVER_FLUID 2 - índice del fluido (supongamos gas) gas-oil-ratio
+PARTITION_COEFFICIENT #_MEDIDAS
+PRESIÓN 1 COEFICIENTE 1 - presiones contributor (Pa) coeficiente (...)
+PRESION 2 COEFICIENTE 2
+
+INTERFLUID_INTERACTIONS # (De interacciones entre fluidos)
+REFERENCE_FLUID 2 - índice del fluido (supongamos gas)
+WETTING_FLUID 1 - índice del fluido (aceite) Kr gas-aceite
+NON_WETTING_FLUID 2 - índice del fluido (gas)
+REFERENCE_RELATIVE_PERMEABILITY #_MEDIDAS
+SATURACIÓN 1 REFERENCE_RELATIVE_PERMEABILITY 1 - saturacion gas (-) Krg (-)
+SATURACIÓN 2 REFERENCE_RELATIVE_PERMEABILITY 2 - saturacion gas (-) Krg (-)
+PRINCIPAL_RELATIVE_PERMEABILITY #_MEDIDAS
+SATURACIÓN 1 PRINCIPAL_RELATIVE_PERMEABILITY 1 - saturacion gas (-) Krog (-)
+SATURACIÓN 2 PRINCIPAL_RELATIVE_PERMEABILITY 2 - saturacion gas (-) Krog (-)
+CAPILLARY_PRESSURE #_MEDIDAS
+SATURACIÓN 1 CAPILLARY_PRESSURE 1 - saturacion gas (-) pcgo (-)
+SATURACIÓN 2 CAPILLARY_PRESSURE 2 - saturacion gas (-) pcgo (-)
+
+
 TIME_DELTA VALOR (s)
 SIMULATION_TIME VALOR (s)
 
