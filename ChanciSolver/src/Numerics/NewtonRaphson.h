@@ -20,8 +20,9 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
     Eigen::BiCGSTAB<SparseMat_t, Eigen::IncompleteLUT<double, int> > _solver;
 
-    const double _machine_epsilon = 200.0*std::sqrt(std::numeric_limits<double>::epsilon());
-    const double _relative_change_in_residual=1e-10;
+    const double _machine_epsilon = std::sqrt(2.2e-16);
+    //        std::sqrt(std::numeric_limits<double>::epsilon());
+    const double _relative_change_in_residual=1e-4;
 
     std::vector<Tripletd_t> _non_zeros;
     
@@ -97,10 +98,13 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         if(fluid.principal()){
             if(!undo){
                 _aux_variable = fluid.pressure(term, cell_index);
-                //scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
+                
+                scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
                 if(scaled_epsilon == 0.0) scaled_epsilon = _machine_epsilon;
+                
                 fluid.pressure(term, cell_index, fluid.pressure(term, cell_index)+scaled_epsilon);
-                modified_epsilon = scaled_epsilon;
+                
+                modified_epsilon = fluid.pressure(term, cell_index)-_aux_variable;
                 //std::cout << modified_epsilon;
             }else{
                 fluid.pressure(term, cell_index, _aux_variable);
@@ -108,10 +112,14 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         }else{
             if(!undo){
                 _aux_variable = fluid.saturation(term, cell_index);
-                //scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
+                
+                scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
                 if(scaled_epsilon == 0.0) scaled_epsilon = _machine_epsilon;
+                
                 fluid.saturation(term, cell_index, fluid.saturation(term, cell_index)+scaled_epsilon);
-                modified_epsilon = scaled_epsilon;
+                
+                modified_epsilon = fluid.saturation(term, cell_index)-_aux_variable;
+                
             }else{
                 fluid.saturation(term, cell_index, _aux_variable);
             };
@@ -134,7 +142,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     if((*perforation)->type() == typeid(Producer_Perforate).name()){
                         auto producer_perf = std::dynamic_pointer_cast<Producer_Perforate, Perforate>(*perforation);
                         well_contribution += producer_perf->flow(fluid.index());
-                        std::cout << well_contribution;
+                        //std::cout << well_contribution;
                     }else{
                         auto injector_well = std::dynamic_pointer_cast<Injector_Well, Well>(well);
                         if (injector_well->injectionFluid()->index() == fluid.index()){
@@ -158,6 +166,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
         _residual = -_residual;
         // std::cout << "Jacobian: "<< _jacobian<<std::endl;
+        _solver.preconditioner().setDroptol(0.000001);
         _solver.compute(_jacobian);
         _solution_delta = _solver.solve(_residual);
         //std::cout << "Solution Delta: "<< _solution_delta<<std::endl;
@@ -273,18 +282,24 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                                         row = locate(residual_type, residual_selector, residual_well->index());
                                         col = locate(variable_type, variable_selector, well_variable->index());
+                                        
                                         _aux_variable = well_variable->boreholePressure(term);
-                                        //scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
+                                        scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
+                                        
                                         if(scaled_epsilon == 0.0) {scaled_epsilon = _machine_epsilon;};
+                                        
                                         well_variable->boreholePressure(term, well_variable->boreholePressure(term)+scaled_epsilon);
 
-                                        modified_epsilon = scaled_epsilon;
+                                        modified_epsilon = well_variable->boreholePressure(term) - _aux_variable;
                                         
                                         _calculateWellFlow(term, well_variable);
                                         modified_residual = calculateWellResidual(term, well_variable);
                                     
                                     
                                         double derivative = (modified_residual - _residual(row))/modified_epsilon;
+
+                                        if(std::isnan(derivative)){derivative = 0.0;}; 
+                                        
                                         if(derivative != 0.0 || row == col){
                                             if(derivative == 0 && row == col){
                                                 _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
@@ -323,6 +338,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         auto modified_flow = (*perforation)->totalFlow();
 
                                         double derivative = (modified_flow - unmodified_flow)/modified_epsilon;
+                                        if(std::isnan(derivative)){derivative = 0.0;};
+                                        
                                         if(derivative != 0.0 || row == col){
                                             if(derivative == 0 && row == col){
                                                 _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
@@ -376,18 +393,25 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         
                                         row = locate(residual_type, residual_selector, cell->index());
                                         col = locate(variable_type, variable_selector, well_variable->index());
+                                        
                                         _aux_variable = well_variable->boreholePressure(term);
-                                        //scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
+                                        
+                                        scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
                                         if(scaled_epsilon == 0.0) scaled_epsilon = _machine_epsilon;
+                                        
                                         well_variable->boreholePressure(term, well_variable->boreholePressure(term)+scaled_epsilon);
+                                        
                                         std::cout << well_variable->boreholePressure(term);
-                                        modified_epsilon = scaled_epsilon;
+                                        
+                                        modified_epsilon = well_variable->boreholePressure(term) - _aux_variable;
                                         
                                         _calculatePerforation(term, well_variable, *perforation);
                                     
                                         modified_residual = calculateResidual(term,*residual_fluid, mesh,cell,rock, wells);
                                         
                                         double derivative = (modified_residual - _residual(row))/modified_epsilon;
+                                        if(std::isnan(derivative)){derivative = 0.0;};
+                                        
                                         if(derivative != 0.0 || row == col){
                                             if(derivative == 0 && row == col){
                                                 _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
@@ -424,6 +448,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                             modified_residual = calculateResidual(term,*residual_fluid, mesh,neighbor_cell,rock, wells);
 
                                             double derivative = (modified_residual - _residual(neighbor_index))/modified_epsilon;
+                                            if(std::isnan(derivative)){derivative = 0.0;};
+                                            
                                             if(derivative != 0 || row == col){
                                                 if(derivative == 0 && row == col){
                                                     _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
@@ -440,6 +466,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         modified_residual = calculateResidual(term,*residual_fluid, mesh, *cell, rock, wells);
 
                                         double derivative = (modified_residual - _residual(cell_index))/modified_epsilon;
+                                        if(std::isnan(derivative)){derivative = 0.0;};
+                                        
                                         if(derivative != 0.0 || row == col){
                                             if(derivative == 0 && row == col){
                                                 _non_zeros.push_back(Tripletd_t(row,col,_machine_epsilon));
@@ -490,7 +518,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
             tolerance = _residual.squaredNorm()/_initial_residual.squaredNorm();
 
-            //std::cout << "Tolerance: " << tolerance <<" at iteration: "<<iteration<<std::endl;
+            std::cout << "Tolerance: " << tolerance <<" at iteration: "<<iteration<<std::endl;
             
         }while(tolerance > _relative_change_in_residual);
     

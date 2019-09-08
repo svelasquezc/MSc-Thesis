@@ -169,7 +169,7 @@ double calculatePeacemanProducer(const int& term, const double main_pressure, co
     
     peaceman_flow = (well_index * fluid->relativePermeability(term, cell_index) / ((fluid->volumetricFactor(term, cell_index)*fluid->viscosity(term, cell_index)))) *
         (borehole_pressure - main_pressure - (fluid->density(term, cell_index)*gravity*(borehole_depth - cell->depth())));
-    std::cout <<"\n mira:" << borehole_depth - cell->depth() << "\n";
+    //std::cout <<"\n mira:" << borehole_depth - cell->depth() << "\n";
     
 };
 
@@ -577,6 +577,9 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
             max_non_zeros = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + max_number_of_well_non_zeros;
             
             my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
+            
+            ++term;
+            
         };
 
         if(Global::changing_wells > 0){
@@ -599,7 +602,6 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
             my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
 
             Global::changing_wells = 0;
-            
         };
         
         std::cout << "Simulating interval [" << mytime << " - " << mytime + timedelta << "]" << std::endl;
