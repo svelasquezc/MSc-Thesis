@@ -604,7 +604,7 @@ void timePasses(std::string& timestamp, std::string& term, double& mytime, doubl
         std::cout << "Simulating interval [" << mytime << " - " << mytime + timedelta << "]" << std::endl;
 
         for (auto cell = mymesh->begin(); cell!=mymesh->end(); ++cell){
-            std::cout << characterized_fluids[0]->pressure(std::string("N"), (*cell)->index())<< " ";
+            std::cout << characterized_fluids[0]->pressure("N", (*cell)->index())<< " ";
         };
         std::cout << std::endl;
         
