@@ -246,7 +246,7 @@ const int& Fluid::index() const{
 
 void Fluid::potential(const int& _term, const int& _cellindex, const double gravity, const double& depth){
     _potential[_term][_cellindex] =
-        _pressure[_term][_cellindex] - _density[_term][_cellindex]*gravity*depth;
+        _pressure[_term][_cellindex] + _density[_term][_cellindex]*gravity*depth;
 };
 
 //void {density[_term][_cellindex] = standard_conditions_density;};

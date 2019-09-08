@@ -100,6 +100,13 @@ void estimateWellPressure(const int term, std::shared_ptr<Well>& well){
             auto cell = mymesh->cell(producer_perf->index());
             
             for(auto fluid : characterized_fluids){
+                
+                decltype(fluid) main_fluid;
+                
+                if(fluid->principal()){
+                    main_fluid = fluid;
+                };
+                
                 if(fluid->type() != "Gas"){
                     perforation_mobility = producer_perf->wellIndex(term)*
                         fluid->relativePermeability(term, cell->index())/(fluid->volumetricFactor(term, cell->index())*fluid->viscosity(term, cell->index()));
@@ -108,7 +115,7 @@ void estimateWellPressure(const int term, std::shared_ptr<Well>& well){
 
                     hydrostatic_head = fluid->density(term, cell->index())*gravity*(producer_well->boreholeDepth()-cell->depth());
 
-                    estimated_flow = perforation_mobility*(fluid->pressure(term, cell->index()) + hydrostatic_head);
+                    estimated_flow = perforation_mobility*(main_fluid->pressure(term, cell->index()) + hydrostatic_head);
                     accumulated_flow += estimated_flow;
                     
                 };
@@ -118,22 +125,34 @@ void estimateWellPressure(const int term, std::shared_ptr<Well>& well){
         };
         
     }else{
-
+        
         injector_well = std::dynamic_pointer_cast<Injector_Well, Well>(well);
-        auto fluid = injector_well->injectionFluid();
+        auto injection_fluid = injector_well->injectionFluid();
+        
         for(auto perforation = injector_well->begin(); perforation !=injector_well->end(); ++perforation){
             injector_perf = std::dynamic_pointer_cast<Injector_Perforate, Perforate>(*perforation);
 
             auto cell = mymesh->cell(injector_perf->index());
+
+            double total_mobility = 0;
+
+            std::shared_ptr<Fluid> main_fluid;
+        
+            for(auto fluid : characterized_fluids){
+                if(fluid->principal()){
+                    main_fluid = fluid;
+                };
+                total_mobility += fluid->relativePermeability(term, cell->index())/fluid->viscosity(term, cell->index());
+            };
             
-            perforation_mobility = injector_perf->wellIndex(term)*
-                fluid->relativePermeability(term, cell->index())/(fluid->volumetricFactor(term, cell->index())*fluid->viscosity(term, cell->index()));
+            perforation_mobility = injector_perf->wellIndex(term)*total_mobility
+                /injection_fluid->volumetricFactor(term, cell->index());
 
             accumulated_mobility += perforation_mobility;
 
-            hydrostatic_head = fluid->density(term, cell->index())*gravity*(injector_well->boreholeDepth()-cell->depth());
+            hydrostatic_head = injection_fluid->density(term, cell->index())*gravity*(injector_well->boreholeDepth()-cell->depth());
 
-            estimated_flow = perforation_mobility*(fluid->pressure(term, cell->index()) + hydrostatic_head);
+            estimated_flow = perforation_mobility*(main_fluid->pressure(term, cell->index()) + hydrostatic_head);
             accumulated_flow += estimated_flow;
                     
         };
@@ -143,13 +162,23 @@ void estimateWellPressure(const int term, std::shared_ptr<Well>& well){
     well->boreholePressure(term, (accumulated_flow + well->flow(term))/accumulated_mobility);
 };
 
-double calculatePeaceman(const int term, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
+double calculatePeacemanProducer(const int term, const double main_pressure, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
+    
+    auto cell_index = cell->index();
+    double peaceman_flow = 0;
+    
+    peaceman_flow = (well_index * fluid->relativePermeability(term, cell_index) / (fluid->volumetricFactor(term, cell_index)*fluid->viscosity(term, cell_index))) *
+        (borehole_pressure - main_pressure - (fluid->density(term, cell_index)*gravity*(borehole_depth - cell->depth())));
+    
+};
+
+    double calculatePeacemanInjector(const int term, const double main_pressure, const double total_mobility, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
     
     auto cell_index = cell->index();
     double peaceman_flow = 0;
 
-    peaceman_flow = (well_index * fluid->relativePermeability(term, cell_index) / (fluid->volumetricFactor(term, cell_index)*fluid->viscosity(term, cell_index))) *
-        (borehole_pressure - fluid->pressure(term, cell_index)) - (fluid->density(term, cell_index)*gravity*(borehole_depth - cell->depth()));
+    peaceman_flow = (well_index * total_mobility / fluid->volumetricFactor(term, cell_index)) *
+        (borehole_pressure - main_pressure - (fluid->density(term, cell_index)*gravity*(borehole_depth - cell->depth())));
     
 };
 
@@ -167,7 +196,14 @@ void calculatePerforation(const int term, std::shared_ptr<Well>& well, std::shar
     }else{
         injector_well = std::dynamic_pointer_cast<Injector_Well, Well>(well);
     };
-    
+
+    double main_pressure;
+
+    for(auto fluid : characterized_fluids){
+        if(fluid->principal()){
+            main_pressure = fluid->pressure(term, perforation->index());
+        }
+    }
 
     calculateGeometry(term, well, perforation);
     
@@ -176,24 +212,35 @@ void calculatePerforation(const int term, std::shared_ptr<Well>& well, std::shar
         producer_perf = std::dynamic_pointer_cast<Producer_Perforate, Perforate>(perforation);
         
         for(auto fluid : characterized_fluids){
-            producer_perf->flow(fluid->index(), calculatePeaceman(term,
-                                                                  fluid,
-                                                                  mymesh->cell(producer_perf->index()),
-                                                                  producer_perf->wellIndex(term),
-                                                                  well->boreholePressure(term),
-                                                                  well->boreholeDepth()
-                                                                  ));
+            producer_perf->flow(fluid->index(),
+                                calculatePeacemanProducer(term,
+                                                          main_pressure,
+                                                          fluid,
+                                                          mymesh->cell(producer_perf->index()),
+                                                          producer_perf->wellIndex(term),
+                                                          well->boreholePressure(term),
+                                                          well->boreholeDepth()
+                                                          ));
         };
         
     }else{
         
+        double total_mobility = 0;
+        
+        for(auto fluid : characterized_fluids){
+            total_mobility += fluid->relativePermeability(term, perforation->index())/fluid->viscosity(term, perforation->index());
+        };
+        
         injector_perf = std::dynamic_pointer_cast<Injector_Perforate, Perforate>(perforation);
-        injector_perf->flow(calculatePeaceman(term,injector_well->injectionFluid(),
-                                              mymesh->cell(injector_perf->index()),
-                                              injector_perf->wellIndex(term),
-                                              well->boreholePressure(term),
-                                              well->boreholeDepth()
-                                              ));
+        injector_perf->flow(calculatePeacemanInjector(term,
+                                                      main_pressure,
+                                                      total_mobility,
+                                                      injector_well->injectionFluid(),
+                                                      mymesh->cell(injector_perf->index()),
+                                                      injector_perf->wellIndex(term),
+                                                      well->boreholePressure(term),
+                                                      well->boreholeDepth()
+                                                      ));
     };
     
 };

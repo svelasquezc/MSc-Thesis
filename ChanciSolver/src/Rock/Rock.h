@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <string>
+#include <map>
 #include <algorithm>
 
 #include "Value_Reader.h"
@@ -101,8 +102,8 @@ void Rock::updateProperties(const int& term){
 };
 
 void Rock::porosity(const int term, const int cell_index, const double pressure){
-    _porosity[term][cell_index] = _porosity[0][cell_index]
-        * ( 1.0 + (_compressibility * (pressure - _reference_pressure)));
+    _porosity[term][cell_index] = _porosity[0][cell_index];
+    //* ( 1.0 + (_compressibility * (pressure - _reference_pressure)));
 };
 
 #endif /* ROCK_H */
