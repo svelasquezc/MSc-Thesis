@@ -10,7 +10,7 @@ namespace Global{
     double simulationtime = 86400;
     double timedelta=1;
     int wells_quantity=0;
-    std::string term="K";
+    int term=1;
     int fluids_quantity=0;
     int stencil[2] = {-1,1};
     int equilibrium_relations_quantity=0;

@@ -28,7 +28,7 @@ std::vector<std::shared_ptr<Well>> perforated_wells =
 std::unique_ptr<Mesh> mymesh;
 std::unique_ptr<Rock> myrock;
 
-void updateVariables(const std::string& term, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
+void updateVariables(const int& term, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
     
     for(auto fluid : characterized_fluids){
 	fluid->updateProperties(term);
@@ -45,7 +45,7 @@ void updateVariables(const std::string& term, std::vector<std::shared_ptr<Fluid>
     rock.updateProperties(term);
 };
 
-void calculateGeometry(const std::string& term, std::shared_ptr<Well>& well, std::shared_ptr<Perforate>& perforation){
+void calculateGeometry(const int& term, std::shared_ptr<Well>& well, std::shared_ptr<Perforate>& perforation){
     
     auto cell = mymesh->cell(perforation->index());
 
@@ -73,7 +73,7 @@ void calculateGeometry(const std::string& term, std::shared_ptr<Well>& well, std
     
 };
 
-void estimateWellPressure(const std::string& term, std::shared_ptr<Well>& well){
+void estimateWellPressure(const int& term, std::shared_ptr<Well>& well){
 
     double perforation_mobility = 0;
     double hydrostatic_head = 0;
@@ -162,17 +162,18 @@ void estimateWellPressure(const std::string& term, std::shared_ptr<Well>& well){
     well->boreholePressure(term, (accumulated_flow + well->flow(term))/accumulated_mobility);
 };
 
-double calculatePeacemanProducer(const std::string& term, const double main_pressure, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
+double calculatePeacemanProducer(const int& term, const double main_pressure, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
     
     auto cell_index = cell->index();
     double peaceman_flow = 0;
     
-    peaceman_flow = (well_index * fluid->relativePermeability(term, cell_index) / (fluid->volumetricFactor(term, cell_index)*fluid->viscosity(term, cell_index))) *
+    peaceman_flow = (well_index * fluid->relativePermeability(term, cell_index) / ((fluid->volumetricFactor(term, cell_index)*fluid->viscosity(term, cell_index)))) *
         (borehole_pressure - main_pressure - (fluid->density(term, cell_index)*gravity*(borehole_depth - cell->depth())));
+    std::cout <<"\n mira:" << borehole_depth - cell->depth() << "\n";
     
 };
 
-    double calculatePeacemanInjector(const std::string& term, const double main_pressure, const double total_mobility, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
+    double calculatePeacemanInjector(const int& term, const double main_pressure, const double total_mobility, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
     
     auto cell_index = cell->index();
     double peaceman_flow = 0;
@@ -182,7 +183,7 @@ double calculatePeacemanProducer(const std::string& term, const double main_pres
     
 };
 
-void calculatePerforation(const std::string& term, std::shared_ptr<Well>& well, std::shared_ptr<Perforate>& perforation){
+void calculatePerforation(const int& term, std::shared_ptr<Well>& well, std::shared_ptr<Perforate>& perforation){
 
     std::shared_ptr<Injector_Perforate> injector_perf;
     std::shared_ptr<Producer_Perforate> producer_perf;
@@ -245,7 +246,7 @@ void calculatePerforation(const std::string& term, std::shared_ptr<Well>& well, 
     
 };
 
-void calculateWellFlow(const std::string& term, std::shared_ptr<Well>& well){
+void calculateWellFlow(const int& term, std::shared_ptr<Well>& well){
 
     double totalFlow = 0;
     
@@ -269,7 +270,7 @@ void calculateWellFlow(const std::string& term, std::shared_ptr<Well>& well){
     well->flow(term, totalFlow);
 };
 
-void calculateInteractions(const std::string& term, const int& cell_index, Fluid& fluid){
+void calculateInteractions(const int& term, const int& cell_index, Fluid& fluid){
 
     double capillary_pressure=0;
     
@@ -296,7 +297,7 @@ void calculateInteractions(const std::string& term, const int& cell_index, Fluid
         };
 };
 
-double calculateBaker(const std::string& term, const int& cell_index){
+double calculateBaker(const int& term, const int& cell_index){
 
     double accumulated_saturation = 0;
     double accumulated_principal_relative_permeability=0;
@@ -331,7 +332,7 @@ double calculateBaker(const std::string& term, const int& cell_index){
     
 };
 
-void calculateProperties(const std::string& term, const std::shared_ptr<Cell>& cell, Rock& rock){
+void calculateProperties(const int& term, const std::shared_ptr<Cell>& cell, Rock& rock){
 
     const auto cell_index = cell->index();
 
@@ -387,13 +388,13 @@ void calculateProperties(const std::string& term, const std::shared_ptr<Cell>& c
     };        
 };
 
-double calculateAccumulation(const std::string& term, Fluid& fluid, const std::shared_ptr<Cell>& cell, Rock& rock){
+double calculateAccumulation(const int& term, Fluid& fluid, const std::shared_ptr<Cell>& cell, Rock& rock){
 
     double past_contribution=0;
     double current_contribution=0;
 
-    std::string N="N";
-    std::string K="K";
+    //std::string N="N";
+    //std::string K="K";
 
     const int cell_index = cell->index();
     
@@ -403,31 +404,31 @@ double calculateAccumulation(const std::string& term, Fluid& fluid, const std::s
             
             const auto contributor = equilibrium_relation->contributorFluid();
 
-            double past_coef = equilibrium_relation->partitionCoefficient(N,cell_index);
+            double past_coef = equilibrium_relation->partitionCoefficient(term-1,cell_index);
             
             past_contribution = past_contribution +
-                past_coef * (rock.porosity(N,cell_index) * contributor->saturation(N,cell_index)
-                             / contributor->volumetricFactor(N,cell_index));
+                past_coef * (rock.porosity(term-1,cell_index) * contributor->saturation(term-1,cell_index)
+                             / contributor->volumetricFactor(term-1,cell_index));
 
-            double curr_coef = equilibrium_relation->partitionCoefficient(K,cell_index);
+            double curr_coef = equilibrium_relation->partitionCoefficient(term,cell_index);
             
             current_contribution = current_contribution +
-                curr_coef * (rock.porosity(K,cell_index) * contributor->saturation(K,cell_index)
-                             / contributor->volumetricFactor(K,cell_index));
+                curr_coef * (rock.porosity(term,cell_index) * contributor->saturation(term,cell_index)
+                             / contributor->volumetricFactor(term,cell_index));
             
         };
     };
 
     double accumulation = (cell->volume()/Global::timedelta) *
-        (((rock.porosity(K,cell_index)*fluid.saturation(K,cell_index)
-           /fluid.volumetricFactor(K,cell_index)) + current_contribution)-
-         ((rock.porosity(N,cell_index)*fluid.saturation(N,cell_index)
-           /fluid.volumetricFactor(N,cell_index)) + past_contribution));
+        (((rock.porosity(term,cell_index)*fluid.saturation(term,cell_index)
+           /fluid.volumetricFactor(term,cell_index)) + current_contribution)-
+         ((rock.porosity(term-1,cell_index)*fluid.saturation(term-1,cell_index)
+           /fluid.volumetricFactor(term-1,cell_index)) + past_contribution));
     
     return accumulation;
 };
 
-double calculateFlow(const std::string& term, Fluid& fluid, const Mesh& mesh, const std::shared_ptr<Cell>& cell, const std::shared_ptr<Face>& face, Rock& rock){
+double calculateFlow(const int& term, Fluid& fluid, const Mesh& mesh, const std::shared_ptr<Cell>& cell, const std::shared_ptr<Face>& face, Rock& rock){
     
     auto harmonicAverage = [](double cell_property, double neighbor_property){
         return 1.0/((1.0/cell_property) + (1.0/neighbor_property));
@@ -477,7 +478,7 @@ double calculateFlow(const std::string& term, Fluid& fluid, const Mesh& mesh, co
     double face_transmissivity = face_shape_factor * face_relative_permeability /
         (face_volumetric_factor * face_viscosity);
 
-    flow = flow + face_transmissivity*(fluid.potential(term, cell_index) - fluid.potential(term, neighbor_index));
+    flow = flow + face_transmissivity*(fluid.potential(term, neighbor_index) - fluid.potential(term, cell_index));
 
     for(auto& equilibrium_relation : added_equilibrium_relations ){
         
@@ -507,7 +508,7 @@ double calculateFlow(const std::string& term, Fluid& fluid, const Mesh& mesh, co
                 (face_volumetric_factor * face_viscosity);
 
             flow = flow + face_partition_coefficient*face_transmissivity*
-                (contributor->potential(term, cell_index) - contributor->potential(term, neighbor_index));
+                (contributor->potential(term, neighbor_index) - contributor->potential(term, cell_index));
         };
     };
 
@@ -524,11 +525,11 @@ std::unique_ptr<BlackOilNewton> my_newton;// = BlackOilNewton(0,0,calculatePrope
 void FluidPressureVaries(std::string& timestamp){
     if(timestamp == "stop"){
 
-        updateVariables("K",characterized_fluids, *myrock);
+        updateVariables(1,characterized_fluids, *myrock);
 
         my_newton->iterate(Global::term, *mymesh, perforated_wells, equations, *myrock);
 
-        updateVariables("N",characterized_fluids, *myrock);
+        updateVariables(0,characterized_fluids, *myrock);
         
         timestamp = "continue";
 
@@ -544,7 +545,7 @@ void FluidPressureVaries(std::string& timestamp){
     }
 };
 
-void timePasses(std::string& timestamp, std::string& term, double& mytime, double& timedelta, double& simulationtime){
+void timePasses(std::string& timestamp, int& term, double& mytime, double& timedelta, double& simulationtime){
     if(timestamp == "continue" && mytime<=simulationtime){
         int max_number_of_well_non_zeros=0;
         int well_equations=0;
@@ -552,7 +553,7 @@ void timePasses(std::string& timestamp, std::string& term, double& mytime, doubl
         int max_non_zeros;
         if(mytime == 0){
             for(auto cell = mymesh->begin(); cell != mymesh->end(); ++cell){
-                calculateProperties("N", *cell, *myrock);
+                calculateProperties(0, *cell, *myrock);
             };
 
             for(auto well : perforated_wells){
@@ -560,11 +561,11 @@ void timePasses(std::string& timestamp, std::string& term, double& mytime, doubl
                 if(well->operativeStatus() == 1){ //Just Changed
 
                     if(well->operativeCondition()->type() == "FLOW"){
-                        estimateWellPressure("N", well);
+                        estimateWellPressure(0, well);
                         max_number_of_well_non_zeros += well->numberOfPerforates()*2+1;
                         ++well_equations;
                     }else{
-                        calculateWellFlow("N", well);
+                        calculateWellFlow(0, well);
                     };
                     
                     well->operativeStatus(0); // Stable
@@ -604,7 +605,7 @@ void timePasses(std::string& timestamp, std::string& term, double& mytime, doubl
         std::cout << "Simulating interval [" << mytime << " - " << mytime + timedelta << "]" << std::endl;
 
         for (auto cell = mymesh->begin(); cell!=mymesh->end(); ++cell){
-            std::cout << characterized_fluids[0]->pressure("N", (*cell)->index())<< " ";
+            std::cout << characterized_fluids[0]->pressure(0, (*cell)->index())<< " ";
         };
         std::cout << std::endl;
         
@@ -770,7 +771,7 @@ void launchReservoirEngineer(std::string& timestamp){
     }
 };
 
-void reEstablishOperativeConditions(std::ifstream& file_reader, const std::string& term, std::string& timestamp){
+void reEstablishOperativeConditions(std::ifstream& file_reader, const int& term, std::string& timestamp){
     
     std::string object;
     
