@@ -27,8 +27,8 @@ class Well : public Equation<Well>{
     double _borehole_depth;
     std::vector<std::shared_ptr<Perforate>> _perforates;
 
-    std::vector<double> _borehole_pressure;
-    std::vector<double> _flow;
+    std::map<const std::string, double> _borehole_pressure;
+    std::map<const std::string, double> _flow;
 
     std::shared_ptr<Operative_Condition> _operative_condition;
 
@@ -51,9 +51,10 @@ class Well : public Equation<Well>{
         
         _type = type;
 
-        _flow = std::vector<double>(1,0.0);
-
-        _borehole_pressure=std::vector<double>(1,0.0);
+        _flow["N"] = 0.0;
+        _flow["K"] = 0.0;
+        _borehole_pressure["N"]=0.0;
+        _borehole_pressure["K"]=0.0;
         
         Value_Reader::myRead(std::string("Please insert the well radius "), _radius, std::string("Please insert a valid input"));
         Value_Reader::myRead(std::string("Please insert the number of perforations "), _number_of_perforates, std::string("Please insert a valid input"));
@@ -74,9 +75,10 @@ class Well : public Equation<Well>{
         
         _type = type;
 
-        _flow = std::vector<double>(1,0.0);
-
-        _borehole_pressure=std::vector<double>(1,0.0);
+        _flow["N"] = 0.0;
+        _flow["K"] = 0.0;
+        _borehole_pressure["N"]=0.0;
+        _borehole_pressure["K"]=0.0;
         
         while(well_reader >> element){
             std::transform(element.begin(), element.end(), element.begin(), ::toupper);
@@ -95,20 +97,20 @@ class Well : public Equation<Well>{
         _operative_status = 2;
     };
 
-    void flow(const int& term, const double flow){
+    void flow(const std::string& term, const double flow){
         _flow[term] = flow;
     };
     
-    void boreholePressure(const int& term, const double boreholePressure) {
+    void boreholePressure(const std::string& term, const double boreholePressure) {
         _borehole_pressure[term]=boreholePressure;
     };
 
     const int& index() const {return _index;};
     const double& radius() const {return _radius;};
     const double& boreholeDepth() const {return _borehole_depth;};
-    const double& boreholePressure(const int& term) const { return _borehole_pressure[term];};
+    const double& boreholePressure(const std::string& term) const { return _borehole_pressure.find(term)->second;};
     
-    const double& flow(const int& term) const { return _flow[term];};
+    const double& flow(const std::string& term) const { return _flow.find(term)->second;};
 
     const int& numberOfPerforates() const {return _number_of_perforates;};
 
@@ -188,9 +190,15 @@ class Well : public Equation<Well>{
         };
     };
 
-    virtual void updateProperties(const int term){
-        _borehole_pressure.push_back(_borehole_pressure[term-1]);
-        _flow.push_back(_flow[term-1]);
+    virtual void updateProperties(const std::string& term){
+        if(term=="K"){
+            _borehole_pressure["K"]=_borehole_pressure["N"];
+            _flow["K"]=_flow["N"];
+        }else{
+            _borehole_pressure["N"]=_borehole_pressure["K"];
+            _flow["N"]=_flow["K"];
+        }
+        
         for(auto perforate : _perforates){
             perforate->updateProperties(term);
         }
@@ -200,7 +208,7 @@ class Well : public Equation<Well>{
         return _operative_condition;
     };
 
-    void establish(const int& term, std::string timestamp){
+    void establish(const std::string& term, std::string timestamp){
 
         std::string type;
         double value;
@@ -226,8 +234,12 @@ class Well : public Equation<Well>{
 
             if(type == "PRESSURE" || type == "SHUT"){
                 Equation<Well>::_status = false;
+                if(type == "PRESSURE"){
+                    _borehole_pressure[term] = value;
+                };
             }else{
                 Equation<Well>::_status = true;
+                _flow[term] = value;
             };
 
             _operative_status = 1; //
@@ -235,7 +247,7 @@ class Well : public Equation<Well>{
             
     };
 
-    void establishFromFile(std::ifstream& condition_reader, const int& term, std::string timestamp){
+    void establishFromFile(std::ifstream& condition_reader, const std::string& term, std::string timestamp){
 
         std::string element;
         std::string type;

@@ -11,7 +11,7 @@ class Equilibrium_Relation : Value_Reader{
     int _index;
     std::weak_ptr<Fluid> _contributor_fluid;
     std::weak_ptr<Fluid> _receiver_fluid;
-    std::vector<std::vector<double>>   _partition_coefficient;
+    std::map<const std::string,std::vector<double>>   _partition_coefficient;
     std::unique_ptr<Measured_Property> _measured_partition_coefficient;
  public:
  Equilibrium_Relation(const int index) : _index(index) {};
@@ -21,15 +21,19 @@ class Equilibrium_Relation : Value_Reader{
     const std::shared_ptr<Fluid> contributorFluid() const {return _contributor_fluid.lock();}
     const std::shared_ptr<Fluid> receiverFluid()    const {return _receiver_fluid.lock();}
 
-    const double& partitionCoefficient (const int& term, const int& cell_index) const {return _partition_coefficient[term][cell_index];};             
+    const double& partitionCoefficient (const std::string& term, const int& cell_index) const {return _partition_coefficient.find(term)->second[cell_index];};             
 
-    void partitionCoefficient(const int& term, const int& cell_index, const double pressure){
+    void partitionCoefficient(const std::string& term, const int& cell_index, const double pressure){
         _partition_coefficient[term][cell_index] =
             _measured_partition_coefficient->interpolate(pressure);
     };
     
-    void updateProperties(const int& term){
-        _partition_coefficient.push_back(_partition_coefficient[term-1]);
+    void updateProperties(const std::string& term){
+        if(term=="K"){
+            _partition_coefficient["K"]=_partition_coefficient["N"];
+        }else{
+            _partition_coefficient["N"]=_partition_coefficient["K"];
+        }
     }
 };
 
@@ -43,7 +47,8 @@ void Equilibrium_Relation::add(const int cells_number, std::vector<std::shared_p
     
     if(characterized_fluids.size() >= 2){
 
-        _partition_coefficient = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+        _partition_coefficient["N"] = std::vector<double>(cells_number);
+        _partition_coefficient["K"] = std::vector<double>(cells_number);
         
         std::cout << "Please select the contributor Fluid: " << std::endl;
         for (counter=0; counter<characterized_fluids.size(); ++counter){
@@ -101,7 +106,8 @@ void Equilibrium_Relation::addFromFile(std::ifstream& equilibrium_reader, const 
         
     if(characterized_fluids.size() >= 2){
         
-        _partition_coefficient = std::vector<std::vector<double>>(1,std::vector<double>(cells_number));
+        _partition_coefficient["N"] = std::vector<double>(cells_number);
+        _partition_coefficient["K"] = std::vector<double>(cells_number);
     
         while(equilibrium_reader >> element){
 

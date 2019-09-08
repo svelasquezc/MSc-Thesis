@@ -11,8 +11,8 @@ class Injector_Well : public Well{
 
     std::weak_ptr<Fluid> _injection_fluid;
     
-    std::vector<double> _rate;
-    std::vector<double> _total_accumulated;    
+    std::map<const std::string, double> _rate;
+    std::map<const std::string, double> _total_accumulated;    
 
  public:
 
@@ -42,8 +42,11 @@ class Injector_Well : public Well{
             
         };
 
-        _rate=std::vector<double>(1,0.0);
-        _total_accumulated=std::vector<double>(1,0.0);
+        _rate ["N"]=0.0;
+        _total_accumulated["N"]= 0.0;
+
+        _rate ["K"]=0.0;
+        _total_accumulated["K"]= 0.0;
         
     };
 
@@ -75,18 +78,26 @@ class Injector_Well : public Well{
             };
         };
 
-        _rate=std::vector<double>();
-        _total_accumulated=std::vector<double>();
+        _rate ["N"]=0.0;
+        _total_accumulated["N"]= 0.0;
+        
+        _rate ["K"]=0.0;
+        _total_accumulated["K"]= 0.0;
         
     };
 
     const std::shared_ptr<Fluid> injectionFluid() const {return  _injection_fluid.lock();};
 
-    void updateProperties(const int term){
+    void updateProperties(const std::string& term){
         Well::updateProperties(term);
 
-        _rate.push_back(_rate[term-1]);
-        _total_accumulated.push_back(_total_accumulated[term-1]);
+        if(term=="K"){
+            _rate["K"]=_rate["N"];
+            _total_accumulated["K"]=_total_accumulated["N"];
+        }else{
+            _rate["K"]=_rate["N"];
+            _total_accumulated["K"]=_total_accumulated["N"];
+        }
     };
 
     const std::string type() const override {return typeid(Injector_Well).name();};

@@ -20,8 +20,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
     Eigen::BiCGSTAB<SparseMat_t, Eigen::IncompleteLUT<double, int> > _solver;
 
-    const double _machine_epsilon = 0.001*std::sqrt(std::numeric_limits<double>::epsilon());
-    const double _relative_change_in_residual=1e-11;
+    const double _machine_epsilon = std::sqrt(std::numeric_limits<double>::epsilon());
+    const double _relative_change_in_residual=1e-4;
 
     std::vector<Tripletd_t> _non_zeros;
     
@@ -87,7 +87,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         _solution_delta.setZero();
     };
 
-    void modifyVariable(const int& term, Fluid& fluid, const std::shared_ptr<Cell>& cell, double modified_epsilon, const bool undo){
+    void modifyVariable(const std::string& term, Fluid& fluid, const std::shared_ptr<Cell>& cell, double modified_epsilon, const bool undo){
 
 
         double scaled_epsilon = 0.0;
@@ -97,7 +97,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         if(fluid.principal()){
             if(!undo){
                 _aux_variable = fluid.pressure(term, cell_index);
-                scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
+                //scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
                 if(scaled_epsilon == 0.0) scaled_epsilon = _machine_epsilon;
                 fluid.pressure(term, cell_index, fluid.pressure(term, cell_index)+scaled_epsilon);
                 modified_epsilon = scaled_epsilon;
@@ -118,7 +118,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         };
     };
     
-    double calculateResidual(const int& term, Fluid& fluid, const Mesh& mesh, const std::shared_ptr<Cell>& cell, Rock& rock, std::vector<std::shared_ptr<Well>>& wells)
+    double calculateResidual(const std::string& term, Fluid& fluid, const Mesh& mesh, const std::shared_ptr<Cell>& cell, Rock& rock, std::vector<std::shared_ptr<Well>>& wells)
     {
         double flow=0.0;
         for (auto face = cell->begin(); face!=cell->end(); ++face){
@@ -149,7 +149,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         return accumulation - flow - well_contribution;
     };
 
-    double inline calculateWellResidual(const int& term, std::shared_ptr<Well>& well){
+    double inline calculateWellResidual(const std::string& term, std::shared_ptr<Well>& well){
         //std::cout << well->operativeCondition()->value() - well->flow(term);
         return well->operativeCondition()->value() - well->flow(term);
     };
@@ -164,7 +164,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         _residual = -_residual;
     };
     
-    void iterate(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Well>>& wells, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
+    void iterate(const std::string& term, const Mesh& mesh, std::vector<std::shared_ptr<Well>>& wells, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
 
         int residual_selector;
         int cell_index;
@@ -496,7 +496,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
     };
     
-    void update(const int term, const Mesh& mesh, std::vector<std::shared_ptr<Equation_Base>>& equations){
+    void update(const std::string& term, const Mesh& mesh, std::vector<std::shared_ptr<Equation_Base>>& equations){
         int cell_index;
         int residual_selector;
         int row;

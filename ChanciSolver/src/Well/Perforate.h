@@ -10,14 +10,16 @@ class Perforate{
     int _index;
     int _local_index;
     std::vector<int> _position = std::vector<int>(3);
-    std::vector<double> _well_index;
+    std::map<const std::string, double> _well_index;
     double _skin;
     
-    std::vector<double> _equivalent_radius;
+    std::map<const std::string, double> _equivalent_radius;
 
     Perforate(){
-        _well_index = std::vector<double>(1);
-        _equivalent_radius = std::vector<double>(1);
+        _well_index["N"] = 0.0;
+        _well_index["K"] = 0.0;
+        _equivalent_radius["N"]=0.0;
+        _equivalent_radius["K"]=0.0;
     };
     
  public:
@@ -38,20 +40,25 @@ class Perforate{
     const int& local_index() const {return _local_index;};
     const double& skin() const {return _skin;};
     const int& position(const int direction) const {return _position[direction];};
-    const double& equivalentRadius(const int term) const {return _equivalent_radius[term];};
-    const double& wellIndex(const int term) const {return _well_index[term];};
+    const double& equivalentRadius(const std::string& term) const {return _equivalent_radius.find(term)->second;};
+    const double& wellIndex(const std::string& term) const {return _well_index.find(term)->second;};
 
-    void calculateEquivalentRadius(const int& term, const double permeability_in_y_direction, const double permeability_in_x_direction, const double thickness_in_y_direction, const double thickness_in_x_direction){
+    void calculateEquivalentRadius(const std::string& term, const double permeability_in_y_direction, const double permeability_in_x_direction, const double thickness_in_y_direction, const double thickness_in_x_direction){
         _equivalent_radius[term] = 0.14*sqrt(sqrt(permeability_in_y_direction/permeability_in_x_direction)*pow(thickness_in_x_direction, 2.0) + std::sqrt(permeability_in_x_direction/permeability_in_y_direction)*std::pow(thickness_in_y_direction, 2.0))/(0.5*(std::pow(permeability_in_y_direction/permeability_in_x_direction,1.0/4.0) + std::pow(permeability_in_x_direction/permeability_in_y_direction,1.0/4.0)));
     };
 
-    void calculateWellIndex(const int& term, const double z_thickness, const double x_direction_permeability, const double y_direction_permeability, const double well_radius){
+    void calculateWellIndex(const std::string& term, const double z_thickness, const double x_direction_permeability, const double y_direction_permeability, const double well_radius){
         _well_index[term]=2*pi()*z_thickness*std::sqrt(x_direction_permeability*y_direction_permeability)/(_skin+std::log(_equivalent_radius[term]/well_radius));
     };
 
-    void updateProperties(const int term){
-        _equivalent_radius.push_back(_equivalent_radius[term-1]);
-        _well_index.push_back(_well_index[term-1]);
+    void updateProperties(const std::string& term){
+        if(term=="K"){
+            _equivalent_radius["K"]=_equivalent_radius["N"];
+            _well_index["K"]=_well_index["N"];
+        }else{
+            _equivalent_radius["N"]=_equivalent_radius["K"];
+            _well_index["N"]=_well_index["K"];
+        }
     };
     
 };
