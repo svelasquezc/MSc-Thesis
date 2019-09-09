@@ -578,7 +578,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
                 };
             };
 
-            total_equations = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + well_equations;
+            total_equations = Global::fluids_quantity*Global::cells_number + well_equations;
 
             max_non_zeros = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + max_number_of_well_non_zeros;
             
@@ -602,7 +602,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
 
             };
             
-            total_equations = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + well_equations;
+            total_equations = Global::fluids_quantity*Global::cells_number + well_equations;
             max_non_zeros = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + max_number_of_well_non_zeros;
             my_newton.reset();
             my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);

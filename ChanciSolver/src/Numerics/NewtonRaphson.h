@@ -164,7 +164,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     void solve(){
 
         _residual = -_residual;
-        // std::cout << "Jacobian: "<< _jacobian<<std::endl;
+         std::cout << "Jacobian: "<< _jacobian<<std::endl;
         _solver.preconditioner().setDroptol(0.000001);
         _solver.compute(_jacobian);
         _solution_delta = _solver.solve(_residual);
