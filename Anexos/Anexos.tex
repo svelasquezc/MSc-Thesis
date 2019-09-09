@@ -306,4 +306,69 @@ Para incluir las referencias dentro del texto y realizar lista de la bibliograf\
 	\label{cora}
 \end{figure}{}
 
+
+\begin{figure}[h!]
+	\begin{tikzpicture}
+	\begin{axis}[
+	title={Datos simulados por el Autor contra caso de estudio.},
+	xlabel={Bloque},
+	ylabel={Presión (psi)},
+	xmin=0, xmax=6,
+	ymin=1500, ymax=3000,
+	legend pos=outer north east ,
+	ymajorgrids=true,
+	xmajorgrids=true,
+	%semilogxaxis=true,
+	grid style=dashed,
+	]
+	
+	\addplot[]
+	coordinates{
+		(1,2933.8141602)	
+		(2,2923.5889812)	
+		(3,2908.882128)	
+		(4,2896.698936)	
+		(5,2899.4836656)
+		
+	};
+	\addlegendentry{5 días.}
+	
+	\addplot[]
+	coordinates{
+		(1,2605.9267536)	
+		(2,2595.745086)	
+		(3,2581.1107518)	
+		(4,2569.0000788)	
+		(5,2571.741297)
+		
+	};
+	\addlegendentry{25 días.}
+	
+	\addplot[]
+	coordinates{
+		(1,2203.1127162)	
+		(2,2193.0180714)	
+		(3,2178.5287752)	
+		(4,2166.5196288)	
+		(5,2169.2463432)
+		
+	};
+	\addlegendentry{50 días.}
+	
+	\addplot[]
+	coordinates{
+		(1,1729.7812032)	
+		(2,1719.8025888)	
+		(3,1705.4728344)	
+		(4,1693.6087260)
+		(5,1696.3064328)
+		
+	};
+	\addlegendentry{80 días.}
+	\end{axis}
+	\end{tikzpicture}
+	\caption{gg izi}
+	\label{siiiizas}
+\end{figure}{}
+
 \end{appendix}
