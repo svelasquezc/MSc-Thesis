@@ -167,10 +167,20 @@ void estimateWellPressure(const int& term, std::shared_ptr<Well>& well){
 double calculatePeacemanProducer(const int& term, const double main_pressure, const std::shared_ptr<Fluid>& fluid, const std::shared_ptr<Cell>& cell, const double well_index, const double borehole_pressure, const double borehole_depth){
     
     auto cell_index = cell->index();
-    double peaceman_flow = 0;
+    double peaceman_flow = 0.0;
     
     peaceman_flow = (well_index * fluid->relativePermeability(term, cell_index) / ((fluid->volumetricFactor(term, cell_index)*fluid->viscosity(term, cell_index)))) *
         (borehole_pressure - main_pressure - (fluid->density(term, cell_index)*gravity*(borehole_depth - cell->depth())));
+    
+    //std::cout << "\n mira::wi  " <<    well_index ;
+    //std::cout << "\n mira::kr  " << fluid->relativePermeability(term, cell_index);
+    //std::cout << "\n mira::bol  " << fluid->volumetricFactor(term, cell_index);
+    //std::cout << "\n mira::vis  " << fluid->viscosity(term, cell_index);
+    //std::cout << "\n mira::bhp  " << borehole_pressure;
+    //std::cout << "\n mira::bhp  " <<    main_pressure;
+    //std::cout << "\n mira::Pres  " << (borehole_pressure - main_pressure - (fluid->density(term, cell_index)*gravity*(borehole_depth - cell->depth())));
+
+    
     //std::cout <<"\n mira:" << borehole_depth - cell->depth() << "\n";
     
 };
