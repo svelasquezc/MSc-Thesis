@@ -164,7 +164,14 @@ Es decir, existe funciones en el espacio que describen las condiciones iniciales
 
 \subsection{Discretización}\label{subsec:Discretization}
 
-Existen múltiples métodos numéricos para resolver las ecuaciones diferenciales parciales que se describen en el BOM, tales como las diferencias finitas (FDM), los volúmenes finitos (FVM), los elementos finitos (FEM), entre otros. Éstos consisten en construir un sistema de ecuaciones algebraicas para un dominio discreto, es decir, con un número finito de celdas o volúmenes de control, a partir de un dominio físico continuo, cuya solución se aproxime a la del sistema de ecuaciones diferenciales parciales original. Al proceso de construir el sistema de ecuaciones algebraico para dominios discretos se le llama discretización. En la Figura \ref{fig:EmpanadaDiscretizada} se muestra un ejemplo de un dominio discreto.\\
+Existen múltiples métodos numéricos para resolver las ecuaciones diferenciales parciales que se describen en el BOM, tales como las diferencias finitas (FDM), los volúmenes finitos (FVM), los elementos finitos (FEM), entre otros. Éstos consisten en construir un sistema de ecuaciones algebraicas para un dominio discreto, es decir, con un número finito de celdas o volúmenes de control, a partir de un dominio físico continuo, cuya solución se aproxime a la del sistema de ecuaciones diferenciales parciales original. Al proceso de construir el sistema de ecuaciones algebraico para dominios discretos se le llama discretización. En la Figura \ref{fig:EmpanadaDiscretizada} se muestra un ejemplo de un dominio discreto. Las zonas en rojo corresponden a celdas con aportes de fuentes y sumideros.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[scale=0.8]{Fig/yacimiento-discretizacion.pdf}%
+	\caption[Ejemplo de dominio discreto.]{Ejemplo de dominio discreto. Los autores.}
+	\label{fig:EmpanadaDiscretizada}
+\end{figure}
 
 Para las ecuaciones diferenciales que son dependientes del tiempo, como lo son las de BOM, se requiere, también, obtener un conjunto finito de intervalos de tiempo, para los cuales resolver las ecuaciones. Así, para un término $F(t)$ dependiente del tiempo, su integral en un intervalo $\left[t;t+\Delta t\right]$ se puede expresar, usando el teorema del valor medio como:
 \begin{align}
