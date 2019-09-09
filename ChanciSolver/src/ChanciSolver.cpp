@@ -92,6 +92,14 @@ void estimateWellPressure(const int& term, std::shared_ptr<Well>& well){
     std::shared_ptr<Injector_Well> injector_well;
     std::shared_ptr<Producer_Well> producer_well;
 
+    std::shared_ptr<Fluid> main_fluid;
+
+    for(auto fluid : characterized_fluids){
+        if(fluid->principal()){
+            main_fluid = fluid;
+        };
+    }
+    
     if(well->type() == typeid(Producer_Well).name()){
         producer_well = std::dynamic_pointer_cast<Producer_Well, Well>(well);
         for(auto perforation = producer_well->begin(); perforation !=producer_well->end(); ++perforation){
@@ -100,12 +108,6 @@ void estimateWellPressure(const int& term, std::shared_ptr<Well>& well){
             auto cell = mymesh->cell(producer_perf->index());
             
             for(auto fluid : characterized_fluids){
-                
-                decltype(fluid) main_fluid;
-                
-                if(fluid->principal()){
-                    main_fluid = fluid;
-                };
                 
                 if(fluid->type() != "Gas"){
                     perforation_mobility = producer_perf->wellIndex(term)*
