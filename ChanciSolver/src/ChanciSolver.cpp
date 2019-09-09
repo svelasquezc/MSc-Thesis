@@ -304,7 +304,7 @@ double calculateBaker(const int& term, const int& cell_index){
     double irreducible_saturation = 0;
     double mobile_saturation=0;
     double interpolated_principal_relative_permeability=0;
-    double maximum_principal_relative_permeability=1;
+    double maximum_principal_relative_permeability=0;
     
 
     for(auto& interfluid_interaction : added_interfluid_interactions )
@@ -322,10 +322,12 @@ double calculateBaker(const int& term, const int& cell_index){
 
             accumulated_principal_relative_permeability += mobile_saturation*interpolated_principal_relative_permeability;
 
+            maximum_principal_relative_permeability = std::max(maximum_principal_relative_permeability, interfluid_interaction->maximumPrincipalRelativePermeability());
+            
         };
     
     if(accumulated_saturation == 0){
-        return 1;
+        return maximum_principal_relative_permeability;
     }else{
         return accumulated_principal_relative_permeability/accumulated_saturation;
     };
@@ -355,7 +357,11 @@ void calculateProperties(const int& term, const std::shared_ptr<Cell>& cell, Roc
 
         if(fluid->principal()){
             fluid->saturation(term, cell_index, remaining_saturation);
-            fluid->relativePermeability(term, cell_index, calculateBaker(term, cell_index));
+            if(Global::fluids_quantity>=2){
+                fluid->relativePermeability(term, cell_index, calculateBaker(term, cell_index));
+            }else{
+                fluid->relativePermeability(term, cell_index, 1.0);
+            };
         };
 
         fluid->volumetricFactor(term, cell_index, fluid->pressure(term, cell_index));

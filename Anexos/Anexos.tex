@@ -371,4 +371,113 @@ Para incluir las referencias dentro del texto y realizar lista de la bibliograf\
 	\label{siiiizas}
 \end{figure}{}
 
+\begin{figure}[h!]
+	\begin{tikzpicture}
+	\begin{axis}[
+	title={Datos simulados por el Autor contra caso de estudio.},
+	xlabel={Bloque},
+	ylabel={Presión (psi)},
+	xmin=0, xmax=6,
+	ymin=1500, ymax=3000,
+	legend pos=outer north east ,
+	ymajorgrids=true,
+	xmajorgrids=true,
+	%semilogxaxis=true,
+	grid style=dashed,
+	]
+	
+	\addplot[]
+	coordinates{
+		(1,2933.8141602)
+		(2,2923.5889812)
+		(3,2908.882128)
+		(4,2896.698936)
+		(5,2899.4836656)
+		
+	};
+	\addlegendentry{5 días.}
+	
+	\addplot[]
+	coordinates{
+		(1,2605.9267536)
+		(2,2595.745086)
+		(3,2581.1107518)
+		(4,2569.0000788)
+		(5,2571.741297)
+		
+	};
+	\addlegendentry{25 días.}
+	
+	\addplot[]
+	coordinates{
+		(1,2203.1127162)
+		(2,2193.0180714)
+		(3,2178.5287752)
+		(4,2166.5196288)
+		(5,2169.2463432)
+		
+	};
+	\addlegendentry{50 días.}
+	
+	\addplot[]
+	coordinates{
+		(1,1729.7812032)
+		(2,1719.8025888)
+		(3,1705.4728344)
+		(4,1693.6087260)
+		(5,1696.3064328)
+	};
+	\addlegendentry{80 días.}
+	
+	\addplot[only marks]
+	coordinates{
+		(1,2936.80)
+		(2,2928.38)
+		(3,2915.68)
+		(4,2904.88)
+		(5,2908.18)
+		
+		
+	};
+	\addlegendentry{días, reportado.}
+	\addplot[only marks]
+	coordinates{
+		(1,2630.34)
+		(2,2620.06)
+		(3,2605.28)
+		(4,2593.04)
+		(5,2595.81)
+		
+		
+	};
+	\addlegendentry{días, reportado.}
+	\addplot[only marks]
+	coordinates{
+		(1,2243.97)
+		(2,2233.68)
+		(3,2218.9)
+		(4,2206.66)
+		(5,2209.43)
+		
+		
+	};
+	\addlegendentry{días, reportado.}
+	\addplot[only marks]
+	coordinates{
+		
+		(1,1780.3100)
+		(2,1770.0200)
+		(3,1755.2400)
+		(4,1743.0000)
+		(5,1745.7700)
+		
+		
+	};
+	\addlegendentry{días, reportado.}
+	\end{axis}
+	\end{tikzpicture}
+	\caption{gg}
+	\label{recora}
+\end{figure}{}
+
 \end{appendix}

@@ -74,4 +74,4 @@
 \contentsline {chapter}{\numberline {B}Anexo: Traducciones a c\IeC {\'o}digo de la representaci\IeC {\'o}n}{58}{appendix.Alph2}
 \contentsline {chapter}{\numberline {C}Anexo: Nombrar el anexo C de acuerdo con su contenido}{59}{appendix.Alph3}
 \contentsline {chapter}{\numberline {D}Sizas Tikz}{61}{appendix.Alph4}
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{63}{figure.Alph4.2}
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{63}{figure.Alph4.3}

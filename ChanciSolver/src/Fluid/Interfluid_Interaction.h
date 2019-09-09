@@ -23,6 +23,11 @@ class Interfluid_Interaction : protected Value_Reader {
     {
         return _measured_principal_relative_permeability->begin()->first;
     };
+
+    const double maximumPrincipalRelativePermeability() const
+    {
+        return (--_measured_principal_relative_permeability->end())->second;
+    };
     
     double referenceRelativePermeability(const double saturation) const
     {
