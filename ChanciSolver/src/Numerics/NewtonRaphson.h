@@ -20,8 +20,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
     Eigen::BiCGSTAB<SparseMat_t, Eigen::IncompleteLUT<double, int> > _solver;
 
-    const double _machine_epsilon = std::sqrt(std::numeric_limits<double>::epsilon());
-    const double _relative_change_in_residual=1e-4;
+    const double _machine_epsilon = 2.0*std::sqrt(std::numeric_limits<double>::epsilon());
+    const double _relative_change_in_residual=1e-11;
 
     std::vector<Tripletd_t> _non_zeros;
     
@@ -141,7 +141,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     if((*perforation)->type() == typeid(Producer_Perforate).name()){
                         auto producer_perf = std::dynamic_pointer_cast<Producer_Perforate, Perforate>(*perforation);
                         well_contribution += producer_perf->flow(fluid.index());
-                        //std::cout << well_contribution;
+                        //std::cout <<"\n"<< well_contribution;
                     }else{
                         auto injector_well = std::dynamic_pointer_cast<Injector_Well, Well>(well);
                         if (injector_well->injectionFluid()->index() == fluid.index()){
@@ -164,8 +164,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     void solve(){
 
         _residual = -_residual;
-         std::cout << "Jacobian: "<< _jacobian<<std::endl;
-        _solver.preconditioner().setDroptol(0.000001);
+         //std::cout << "Jacobian: \n"<< _jacobian<<std::endl;
+        _solver.preconditioner().setDroptol(0.00000001);
         _solver.compute(_jacobian);
         _solution_delta = _solver.solve(_residual);
         //std::cout << "Solution Delta: "<< _solution_delta<<std::endl;
@@ -527,7 +527,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
             tolerance = _residual.squaredNorm()/_initial_residual.squaredNorm();
 
-            //std::cout << "Tolerance: " << tolerance <<" at iteration: "<<iteration<<std::endl;
+            std::cout << "Tolerance: " << tolerance <<" at iteration: "<<iteration<<std::endl;
             
         }while(tolerance > _relative_change_in_residual);
     
