@@ -219,23 +219,24 @@ La principal diferencia entre los pozos productores e inyectores radica en que e
 
 Los pozos funcionan bajo una ``condición operativa'', que permite regular la presión o el caudal al que estos inyectan o producen fluido. Estas condiciones definen, si un pozo genera una ecuación, o si su caudal se puede resolver directamente usando la presión de fondo. Por otro lado, las condiciones operativas pueden variar en el tiempo. Por esto, se requiere calcular o resolver el atributo que no está sujeto a la condición operativa cada que se establezca un cambio en la condición. En la Figura \ref{fig:Well} se observa, también.
 
+%\subsection{Químico}\label{subsec:PS_Chemical}
+%El ``químico'' como concepto comprende un conjunto de ``transferencias'' en las que se describen las cinéticas en no-equilibrio entre dos fluidos que pueden acarrear tal químico. Una transferencia es direccional, por lo que existe una cantidad de químico (``cantidad transferida'') que se transfiere de un ``fluido de origen'' a un ``fluido de destino'' y la ``cantidad transferida'' se calcula por medio de una ``función''. La ``presencia'' de éste en un fluido implica que se generen ``afectaciones'' de las propiedades de tal ``fluido de acarreo'', esta afectación se aplica por medio de una función que inserta el ``ingeniero de estimulación'' al preparar el químico.
+
 \subsection{Ecuación}\label{subsec:PS_Equation}
-La ecuación es un concepto agrupador, tanto el fluido como el pozo son ecuaciones {\color{red} (¡Posteriormente los químicos!)}. Este sirve para asociar  iterar sobre todos los conceptos que generan un residual en el método de Newton. Tienen un índice y estado. Este último permite que todos los pozos generen ecuación pero no necesariamente se resuelva en el jacobiano. Sólo se resuelven las ecuaciones cuyo estado sea ``activo''.
+La ecuación es un concepto abstracto que sirve como agrupador. Tanto el fluido, como el pozo, o presencia de un químico en un fluido, son ecuaciones. Este concepto sirve para iterar sobre todos los conceptos que generan un residual en el método de Newton. Tienen un índice y estado. Este último permite activar o desactivar la solución de ecuaciones, lo cual sirve para gestionar la solución de pozos involucrando cambios de condición operativa.
 %Poner ecuación acá con Volumen de celda ya como concepto
 
-%\subsection{Rock}
 
 %\section{PS Representation of Enhanced Oil Recovery Simulation}\label{sec:PS_EOR}
-\section{Representación en EP de la simulación de procesos EOR}\label{subsec:PS_EOR}
-En esta sección se propone una representación basada en un EP para procesos EOR. En el esquema \ref{fig:PSComplete} se evidencia la solución del BOM discretizado usando volúmenes finitos en una malla cartesiana ortogonal. El paso a paso en la ejecución de los eventos se muestra en \ref{fig:EventsInteraction}.  En el evento ``Presión del fluido varía'' se desarrollan las iteraciones del método de Newton-Raphson e internamente las iteraciones sobre las celdas requeridas para solucionar el sistema algebraico resultante de la discretización. En las secciones siguientes se explica el EP elaborado en las respectivas porciones correspondientes a eventos, subrutinas y funciones que procesan la simulación de procesos EOR. \\
+\section{Funciones y eventos para la simulación de procesos EOR}\label{subsec:PS_EOR}
+En el esquema \ref{fig:PSComplete} se evidencia la solución del BOM discretizado usando volúmenes finitos en una malla cartesiana ortogonal. El paso a paso en la ejecución de los eventos se muestra en \ref{fig:EventsInteraction}.  En el evento ``Presión del fluido varía'' se desarrollan las iteraciones del método de Newton-Raphson e internamente las iteraciones sobre las celdas requeridas para solucionar el sistema algebraico resultante de la discretización. En las secciones siguientes se explica el EP elaborado en las respectivas porciones correspondientes a eventos, subrutinas y funciones que procesan la simulación de procesos EOR. Para el correcto desarrollo de la simulación, se establecen las siguientes \textbf{precondiciones}: existe una única malla y una única roca. En el caso de una simulación de dos fluidos debe existir una única interacción entre fluidos. En el caso de tres fluidos deben existir exactamente dos interacciones entre fluidos.
 
-Para el correcto desarrollo de la simulación, se establecen las siguientes precondiciones: existe una única malla y una única roca. En el caso de una simulación de dos fluidos debe existir una única interacción entre fluidos. En el caso de tres fluidos deben existir exactamente dos interacciones entre fluidos.
 
 
 %In this section we propose a PS representation for enhanced oil recovery simulation, we couple a black oil model discretized using finite volumes method with the theoretical framework developed the previous chapter. We mapped each term in the resultant equations to their respective concepts and how they are linked together. The complete representation is shown in \ref{fig:PSComplete}.\\
 \begin{figure}[h]
 \centering%
-\includegraphics[width=0.9\linewidth]{Fig/PozosConEcuacion.pdf}%
+\includegraphics[width=0.9\linewidth]{Fig/EPConQuimico.pdf}%
 %\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
 \caption[Representación en EP de la simulación de procesos EOR.]{Representación en EP de la simulación de procesos EOR. Los autores.} \label{fig:PSComplete}
 \end{figure}
@@ -247,6 +248,46 @@ Para el correcto desarrollo de la simulación, se establecen las siguientes prec
 	\caption[Diagrama basado en el grafo de interacción de eventos.]{Diagrama basado en el grafo de interacción de eventos. Los autores basados en \cite{zapata2013Eventos}.} \label{fig:EventsInteraction}
 \end{figure}
 %The rest of this section is as follows: In section \ref{sec:PS_Mesh} we present the Mesh concept as a collection of cells with additional elements needed for calculating the attributes of each cell. Furthermore, we develop the dynamical relationship ``Geomodeler defines Mesh'' as an interaction of the role ``Geomodeler'' with atomic\footnote{atomic as is stated by \cite{AG01} (Aca debe ir Zapata)} dynamical relationships. In section \ref{sec:PS_Rock} we present the Rock concept with its attributes and initial characterization. In section \ref{sec:PS_Phase} ... In section \ref{sec:PS_Interphase} ... In section \ref{sec:PS_Equilibrium} we define the partition coefficients as relations between two phases, one contributing mass and another receiving mass in the mass balance equation. In section \ref{sec:PS_Well}
+
+\subsection{Cálculo de propiedades}\label{subsec:PS_PropertyCalc}
+En la subrutina ``Calcular propiedades'' se engloba el cálculo de propiedades que dependen de las incógnitas principales de la simulación (véase \ref{subsec:BOM}, ecuaciones constitutivas). En esta subrutina se itera sobre todos los fluidos y, para el fluido principal, calcula su saturación y su permeabilidad relativa (véase \ref{subsec:PS_Interphase}), en función de la saturación de los fluidos no principales. Además, para los fluidos no principales, calcula su presión con base en la presión del fluido principal y la presión capilar a la saturación del fluido de referencia. Una vez se tienen las presiones de todos los fluidos en el sistema, es posible interpolar sus factores volumétricos y viscosidad en términos de su presión. Adicionalmente, se calculan sus densidades, usando la formulación que se propone en la Ecuación \ref{ec:generaldensity}, para todas las relaciones de equilibrio existentes.  En la Figura \ref{fig:PropertyCalculation} se muestra la representación de la subrutina ``Calcular Propiedades''.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/CalculoPropiedades.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Subrutina ``Calcular propiedades''.]{Subrutina ``Calcular propiedades''. Los autores.}
+	\label{fig:PropertyCalculation}
+\end{figure}
+
+En la Figura \ref{fig:CapillaryPressure} se muestra la representación de la subrutina ``Calcular interacciones'' para el cálculo de presiones de los fluidos que no son principales. En esta subrutina se calculan las presiones capilares a la saturación del respectivo fluido de referencia, el cual corresponde a uno de los fluidos no principales, y con esta presión capilar, se calcula la presión del fluido, usando la Ecuación \ref{ec:presioncapilar}. Adicionalmente, se interpolan las permeabilidades relativas de los fluidos no principales, asumiendo que sólo dependen de su respectiva saturación.
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/CalcularInteracciones.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Subrutina ``Calcular interacciones''.]{Subrutina ``Calcular interacciones''. Los autores.}
+	\label{fig:CapillaryPressure}
+\end{figure}
+
+\subsection{Funciones y subrutinas de pozo}\label{subsec:PS_WellFunctions}
+Los pozos tienen su ecuación sujeta a su condición operativa, requiriendo calcular el caudal en el pozo a una presión de fondo fija, o requiriendo estimar la presión de fondo para una condición de caudal fijo. Para esto se definen dos subrutinas: ``Estimar presión pozo'' y ``Calcular pozo''. En la primera, se despeja la presión de fondo del pozo, a partir de su respectiva ecuación de Peaceman \citep{peaceman1983interpretation}, usando la condición operativa de caudal fijo. En la segunda, se calcula la ecuación de \cite{peaceman1983interpretation} para todos los perforados, usando la presión de fondo fija, y se suman para así obtener el caudal. En la Figura \ref{fig:EstimatePwf} se presenta la subrutina ``Estimar presión pozo'' y en la Figura \ref{fig:CalculateFlow} se muestra la subrutina ``Calcular pozo''. Cabe notar que la subrutina ``Calcular pozo'' depende de la subrutina ``Calcular perforado'' y ``Calcular perforado'' requiere, a su vez, de ``Calcular Peaceman Productor'' y ''Calcular Peaceman Inyector''. 
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=1\linewidth]{Fig/EstimarPwf.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Subrutina ``Estimar presión pozo''.]{Subrutina ``Estimar presión pozo''. Los autores.}
+	\label{fig:EstimatePwf}
+\end{figure}
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=1\linewidth]{Fig/EstimarPwf.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Subrutina ``Estimar presión pozo''.]{Subrutina ``Estimar presión pozo''. Los autores.}
+	\label{fig:CalculateFlow}
+\end{figure}
 
 \subsection{Tiempo pasa}\label{sec:PS_TimePasses}
 El evento ``Tiempo pasa'' se dispara en el momento en que se tienen las suficientes realizaciones de los conceptos para ejecutar la simulación, es decir, se ejecutaron las mínimas relaciones dinámicas para poder disparar el evento, como se ve en la figura \ref{fig:TimePasses}. En este evento se procesa el inicio y el final de la simulación, incrementando el ``tiempo'' y ``término'' al que se van a calcular las propiedades de los conceptos principales.\\
@@ -262,7 +303,7 @@ Se puede observar también que, en este evento se realiza el cálculo de las pro
 
 
 \subsection{Presión del Fluido varía}\label{sec:PS_FluidVaries}
-En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulación. En éste, se llevan a cabo las iteraciones del método de Newton-Raphson para converger al próximo paso de tiempo. La especificación de este evento consta de cinco procesos principales: La actualización de propiedades al término actual, el recálculo de las mismas, el cálculo de los residuales en cada iteración, el cálculo de la matriz jacobiana, y la actualización de las incógnitas. La especificación del evento ``Presión del Fluido varía'' se presenta en la figura \ref{fig:FluidPressureVaries}.\\
+En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulación. En éste, se llevan a cabo las iteraciones del método de Newton-Raphson para converger al próximo paso de tiempo. La especificación de este evento consta de cinco procesos principales: La actualización de propiedades al término actual, el recálculo de las mismas, el cálculo de los residuales en cada iteración, y la actualización de las incógnitas. La especificación del evento ``Presión del Fluido varía'' se presenta en la figura \ref{fig:FluidPressureVaries}. El cálculo del \textbf{Jacobiano} no se muestra por motivos de confidencialidad.\\
 
 \begin{figure}[h]
 	\centering%
@@ -293,9 +334,9 @@ Posteriormente, en la figura \ref{fig:TimeK} se muestra el recálculo de las pro
 \end{figure}
 
 \subsubsection{Cálculo de Residuales}\label{subsec:Residual}
-Luego se hace un recorrido de todas las ecuaciones, y se calcula el residual dependiendo de si la ecuación es de tipo fluido o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado ``Inactivas''.\\
+En el cálculo de residuales se reunen las ecuaciones de conservación de masa del fluido y las ecuaciones de caudal de peaceman multiperforado para pozos, el armado del vector residual para el método de Newton se calcula de manera iterativa, realizando un ciclo sobre el concepto ecuación y calculando dependiendo de si la ecuación es de tipo fluido o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado ``Inactivas''.\\
 
-Es importante notar también, que la función ``ubicar'' se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. {\color{red} Además, el tipo de residual indica si se debe ubicar como una ecuación de fluido que se evalúa para todas las celdas o sólo es una ecuación de pozo y por tanto una sola fila en las últimas posiciones del residual, tal comportamiento se evidencia} en \ref{fig:Residual}. \\ % Residual
+Es importante notar también, que la función ``ubicar'' se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. El proceso de cálculo de residuales se muestra en \ref{fig:Residual}. \\ % Residual
 
 \begin{figure}[h]
 	\centering%
@@ -304,14 +345,30 @@ Es importante notar también, que la función ``ubicar'' se encarga de calcular 
 	\caption[Cálculo de residual para la iteración.]{Cálculo de residual para la iteración. Los autores.} \label{fig:Residual}
 \end{figure}
 
-\subsubsection{Cálculo de la Matriz del Jacobiano}\label{subsec:Jacobian}
-Siguiendo \ref{fig:Jacobiano} \\ % Jacobiano
-
+Existen residual de fluidos, al igual que de pozos, estos se muestran en las Figuras \ref{fig:ResidualFluid}, y \ref{fig:ResidualWell}. Las funciones de flujo y acumulación, que corresponden a las ecuaciones discretizadas generalizadas en la Subsección \ref{subsec:PS_Equilibrium}, se muestran en las Figuras \ref{fig:Accumulation} y \ref{fig:Flow}.
 \begin{figure}[h]
 	\centering%
-	\includegraphics[width=\linewidth]{Fig/Jacobiano.pdf}%
+	\includegraphics[width=0.9\linewidth]{Fig/CalcularResidualFluido.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
-	\caption[Cálculo y armado de la matriz del jacobiano al término actual para la iteración.]{Cálculo y armado de la matriz del jacobiano al término actual para la iteración. Los autores.} \label{fig:Jacobiano}
+	\caption[Cálculo de residual de un fluido.]{Cálculo de residual de un fluido. Los autores.} \label{fig:ResidualFluid}
+\end{figure}
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/CalcularResidualPozo.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Cálculo de residual de pozo.]{Cálculo de residual de pozo. Los autores.} \label{fig:ResidualWell}
+\end{figure}
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/CalcularAcumulacion.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Cálculo de acumulación generalizado.]{Cálculo de acumulación generalizado. Los autores.} \label{fig:Accumulation}
+\end{figure}
+\begin{figure}[h]
+	\centering%
+	\includegraphics[height=0.9\textheight]{Fig/CalcularFlujo.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Cálculo de flujo generalizado.]{Cálculo de flujo generalizado. Los autores.} \label{fig:Flow}
 \end{figure}
 
 \subsubsection{Solución del sistema lineal y actualización de incógnitas}

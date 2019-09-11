@@ -253,34 +253,46 @@ Donde $iny$ corresponde al fluido de inyección y $f \in F:\left\lbrace o,g,w,..
 
 \subsection{Método de Newton-Raphson}\label{subsec:N-R}
 %
-El sistema de ecuaciones algebraicas que se forman por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximando su derivada, como se ilustra en la Figura \ref{fig:NewtonR}.\\
+El sistema de ecuaciones algebraicas que se forman por \ref{ec:aceiteDiscretizacion}, \ref{ec:gasDiscretizacion} y \ref{ec:aguaDiscretizacion} es no lineal, por lo tanto, se aplica el método del Newton-Raphson el cuál se usa para encontrar las raíces de una ecuación no lineal aproximando su derivada, como se ilustra en la Figura \ref{fig:NewtonR}.
+El método de Newton-Raphson se presenta en la Ecuación \ref{ec:Newton-R} hasta la Ecuación \ref{ec:Derivative}.
 
 \begin{figure}[h]
 	\centering%
 	\includegraphics[scale=0.8]{Fig/NewtonR.pdf}%
-	\caption[Aproximación a la derivada de una función.]{Aproximación a la derivada de una función. {\color{red} Elaboración a partir de .}} \label{fig:NewtonR}
+	\caption[Aproximación a la derivada de una función.]{Aproximación a la derivada de una función. Elaboración a partir de \cite{atkinson2008introduction}.} \label{fig:NewtonR}
 \end{figure}
-~\\
-\begin{equation}
-A \cdot {\Delta \vec{x}} = \vec{b} \Leftrightarrow J^{k}_{i,j} \cdot {\Delta \vec{x}} = -\vec{R^{k}_{i}}
-\end{equation}
-\begin{equation}
-\Delta \vec{x} = \vec{x}^{k+1} - \vec{x}^{k} = \left(\Delta P_o, \Delta S_g, \Delta S_w \right)^T
-\end{equation}
-\begin{equation}
--\vec{R^k_i} = \left(\Delta R^k_{P_o,i}, \Delta R^k_{S_g,i}, \Delta R^k_{S_w,i} \right)^T
-\end{equation}
-\begin{equation}
-J^k_{i,j}=\frac{\partial R^k_i}{\partial x^k_j}	
-\end{equation}
-\begin{equation}
-\frac{\partial R^k}{\partial x^k} \approx \frac{R\left(x^k + \xi \right) - R\left(x^k \right)}{\xi}
-\end{equation}
+\begin{align}
+\label{ec:Newton-R}&A \cdot {\Delta \vec{x}} = \vec{b} \Leftrightarrow J^{k}_{i,j} \cdot {\Delta \vec{x}} = -\vec{R^{k}_{i}}\\
+&\Delta \vec{x} = \vec{x}^{k+1} - \vec{x}^{k} = \left(\Delta P_o, \Delta S_g, \Delta S_w \right)^T\\
+&-\vec{R^k_i} = \left(\Delta R^k_{P_o,i}, \Delta R^k_{S_g,i}, \Delta R^k_{S_w,i} \right)^T\\
+&J^k_{i,j}=\frac{\partial R^k_i}{\partial x^k_j}\\	
+\label{ec:Derivative}&\frac{\partial R^k}{\partial x^k} \approx \frac{R\left(x^k + \xi \right) - R\left(x^k \right)}{\xi}
+\end{align}
 
 \section{Procesos de Recobro Mejorado}\label{sec:EOR}
+El recobro mejorado químicamente se enmarca en los procesos de recobro mejorado (EOR), se considera como una técnica eficiente de recuperación de petróleo para producir el aceite residual atrapado en yacimiento o que se puede extraer de manera económica por métodos convencionales. Los métodos EOR, se basan en la inyección de productos químicos para impulsar la recuperación de petróleo, cambiando interacciones de los fluidos con el yacimiento \citep{gbadamosi2019overview}.\\
 
-\subsection{Modelado del Químico}\label{subsec:Chemical}
+Durante la recuperación de petróleo, el desplazamiento general del fluido se debe a una combinación de barrido macroscópico (barrido volumétrico) y de una eficiencia de desplazamiento microscópico (escala de poro). \cite{olajire2014review} y \cite{samanta2012comparative}, proponen que ambos factores se afectan por propiedades objetivo de los fluidos y de la roca, que se cambian debido a interacción con los químicos que se inyectan o producen en un yacimiento. En la Figura \ref{fig:diagrama_eor} se ilustran los procesos de recobro mejorado (EOR) existentes, en esta Tesis de Maestría se representan los procesos EOR que se basan en la inyección de químicos, tal como se muestra en el recuadro rojo.
 
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth]{Fig/diagramaEOR.pdf}
+	\caption[Diagrama de división de procesos EOR.]{Diagrama de división de procesos EOR. Elaboración a partir de \cite{gogoi2013carbon}.}
+	\label{fig:diagrama_eor}
+\end{figure}{}
+
+%\subsection{Modelado del Químico}\label{subsec:Chemical}
+%
+%
+%
+%\begin{equation}
+%\begin{split}
+%B_{j}T_{j}^{n+1}y_{i,j}^{n+1}(\Delta \Phi^{n+1}_{j}) + q_{i,j}^{n+1} + \sum_{k=1, k\neq j}^{n_{p}}(\dot{m}^{n+1}_{j \rightarrow k})- \frac{V}{\Delta t}\left[ N_{i,j}^{n+1}-N_{i,j}^{n} \right]=0\\
+%para\; i = 1,..., n_{c}\\
+%para\; j = 1,..., n_{p}
+%\end{split}{}    
+%\label{eqholi}
+%\end{equation}{}
 %\section{Procesos de Recobro Mejorado}
 
 \section{Esquemas Preconceptuales}\label{sec:EP}
