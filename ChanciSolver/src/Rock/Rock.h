@@ -5,11 +5,13 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <vector>
+#include <sstream>
 #include <algorithm>
 
 #include "Value_Reader.h"
 
-class Rock : protected Value_Reader{
+class Rock {
  private:
     
     double _reference_pressure;
@@ -44,14 +46,14 @@ void Rock::characterize(const int& cells_number){
         (2,std::vector<std::vector<double>>(cells_number,std::vector<double>(3)));
     _porosity              = std::vector<std::vector<double>>(3,std::vector<double>(cells_number));
 
-    myRead(std::string("Please insert rock compressibility [1/Pa]"), _compressibility, std::string("Please insert a valid input"));
+    Value_Reader::myRead(std::string("Please insert rock compressibility [1/Pa]"), _compressibility, std::string("Please insert a valid input"));
 
-    myRead(std::string("Please insert reference pressure [Pa]"), _reference_pressure, std::string("Please insert a valid input"));
+    Value_Reader::myRead(std::string("Please insert reference pressure [Pa]"), _reference_pressure, std::string("Please insert a valid input"));
 
     for(int cellindex=0; cellindex<cells_number; ++cellindex){
         
         ss << "Please insert initial porosity for the "<< cellindex+1 << " cell [-]";
-        myRead(ss.str(), _porosity[2][cellindex], std::string("Please insert a valid input"));
+        Value_Reader::myRead(ss.str(), _porosity[2][cellindex], std::string("Please insert a valid input"));
         ss.str("");
         ss.clear();
         
@@ -61,7 +63,7 @@ void Rock::characterize(const int& cells_number){
         for(int direction=0; direction<3;++direction){
             ss << "Please insert initial absolute permeability for the "<< cellindex+1
                << " cell in direction " << axisnames[direction] << " [m2]";
-            myRead(ss.str(), _absolute_permeability[0][cellindex][direction], std::string("Please insert a valid input"));
+            Value_Reader::myRead(ss.str(), _absolute_permeability[0][cellindex][direction], std::string("Please insert a valid input"));
             ss.str("");
             ss.clear();
         };
@@ -108,8 +110,8 @@ void Rock::updateProperties(const int& term){
 };
 
 void Rock::porosity(const int& term, const int cell_index, const double pressure){
-    _porosity[term][cell_index] = _porosity[2][cell_index];
-    //* ( 1.0 + (_compressibility * (pressure - _reference_pressure)));
+    _porosity[term][cell_index] = _porosity[2][cell_index] *
+        ( 1.0 + (_compressibility * (pressure - _reference_pressure)));
 };
 
 #endif /* ROCK_H */

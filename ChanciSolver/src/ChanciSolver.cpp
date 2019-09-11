@@ -1,34 +1,16 @@
 #include <ctime>
 
-#include "Global.h"
-
+#include "Initial_Conditions.h"
+#include "Database.h"
 #include "NewtonRaphson.h"
-#include "Equilibrium_Relation.h"
-#include "Interfluid_Interaction.h"
 
 
 int Fluid::_count_of_principals=0;
 int Fluid::_count_of_fluids=0;
 
-std::vector<std::shared_ptr<Equation_Base>> equations =
-    std::vector<std::shared_ptr<Equation_Base>>();
+using namespace Database;
 
-std::vector<std::shared_ptr<Fluid>> characterized_fluids =
-    std::vector<std::shared_ptr<Fluid>>();
-
-std::vector<std::unique_ptr<Equilibrium_Relation>> added_equilibrium_relations =
-    std::vector<std::unique_ptr<Equilibrium_Relation>>();
-
-std::vector<std::unique_ptr<Interfluid_Interaction>> added_interfluid_interactions =
-    std::vector<std::unique_ptr<Interfluid_Interaction>>();
-
-std::vector<std::shared_ptr<Well>> perforated_wells =
-    std::vector<std::shared_ptr<Well>>();
-
-std::unique_ptr<Mesh> mymesh;
-std::unique_ptr<Rock> myrock;
-
-void updateVariables(const int& term, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, Rock& rock){
+void updateVariables(const int& term, Rock& rock){
     
     for(auto fluid : characterized_fluids){
 	fluid->updateProperties(term);
@@ -369,7 +351,7 @@ void calculateProperties(const int& term, const std::shared_ptr<Cell>& cell, Roc
 
         if(fluid->principal()){
             fluid->saturation(term, cell_index, remaining_saturation);
-            if(Global::fluids_quantity>=2){
+            if(Initial_Conditions::fluids_quantity>=2){
                 fluid->relativePermeability(term, cell_index, calculateBaker(term, cell_index));
             }else{
                 fluid->relativePermeability(term, cell_index, 1.0);
@@ -437,7 +419,7 @@ double calculateAccumulation(const int& term, Fluid& fluid, const std::shared_pt
         };
     };
 
-    double accumulation = (cell->volume()/Global::timedelta) *
+    double accumulation = (cell->volume()/Initial_Conditions::timedelta) *
         (((rock.porosity(term,cell_index)*fluid.saturation(term,cell_index)
            /fluid.volumetricFactor(term,cell_index)) + current_contribution)-
          ((rock.porosity(term-1,cell_index)*fluid.saturation(term-1,cell_index)
@@ -543,19 +525,19 @@ std::unique_ptr<BlackOilNewton> my_newton;// = BlackOilNewton(0,0,calculatePrope
 void FluidPressureVaries(std::string& timestamp){
     if(timestamp == "stop"){
 
-        updateVariables(1,characterized_fluids, *myrock);
+        updateVariables(1, *myrock);
 
-        my_newton->iterate(Global::term, *mymesh, perforated_wells, equations, *myrock);
+        my_newton->iterate(Initial_Conditions::term, *mymesh, perforated_wells, equations, *myrock);
 
-        updateVariables(0,characterized_fluids, *myrock);
+        updateVariables(0, *myrock);
         
         timestamp = "continue";
 
-        double next_time = Global::mytime + Global::timedelta;
+        double next_time = Initial_Conditions::mytime + Initial_Conditions::timedelta;
 
         for(auto well : perforated_wells){
             if(next_time >= well->operativeCondition()->nextChange()){
-                ++Global::changing_wells;
+                ++Initial_Conditions::changing_wells;
                 timestamp == "change";
                 well->operativeStatus(2); //Pending Change
             };
@@ -590,9 +572,9 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
                 };
             };
 
-            total_equations = Global::fluids_quantity*Global::cells_number + well_equations;
+            total_equations = Initial_Conditions::fluids_quantity*Initial_Conditions::cells_number + well_equations;
 
-            max_non_zeros = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + max_number_of_well_non_zeros;
+            max_non_zeros = Initial_Conditions::fluids_quantity*Initial_Conditions::fluids_quantity*Initial_Conditions::cells_number + max_number_of_well_non_zeros;
             
             my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
             
@@ -600,7 +582,7 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
             
         };
 
-        if(Global::changing_wells > 0){
+        if(Initial_Conditions::changing_wells > 0){
             
             max_number_of_well_non_zeros=0;
             well_equations=0;
@@ -614,12 +596,12 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
 
             };
             
-            total_equations = Global::fluids_quantity*Global::cells_number + well_equations;
-            max_non_zeros = Global::fluids_quantity*Global::fluids_quantity*Global::cells_number + max_number_of_well_non_zeros;
+            total_equations = Initial_Conditions::fluids_quantity*Initial_Conditions::cells_number + well_equations;
+            max_non_zeros = Initial_Conditions::fluids_quantity*Initial_Conditions::fluids_quantity*Initial_Conditions::cells_number + max_number_of_well_non_zeros;
             my_newton.reset();
             my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
 
-            Global::changing_wells = 0;
+            Initial_Conditions::changing_wells = 0;
         };
         
         std::cout << "Simulating interval [" << mytime << " - " << mytime + timedelta << "]" << std::endl;
@@ -648,7 +630,7 @@ void launchGeomodeler(){
     case 1:
         mymesh = std::make_unique<Mesh>();
         mymesh->define();
-        Global::cells_number = mymesh->getCellTotal();
+        Initial_Conditions::cells_number = mymesh->getCellTotal();
         break;
     default:
         break;
@@ -668,10 +650,10 @@ void launchPetrophysicalEngineer(){
     switch(option){
     case 1:
         myrock = std::make_unique<Rock>();
-        myrock->characterize(Global::cells_number);
+        myrock->characterize(Initial_Conditions::cells_number);
         break;
     case 2:
-        if(Global::fluids_quantity >= 2){
+        if(Initial_Conditions::fluids_quantity >= 2){
             
             added_interfluid_interaction = std::make_unique<Interfluid_Interaction>();
             added_interfluid_interaction->add(characterized_fluids);
@@ -702,18 +684,18 @@ void launchFluidsEngineer(){
     
     switch(option){
     case 1:
-        characterized_fluid = std::make_shared<Fluid>(Global::fluids_quantity);
-        characterized_fluid->characterize(Global::cells_number);
+        characterized_fluid = std::make_shared<Fluid>(Initial_Conditions::fluids_quantity);
+        characterized_fluid->characterize(Initial_Conditions::cells_number);
         characterized_fluids.push_back(characterized_fluid);
         equations.push_back(characterized_fluid);
-        ++Global::fluids_quantity;
+        ++Initial_Conditions::fluids_quantity;
         break;
     case 2:
-        if(Global::fluids_quantity >= 2){
-            added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(Global::equilibrium_relations_quantity);
-            added_equilibrium_relation->add(Global::cells_number,characterized_fluids);
+        if(Initial_Conditions::fluids_quantity >= 2){
+            added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(Initial_Conditions::equilibrium_relations_quantity);
+            added_equilibrium_relation->add(Initial_Conditions::cells_number,characterized_fluids);
             added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
-            ++Global::equilibrium_relations_quantity;
+            ++Initial_Conditions::equilibrium_relations_quantity;
             break;
         }else{
             std::cout << "It is not possible to add an Equilibrium relation with only one fluid characterized."
@@ -749,17 +731,17 @@ void launchReservoirEngineer(std::string& timestamp){
     switch(option){
     case 1:
         if(timestamp ==""){
-            if(Global::fluids_quantity >= 1){
+            if(Initial_Conditions::fluids_quantity >= 1){
                 Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
                 while(type != "Producer" && type != "Injector"){
                     std::cout << "Only Injector or Producer wells";
                     Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
                 };
-                ++Global::wells_quantity;
+                ++Initial_Conditions::wells_quantity;
                 if(type == "Producer"){
-                    well = std::make_shared<Producer_Well>(Producer_Well(Global::wells_quantity));
+                    well = std::make_shared<Producer_Well>(Producer_Well(Initial_Conditions::wells_quantity));
                 }else if(type == "Injector"){
-                    well = std::make_shared<Injector_Well>(Injector_Well(Global::wells_quantity));
+                    well = std::make_shared<Injector_Well>(Injector_Well(Initial_Conditions::wells_quantity));
                 }else{
                     std::cout << "Only Injector or Producer wells";
                 };
@@ -780,11 +762,11 @@ void launchReservoirEngineer(std::string& timestamp){
         for (auto well : perforated_wells){
             std::cout << well->index() <<". " <<well->type()<<std::endl;
         };
-        while(index<1 && index>=Global::wells_quantity){
+        while(index<1 && index>=Initial_Conditions::wells_quantity){
             Value_Reader::myRead(std::string("Please select an index between the range "), index, std::string("Please insert a valid input"));
         };
 
-        perforated_wells[index-1]->establish(Global::term, Global::timestamp);
+        perforated_wells[index-1]->establish(Initial_Conditions::term, Initial_Conditions::timestamp);
         
     default:
         break;
@@ -814,7 +796,7 @@ void reEstablishOperativeConditions(std::ifstream& file_reader, const int& term,
 };
 
 void launchTriggers(){
-    using namespace Global;
+    using namespace Initial_Conditions;
     mymesh->appear(timestamp,stencil);
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
     FluidPressureVaries(timestamp);
@@ -824,7 +806,7 @@ void launchTriggers(){
 };
 
 void launchTriggers(std::ifstream& file_reader){
-    using namespace Global;
+    using namespace Initial_Conditions;
     mymesh->appear(timestamp,stencil);
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
     FluidPressureVaries(timestamp);
@@ -852,7 +834,7 @@ void launchMenu(){
             launchFluidsEngineer();
             break;
         case 4:
-            launchReservoirEngineer(Global::timestamp);
+            launchReservoirEngineer(Initial_Conditions::timestamp);
             break;
         case -1:
             run=true;
@@ -882,21 +864,21 @@ void launchFromFile(std::ifstream& file_reader){
                 
                 mymesh = std::make_unique<Mesh>();
                 mymesh->defineFromFile(file_reader);
-                Global::cells_number = mymesh->getCellTotal();
+                Initial_Conditions::cells_number = mymesh->getCellTotal();
                 
             }else if(object == "ROCK"){
                 
                 myrock = std::make_unique<Rock>();
-                myrock->characterizeFromFile(file_reader, Global::cells_number);
+                myrock->characterizeFromFile(file_reader, Initial_Conditions::cells_number);
             
             }else if(object == "FLUIDS"){
                 
-                file_reader>>Global::fluids_quantity;
+                file_reader>>Initial_Conditions::fluids_quantity;
                 
-                for(int fluid=0; fluid<Global::fluids_quantity;++fluid){
+                for(int fluid=0; fluid<Initial_Conditions::fluids_quantity;++fluid){
                     
                     characterized_fluid = std::make_shared<Fluid>(fluid);
-                    characterized_fluid->characterizeFromFile(file_reader, Global::cells_number);
+                    characterized_fluid->characterizeFromFile(file_reader, Initial_Conditions::cells_number);
                     characterized_fluids.push_back(characterized_fluid);
                     equations.push_back(characterized_fluid);
                     
@@ -904,11 +886,11 @@ void launchFromFile(std::ifstream& file_reader){
                 
             }else if(object == "EQUILIBRIUM_RELATIONS"){
                 
-                if(Global::fluids_quantity >= 2){
-                    file_reader>>Global::equilibrium_relations_quantity;
-                    for(int equilibrium_relation=0; equilibrium_relation<Global::equilibrium_relations_quantity; ++equilibrium_relation){
+                if(Initial_Conditions::fluids_quantity >= 2){
+                    file_reader>>Initial_Conditions::equilibrium_relations_quantity;
+                    for(int equilibrium_relation=0; equilibrium_relation<Initial_Conditions::equilibrium_relations_quantity; ++equilibrium_relation){
                         added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(equilibrium_relation);
-                        added_equilibrium_relation->addFromFile(file_reader, Global::cells_number, characterized_fluids);
+                        added_equilibrium_relation->addFromFile(file_reader, Initial_Conditions::cells_number, characterized_fluids);
                         added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
                     };
                 }else{
@@ -917,9 +899,9 @@ void launchFromFile(std::ifstream& file_reader){
                 
             }else if(object == "INTERFLUID_INTERACTIONS"){
                 
-                if(Global::fluids_quantity >= 2){
-                    file_reader>>Global::interfluid_interactions_quantity;
-                    for(int interfluid_interaction=0; interfluid_interaction<Global::interfluid_interactions_quantity; ++interfluid_interaction){
+                if(Initial_Conditions::fluids_quantity >= 2){
+                    file_reader>>Initial_Conditions::interfluid_interactions_quantity;
+                    for(int interfluid_interaction=0; interfluid_interaction<Initial_Conditions::interfluid_interactions_quantity; ++interfluid_interaction){
                         added_interfluid_interaction = std::make_unique<Interfluid_Interaction>(interfluid_interaction);
                         added_interfluid_interaction->addFromFile(file_reader, characterized_fluids);
                         added_interfluid_interactions.push_back(std::move(added_interfluid_interaction));
@@ -930,16 +912,16 @@ void launchFromFile(std::ifstream& file_reader){
                 
             }else if(object == "TIME_DELTA"){
                 
-                file_reader>>Global::timedelta;
+                file_reader>>Initial_Conditions::timedelta;
                 
             }else if(object == "SIMULATION_TIME"){
                 
-                file_reader>>Global::simulationtime;
+                file_reader>>Initial_Conditions::simulationtime;
                 
             }else if(object == "WELLS"){
-                if(Global::fluids_quantity >= 1){
-                    file_reader>>Global::wells_quantity;
-                    for(int well_index=0; well_index<Global::wells_quantity;++well_index){
+                if(Initial_Conditions::fluids_quantity >= 1){
+                    file_reader>>Initial_Conditions::wells_quantity;
+                    for(int well_index=0; well_index<Initial_Conditions::wells_quantity;++well_index){
                         file_reader>>type;
                         std::transform(type.begin(), type.end(), type.begin(), ::toupper);
                         if(type == "PRODUCER"){
@@ -964,7 +946,7 @@ void launchFromFile(std::ifstream& file_reader){
                 };
                 
             }else if(object == "OPERATIVE_CONDITIONS"){
-                if(Global::wells_quantity >= 1){
+                if(Initial_Conditions::wells_quantity >= 1){
                     for(auto well : perforated_wells){
                         file_reader >> object;
                         std::transform(object.begin(), object.end(),object.begin(), ::toupper);
@@ -972,7 +954,7 @@ void launchFromFile(std::ifstream& file_reader){
                             int index;
                             file_reader >> index;
                             if(well->index() == index - 1){
-                                well->establishFromFile(file_reader, Global::term, Global::timestamp);
+                                well->establishFromFile(file_reader, Initial_Conditions::term, Initial_Conditions::timestamp);
                             };
                         };
                     };
@@ -996,9 +978,9 @@ int main(int argc, char *argv[]){
     if(argc <= 1){
         launchMenu();
         
-        Global::timestamp="continue";
+        Initial_Conditions::timestamp="continue";
         tstart = std::time(0);
-        while(Global::mytime<Global::simulationtime){
+        while(Initial_Conditions::mytime<Initial_Conditions::simulationtime){
             launchTriggers();
         };
         tend = std::time(0);
@@ -1008,9 +990,9 @@ int main(int argc, char *argv[]){
     }else{
         std::ifstream file_reader(argv[1], std::ifstream::in);
         launchFromFile(file_reader);
-        Global::timestamp="continue";
+        Initial_Conditions::timestamp="continue";
         tstart = std::time(0);
-        while(Global::mytime<Global::simulationtime){
+        while(Initial_Conditions::mytime<Initial_Conditions::simulationtime){
             launchTriggers(file_reader);
         };
         tend = std::time(0);

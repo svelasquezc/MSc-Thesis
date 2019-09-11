@@ -1,9 +1,9 @@
-#ifndef GLOBAL_H
-#define GLOBAL_H
+#ifndef INITIAL_CONDITIONS_H
+#define INITIAL_CONDITIONS_H
 
 #include <string>
 
-namespace Global{
+namespace Initial_Conditions{
 
     std::string timestamp="";
     double mytime=0;
@@ -19,4 +19,4 @@ namespace Global{
     int changing_wells=0;
 };
 
-#endif /* GLOBAL_H */
+#endif /* INITIAL_CONDITIONS_H */

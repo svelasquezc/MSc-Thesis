@@ -4,7 +4,8 @@
 #include <Eigen/Sparse>
 #include <cmath>
 
-#include "Global.h"
+#include "Initial_Conditions.h"
+//#include "Database.h"
 
 #include "Mesh.h"
 #include "Rock.h"
@@ -40,7 +41,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     EstimatorFunction_t* _estimatePressure;
     
     const inline int locate(const auto type, int input_selector, int input_index){
-        using namespace Global;
+        using namespace Initial_Conditions;
         if(type == "fluid"){
             return cells_number*input_selector + input_index;
         }else{
