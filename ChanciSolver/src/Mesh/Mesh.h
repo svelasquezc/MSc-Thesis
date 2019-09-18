@@ -44,6 +44,10 @@ class Mesh : protected Value_Reader{
 
     const double& thickness(const int axis, const int spacing) const {return _thickness[axis][spacing];};
 
+    const double& top(const int x_index, const int y_index) const {return _top[x_index][y_index];};
+    
+    const std::vector<int>& cellNumber() const {return _cell_number;};
+
     Cell_iterator begin() {return _cells.begin();};
     Cell_iterator end()   {return _cells.end();};
 

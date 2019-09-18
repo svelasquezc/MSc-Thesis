@@ -28,6 +28,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
     SparseMat_t _jacobian;
     Eigen::VectorXd _residual;
+    Eigen::VectorXd _past_residual;
     Eigen::VectorXd _initial_residual;
     Eigen::VectorXd _solution_delta;
 
@@ -184,10 +185,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         int row;
         int col;
         int iteration=0;
+        double stability_tolerance;
+        double initial_norm;
         //decltype(_residual) past_residual = _residual;
 
         double tolerance;
-
+        double past_tolerance;
         
     
         do{
@@ -521,16 +524,24 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
             //auto difference = past_residual - _residual;
             //
             //tolerance = difference.squaredNorm()/_residual.squaredNorm();
+
+            initial_norm = _initial_residual.squaredNorm();
             
-            //past_residual = _residual;
+            tolerance = _residual.squaredNorm()/initial_norm;
 
-            ++iteration;
+            if(iteration > 0){
 
-            tolerance = _residual.squaredNorm()/_initial_residual.squaredNorm();
+                past_tolerance = _past_residual.squaredNorm()/initial_norm;
+                
+                stability_tolerance = std::abs(tolerance - past_tolerance);
+            };
+
+            _past_residual = _residual;
 
             std::cout << "Tolerance: " << tolerance <<" at iteration: "<<iteration<<std::endl;
+            ++iteration;
             
-        }while(tolerance > _relative_change_in_residual);
+        }while(tolerance > _relative_change_in_residual && tolerance != past_tolerance);
     
     };
     
