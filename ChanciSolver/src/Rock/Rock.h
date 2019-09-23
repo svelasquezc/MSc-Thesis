@@ -32,9 +32,13 @@ class Rock {
         return _porosity[term][cells_number];
     };
 
+    const std::vector<double>& porosity (const int& term) const {return _porosity[term];};
+    
     const std::vector<double>& absolutePermeability(const int& term, const int cells_number) const {
         return _absolute_permeability[term][cells_number];
     };
+
+    const std::vector<std::vector<double>>& absolutePermeability (const int& term) const {return _absolute_permeability[term];};
 };
 
 void Rock::characterize(const int& cells_number){

@@ -42,9 +42,22 @@ class Mesh : protected Value_Reader{
 
     const std::shared_ptr<Cell>& cell(const int index) const {return _cells[index];};
 
-    const double& thickness(const int axis, const int spacing) const {return _thickness[axis][spacing];};
+    const double& thickness(const int axis, int spacing) const {
+        if(spacing == _cell_number[axis]){
+            --spacing;
+        };
+        return _thickness[axis][spacing];
+    };
 
-    const double& top(const int x_index, const int y_index) const {return _top[x_index][y_index];};
+    const double& top(int y_index, int x_index) const {
+        if(x_index == _cell_number[0]){
+            --x_index;
+        };
+        if(y_index == _cell_number[1]){
+            --y_index;
+        };
+        return _top[y_index][x_index];
+    };
     
     const std::vector<int>& cellNumber() const {return _cell_number;};
 

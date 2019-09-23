@@ -6,8 +6,16 @@
 #include "FlowFunctions.h"
 #include "WellFunctions.h"
 
+#include "VTKMesh.h"
+
 int Fluid::_count_of_principals=0;
 int Fluid::_count_of_fluids=0;
+
+using BlackOilNewton = NewtonRaphson<decltype(calculateProperties), decltype(calculateFlow), decltype(calculateAccumulation),decltype(calculatePerforation),decltype(calculateWellFlow), decltype(estimateWellPressure)>;
+
+std::unique_ptr<BlackOilNewton> my_newton;// = BlackOilNewton(0,0,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
+
+//VTKMesh vtkholder;
 
 using namespace Database;
 
@@ -27,10 +35,6 @@ void updateVariables(const int& term, Rock& rock){
 
     rock.updateProperties(term);
 };
-
-using BlackOilNewton = NewtonRaphson<decltype(calculateProperties), decltype(calculateFlow), decltype(calculateAccumulation),decltype(calculatePerforation),decltype(calculateWellFlow), decltype(estimateWellPressure)>;
-
-std::unique_ptr<BlackOilNewton> my_newton;// = BlackOilNewton(0,0,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
 
 //Change Event Name
 void FluidPressureVaries(std::string& timestamp){
@@ -121,7 +125,9 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
         
         mytime    +=timedelta;
         timestamp = "stop";
+        
     };
+    
 };
 
 //Rock
@@ -139,6 +145,7 @@ void launchGeomodeler(){
         mymesh = std::make_unique<Mesh>();
         mymesh->define();
         Initial_Conditions::cells_number = mymesh->getCellTotal();
+        //vtkholder.set(*mymesh);
         break;
     default:
         break;
@@ -373,6 +380,7 @@ void launchFromFile(std::ifstream& file_reader){
                 mymesh = std::make_unique<Mesh>();
                 mymesh->defineFromFile(file_reader);
                 Initial_Conditions::cells_number = mymesh->getCellTotal();
+                //vtkholder.set(*mymesh);
                 
             }else if(object == "ROCK"){
                 
@@ -507,6 +515,5 @@ int main(int argc, char *argv[]){
 
         std::cout << "Elapsed time: "<< std::difftime(tend, tstart) <<" seconds(s)."<<std::endl;
     };
-    
     return 0;
 };

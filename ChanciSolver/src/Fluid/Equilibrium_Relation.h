@@ -23,6 +23,8 @@ class Equilibrium_Relation : Value_Reader{
 
     const double& partitionCoefficient (const int& term, const int& cell_index) const {return _partition_coefficient[term][cell_index];};             
 
+    const std::vector<double>& partitionCoefficient (const int& term) const {return _partition_coefficient[term];};
+    
     void partitionCoefficient(const int& term, const int& cell_index, const double pressure){
         _partition_coefficient[term][cell_index] =
             _measured_partition_coefficient->interpolate(pressure);

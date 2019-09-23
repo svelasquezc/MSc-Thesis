@@ -2,6 +2,7 @@
 #define VTKMESH_H
 
 #include <string>
+#include <sstream>
 #include <vector>
 
 #include <vtkVersion.h>
@@ -9,6 +10,7 @@
 #include <vtkDoubleArray.h>
 #include <vtkStructuredGrid.h>
 #include <vtkXMLStructuredGridWriter.h>
+#include <vtkCellData.h>
 #include <vtkDataSetMapper.h>
 
 
@@ -42,9 +44,12 @@ class VTKMesh{
             for(int j=0; j<=cell_number[1]; ++j){
 
                 for(int i=0; i<=cell_number[0]; ++i){
-                    points->InsertNextPoint(x, y, z + mesh.top(i,j));
+
+                    points->InsertNextPoint(x, y, z + mesh.top(j,i));
                     x += mesh.thickness(0,i);
+                    
                 };
+                
                 y += mesh.thickness(1,j);
 
             };
@@ -58,16 +63,25 @@ class VTKMesh{
 
     void appendScalar(const std::string name, const std::vector<double> all_values){
         auto scalar = vtkSmartPointer<vtkDoubleArray>::New();
-        scalar->SetName(name.c_str());        
-        scalar->setArray(all_values.data(), all_values.size(),0);
-        structuredGrid->GetCellData()->SetScalars(scalar);
+        scalar->SetName(name.c_str());
+        scalar->SetNumberOfComponents(1);
+        for(vtkIdType i = 0; i< all_values.size(); ++i){
+            scalar->InsertNextValue(all_values[i]);
+        }
+        structuredGrid->GetCellData()->AddArray(scalar);
+        structuredGrid->Modified();
     };
     
-    void write(){
-        // Write file
+    void write(double timestep){
+
+        ostringstream ss; 
+        
         vtkSmartPointer<vtkXMLStructuredGridWriter> writer =
             vtkSmartPointer<vtkXMLStructuredGridWriter>::New();
-        writer->SetFileName();
+
+        ss << filename << "_" << timestep << ".vts";
+        
+        writer->SetFileName(ss.str().c_str());
 #if VTK_MAJOR_VERSION <= 5
         writer->SetInput(structuredGrid);
 #else

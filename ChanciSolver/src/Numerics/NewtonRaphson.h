@@ -5,7 +5,7 @@
 #include <cmath>
 
 #include "Initial_Conditions.h"
-//#include "Database.h"
+#include "Database.h"
 
 #include "Mesh.h"
 #include "Rock.h"
@@ -189,8 +189,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         double initial_norm;
         //decltype(_residual) past_residual = _residual;
 
-        double tolerance;
-        double past_tolerance;
+        double tolerance=0;
+        double past_tolerance=0;
         
     
         do{

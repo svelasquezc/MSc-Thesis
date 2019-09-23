@@ -64,6 +64,14 @@ class Fluid : public Equation<Fluid>{
     const double& potential            (const int& _term, const int _cell_index) const {return _potential[_term][_cell_index];};            
     const double& relativePermeability (const int& _term, const int _cell_index) const {return _relative_permeability[_term][_cell_index];};
     const bool  & principal            ()                                       const {return _principal;};
+
+    const std::vector<double>& pressure (const int& term) const {return _pressure[term];};
+    const std::vector<double>& density (const int& term) const {return _density[term];};
+    const std::vector<double>& saturation (const int& term) const {return _saturation[term];};
+    const std::vector<double>& viscosity (const int& term) const {return _viscosity[term];};
+    const std::vector<double>& volumetricFactor (const int& term) const {return _volumetric_factor[term];};
+    const std::vector<double>& potential (const int& term) const {return _potential[term];};
+    const std::vector<double>& relativePermeability (const int& term) const {return _relative_permeability[term];};
     
     static const int& countOfPrincipals(){return _count_of_principals;};
     static const int& countOfFluids    (){return _count_of_fluids;};
