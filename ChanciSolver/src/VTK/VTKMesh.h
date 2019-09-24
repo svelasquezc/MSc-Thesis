@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <fstream>
 
 #include <vtkVersion.h>
 #include <vtkSmartPointer.h>
@@ -17,7 +18,13 @@
 class VTKMesh{
  private:
 
-    std::string filename;
+    std::string _filename;
+
+    std::ostringstream _pvd;
+
+    std::string _header = "<?xml version=\"1.0\"?>\n<VTKFile type=\"Collection\" version=\"0.1\" byte_order=\"LittleEndian\" compressor=\"vtkZLibDataCompressor\">\n    <Collection>";
+
+    std::string ending = "    </Collection>\n</VTKFile>";
     
     vtkSmartPointer<vtkStructuredGrid> structuredGrid =
     vtkSmartPointer<vtkStructuredGrid>::New();
@@ -31,6 +38,8 @@ class VTKMesh{
  public:
 
     VTKMesh(){};
+
+    void filename(const char* filename){_filename = filename;};
     
     template <typename Mesh> void set(const Mesh& mesh){
         auto cell_number = mesh.cellNumber();
@@ -40,9 +49,13 @@ class VTKMesh{
         double z=0;
         
         for(int k=0; k<=cell_number[2]; ++k){
-
+            
+            y=0;
+            
             for(int j=0; j<=cell_number[1]; ++j){
-
+                
+                x=0;
+                
                 for(int i=0; i<=cell_number[0]; ++i){
 
                     points->InsertNextPoint(x, y, z + mesh.top(j,i));
@@ -56,7 +69,9 @@ class VTKMesh{
             z += mesh.thickness(2,k);
         };
 
-        structuredGrid->SetDimensions(cell_number[0],cell_number[1],cell_number[2]);
+        points->Print(std::cout);
+
+        structuredGrid->SetDimensions(cell_number[0]+1,cell_number[1]+1,cell_number[2]+1);
         structuredGrid->SetPoints(points);
         
     };
@@ -74,13 +89,10 @@ class VTKMesh{
     
     void write(double timestep){
 
-        ostringstream ss; 
-        
-        vtkSmartPointer<vtkXMLStructuredGridWriter> writer =
-            vtkSmartPointer<vtkXMLStructuredGridWriter>::New();
+        std::ostringstream ss; 
 
-        ss << filename << "_" << timestep << ".vts";
-        
+        ss << "structuredGrid" << "_" << timestep << ".vts";
+        //writer->SetDataModeToAscii();
         writer->SetFileName(ss.str().c_str());
 #if VTK_MAJOR_VERSION <= 5
         writer->SetInput(structuredGrid);

@@ -15,7 +15,7 @@ using BlackOilNewton = NewtonRaphson<decltype(calculateProperties), decltype(cal
 
 std::unique_ptr<BlackOilNewton> my_newton;// = BlackOilNewton(0,0,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
 
-//VTKMesh vtkholder;
+VTKMesh vtkholder;
 
 using namespace Database;
 
@@ -145,7 +145,7 @@ void launchGeomodeler(){
         mymesh = std::make_unique<Mesh>();
         mymesh->define();
         Initial_Conditions::cells_number = mymesh->getCellTotal();
-        //vtkholder.set(*mymesh);
+        vtkholder.set(*mymesh);
         break;
     default:
         break;
@@ -380,8 +380,7 @@ void launchFromFile(std::ifstream& file_reader){
                 mymesh = std::make_unique<Mesh>();
                 mymesh->defineFromFile(file_reader);
                 Initial_Conditions::cells_number = mymesh->getCellTotal();
-                //vtkholder.set(*mymesh);
-                
+                vtkholder.set(*mymesh);
             }else if(object == "ROCK"){
                 
                 myrock = std::make_unique<Rock>();
