@@ -19,6 +19,18 @@ VTKMesh vtkholder;
 
 using namespace Database;
 
+void insertAll(const double mytime, const int& term){
+    for(auto fluid : characterized_fluids){
+        fluid->insert(vtkholder, term);
+    };
+
+    for(auto& equilibrium_relation : added_equilibrium_relations){
+        equilibrium_relation->insert(vtkholder, term);
+    };
+    
+    vtkholder.write(mytime);
+};
+
 void updateVariables(const int& term, Rock& rock){
     
     for(auto fluid : characterized_fluids){
@@ -115,13 +127,10 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
             reBuildNewton();
             Initial_Conditions::changing_wells = 0;
         };
+
+        insertAll(mytime, term);
         
         std::cout << "Simulating interval [" << mytime << " - " << mytime + timedelta << "]" << std::endl;
-
-        for (auto cell = mymesh->begin(); cell!=mymesh->end(); ++cell){
-            std::cout << characterized_fluids[0]->pressure(0, (*cell)->index())<< " ";
-        };
-        std::cout << std::endl;
         
         mytime    +=timedelta;
         timestamp = "stop";
@@ -514,5 +523,8 @@ int main(int argc, char *argv[]){
 
         std::cout << "Elapsed time: "<< std::difftime(tend, tstart) <<" seconds(s)."<<std::endl;
     };
+
+    insertAll(Initial_Conditions::mytime, Initial_Conditions::term);
+    
     return 0;
 };

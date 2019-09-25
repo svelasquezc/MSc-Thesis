@@ -22,9 +22,9 @@ class VTKMesh{
 
     std::ostringstream _pvd;
 
-    std::string _header = "<?xml version=\"1.0\"?>\n<VTKFile type=\"Collection\" version=\"0.1\" byte_order=\"LittleEndian\" compressor=\"vtkZLibDataCompressor\">\n    <Collection>";
+    const std::string _header = "<?xml version=\"1.0\"?>\n<VTKFile type=\"Collection\" version=\"0.1\" byte_order=\"LittleEndian\" compressor=\"vtkZLibDataCompressor\">\n    <Collection>\n";
 
-    std::string ending = "    </Collection>\n</VTKFile>";
+    const std::string _ending = "    </Collection>\n</VTKFile>";
     
     vtkSmartPointer<vtkStructuredGrid> structuredGrid =
     vtkSmartPointer<vtkStructuredGrid>::New();
@@ -89,11 +89,20 @@ class VTKMesh{
     
     void write(double timestep){
 
-        std::ostringstream ss; 
+        std::ostringstream ss;
+
+        std::ofstream pvdfile;
+
+        pvdfile.open("./VTKResult/structuredGrid.pvd",ios::trunc);
 
         ss << "structuredGrid" << "_" << timestep << ".vts";
+        _pvd << "    <DataSet timestep=\""<<timestep<<"\" group=\"\" part=\"0\" file=\""<< ss.str() <<"\"/>\n";
+
+        pvdfile << _header <<_pvd.str() << _ending;
+
+        pvdfile.close();
         //writer->SetDataModeToAscii();
-        writer->SetFileName(ss.str().c_str());
+        writer->SetFileName(("./VTKResult/"+ss.str()).c_str());
 #if VTK_MAJOR_VERSION <= 5
         writer->SetInput(structuredGrid);
 #else

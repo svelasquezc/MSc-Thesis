@@ -75,6 +75,34 @@ class Fluid : public Equation<Fluid>{
     
     static const int& countOfPrincipals(){return _count_of_principals;};
     static const int& countOfFluids    (){return _count_of_fluids;};
+
+
+    template<typename VTKType> void insert(VTKType& vtkcontext, const int term){
+
+        std::ostringstream ss_pressure;
+        std::ostringstream ss_saturation;
+        std::ostringstream ss_viscosity;
+        std::ostringstream ss_density;
+        std::ostringstream ss_potential;
+        std::ostringstream ss_volumetric_factor;
+        std::ostringstream ss_relative_permeability;
+
+        ss_pressure << _type << "_Pressure";
+        ss_saturation << _type << "_Saturation";
+        ss_viscosity << _type << "_Viscosity";
+        ss_density << _type << "_Density";
+        ss_potential << _type << "_Potential";
+        ss_volumetric_factor << _type << "_Volumetric_Factor";
+        ss_relative_permeability << _type << "_Relative_Permeability";
+        
+        vtkcontext.appendScalar(ss_pressure.str(), _pressure[term]);
+        vtkcontext.appendScalar(ss_saturation.str(), _saturation[term]);
+        vtkcontext.appendScalar(ss_density.str(), _density[term]);
+        vtkcontext.appendScalar(ss_volumetric_factor.str(), _volumetric_factor[term]);
+        vtkcontext.appendScalar(ss_viscosity.str(), _viscosity[term]);
+        vtkcontext.appendScalar(ss_potential.str(), _potential[term]);
+        vtkcontext.appendScalar(ss_relative_permeability.str(), _relative_permeability[term]);
+    };
     
 };
 

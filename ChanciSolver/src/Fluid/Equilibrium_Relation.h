@@ -36,7 +36,16 @@ class Equilibrium_Relation : Value_Reader{
         }else{
             _partition_coefficient[0]=_partition_coefficient[1];
         }
-    }
+    };
+
+    template<typename VTKType> void insert(VTKType& vtkcontext, const int term){
+        
+        std::ostringstream fullname;
+
+        fullname << receiverFluid()->type() << " in " << contributorFluid()->type() << " Ratio";
+        
+        vtkcontext.appendScalar(fullname.str(), _partition_coefficient[term]);
+    };
 };
 
 void Equilibrium_Relation::add(const int cells_number, std::vector<std::shared_ptr<Fluid>>& characterized_fluids){
