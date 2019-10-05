@@ -27,6 +27,7 @@
 \usepackage{tikz}
 \usepackage{capt-of}
 \usepackage{pgfplots}
+\usepackage{caption}
 \usepackage{latexsym}
 
 \usepackage{listings}
@@ -47,11 +48,11 @@
 \usepackage{rotating} %Para rotar texto, objetos y tablas seite. No se ve en DVI solo en PS. Seite 328 Hundebuch
                         %se usa junto con \rotate, \sidewidestable ....
 
-
 \renewcommand{\theequation}{\thechapter-\arabic{equation}}
 \renewcommand{\thefigure}{\textbf{\thechapter-\arabic{figure}}}
 \renewcommand{\thetable}{\textbf{\thechapter-\arabic{table}}}
 
+\captionsetup{labelsep=space}
 
 \pagestyle{fancyplain}%\addtolength{\headwidth}{\marginparwidth}
 \textheight22.5cm \topmargin0cm \textwidth16.5cm

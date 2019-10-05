@@ -1,10 +1,10 @@
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Agradecimientos}{\es@scroman {iv}}{chapter*.1}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Resumen}{\es@scroman {v}}{chapter*.2}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Abstract}{\es@scroman {vi}}{chapter*.3}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Agradecimientos}{\es@scroman {iv}}{chapter*.2}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Resumen}{\es@scroman {v}}{chapter*.3}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Abstract}{\es@scroman {vi}}{chapter*.4}% 
 \babel@toc {spanish}{}
-\contentsline {chapter}{Contenido}{\es@scroman {vii}}{chapter*.3}% 
-\contentsline {chapter}{Lista de figuras}{\es@scroman {viii}}{chapter*.4}% 
-\contentsline {chapter}{Lista de tablas}{\es@scroman {x}}{chapter*.5}% 
+\contentsline {chapter}{Contenido}{\es@scroman {vii}}{chapter*.4}% 
+\contentsline {chapter}{Lista de figuras}{\es@scroman {viii}}{chapter*.5}% 
+\contentsline {chapter}{Lista de tablas}{\es@scroman {x}}{chapter*.6}% 
 \contentsline {chapter}{\numberline {1}Introducci\'{o}n}{2}{chapter.1}% 
 \contentsline {chapter}{\numberline {2}Marco te\IeC {\'o}rico}{4}{chapter.2}% 
 \contentsline {section}{\numberline {2.1}El medio poroso}{4}{section.2.1}% 
@@ -14,7 +14,7 @@
 \contentsline {subsection}{\numberline {2.2.3}Permeabilidad Relativa}{6}{subsection.2.2.3}% 
 \contentsline {section}{\numberline {2.3}Simulaci\IeC {\'o}n de Yacimientos de Petr\IeC {\'o}leo}{6}{section.2.3}% 
 \contentsline {subsection}{\numberline {2.3.1}Modelo \emph {Black Oil} Extendido}{7}{subsection.2.3.1}% 
-\contentsline {subsubsection}{\nonumberline Ecuaciones constitutivas}{8}{section*.7}% 
+\contentsline {subsubsection}{\nonumberline Ecuaciones constitutivas}{8}{section*.9}% 
 \contentsline {subsection}{\numberline {2.3.2}Condiciones iniciales}{8}{subsection.2.3.2}% 
 \contentsline {subsection}{\numberline {2.3.3}Discretizaci\IeC {\'o}n}{9}{subsection.2.3.3}% 
 \contentsline {subsection}{\numberline {2.3.4}Modelado de Pozos}{11}{subsection.2.3.4}% 
@@ -22,20 +22,20 @@
 \contentsline {section}{\numberline {2.4}Procesos de Recobro Mejorado}{13}{section.2.4}% 
 \contentsline {section}{\numberline {2.5}Esquemas Preconceptuales}{14}{section.2.5}% 
 \contentsline {subsection}{\numberline {2.5.1}Elementos del Esquema Preconceptual}{14}{subsection.2.5.1}% 
-\contentsline {subsubsection}{\nonumberline Nodos}{15}{section*.8}% 
-\contentsline {subsubsection}{\nonumberline Relaciones}{15}{section*.9}% 
-\contentsline {subsubsection}{\nonumberline Enlaces}{16}{section*.10}% 
-\contentsline {subsubsection}{\nonumberline Aglutinadores}{16}{section*.11}% 
+\contentsline {subsubsection}{\nonumberline Nodos}{15}{section*.16}% 
+\contentsline {subsubsection}{\nonumberline Relaciones}{15}{section*.17}% 
+\contentsline {subsubsection}{\nonumberline Enlaces}{16}{section*.18}% 
+\contentsline {subsubsection}{\nonumberline Aglutinadores}{16}{section*.19}% 
 \contentsline {subsection}{\numberline {2.5.2}Esquemas Preconceptuales en el contexto del software cient\IeC {\'\i }fico}{17}{subsection.2.5.2}% 
-\contentsline {subsubsection}{\nonumberline Condiciones Iniciales}{17}{section*.12}% 
-\contentsline {subsubsection}{\nonumberline Concepto tipo arreglo}{18}{section*.13}% 
-\contentsline {subsubsection}{\nonumberline Par\IeC {\'a}metro}{18}{section*.14}% 
-\contentsline {subsubsection}{\nonumberline Variable Independiente}{18}{section*.15}% 
-\contentsline {subsubsection}{\nonumberline Vector independiente}{19}{section*.16}% 
-\contentsline {subsubsection}{\nonumberline Operadores Predefinidos}{19}{section*.17}% 
-\contentsline {subsubsection}{\nonumberline Operador \emph {Push}}{19}{section*.18}% 
-\contentsline {subsubsection}{\nonumberline Operador \emph {Type}}{19}{section*.19}% 
-\contentsline {subsubsection}{\nonumberline Funciones que define el analista}{19}{section*.20}% 
+\contentsline {subsubsection}{\nonumberline Condiciones Iniciales}{17}{section*.21}% 
+\contentsline {subsubsection}{\nonumberline Concepto tipo arreglo}{18}{section*.23}% 
+\contentsline {subsubsection}{\nonumberline Par\IeC {\'a}metro}{18}{section*.25}% 
+\contentsline {subsubsection}{\nonumberline Variable Independiente}{18}{section*.27}% 
+\contentsline {subsubsection}{\nonumberline Vector independiente}{19}{section*.28}% 
+\contentsline {subsubsection}{\nonumberline Operadores Predefinidos}{19}{section*.30}% 
+\contentsline {subsubsection}{\nonumberline Operador \emph {Push}}{19}{section*.31}% 
+\contentsline {subsubsection}{\nonumberline Operador \emph {Type}}{19}{section*.32}% 
+\contentsline {subsubsection}{\nonumberline Funciones que define el analista}{19}{section*.33}% 
 \contentsline {section}{\numberline {2.6}Modelo Ejecutable}{19}{section.2.6}% 
 \contentsline {chapter}{\numberline {3}Planteamiento del Problema}{21}{chapter.3}% 
 \contentsline {section}{\numberline {3.1}Antecedentes}{21}{section.3.1}% 
@@ -60,14 +60,14 @@
 \contentsline {subsection}{\numberline {4.4.2}Funciones y subrutinas de pozo}{33}{subsection.4.4.2}% 
 \contentsline {subsection}{\numberline {4.4.3}Tiempo pasa}{33}{subsection.4.4.3}% 
 \contentsline {subsection}{\numberline {4.4.4}Presi\IeC {\'o}n del Fluido var\IeC {\'\i }a}{33}{subsection.4.4.4}% 
-\contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{34}{section*.21}% 
-\contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{34}{section*.22}% 
-\contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{34}{section*.23}% 
-\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{34}{section*.24}% 
+\contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{34}{section*.58}% 
+\contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{34}{section*.60}% 
+\contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{34}{section*.62}% 
+\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{34}{section*.68}% 
 \contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{58}{chapter.5}% 
 \contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{61}{chapter.6}% 
 \contentsline {section}{\numberline {6.1}Conclusiones}{61}{section.6.1}% 
 \contentsline {section}{\numberline {6.2}Trabajo futuro}{62}{section.6.2}% 
 \contentsline {chapter}{\numberline {A}Anexo: Discretizaci\IeC {\'o}n de las Ecuaciones del BOM}{63}{appendix.Alph1}% 
 \contentsline {chapter}{\numberline {B}Anexo: Traducciones a c\IeC {\'o}digo de la representaci\IeC {\'o}n}{66}{appendix.Alph2}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{71}{table.Alph2.6}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{71}{table.caption.79}% 
