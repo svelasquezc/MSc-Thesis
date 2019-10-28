@@ -23,6 +23,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
     const double _machine_epsilon = 2.0*std::sqrt(std::numeric_limits<double>::epsilon());
     const double _relative_change_in_residual=1e-11;
+    const double _divergence_tolerance = 1e4;
 
     std::vector<Tripletd_t> _non_zeros;
     
@@ -174,7 +175,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         _residual = -_residual;
     };
     
-    void iterate(const int& term, const Mesh& mesh, std::vector<std::shared_ptr<Well>>& wells, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
+    double iterate(const int& term, const Mesh& mesh, std::vector<std::shared_ptr<Well>>& wells, std::vector<std::shared_ptr<Equation_Base>>& equations, Rock& rock){
 
         int residual_selector;
         int cell_index;
@@ -185,7 +186,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         int row;
         int col;
         int iteration=0;
-        double stability_tolerance;
+        double stability_tolerance=1e4;
         double initial_norm;
         //decltype(_residual) past_residual = _residual;
 
@@ -527,22 +528,23 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
             initial_norm = _initial_residual.squaredNorm();
             
-            tolerance = _residual.squaredNorm()/initial_norm;
+            tolerance = _residual.squaredNorm();
 
             if(iteration > 0){
 
-                past_tolerance = _past_residual.squaredNorm()/initial_norm;
+                past_tolerance = _past_residual.squaredNorm();
                 
-                stability_tolerance = std::abs(tolerance - past_tolerance);
+                stability_tolerance = std::abs(past_tolerance/tolerance) - 1.0;
             };
 
             _past_residual = _residual;
 
-            std::cout << "Tolerance: " << tolerance <<" at iteration: "<<iteration<<std::endl;
+            std::cout << "Tolerance: " << tolerance << " at iteration: " << iteration << std::endl;
             ++iteration;
             
-        }while(tolerance > _relative_change_in_residual && tolerance != past_tolerance);
-    
+        }while(tolerance > _relative_change_in_residual && tolerance < _divergence_tolerance && iteration < 100);
+
+        return tolerance;
     };
     
     void update(const int& term, const Mesh& mesh, std::vector<std::shared_ptr<Equation_Base>>& equations){
@@ -561,6 +563,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     row = locate(residual_type, residual_selector, well->index());
 
                     well->boreholePressure(term, well->boreholePressure(term)+_solution_delta(row));
+
+                    //Well at atmospheric pressure [pa]
+                    if(well->boreholePressure(term) < 101325.0){
+                        well->boreholePressure(term, 101325.0);
+                        well->operativeCondition()->type("SHUT");
+                    }
                     
                 }else{
 
@@ -576,8 +584,15 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                         if(fluid->principal()){
                             fluid->pressure(term, cell_index, fluid->pressure(term, cell_index)+_solution_delta(row));
+                            if(fluid->pressure(term, cell_index) < 101325.0){
+                                fluid->pressure(term, cell_index, 101325.0);
+                            };
+                            
                         }else{
                             fluid->saturation(term, cell_index, fluid->saturation(term, cell_index)+_solution_delta(row));
+                            if(fluid->saturation(term, cell_index) < 0){
+                                fluid->saturation(term, cell_index, 0);
+                            };
                         };
                     };
                 };

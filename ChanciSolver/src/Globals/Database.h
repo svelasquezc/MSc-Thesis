@@ -27,6 +27,8 @@ namespace Database{
 
     unique_ptr<Mesh> mymesh;
     unique_ptr<Rock> myrock;
+
+    vector<double> print_times = vector<double>();
 };
 
 #endif /* DATABASE_H */

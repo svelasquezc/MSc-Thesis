@@ -17,6 +17,10 @@ namespace Initial_Conditions{
     int interfluid_interactions_quantity=0;
     int cells_number=0;
     int changing_wells=0;
+    int number_of_print_times=0;
+    int current_print_index = 0;
+    const double relative_change_in_residual=1e-11;
+    const double divergence_tolerance = 1e4;
 };
 
 #endif /* INITIAL_CONDITIONS_H */

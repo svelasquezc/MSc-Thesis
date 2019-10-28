@@ -31,7 +31,7 @@ void insertAll(const double mytime, const int& term){
     vtkholder.write(mytime);
 };
 
-void updateVariables(const int& term, Rock& rock){
+void updateVariables(const int& term){
     
     for(auto fluid : characterized_fluids){
 	fluid->updateProperties(term);
@@ -45,18 +45,34 @@ void updateVariables(const int& term, Rock& rock){
         well->updateProperties(term);
     };
 
-    rock.updateProperties(term);
+    myrock->updateProperties(term);
 };
 
 //Change Event Name
 void FluidPressureVaries(std::string& timestamp){
+
+    double tolerance=Initial_Conditions::divergence_tolerance*2;
+    
     if(timestamp == "stop"){
 
-        updateVariables(1, *myrock);
+        updateVariables(1);
 
-        my_newton->iterate(Initial_Conditions::term, *mymesh, perforated_wells, equations, *myrock);
+        tolerance = my_newton->iterate(Initial_Conditions::term, *mymesh, perforated_wells, equations, *myrock);
 
-        updateVariables(0, *myrock);
+        while(tolerance > Initial_Conditions::relative_change_in_residual){
+            updateVariables(1);
+            Initial_Conditions::mytime -= Initial_Conditions::timedelta;
+            Initial_Conditions::timedelta /= 2.0;
+            Initial_Conditions::mytime += Initial_Conditions::timedelta;
+            tolerance = my_newton->iterate(Initial_Conditions::term, *mymesh, perforated_wells, equations, *myrock);
+            
+        };
+        
+        updateVariables(0);
+        
+        if(tolerance < Initial_Conditions::relative_change_in_residual/2.0){
+            Initial_Conditions::timedelta *= 2.0;
+        };
         
         timestamp = "continue";
 
@@ -69,7 +85,7 @@ void FluidPressureVaries(std::string& timestamp){
                 well->operativeStatus(2); //Pending Change
             };
         };
-    }
+    };
 };
 
 void reBuildNewton(){
@@ -99,10 +115,13 @@ void reBuildNewton(){
 void timePasses(std::string& timestamp, int& term, double& mytime, double& timedelta, double& simulationtime){
     if(timestamp == "continue" && mytime<=simulationtime){
         if(mytime == 0){
+            
             for(auto cell = mymesh->begin(); cell != mymesh->end(); ++cell){
                 calculateProperties(0, *cell, *myrock);
             };
-
+            
+            updateVariables(1);
+            
             for(auto well : perforated_wells){
                 
                 if(well->operativeStatus() == 1){ //Just Changed
@@ -123,14 +142,19 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
             
         };
 
+        //Elements which are not present in the EP,
+        //but are necessary for internal management of the simulation-
+        
         if(Initial_Conditions::changing_wells > 0){
             reBuildNewton();
             Initial_Conditions::changing_wells = 0;
         };
-
-        insertAll(mytime, term);
-        
+        if(mytime>=print_times[Initial_Conditions::current_print_index]){
+           insertAll(mytime, term);
+           ++Initial_Conditions::current_print_index;
+        };
         std::cout << "Simulating interval [" << mytime << " - " << mytime + timedelta << "]" << std::endl;
+        //
         
         mytime    +=timedelta;
         timestamp = "stop";
@@ -441,6 +465,14 @@ void launchFromFile(std::ifstream& file_reader){
             }else if(object == "SIMULATION_TIME"){
                 
                 file_reader>>Initial_Conditions::simulationtime;
+
+            }else if(object == "PRINT_TIMES"){
+
+                file_reader>>Initial_Conditions::number_of_print_times;
+                print_times.resize(Initial_Conditions::number_of_print_times);
+                for(int print_time=0; print_time<Initial_Conditions::number_of_print_times; ++print_time){
+                    file_reader>>print_times[print_time];
+                };
                 
             }else if(object == "WELLS"){
                 if(Initial_Conditions::fluids_quantity >= 1){
