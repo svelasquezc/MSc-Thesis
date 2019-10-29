@@ -536,10 +536,10 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                 
                 stability_tolerance = std::abs(past_tolerance/tolerance) - 1.0;
             };
-
+ 
             _past_residual = _residual;
 
-            std::cout << "Tolerance: " << tolerance << " at iteration: " << iteration << std::endl;
+            //std::cout << "Tolerance: " << tolerance << " at iteration: " << iteration << std::endl;
             ++iteration;
             
         }while(tolerance > _relative_change_in_residual && tolerance < _divergence_tolerance && iteration < 100);
