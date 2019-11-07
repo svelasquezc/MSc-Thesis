@@ -386,6 +386,55 @@ En el código \ref{tab:MeshCode} se puede observar que, la conceptualización de
 	\caption[Traducción a código del cálculo de residual en el evento ``Presión del Fluido Varía''.]{Traducción a código del cálculo de residual en el evento ``Presión del Fluido Varía''. Los autores.}
 \end{table}
 
+%\chapter{Anexo: Pirobos todos}\label{AnexoSizas}
+%\newpage
+%\begin{small}
+%	\begin{lstlisting}
+%	double calculateAccumulation
+%	    (const int& term, Fluid& fluid, 
+%	        const std::shared_ptr<Cell>& cell, Rock& rock){
+%	
+%	double past_contribution=0;
+%	double current_contribution=0;
+%	
+%	const int cell_index = cell->index();
+%	
+%	for(auto& equilibrium_relation : added_equilibrium_relations ){
+%	
+%	if(equilibrium_relation->receiverFluid()->index() == fluid.index()){
+%	
+%	const auto contributor = equilibrium_relation->contributorFluid();
+%	
+%	double past_coef = 
+%	    equilibrium_relation->partitionCoefficient(term-1,cell_index);
+%	
+%	past_contribution = past_contribution +
+%	past_coef * (rock.porosity(term-1,cell_index) * 
+%	contributor->saturation(term-1,cell_index)
+%	/ contributor->volumetricFactor(term-1,cell_index));
+%	
+%	double curr_coef = 
+%	    equilibrium_relation->partitionCoefficient(term,cell_index);
+%	
+%	current_contribution = current_contribution +
+%	curr_coef * (rock.porosity(term,cell_index) * 
+%	contributor->saturation(term,cell_index)
+%	/ contributor->volumetricFactor(term,cell_index));
+%	
+%	};
+%	};
+%	
+%	double accumulation = (cell->volume()/Initial_Conditions::timedelta) *
+%	(((rock.porosity(term,cell_index)*fluid.saturation(term,cell_index)
+%	/fluid.volumetricFactor(term,cell_index)) + current_contribution)-
+%	((rock.porosity(term-1,cell_index)*fluid.saturation(term-1,cell_index)
+%	/fluid.volumetricFactor(term-1,cell_index)) + past_contribution));
+%	
+%	return accumulation;
+%	};
+%	\end{lstlisting}
+%\end{small}
+
 %A final del documento es opcional incluir \'{\i}ndices o glosarios. \'{E}stos son listas detalladas y especializadas de los t\'{e}rminos, nombres, autores, temas, etc., que aparecen en el mismo. Sirven para facilitar su localizaci\'{o}n en el texto. Los \'{\i}ndices pueden ser alfab\'{e}ticos, cronol\'{o}gicos, num\'{e}ricos, anal\'{\i}ticos, entre otros. Luego de cada palabra, t\'{e}rmino, etc., se pone coma y el n\'{u}mero de la p\'{a}gina donde aparece esta informaci\'{o}n.\\
 
 %\chapter{Anexo: Nombrar el anexo C de acuerdo con su contenido}
