@@ -89,7 +89,7 @@ Finalmente, dividiendo por $\Delta t$ la ecuación se obtiene:
 \end{align*}
 La discretización de las ecuaciones de conservación para el gas y el agua (\ref{ec:gas}, \ref{ec:agua}) se obtienen de manera análoga a la del aceite.
 \chapter{Anexo: Traducciones a código de la representación}
-En este apartado se muestran porciones del modelo ejecutable que se programa en C++ \citep{ISO:2017:IIIa}. Se elije este lenguaje porque la \textit{Stardard Template Library} (STL) tiene facilidades que permiten hacer la consistencia del código con el esquema preconceptual explícita, tal como se muestra en la sección \ref{sec:conc++}. Se emula una base de datos a partir de arreglos globales que almacenan cada concepto, y, las claves foráneas que se generan entre conceptos se traducen como punteros. \\
+En este apartado se muestran porciones del modelo ejecutable que se programa en C++ \citep{ISO:2017:IIIa}. Se elije este lenguaje porque la \textit{Stardard Template Library} (STL) tiene facilidades que permiten hacer la consistencia del código con el esquema preconceptual explícita. Se emula una base de datos a partir de arreglos globales que almacenan cada concepto, y, las claves foráneas que se generan entre conceptos se traducen como punteros. \\
 
 A continuación se muestra, a modo de ejemplo, las traducciones de algunos conceptos, funciones, o porciones del EP a código C++ para verificar la consistencia del código con el modelo ejecutable. Primero, se definen los elementos que conforman las condiciones iniciales, y, la base de datos que se emula, es decir, los arreglos que contienen los conceptos que se instancian en la ejecución de las relaciones dinámicas del EP. Posteriormente, se muestran las traducciones a código de dos conceptos clase, ``Malla'' y ``Roca'', y la traducción de la relación dinámica ``Petrofísico caracteriza Roca''. Luego, se explica la traducción del cálculo del residual en el evento ``Presión del Fluido Varía''.\\
 
@@ -106,7 +106,7 @@ Las condiciones iniciales, en las que se definen variables globales y constantes
 		&
 		\begin{tiny}
 			\begin{lstlisting}
-			namespace Global{
+			namespace Initial_Conditions{
 			
 			std::string timestamp="";
 			double mytime=0;
@@ -122,7 +122,6 @@ Las condiciones iniciales, en las que se definen variables globales y constantes
 			int changing_wells=0;
 			
 			};
-			
 			
 			\end{lstlisting}
 		\end{tiny}
