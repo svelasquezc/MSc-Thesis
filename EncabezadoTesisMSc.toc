@@ -65,9 +65,10 @@
 \contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{34}{section*.62}% 
 \contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{34}{section*.68}% 
 \contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{58}{chapter.5}% 
-\contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{61}{chapter.6}% 
-\contentsline {section}{\numberline {6.1}Conclusiones}{61}{section.6.1}% 
-\contentsline {section}{\numberline {6.2}Trabajo futuro}{62}{section.6.2}% 
-\contentsline {chapter}{\numberline {A}Anexo: Discretizaci\IeC {\'o}n de las Ecuaciones del BOM}{63}{appendix.Alph1}% 
-\contentsline {chapter}{\numberline {B}Anexo: Traducciones a c\IeC {\'o}digo de la representaci\IeC {\'o}n}{66}{appendix.Alph2}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{71}{table.caption.79}% 
+\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C\IeC {\'o}digo}{58}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Literatura}{59}{section.5.2}% 
+\contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{64}{chapter.6}% 
+\contentsline {section}{\numberline {6.1}Conclusiones}{64}{section.6.1}% 
+\contentsline {section}{\numberline {6.2}Trabajo futuro}{65}{section.6.2}% 
+\contentsline {chapter}{\numberline {A}Anexo: Discretizaci\IeC {\'o}n de las Ecuaciones del BOM}{66}{appendix.Alph1}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{69}{equation.Alph1.0.1}% 
