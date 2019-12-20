@@ -1,0 +1,282 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{hoteit_multicomponent_2005}
+H.~Hoteit, A.~Firoozabadi,
+  \href{http://onlinelibrary.wiley.com/doi/10.1029/2005WR004339/abstract}{Multicomponent
+  fluid flow by discontinuous {Galerkin} and mixed methods in unfractured and
+  fractured media}, Water Resources Research 41~(11) (2005) W11412.
+\newblock \href {http://dx.doi.org/10.1029/2005WR004339}
+  {\path{doi:10.1029/2005WR004339}}.
+\newline\urlprefix\url{http://onlinelibrary.wiley.com/doi/10.1029/2005WR004339/abstract}
+
+\bibitem{w1}
+S.~P. Neuman, Saturated-unsaturated seepage by finite elements., in: J.
+  HYDRAUL. DIV., PROC., ASCE., 1973.
+
+\bibitem{johnson1996colloid}
+P.~R. Johnson, N.~Sun, M.~Elimelech, Colloid transport in geochemically
+  heterogeneous porous media: Modeling and measurements, Environmental science
+  \& technology 30~(11) (1996) 3284--3293.
+
+\bibitem{XU}
+T.~Xu, J.~Samper, C.~Ayora, M.~Manzano, E.~Custodio,
+  \href{http://www.sciencedirect.com/science/article/pii/S0022169498002832}{Modeling
+  of non-isothermal multi-component reactive transport in field scale porous
+  media flow systems}, Journal of Hydrology 214~(1) (1999) 144 -- 164.
+\newblock \href
+  {http://dx.doi.org/https://doi.org/10.1016/S0022-1694(98)00283-2}
+  {\path{doi:https://doi.org/10.1016/S0022-1694(98)00283-2}}.
+\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0022169498002832}
+
+\bibitem{Narasimhan76}
+T.~N. Narasimhan, P.~A. Witherspoon,
+  \href{http://dx.doi.org/10.1029/WR012i001p00057}{An integrated finite
+  difference method for analyzing fluid flow in porous media}, Water Resources
+  Research 12~(1) (1976) 57--64.
+\newblock \href {http://dx.doi.org/10.1029/WR012i001p00057}
+  {\path{doi:10.1029/WR012i001p00057}}.
+\newline\urlprefix\url{http://dx.doi.org/10.1029/WR012i001p00057}
+
+\bibitem{islam}
+M.~R. Islam, M.~E. Hossain, S.~H. Mousavizadegan, S.~Mustafiz, J.~H.
+  Abou-Kassem, Advanced Petroleum Reservoir Simulation: Towards Developing
+  Reservoir Emulators, John Wiley \& Sons, 2016.
+
+\bibitem{Achdou2003}
+Y.~Achdou, C.~Bernardi, F.~Coquel,
+  \href{https://doi.org/10.1007/s00211-002-0436-7}{A priori and a posteriori
+  analysis of finite volume discretizations of darcy's equations}, Numerische
+  Mathematik 96~(1) (2003) 17--42.
+\newblock \href {http://dx.doi.org/10.1007/s00211-002-0436-7}
+  {\path{doi:10.1007/s00211-002-0436-7}}.
+\newline\urlprefix\url{https://doi.org/10.1007/s00211-002-0436-7}
+
+\bibitem{young_finite-element_1981}
+L.~C. Young, \href{https://www.onepetro.org/journal-paper/SPE-7413-PA}{A
+  {Finite}-{Element} {Method} for {Reservoir} {Simulation}}, Society of
+  Petroleum Engineers Journal 21~(01) (1981) 115--128.
+\newblock \href {http://dx.doi.org/10.2118/7413-PA}
+  {\path{doi:10.2118/7413-PA}}.
+\newline\urlprefix\url{https://www.onepetro.org/journal-paper/SPE-7413-PA}
+
+\bibitem{Zienkiewicz84}
+O.~C. Zienkiewicz, T.~Shiomi,
+  \href{http://dx.doi.org/10.1002/nag.1610080106}{Dynamic behaviour of
+  saturated porous media; the generalized biot formulation and its numerical
+  solution}, International Journal for Numerical and Analytical Methods in
+  Geomechanics 8~(1) (1984) 71--96.
+\newblock \href {http://dx.doi.org/10.1002/nag.1610080106}
+  {\path{doi:10.1002/nag.1610080106}}.
+\newline\urlprefix\url{http://dx.doi.org/10.1002/nag.1610080106}
+
+\bibitem{MASUD2002}
+A.~Masud, T.~J. Hughes,
+  \href{http://www.sciencedirect.com/science/article/pii/S0045782502003717}{A
+  stabilized mixed finite element method for darcy flow}, Computer Methods in
+  Applied Mechanics and Engineering 191~(39) (2002) 4341 -- 4370.
+\newblock \href
+  {http://dx.doi.org/https://doi.org/10.1016/S0045-7825(02)00371-7}
+  {\path{doi:https://doi.org/10.1016/S0045-7825(02)00371-7}}.
+\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0045782502003717}
+
+\bibitem{Ye2004}
+S.~Ye, Y.~Xue, C.~Xie,
+  \href{http://dx.doi.org/10.1029/2003WR002914}{Application of the multiscale
+  finite element method to flow in heterogeneous porous media}, Water Resources
+  Research 40~(9) (2004) n/a--n/a, w09202.
+\newblock \href {http://dx.doi.org/10.1029/2003WR002914}
+  {\path{doi:10.1029/2003WR002914}}.
+\newline\urlprefix\url{http://dx.doi.org/10.1029/2003WR002914}
+
+\bibitem{jasak1996error}
+H.~Jasak, Error analysis and estimation for finite volume method with
+  applications to fluid flow.
+
+\bibitem{juretic2005error}
+F.~Juretic, Error analysis in finite volume cfd, Ph.D. thesis, Imperial College
+  London (University of London) (2005).
+
+\bibitem{loudyi}
+D.~Loudyi, R.~A. Falconer, B.~Lin, Mathematical development and verification of
+  a non-orthogonal finite volume model for groundwater flow applications,
+  Advances in water resources 30~(1) (2007) 29--42.
+
+\bibitem{jayantha2003}
+J.~Pasdunkorale~A, I.~W. Turner, A second order finite volume technique for
+  simulating transport in anisotropic media, International Journal of Numerical
+  Methods for Heat \& Fluid Flow 13~(1) (2003) 31--56.
+
+\bibitem{sozer2014gradient}
+E.~Sozer, C.~Brehm, C.~C. Kiris, Gradient calculation methods on arbitrary
+  polyhedral unstructured meshes for cell-centered cfd solvers, in: Proceedings
+  of the 52nd Aerospace Sciences Meeting, National Harbor, MD, USA, Vol. 1317,
+  2014.
+
+\bibitem{TURNER}
+I.~Turner, W.~Ferguson,
+  \href{http://www.sciencedirect.com/science/article/pii/0307904X9500087Z}{An
+  unstructured mesh cell-centered control volume method for simulating heat and
+  mass transfer in porous media: Application to softwood drying, part i: The
+  isotropic model}, Applied Mathematical Modelling 19~(11) (1995) 654 -- 667.
+\newblock \href
+  {http://dx.doi.org/https://doi.org/10.1016/0307-904X(95)00087-Z}
+  {\path{doi:https://doi.org/10.1016/0307-904X(95)00087-Z}}.
+\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/0307904X9500087Z}
+
+\bibitem{dalen_simplified_1979}
+V.~Dalen, \href{https://www.onepetro.org/journal-paper/SPE-7196-PA}{Simplified
+  {Finite}-{Element} {Models} for {Reservoir} {Flow} {Problems}}, Society of
+  Petroleum Engineers Journal 19~(05) (1979) 333--343.
+\newblock \href {http://dx.doi.org/10.2118/7196-PA}
+  {\path{doi:10.2118/7196-PA}}.
+\newline\urlprefix\url{https://www.onepetro.org/journal-paper/SPE-7196-PA}
+
+\bibitem{mcmichael_reservoir_1973}
+C.~L. McMichael, G.~W. Thomas,
+  \href{https://www.onepetro.org/journal-paper/SPE-3558-PA}{Reservoir
+  {Simulation} by {Galerkin}\&apos;s {Method}}, Society of Petroleum Engineers
+  Journal 13~(03) (1973) 125--138.
+\newblock \href {http://dx.doi.org/10.2118/3558-PA}
+  {\path{doi:10.2118/3558-PA}}.
+\newline\urlprefix\url{https://www.onepetro.org/journal-paper/SPE-3558-PA}
+
+\bibitem{ewing_mathematics_1983}
+R.~E. Ewing, The {Mathematics} of {Reservoir} {Simulation}, SIAM, 1983.
+
+\bibitem{ainsworth2005synthesis}
+M.~Ainsworth, A synthesis of a posteriori error estimation techniques for
+  conforming, non-conforming and discontinuous galerkin finite element methods,
+  Contemporary Mathematics 383 (2005) 1--14.
+
+\bibitem{hansbo2003discontinuous}
+P.~Hansbo, M.~G. Larson, Discontinuous galerkin and the crouzeix--raviart
+  element: application to elasticity, ESAIM: Mathematical Modelling and
+  Numerical Analysis 37~(1) (2003) 63--72.
+
+\bibitem{cockburn_development_2000}
+B.~Cockburn, G.~E. Karniadakis, C.-W. Shu,
+  \href{http://link.springer.com/chapter/10.1007/978-3-642-59721-3_1}{The
+  {Development} of {Discontinuous} {Galerkin} {Methods}}, in: B.~Cockburn,
+  G.~E. Karniadakis, C.-W. Shu (Eds.), Discontinuous {Galerkin} {Methods},
+  no.~11 in Lecture {Notes} in {Computational} {Science} and {Engineering},
+  Springer Berlin Heidelberg, 2000, pp. 3--50, dOI:
+  10.1007/978-3-642-59721-3\_1.
+\newline\urlprefix\url{http://link.springer.com/chapter/10.1007/978-3-642-59721-3_1}
+
+\bibitem{nguyen2011hybridizable}
+N.~C. Nguyen, J.~Peraire, B.~Cockburn, Hybridizable discontinuous galerkin
+  methods, in: Spectral and High Order Methods for Partial Differential
+  Equations, Springer, 2011, pp. 63--84.
+
+\bibitem{cockburn_unified_2009}
+B.~Cockburn, J.~Gopalakrishnan, R.~Lazarov,
+  \href{http://epubs.siam.org/doi/abs/10.1137/070706616}{Unified
+  {Hybridization} of {Discontinuous} {Galerkin}, {Mixed}, and {Continuous}
+  {Galerkin} {Methods} for {Second} {Order} {Elliptic} {Problems}}, SIAM
+  Journal on Numerical Analysis 47~(2) (2009) 1319--1365.
+\newblock \href {http://dx.doi.org/10.1137/070706616}
+  {\path{doi:10.1137/070706616}}.
+\newline\urlprefix\url{http://epubs.siam.org/doi/abs/10.1137/070706616}
+
+\bibitem{cockburn2009superconvergent}
+B.~Cockburn, J.~Guzm{\'a}n, H.~Wang, Superconvergent discontinuous galerkin
+  methods for second-order elliptic problems, Mathematics of Computation
+  78~(265) (2009) 1--24.
+
+\bibitem{CockburnPLaplacian}
+B.~Cockburn, J.~Shen, \href{https://doi.org/10.1137/15M1008014}{A hybridizable
+  discontinuous galerkin method for the \$p\$-laplacian}, SIAM Journal on
+  Scientific Computing 38~(1) (2016) A545--A566.
+\newblock \href {http://arxiv.org/abs/https://doi.org/10.1137/15M1008014}
+  {\path{arXiv:https://doi.org/10.1137/15M1008014}}, \href
+  {http://dx.doi.org/10.1137/15M1008014} {\path{doi:10.1137/15M1008014}}.
+\newline\urlprefix\url{https://doi.org/10.1137/15M1008014}
+
+\bibitem{LOULA20086436}
+A.~Loula, M.~Correa, J.~Guerreiro, E.~Toledo,
+  \href{http://www.sciencedirect.com/science/article/pii/S0020768308003296}{On
+  finite element methods for heterogeneous elliptic problems}, International
+  Journal of Solids and Structures 45~(25) (2008) 6436 -- 6450.
+\newblock \href
+  {http://dx.doi.org/https://doi.org/10.1016/j.ijsolstr.2008.08.005}
+  {\path{doi:https://doi.org/10.1016/j.ijsolstr.2008.08.005}}.
+\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0020768308003296}
+
+\bibitem{gatica2014simple}
+G.~N. Gatica, A simple introduction to the mixed finite element method, Theory
+  and Applications. Springer Briefs in Mathematics. Springer, London.
+
+\bibitem{cockburn2010projection}
+B.~Cockburn, J.~Gopalakrishnan, F.-J. Sayas, A projection-based error analysis
+  of hdg methods, Mathematics of Computation 79~(271) (2010) 1351--1367.
+
+\bibitem{lynd2016application}
+E.~A. Lynd, J.~T. Foster, Q.~P. Nguyen, et~al., An application of the
+  isogeometric analysis method to reservoir simulation, in: SPE Europec
+  featured at 78th EAGE Conference and Exhibition, Society of Petroleum
+  Engineers, 2016.
+
+\bibitem{FERGUSON1996}
+W.~Ferguson, I.~Turner,
+  \href{http://www.sciencedirect.com/science/article/pii/S0021999196900790}{A
+  control volume finite element numerical simulation of the drying of spruce},
+  Journal of Computational Physics 125~(1) (1996) 59 -- 70.
+\newblock \href {http://dx.doi.org/https://doi.org/10.1006/jcph.1996.0079}
+  {\path{doi:https://doi.org/10.1006/jcph.1996.0079}}.
+\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0021999196900790}
+
+\bibitem{KATIYAR}
+A.~Katiyar, J.~T. Foster, H.~Ouchi, M.~M. Sharma,
+  \href{http://www.sciencedirect.com/science/article/pii/S0021999113008474}{A
+  peridynamic formulation of pressure driven convective fluid transport in
+  porous media}, Journal of Computational Physics 261~(Supplement C) (2014) 209
+  -- 229.
+\newblock \href {http://dx.doi.org/https://doi.org/10.1016/j.jcp.2013.12.039}
+  {\path{doi:https://doi.org/10.1016/j.jcp.2013.12.039}}.
+\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0021999113008474}
+
+\bibitem{sahimi2011flow}
+M.~Sahimi, Flow and transport in porous media and fractured rock: from
+  classical methods to modern approaches, John Wiley \& Sons, 2011.
+
+\bibitem{fractureGhafouri96}
+H.~R. Ghafouri, R.~W. Lewis,
+  \href{http://dx.doi.org/10.1002/(SICI)1096-9853(199611)20:11<831::AID-NAG850>3.0.CO;2-6}{A
+  finite element double porosity model for heterogeneous deformable porous
+  media}, International Journal for Numerical and Analytical Methods in
+  Geomechanics 20~(11) (1996) 831--844.
+\newblock \href
+  {http://dx.doi.org/10.1002/(SICI)1096-9853(199611)20:11<831::AID-NAG850>3.0.CO;2-6}
+  {\path{doi:10.1002/(SICI)1096-9853(199611)20:11<831::AID-NAG850>3.0.CO;2-6}}.
+\newline\urlprefix\url{http://dx.doi.org/10.1002/(SICI)1096-9853(199611)20:11<831::AID-NAG850>3.0.CO;2-6}
+
+\bibitem{fractureLewis97}
+R.~W. Lewis, H.~R. Ghafouri,
+  \href{http://dx.doi.org/10.1002/(SICI)1096-9853(199711)21:11<789::AID-NAG901>3.0.CO;2-C}{A
+  novel finite element double porosity model for multiphase flow through
+  deformable fractured porous media}, International Journal for Numerical and
+  Analytical Methods in Geomechanics 21~(11) (1997) 789--816.
+\newblock \href
+  {http://dx.doi.org/10.1002/(SICI)1096-9853(199711)21:11<789::AID-NAG901>3.0.CO;2-C}
+  {\path{doi:10.1002/(SICI)1096-9853(199711)21:11<789::AID-NAG901>3.0.CO;2-C}}.
+\newline\urlprefix\url{http://dx.doi.org/10.1002/(SICI)1096-9853(199711)21:11<789::AID-NAG901>3.0.CO;2-C}
+
+\bibitem{fractureHuyakorn83}
+P.~S. Huyakorn, B.~H. Lester, J.~W. Mercer,
+  \href{http://dx.doi.org/10.1029/WR019i003p00841}{An efficient finite element
+  technique for modeling transport in fractured porous media: 1. single species
+  transport}, Water Resources Research 19~(3) (1983) 841--854.
+\newblock \href {http://dx.doi.org/10.1029/WR019i003p00841}
+  {\path{doi:10.1029/WR019i003p00841}}.
+\newline\urlprefix\url{http://dx.doi.org/10.1029/WR019i003p00841}
+
+\bibitem{bobaru2012}
+A peridynamic formulation for transient heat conduction in bodies with evolving
+  discontinuities, Journal of Computational Physics 231~(7).
+
+\end{thebibliography}
