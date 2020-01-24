@@ -54,21 +54,22 @@
 \contentsline {subsection}{\numberline {4.3.5}Interacci\IeC {\'o}n entre fluidos}{29}{subsection.4.3.5}% 
 \contentsline {subsection}{\numberline {4.3.6}Relaci\IeC {\'o}n de Equilibrio}{30}{subsection.4.3.6}% 
 \contentsline {subsection}{\numberline {4.3.7}Pozo}{31}{subsection.4.3.7}% 
-\contentsline {subsection}{\numberline {4.3.8}Ecuaci\IeC {\'o}n}{32}{subsection.4.3.8}% 
-\contentsline {section}{\numberline {4.4}Funciones y eventos para la simulaci\IeC {\'o}n de procesos EOR}{32}{section.4.4}% 
-\contentsline {subsection}{\numberline {4.4.1}C\IeC {\'a}lculo de propiedades}{32}{subsection.4.4.1}% 
+\contentsline {subsection}{\numberline {4.3.8}Qu\IeC {\'\i }mico}{32}{subsection.4.3.8}% 
+\contentsline {subsection}{\numberline {4.3.9}Ecuaci\IeC {\'o}n}{32}{subsection.4.3.9}% 
+\contentsline {section}{\numberline {4.4}Funciones y eventos para la simulaci\IeC {\'o}n de procesos EOR}{33}{section.4.4}% 
+\contentsline {subsection}{\numberline {4.4.1}C\IeC {\'a}lculo de propiedades}{33}{subsection.4.4.1}% 
 \contentsline {subsection}{\numberline {4.4.2}Funciones y subrutinas de pozo}{33}{subsection.4.4.2}% 
-\contentsline {subsection}{\numberline {4.4.3}Tiempo pasa}{33}{subsection.4.4.3}% 
-\contentsline {subsection}{\numberline {4.4.4}Presi\IeC {\'o}n del Fluido var\IeC {\'\i }a}{33}{subsection.4.4.4}% 
-\contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{34}{section*.58}% 
-\contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{34}{section*.60}% 
-\contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{34}{section*.62}% 
-\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{34}{section*.68}% 
-\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{58}{chapter.5}% 
-\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C\IeC {\'o}digo}{58}{section.5.1}% 
-\contentsline {section}{\numberline {5.2}Literatura}{59}{section.5.2}% 
-\contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{64}{chapter.6}% 
-\contentsline {section}{\numberline {6.1}Conclusiones}{64}{section.6.1}% 
-\contentsline {section}{\numberline {6.2}Trabajo futuro}{65}{section.6.2}% 
-\contentsline {chapter}{\numberline {A}Anexo: Discretizaci\IeC {\'o}n de las Ecuaciones del BOM}{66}{appendix.Alph1}% 
-\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{69}{equation.Alph1.0.1}% 
+\contentsline {subsection}{\numberline {4.4.3}Tiempo pasa}{34}{subsection.4.4.3}% 
+\contentsline {subsection}{\numberline {4.4.4}Presi\IeC {\'o}n del Fluido var\IeC {\'\i }a}{34}{subsection.4.4.4}% 
+\contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{34}{section*.59}% 
+\contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{35}{section*.61}% 
+\contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{35}{section*.64}% 
+\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{36}{section*.74}% 
+\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{63}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C\IeC {\'o}digo}{63}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Caso de Literatura}{64}{section.5.2}% 
+\contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{69}{chapter.6}% 
+\contentsline {section}{\numberline {6.1}Conclusiones}{69}{section.6.1}% 
+\contentsline {section}{\numberline {6.2}Trabajo futuro}{70}{section.6.2}% 
+\contentsline {chapter}{\numberline {A}Anexo: Discretizaci\IeC {\'o}n de las Ecuaciones del BOM}{71}{appendix.Alph1}% 
+\contentsline {chapter}{\hbox to\@tempdima {\hfil }Bibliograf\'{\i }a}{74}{equation.Alph1.0.1}% 

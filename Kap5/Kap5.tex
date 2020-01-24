@@ -3,7 +3,7 @@
 
 %\renewcommand{\tablename}{\textbf{Código}}
 \section{Traducción a Código}
-En esta Sección se muestran porciones del modelo ejecutable que se programa en C++ \citep{ISO:2017:IIIa}. Se elije este lenguaje porque la \textit{Stardard Template Library} (STL) tiene facilidades que permiten hacer la consistencia del código con el esquema preconceptual explícita. Se emula una base de datos a partir de arreglos globales que almacenan cada concepto, y, las claves foráneas que se generan entre conceptos se traducen como punteros. \\
+En esta Sección se muestran porciones del modelo ejecutable que se programa en C++ \citep{ISO:2017:IIIa}. Se elije este lenguaje porque la \textit{Stardard Template Library} (STL) tiene facilidades que permiten hacer explícita la consistencia del código con el esquema preconceptual. Se emula una base de datos a partir de arreglos globales que almacenan cada concepto, y, las claves foráneas que se generan entre conceptos se traducen como punteros. \\
 
 A continuación se muestra, a modo de ejemplo, las traducciones de algunos conceptos, funciones, o porciones del EP a código C++ para verificar la consistencia del código con el modelo ejecutable. Primero, se definen los elementos que conforman las condiciones iniciales, y, la base de datos que se emula, es decir, los arreglos que contienen los conceptos que se instancian en la ejecución de las relaciones dinámicas del EP. Posteriormente, se muestran las traducciones a código de dos conceptos clase, ``Malla'' y ``Roca'', y la traducción de la relación dinámica ``Petrofísico caracteriza Roca''. Luego, se explica la traducción del cálculo del residual en el evento ``Presión del Fluido Varía''.\\
 
@@ -300,8 +300,8 @@ En el código \ref{tab:MeshCode} se puede observar que, la conceptualización de
 \end{table}
 
 
-\section{Literatura}
-En este capítulo se pretende validar el modelo ejecutable que se realiza a partir del esquema preconceptual. Con éste propósito, se plantea un caso que se toma de \cite{jamal2006petroleum}. El cual, consiste en una simulación de un yacimiento lineal (1D) de cinco celdas con un solo fluido y un pozo productor en la cuarta celda, como se muestra en la Figura \ref{fig:Abou-Kassem} \citep{jamal2006petroleum}. Con este, se espera validar el transporte de un fluido y las pérdidas de presión por pozos.\\
+\section{Caso de Literatura}
+En esta Sección se pretende validar el modelo ejecutable que se realiza a partir del esquema preconceptual. Con éste propósito, se plantea un caso que se toma de \cite{jamal2006petroleum}. El cual, consiste en una simulación de un yacimiento lineal (1D) de cinco celdas con un solo fluido y un pozo productor en la cuarta celda, como se muestra en la Figura \ref{fig:Abou-Kassem} \citep{jamal2006petroleum}. Con este, se espera validar el transporte de un fluido y las pérdidas de presión por pozos.\\
 
 El caso de estudio de \cite{jamal2006petroleum} consta de dos procesos principales, uno de pérdidas a caudal fijo, y el otro, cuando la celda perforada para el pozo alcanza la ``presión de abandono''. En este, se cambia la condición operativa del pozo para mantener la presión fija a esa presión de abandono. En la Figura \ref{fig:ConstantQ} se reportan los resultados de la simulación durante la etapa de producción a caudal constante, y en la Figura \ref{fig:ConstantP} se reportan los resultados de la simulación durante la etapa de producción a presión constante.
 \begin{figure}[h]

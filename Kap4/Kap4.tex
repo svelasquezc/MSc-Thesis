@@ -58,20 +58,20 @@ En esta sección se explican los conceptos principales que resultan en la traduc
 
 %\subsection{Mesh}
 \subsection{Malla}\label{subsec:PS_Mesh}
-Al resolver el dominio espacial continuo como un conjunto discreto de celdas (discretizar el espacio), aparecen propiedades tales como los volúmenes de las celdas y el área de las caras. Este conjunto discreto de celdas es el que se denomina como ``malla''. A su vez, la celda es un conjunto discreto de caras que generan una superficie cerrada\footnote{En el caso tridimensional}. Cada celda cuenta con una numeración, que sirve para identificar posiciones en el espacio y ubicar las vecindades correspondientes para el cálculo del flujo discretizado.\\
+Al resolver el dominio espacial continuo como un conjunto discreto de celdas (discretizar el espacio), aparecen propiedades tales como los volúmenes de las celdas y el área de las caras. Este conjunto discreto de celdas es el que se denomina como ``malla''. A su vez, la celda es un conjunto discreto de caras que generan una superficie cerrada\footnote{En el caso tridimensional.}. Cada celda cuenta con una numeración, que sirve para identificar posiciones en el espacio y ubicar las vecindades correspondientes para el cálculo del flujo discretizado.\\
 
 Una malla existe a partir de la conceptualización de los elementos emergentes en la discretización, que contiene todas las propiedades necesarias para generar el conjunto de celdas. Además, existe un actor ``geomodelador'' que se usa para definir el número de celdas en cada eje, sus espesores y topes tal como se presenta en  la Figura \ref{fig:Mesh}. Una vez se definen tales propiedades, la ``malla aparece'' en un proceso iterativo de creación de la cantidad de celdas y el respectivo cálculo de volúmenes, profundidades y numeración para cada una. Posteriormente, las caras se crean en otro proceso iterativo, conteniendo la información sobre las vecindades de cada celda, donde cada celda tiene un conjunto de caras\footnote{Es posible notar que la cara existente entre dos celdas vecinas se crea dos veces, una por cada celda.}.\\
 
 \begin{figure}[h]
 	\centering%
-	\includegraphics[width=0.8\linewidth]{Fig/Mesh.pdf}%
+	\includegraphics[width=\linewidth]{Fig/Mesh.pdf}%
 	\caption[Definición de la malla.]{Definición de la malla. Los autores.} \label{fig:Mesh}
 \end{figure}
 
 %Este párrafo puede servirme más para la parte del evento.
 
 \subsection{Malla aparece}\label{subsec:PS_MeshAppears}
-El evento ``Malla aparece'' Se dispara cuando el estado de la malla es ``Definida'', que sucede justo después de que el geomodelador defina la malla. En este evento, se desarrollan dos ciclos principales. El primer ciclo es anidado por cada eje coordenado, y en total se recorre el número de celdas a definir. En este ciclo, se calculan los volúmenes y profundidades de cada celda, además se asigna un índice único de celda y la numeración en cada eje $(x,y,z)$. La especificación del evento ``Malla Aparece'' se presenta en la Figura \ref{fig:MeshAppears}.\\
+El evento ``Malla aparece'' se dispara cuando el estado de la malla es ``Definida'', que sucede justo después de que el geomodelador defina la malla. En este evento, se desarrollan dos ciclos principales. El primer ciclo es anidado por cada eje coordenado, y en total se recorre el número de celdas a definir. En este ciclo, se calculan los volúmenes y profundidades de cada celda, además se asigna un índice único de celda y la numeración en cada eje $(x,y,z)$. La especificación del evento ``Malla Aparece'' se presenta en la Figura \ref{fig:MeshAppears}.\\
 
 \begin{figure}[h]
 	\centering%
@@ -217,13 +217,23 @@ Se proponen los pozos, de manera análoga a la malla, como un conjunto de ``perf
 
 La principal diferencia entre los pozos productores e inyectores radica en que el pozo inyector tiene un ``fluido de inyección''. Además, la ``tasa'' y el ``acumulado'' del pozo inyector sólo dependen de este fluido, mientras que para el pozo productor dependerá de la cantidad de fluidos caracterizados. Estos pozos están sujetos a la restricción de no cambiar su tipo, además para un pozo productor, su conjunto de perforados corresponderá también a perforados productores. Así, para los pozos inyectores serán perforados inyectores.\\
 
-Los pozos funcionan bajo una ``condición operativa'', que permite regular la presión o el caudal al que estos inyectan o producen fluido. Estas condiciones definen, si un pozo genera una ecuación, o si su caudal se puede resolver directamente usando la presión de fondo. Por otro lado, las condiciones operativas pueden variar en el tiempo. Por esto, se requiere calcular o resolver el atributo que no está sujeto a la condición operativa cada que se establezca un cambio en la condición. En la Figura \ref{fig:Well} se observa, también.
+Los pozos funcionan bajo una ``condición operativa'', que permite regular la presión o el caudal al que estos inyectan o producen fluido. Estas condiciones definen, si un pozo genera una ecuación, o si su caudal se puede resolver directamente usando la presión de fondo. Por otro lado, las condiciones operativas pueden variar en el tiempo. Por esto, se requiere calcular o resolver el atributo que no está sujeto a la condición operativa cada que se establezca un cambio en la condición.
 
-%\subsection{Químico}\label{subsec:PS_Chemical}
-%El ``químico'' como concepto comprende un conjunto de ``transferencias'' en las que se describen las cinéticas en no-equilibrio entre dos fluidos que pueden acarrear tal químico. Una transferencia es direccional, por lo que existe una cantidad de químico (``cantidad transferida'') que se transfiere de un ``fluido de origen'' a un ``fluido de destino'' y la ``cantidad transferida'' se calcula por medio de una ``función''. La ``presencia'' de éste en un fluido implica que se generen ``afectaciones'' de las propiedades de tal ``fluido de acarreo'', esta afectación se aplica por medio de una función que inserta el ``ingeniero de estimulación'' al preparar el químico.
+\subsection{Químico}\label{subsec:PS_Chemical}
+El ``químico'' como concepto comprende un conjunto de ``transferencias'' en las que se describen las cinéticas en no-equilibrio entre dos fluidos que pueden acarrear tal químico\footnote{Todas las transferencias del químico, en esta Tesis de Maestría, se consideran en no-equilibrio.}. Una transferencia es unidireccional\footnote{En el caso de las cinéticas reversibles o bidireccionales, se consideran dos transferencias.}, por lo que existe una cantidad de químico (``cantidad transferida'') que se transfiere de un ``fluido de origen'' a un ``fluido de destino'' y la ``cantidad transferida'' se calcula por medio de una ``función''.\\
+
+La ``presencia'' de un químico en un fluido que lo acarrea, implica que se genere una ``afectación'' de las propiedades de tal ``fluido de acarreo''. Esta afectación se aplica por medio de una ``función'' en la que se calcula una ``modificación'', la modificación corresponde a una corrección que se aplica sobre el cálculo de la propiedad que se afecta. Con esta representación del químico es posible considerar múltiples productos químicos con los que se generan afectaciones en diferentes fluidos, pudiendo ser tanto de incremento como reducción, a la viscosidad de los mismos o a su permeabilidad relativa. En la Figura \ref{fig:Chemical} se presenta la representación del químico.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/QuimicoStruct.pdf}%
+	\caption[Preparación del Químico.]{Preparación del Químico. Los autores.} \label{fig:Chemical}
+\end{figure}
+
+En la relación dinámica ``Ingeniero de estimulación prepara químico'' el ``Ingeniero de estimulación'' caracteriza todas las transferencias que puede tener el químico, indicando en cada una la expresión matemática, en la que se describe la ``función'' a evaluar, para calcular la ``cantidad transferida''. Así mismo, caracteriza las afectaciones que se generan, considerando que no todas las presencias del químico pueden verse afectadas por el mismo, y de manera análoga a la transferencia, indica la expresión matemática o ``función'' para calcular la ``modificación''. Posteriormente, el ``Ingeniero de estimulación'' indica unas condiciones iniciales del químico en el yacimiento, es decir, para todas las celdas de la malla al tiempo inicial o tiempo cero. 
 
 \subsection{Ecuación}\label{subsec:PS_Equation}
-La ecuación es un concepto abstracto que sirve como agrupador. Tanto el fluido, como el pozo, o presencia de un químico en un fluido, son ecuaciones. Este concepto sirve para iterar sobre todos los conceptos que generan un residual en el método de Newton. Tienen un índice y estado. Este último permite activar o desactivar la solución de ecuaciones, lo cual sirve para gestionar la solución de pozos involucrando cambios de condición operativa.
+La ecuación es un concepto abstracto que sirve como agrupador. Tanto el fluido, como el pozo, o presencia de un químico en un fluido\footnote{Esto debido a que todas las transferencias o cinéticas se consideran en no-equilibrio.}, son ecuaciones. Este concepto sirve para iterar sobre todos los conceptos que generan un residual en el método de Newton. Tienen un índice y estado. Este último permite activar o desactivar la solución de ecuaciones, lo cual sirve para gestionar la solución de pozos involucrando cambios de condición operativa.
 %Poner ecuación acá con Volumen de celda ya como concepto
 
 
@@ -236,7 +246,7 @@ En el esquema \ref{fig:PSComplete} se evidencia la solución del BOM discretizad
 %In this section we propose a PS representation for enhanced oil recovery simulation, we couple a black oil model discretized using finite volumes method with the theoretical framework developed the previous chapter. We mapped each term in the resultant equations to their respective concepts and how they are linked together. The complete representation is shown in \ref{fig:PSComplete}.\\
 \begin{figure}[h]
 \centering%
-\includegraphics[width=0.9\linewidth]{Fig/EPConQuimico.pdf}%
+\includegraphics[width=1\linewidth]{Fig/EPConQuimico.pdf}%
 %\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
 \caption[Representación en EP de la simulación de procesos EOR.]{Representación en EP de la simulación de procesos EOR. Los autores.} \label{fig:PSComplete}
 \end{figure}
@@ -303,7 +313,7 @@ Se puede observar también que, en este evento se realiza el cálculo de las pro
 
 
 \subsection{Presión del Fluido varía}\label{sec:PS_FluidVaries}
-En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulación. En éste, se llevan a cabo las iteraciones del método de Newton-Raphson para converger al próximo paso de tiempo. La especificación de este evento consta de cinco procesos principales: La actualización de propiedades al término actual, el recálculo de las mismas, el cálculo de los residuales en cada iteración, y la actualización de las incógnitas. La especificación del evento ``Presión del Fluido varía'' se presenta en la figura \ref{fig:FluidPressureVaries}. El cálculo del \textbf{Jacobiano} no se muestra por motivos de confidencialidad.\\
+En el evento ``Presión del Fluido varía'' se procesa el núcleo de la simulación. En éste, se llevan a cabo las iteraciones del método de Newton-Raphson para converger al próximo paso de tiempo. La especificación de este evento consta de cinco procesos principales: La actualización de propiedades al término actual, el recálculo de las mismas, el cálculo de los residuales en cada iteración, y la actualización de las incógnitas. Dentro de estos procesos principales se realizan, también, los correspondientes cálculos del transporte del químico. La especificación del evento ``Presión del Fluido varía'' se presenta en la figura \ref{fig:FluidPressureVaries}. El cálculo del \textbf{Jacobiano} no se muestra por motivos de confidencialidad.\\
 
 \begin{figure}[h]
 	\centering%
@@ -324,7 +334,9 @@ En la actualización de propiedades al término actual, se hace un incremento de
 
 
 \subsubsection{Recálculo de propiedades de los fluidos}\label{subsec:PS_TimeK}
-Posteriormente, en la figura \ref{fig:TimeK} se muestra el recálculo de las propiedades de los fluidos para cada celda. Como el sistema que se resuelve tiene por incógnitas la presión del fluido principal y la saturación de los demás fluidos, es necesario calcular el resto de las propiedades de los fluidos como funciones de la presión y las saturaciones. \\%Time K
+Posteriormente, en la Figura \ref{fig:TimeK} se muestra el recálculo de las propiedades de los fluidos para cada celda. Como el sistema que se resuelve tiene por incógnitas la presión del fluido principal y la saturación de los demás fluidos, es necesario calcular el resto de las propiedades de los fluidos como funciones de la presión y las saturaciones. \\%Time K
+
+Una vez se calculan las propiedades de los fluidos caracterizados, se calculan las afectaciones que puedan generar los químicos existentes en los fluidos de acarreo, para esto, en cada presencia (químico-fluido) se recorren las afectaciones y se evalúa la función respectiva. La variable independiente es la concentración del químico en la presencia. Posteriormente se suma la modificación a la propiedad correspondiente del fluido de acarreo, tal como se muestra en la Figura \ref{fig:CalcularAfectaciones}.
 
 \begin{figure}[h]
 	\centering%
@@ -333,10 +345,17 @@ Posteriormente, en la figura \ref{fig:TimeK} se muestra el recálculo de las pro
 	\caption[Recálculo de Propiedades al término actual para la iteración.]{Recálculo de Propiedades al término actual para la iteración. Los autores.} \label{fig:TimeK}
 \end{figure}
 
-\subsubsection{Cálculo de Residuales}\label{subsec:Residual}
-En el cálculo de residuales se reunen las ecuaciones de conservación de masa del fluido y las ecuaciones de caudal de peaceman multiperforado para pozos, el armado del vector residual para el método de Newton se calcula de manera iterativa, realizando un ciclo sobre el concepto ecuación y calculando dependiendo de si la ecuación es de tipo fluido o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado ``Inactivas''.\\
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=\linewidth]{Fig/CalcularAfectaciones.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Función calcular afectaciones.]{Función calcular afectaciones. Los autores.} \label{fig:CalcularAfectaciones}
+\end{figure}
 
-Es importante notar también, que la función ``ubicar'' se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. El proceso de cálculo de residuales se muestra en \ref{fig:Residual}. \\ % Residual
+\subsubsection{Cálculo de Residuales}\label{subsec:Residual}
+En el cálculo de residuales se reúnen las ecuaciones de conservación de volumen del fluido, las ecuaciones para los químicos en cada una de sus presencias, y las ecuaciones de caudal de peaceman multiperforado para pozos. El armado del vector residual para el método de Newton se calcula de manera iterativa, realizando un ciclo sobre el concepto ecuación y calculando dependiendo de si la ecuación es de tipo fluido, químico o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado ``Inactivas''. Las ecuaciones de tipo fluido y presencia, se procesan del mismo modo, pero difieren en el cálculo del residual.\\
+
+Es importante notar también, que la función ``ubicar'' se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. El proceso de cálculo de residuales se muestra en la Figura \ref{fig:Residual}. \\ % Residual
 
 \begin{figure}[h]
 	\centering%
@@ -345,13 +364,22 @@ Es importante notar también, que la función ``ubicar'' se encarga de calcular 
 	\caption[Cálculo de residual para la iteración.]{Cálculo de residual para la iteración. Los autores.} \label{fig:Residual}
 \end{figure}
 
-Existen residual de fluidos, al igual que de pozos, estos se muestran en las Figuras \ref{fig:ResidualFluid}, y \ref{fig:ResidualWell}. Las funciones de flujo y acumulación, que corresponden a las ecuaciones discretizadas generalizadas en la Subsección \ref{subsec:PS_Equilibrium}, se muestran en las Figuras \ref{fig:Accumulation} y \ref{fig:Flow}.
+Existe residual de fluidos, de presencias, al igual que de pozos, estos se muestran en las Figuras \ref{fig:ResidualFluid}, \ref{fig:ResidualChemical} \ref{fig:ResidualWell}. Las funciones de flujo y acumulación, que corresponden a las ecuaciones discretizadas generalizadas del fluido en la Subsección \ref{subsec:PS_Equilibrium}, se muestran en las Figuras \ref{fig:Accumulation} y \ref{fig:Flow}. Las ecuaciones discretizadas del químico se muestran en las Figuras \ref{fig:ChemicalAccumulation}, \ref{fig:ChemicalFlow}, \ref{fig:ChemicalTransferences}.\\
+
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/CalcularResidualFluido.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
 	\caption[Cálculo de residual de un fluido.]{Cálculo de residual de un fluido. Los autores.} \label{fig:ResidualFluid}
 \end{figure}
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/CalcularResidualQuimico.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Cálculo de residual de una presencia.]{Cálculo de residual de una presencia (Químico-Fluido). Los autores.} \label{fig:ResidualChemical}
+\end{figure}
+
 \begin{figure}[h]
 	\centering%
 	\includegraphics[width=0.9\linewidth]{Fig/CalcularResidualPozo.pdf}%
@@ -371,8 +399,31 @@ Existen residual de fluidos, al igual que de pozos, estos se muestran en las Fig
 	\caption[Cálculo de flujo generalizado.]{Cálculo de flujo generalizado. Los autores.} \label{fig:Flow}
 \end{figure}
 
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/CalcularAcumulacionQuimico.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Cálculo de acumulación para el químico.]{Cálculo de acumulación para el químico. Los autores.} \label{fig:ChemicalAccumulation}
+\end{figure}
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/CalcularFlujoQuimico.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Cálculo de flujo para el químico.]{Cálculo de flujo para el químico. Los autores.} \label{fig:ChemicalFlow}
+\end{figure}
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.9\linewidth]{Fig/CalcularTransferencias.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Cálculo de la masa total transferida desde la presencia.]{Cálculo de la masa total transferida desde la presencia. Los autores.} \label{fig:ChemicalTransferences}
+\end{figure}
+
+Se puede notar que, a pesar de que, la representación del flujo del fluido y del químico tiene elementos en común, es necesario representarlos aparte, puesto que la ecuación discretizada del flujo del químico en los distintos fluidos no considera relaciones de equilibrio. Adicionalmente, en las ecuaciones del químico se considera transferencias de masa entre diferentes fluidos.
+
 \subsubsection{Solución del sistema lineal y actualización de incógnitas}
-Por último una vez se tiene la matriz del jacobiano construida se soluciona usando el operador ``Bigradiente conjugado estabilizado", proveniente de alguna librería, que resuelve el sistema: $Jacobiano*DeltaDeSolucion = -Residual$ como se observa en \ref{fig:LinearSystem}. Posteriormente, se actualizan las incógnitas sumándoles el delta de solución de manera acorde al cálculo del residual. Esto se presenta en \ref{fig:UpdateVariables}. \\
+Por último una vez se tiene la matriz del jacobiano construida se soluciona usando el operador ``Bigradiente conjugado estabilizado", proveniente de alguna librería, que resuelve el sistema: $Jacobiano*DeltaDeSolucion = -Residual$ como se observa en la Figura \ref{fig:LinearSystem}. Posteriormente, se actualizan las incógnitas sumándoles el delta de solución de manera acorde al cálculo del residual. Esto se presenta en la Figura \ref{fig:UpdateVariables}.
 
 \begin{figure}[h]
 	\centering%
