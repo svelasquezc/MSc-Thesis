@@ -274,26 +274,48 @@ El recobro mejorado químicamente se enmarca en los procesos de recobro mejorado
 
 Durante la recuperación de petróleo, el desplazamiento general del fluido se debe a una combinación de barrido macroscópico (barrido volumétrico) y de una eficiencia de desplazamiento microscópico (escala de poro). \cite{olajire2014review} y \cite{samanta2012comparative}, proponen que ambos factores se afectan por propiedades objetivo de los fluidos y de la roca, que se cambian debido a interacción con los químicos que se inyectan o producen en un yacimiento. En la Figura \ref{fig:diagrama_eor} se ilustran los procesos de recobro mejorado (EOR) existentes, en esta Tesis de Maestría se representan los procesos EOR que se basan en la inyección de químicos, tal como se muestra en el recuadro rojo.
 
-\begin{figure}
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.9\textwidth]{Fig/diagramaEOR.pdf}
 	\caption[Diagrama de división de procesos EOR.]{Diagrama de división de procesos EOR. Elaboración a partir de \cite{gogoi2013carbon}.}
 	\label{fig:diagrama_eor}
-\end{figure}{}
+\end{figure}
 
-%\subsection{Modelado del Químico}\label{subsec:Chemical}
-%
-%
-%
-%\begin{equation}
-%\begin{split}
-%B_{j}T_{j}^{n+1}y_{i,j}^{n+1}(\Delta \Phi^{n+1}_{j}) + q_{i,j}^{n+1} + \sum_{k=1, k\neq j}^{n_{p}}(\dot{m}^{n+1}_{j \rightarrow k})- \frac{V}{\Delta t}\left[ N_{i,j}^{n+1}-N_{i,j}^{n} \right]=0\\
-%para\; i = 1,..., n_{c}\\
-%para\; j = 1,..., n_{p}
-%\end{split}{}    
-%\label{eqholi}
-%\end{equation}{}
-%\section{Procesos de Recobro Mejorado}
+\subsection{Modelado del Químico}\label{subsec:Chemical}
+
+En esta Tesis de Maestría, se modela el químico como \cite{ValenciaJD2016}, \cite{MozoID2017} e \cite{IsazaCN2017} proponen. En estos trabajos, un componente, especie o químico se transporta dentro de los fluidos existentes en el yacimiento y se puede transferir entre ellos. Adicionalmente, consideran que existen posibles modificaciones de las propiedades del fluido que acarrea tal químico. Las ecuaciones de conservación de volumen para el químico, que se acoplan al BOM, son las siguientes:
+
+\begin{align}
+\label{ec:quimico}
+&\frac{\partial}{\partial t} \left[w_{k,f} \left( \frac{\phi S_{f}}{B_{f}} \right) \right] - \nabla \cdot \left( \frac{w_{k,f}}{B_{f}} \vec{u_{f}} \right) - w_{k,f}\tilde{q}_{f} - \sum_{f'\neq f}\dot{m}_{k,f \rightarrow f'}= 0 
+\end{align}{}
+
+La Ecuación \ref{ec:quimico} es una generalización en la que se presenta un químico $k$ que se transporta en un fluido $f$, y se puede transferir a uno o múltiples fluidos $f'$. Más aún, se considera que existen fuentes y sumideros de tal químico. Cabe notar que, $w_{k,f}$ es una fracción volumétrica del químico en el fluido.\\
+
+Por otro lado, en el químico se involucran ecuaciones constitutivas adicionales en las que se relacionan las transferencias de un químico entre los fluidos existentes y las modificaciones a las propiedades de los fluidos en los que éste exista, estas ecuaciones constitutivas se presentan para las transferencias como:
+
+\begin{align}
+	\label{ec:transferencias}
+	&\dot{m}_{k,f \rightarrow f'} = f(w_{k,f})
+\end{align}{}
+
+Y para las modificaciones al flujo se consideran específicamente la viscosidad y la permeabilidad relativa del fluido así:
+
+\begin{align}
+\label{ec:alteracionkr}
+&k_{rf} = k_{rf, inicial} + f(w_{k,f})\\
+\label{ec:alteracionu}
+&\mu_{f} = \mu_{f, inicial} + f(w_{k,f})
+\end{align}{}
+
+La discretización de la Ecuación \ref{ec:quimico}, en cada uno de los fluidos en que un químico esté presente, es análoga a la Ecuación \ref{ec:aguaDiscretizacion}. Las funciones de transferencias y de modificaciones, en las Ecuaciones \ref{ec:transferencias}, \ref{ec:alteracionkr} y \ref{ec:alteracionu}, sólo multiplican el volumen de la celda en su discretización.\\ 
+
+Los supuestos para este modelo son los siguientes:
+\begin{itemize}
+	\item Las funciones de transferencia y modificaciones se pueden expresar como función única de la concentración del químico en el fluido $f$, y son términos correctivos.
+	\item Se desprecia la difusión y dispersión de los químicos.
+	\item No existen aportes de volumen al fluido $f$ que acarrea el químico $k$.
+\end{itemize}
 
 \section{Esquemas Preconceptuales}\label{sec:EP}
 

@@ -302,17 +302,20 @@ En el código de la Tabla \ref{tab:ResidualCode} se evidencia cómo se logra ite
 \section{Caso de Literatura}
 En esta Sección se pretende validar el modelo ejecutable que se realiza a partir del esquema preconceptual. Con éste propósito, se plantea un caso que se toma de \cite{jamal2006petroleum}. El cual, consiste en una simulación de un yacimiento lineal (1D) de cinco celdas con un solo fluido y un pozo productor en la cuarta celda, como se muestra en la Figura \ref{fig:Abou-Kassem} \citep{jamal2006petroleum}. Con este, se espera validar el transporte de un fluido y las pérdidas de presión por pozos.\\
 
-El caso de estudio de \cite{jamal2006petroleum} consta de dos procesos principales, uno de pérdidas a caudal fijo, y el otro, cuando la celda perforada para el pozo alcanza la ``presión de abandono''. En este, se cambia la condición operativa del pozo para mantener la presión fija a esa presión de abandono. En la Figura \ref{fig:ConstantQ} se reportan los resultados de la simulación durante la etapa de producción a caudal constante, y en la Figura \ref{fig:ConstantP} se reportan los resultados de la simulación durante la etapa de producción a presión constante.
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\textwidth]{Fig/casoasis.pdf}
 	\caption{Representación gráfica del caso proporcionado por \cite{jamal2006petroleum}.}
 	\label{fig:Abou-Kassem}
 \end{figure}
 
+El caso de estudio de \cite{jamal2006petroleum} consta de dos procesos principales, uno de pérdidas a caudal fijo, y el otro, cuando la celda perforada para el pozo alcanza la ``presión de abandono''. En este, se cambia la condición operativa del pozo para mantener la presión fija a esa presión de abandono. En la Figura \ref{fig:ConstantQ} se reportan los resultados de la simulación durante la etapa de producción a caudal constante, y en la Figura \ref{fig:ConstantP} se reportan los resultados de la simulación durante la etapa de producción a presión constante.\\
 
 
-\begin{figure}[h!]
+
+
+
+\begin{figure}[h]
 	\centering
 \begin{tikzpicture}
 \begin{axis}[
@@ -422,9 +425,9 @@ coordinates{
 \label{fig:ConstantQ}
 \end{figure}{}
 
-Las condiciones iniciales de presión para el yacimiento son de $3000$ $psia$ para todas las celdas y el pozo se establece a una condición operativa de caudal fijo a $400$ $STB/D$. Se puede ver como en los primeros 80 días, va decayendo la presión hasta alcanzar la presión de abandono. Se encuentran diferencias entre los resultados simulados y los reportados por \cite{jamal2006petroleum} menores a $50$ $psia$. Éstas se deben, a que las ecuaciones que se implementan en el modelo ejecutable, son diferentes a las que se presentan en \cite{jamal2006petroleum}.
+Las condiciones iniciales de presión para el yacimiento son de $3000$ $psia$ para todas las celdas y el pozo se establece a una condición operativa de caudal fijo a $400$ $STB/D$. Se puede ver como en los primeros 80 días, va decayendo la presión hasta alcanzar la presión de abandono. Se encuentran diferencias entre los resultados simulados y los reportados por \cite{jamal2006petroleum} menores a $50$ $psia$. Éstas se deben, a que las ecuaciones que se implementan en el modelo ejecutable, son diferentes a las que se presentan en \cite{jamal2006petroleum}.\\
 
-\begin{figure}[h!]
+\begin{figure}[h]
 	\centering
 	\begin{tikzpicture}
 	\begin{axis}[
