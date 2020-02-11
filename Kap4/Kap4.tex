@@ -23,7 +23,7 @@ Las subrutinas que define el analista son funciones tal como \cite{JCalle} propo
 
 \begin{figure}[h]
 	\centering%
-	\includegraphics[scale=0.6]{Fig/SubrutinaEjemplo.pdf}%
+	\includegraphics[width=\linewidth]{Fig/SubrutinaEjemplo.pdf}%
 	\caption[Subrutina Modificar Variable.]{Subrutina Modificar Variable. Los autores.} \label{fig:Subroutine}
 \end{figure}
 
@@ -353,9 +353,11 @@ Una vez se calculan las propiedades de los fluidos caracterizados, se calculan l
 \end{figure}
 
 \subsubsection{Cálculo de Residuales}\label{subsec:Residual}
-En el cálculo de residuales se reúnen las ecuaciones de conservación de volumen del fluido, las ecuaciones para los químicos en cada una de sus presencias, y las ecuaciones de caudal de peaceman multiperforado para pozos. El armado del vector residual para el método de Newton se calcula de manera iterativa, realizando un ciclo sobre el concepto ecuación y calculando dependiendo de si la ecuación es de tipo fluido, químico o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado ``Inactivas''. Las ecuaciones de tipo fluido y presencia, se procesan del mismo modo, pero difieren en el cálculo del residual.\\
+En el cálculo de residuales se reúnen las ecuaciones de conservación de volumen del fluido, las ecuaciones para los químicos en cada una de sus presencias, y las ecuaciones de caudal de peaceman multiperforado para pozos. El armado del vector residual para el método de Newton se calcula de manera iterativa, realizando un ciclo sobre el concepto ecuación y calculando dependiendo de si la ecuación es de tipo fluido, presencia o de tipo pozo, cabe aclarar que sólo las ecuaciones de tipo pozo pueden tener como estado ``Inactivas''. Las ecuaciones de tipo fluido y presencia, se procesan del mismo modo, pero difieren en el cálculo del residual.\\
 
-Es importante notar también, que la función ``ubicar'' se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. El proceso de cálculo de residuales se muestra en la Figura \ref{fig:Residual}. \\ % Residual
+Las ecuaciones de cada presencia del químico y de los fluidos se evalúan en todas las celdas, mientras que las ecuaciones de cada pozo se evalúan únicamente en las celdas con perforaciones o ``perforados'', por lo tanto se requiere diferenciar su cálculo de residual según el tipo. Para obtener la ubicación del residual en su correspondiente vector, se requiere conocer el tipo de ecuación que se está calculando. Adicionalmente se emula una sobre-escritura de u \textit{override} de los residuales de químico y de fluido, generando una función intermedia ``calcular residual'' en la que se define si se ejecuta ``calcular residual fluido'' o ``calcular residual químico''. Esto permite generalizar el cálculo del residual para una ecuación que se evalúe en toda la malla. La función ``calcular residual'' se muestra en la Figura \ref{fig:CalResidual}.\\
+
+Es importante notar también, que la función ``ubicar'' se encarga de calcular la posición correspondiente en el vector residual que agrupa todas las incógnitas a resolver. El proceso de cálculo de residuales se muestra en la Figura \ref{fig:Residual}. El residual de fluidos, de presencias, al igual que de pozos, se muestran en las Figuras \ref{fig:ResidualFluid}, \ref{fig:ResidualChemical} \ref{fig:ResidualWell}. Las funciones de flujo y acumulación, que corresponden a las ecuaciones discretizadas generalizadas del fluido en la Subsección \ref{subsec:PS_Equilibrium}, se muestran en las Figuras \ref{fig:Accumulation} y \ref{fig:Flow}. Las ecuaciones discretizadas del químico se muestran en las Figuras \ref{fig:ChemicalAccumulation}, \ref{fig:ChemicalFlow}, \ref{fig:ChemicalTransferences}.\\ % Residual
 
 \begin{figure}[h]
 	\centering%
@@ -364,7 +366,13 @@ Es importante notar también, que la función ``ubicar'' se encarga de calcular 
 	\caption[Cálculo de residual para la iteración.]{Cálculo de residual para la iteración. Los autores.} \label{fig:Residual}
 \end{figure}
 
-Existe residual de fluidos, de presencias, al igual que de pozos, estos se muestran en las Figuras \ref{fig:ResidualFluid}, \ref{fig:ResidualChemical} \ref{fig:ResidualWell}. Las funciones de flujo y acumulación, que corresponden a las ecuaciones discretizadas generalizadas del fluido en la Subsección \ref{subsec:PS_Equilibrium}, se muestran en las Figuras \ref{fig:Accumulation} y \ref{fig:Flow}. Las ecuaciones discretizadas del químico se muestran en las Figuras \ref{fig:ChemicalAccumulation}, \ref{fig:ChemicalFlow}, \ref{fig:ChemicalTransferences}.\\
+
+\begin{figure}[h]
+	\centering%
+	\includegraphics[width=0.7\linewidth]{Fig/CalcularResidual.pdf}%
+	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
+	\caption[Cálculo de residual por tipo.]{Cálculo de residual por tipo. Los autores.} \label{fig:CalResidual}
+\end{figure}
 
 \begin{figure}[h]
 	\centering%
@@ -382,7 +390,7 @@ Existe residual de fluidos, de presencias, al igual que de pozos, estos se muest
 
 \begin{figure}[h]
 	\centering%
-	\includegraphics[width=0.9\linewidth]{Fig/CalcularResidualPozo.pdf}%
+	\includegraphics[width=0.7\linewidth]{Fig/CalcularResidualPozo.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
 	\caption[Cálculo de residual de pozo.]{Cálculo de residual de pozo. Los autores.} \label{fig:ResidualWell}
 \end{figure}
@@ -401,7 +409,7 @@ Existe residual de fluidos, de presencias, al igual que de pozos, estos se muest
 
 \begin{figure}[h]
 	\centering%
-	\includegraphics[width=0.9\linewidth]{Fig/CalcularAcumulacionQuimico.pdf}%
+	\includegraphics[width=0.7\linewidth]{Fig/CalcularAcumulacionQuimico.pdf}%
 	%\caption{Complete PS Representation for EOR Processes} \label{fig:PSComplete}
 	\caption[Cálculo de acumulación para el químico.]{Cálculo de acumulación para el químico. Los autores.} \label{fig:ChemicalAccumulation}
 \end{figure}

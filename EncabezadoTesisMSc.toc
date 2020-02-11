@@ -64,10 +64,10 @@
 \contentsline {subsubsection}{\nonumberline Actualizaci\IeC {\'o}n de arreglos de propiedades}{34}{section*.59}% 
 \contentsline {subsubsection}{\nonumberline Rec\IeC {\'a}lculo de propiedades de los fluidos}{35}{section*.61}% 
 \contentsline {subsubsection}{\nonumberline C\IeC {\'a}lculo de Residuales}{35}{section*.64}% 
-\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{36}{section*.74}% 
-\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{63}{chapter.5}% 
-\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C\IeC {\'o}digo}{63}{section.5.1}% 
-\contentsline {section}{\numberline {5.2}Caso de Literatura}{64}{section.5.2}% 
+\contentsline {subsubsection}{\nonumberline Soluci\IeC {\'o}n del sistema lineal y actualizaci\IeC {\'o}n de inc\IeC {\'o}gnitas}{36}{section*.75}% 
+\contentsline {chapter}{\numberline {5}Validaci\IeC {\'o}n y Resultados}{62}{chapter.5}% 
+\contentsline {section}{\numberline {5.1}Traducci\IeC {\'o}n a C\IeC {\'o}digo}{62}{section.5.1}% 
+\contentsline {section}{\numberline {5.2}Caso de Literatura}{66}{section.5.2}% 
 \contentsline {chapter}{\numberline {6}Conclusiones y trabajo futuro}{69}{chapter.6}% 
 \contentsline {section}{\numberline {6.1}Conclusiones}{69}{section.6.1}% 
 \contentsline {section}{\numberline {6.2}Trabajo futuro}{70}{section.6.2}% 

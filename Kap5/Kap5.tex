@@ -7,9 +7,9 @@ En esta Sección se muestran porciones del modelo ejecutable que se programa en 
 
 A continuación se muestra, a modo de ejemplo, las traducciones de algunos conceptos, funciones, o porciones del EP a código C++ para verificar la consistencia del código con el modelo ejecutable. Primero, se definen los elementos que conforman las condiciones iniciales, y, la base de datos que se emula, es decir, los arreglos que contienen los conceptos que se instancian en la ejecución de las relaciones dinámicas del EP. Posteriormente, se muestran las traducciones a código de dos conceptos clase, ``Malla'' y ``Roca'', y la traducción de la relación dinámica ``Petrofísico caracteriza Roca''. Luego, se explica la traducción del cálculo del residual en el evento ``Presión del Fluido Varía''.\\
 
-Las condiciones iniciales, en las que se definen variables globales y constantes, se programan en un \textit{namespace} ``Global'' que agrupa todas las definiciones, tal como aparecen en la figura \ref{fig:EjInitialConditions}. El código para las condiciones iniciales se expone en la tabla \ref{tab:InitialConditions}.\\
+Las condiciones iniciales, en las que se definen variables globales y constantes, se programan en un \textit{namespace} ``Global'' que agrupa todas las definiciones, tal como aparecen en la figura \ref{fig:EjInitialConditions}. El código para las condiciones iniciales se expone en la Tabla \ref{tab:InitialConditions}.\\
 
-\begin{table}[h]
+\begin{table}[h!]
 	\centering
 	\begin{tabular}{cc}
 		\parbox[c]{10em}{
@@ -40,13 +40,12 @@ Las condiciones iniciales, en las que se definen variables globales y constantes
 			\end{lstlisting}
 		\end{tiny}
 	\end{tabular}
-	\label{tab:InitialConditions}
-	\caption[Traducción a código de las condiciones iniciales.]{Traducción a código de las condiciones iniciales. Los autores.}
+	\caption[Traducción a código de las condiciones iniciales.]{Traducción a código de las condiciones iniciales. Los autores. \label{tab:InitialConditions}}
 \end{table}
 
-En el código \ref{tab:bd} se muestra los conceptos que se almacenan en arreglos, estos se iteran en diferentes funciones del código. Es importante notar que, en las precondiciones del EP se establece que sólo se define una única malla y sólo se caracteriza una única roca. Por tanto, en la base de datos que se emula, estos dos conceptos se acceden por medio de un puntero único. También se destaca que, todos los objetos que se instancian de los conceptos clase, se acceden a partir de punteros. Todos los punteros se fundamentan en la STL, que se encarga de hacer la respectiva gestión del uso de la memoria.\\
+En el código de la Tabla \ref{tab:bd} se muestran los conceptos que se almacenan en arreglos, estos se iteran en diferentes funciones del código. Es importante notar que, en las precondiciones del EP se establece que sólo se define una única malla y sólo se caracteriza una única roca. Por tanto, en la base de datos que se emula, estos dos conceptos se acceden por medio de un puntero único. También se destaca que, todos los objetos que se instancian de los conceptos clase, se acceden a partir de punteros. Todos los punteros se fundamentan en la STL, que se encarga de hacer la respectiva gestión del uso de la memoria.\\
 
-\begin{table}
+\begin{table}[h!]
 	\begin{tabular}{c}
 		\begin{tiny}
 			\begin{lstlisting}
@@ -72,13 +71,12 @@ En el código \ref{tab:bd} se muestra los conceptos que se almacenan en arreglos
 			\end{lstlisting}
 		\end{tiny}
 	\end{tabular}
-	\label{tab:bd}
-	\caption[Arreglos que conforman la base de datos que se emula.]{Arreglos que conforman la base de datos que se emula. Los autores.}
+	\caption[Arreglos que conforman la base de datos que se emula.]{Arreglos que conforman la base de datos que se emula. Los autores. \label{tab:bd}}
 \end{table}
 
-En el código \ref{tab:MeshCode} se puede observar que, la conceptualización de la malla coincide con el código que se genera para la misma. La malla se propone como un conjunto de celdas. Adicionalmente, se tienen elementos como el espesor que dependen de la cantidad de celdas en cada dirección. Las celdas también se iteran, pero su arreglo correspondiente se almacena dentro del concepto malla, tal como se propone en la sección \ref{subsec:PS_Mesh}.\\
+En el código de la Tabla \ref{tab:MeshCode} se puede observar que, la conceptualización de la malla coincide con el código que se genera para la misma. La malla se propone como un conjunto de celdas. Adicionalmente, se tienen elementos como el espesor que dependen de la cantidad de celdas en cada dirección. Las celdas también se iteran, pero su arreglo correspondiente se almacena dentro del concepto malla, tal como se propone en la sección \ref{subsec:PS_Mesh}.\\
 
-\begin{table}[h]
+\begin{table}[h!]
 	\centering
 	\begin{tabular}{cc}
 		\parbox[c]{5em}{
@@ -137,13 +135,14 @@ En el código \ref{tab:MeshCode} se puede observar que, la conceptualización de
 			\end{lstlisting}
 		\end{tiny}
 	\end{tabular}
-	\label{tab:MeshCode}
-	\caption[Traducción a código del concepto Malla.]{Traducción a código del concepto Malla. Los autores.}
+	\caption[Traducción a código del concepto Malla.]{Traducción a código del concepto Malla. Los autores. \label{tab:MeshCode}}
 \end{table}
 
+\newpage
 
+En el código de la Tabla \ref{tab:RockCode}, se muestra la definición de la clase Roca, que corresponde al concepto roca en el EP y se pueden notar adicionalmente, la implementación de los \textit{get} y \textit{set} para cada atributo o concepto hoja. En el código de la Tabla \ref{tab:RockCharacterizeCode} se muestra la implementación de la relación dinámica ``petrofísico caracteriza roca''. Ésta se implementa como lecturas por consola, la cuál se desarrolla de manera segura en la función \textit{myRead}. Se logra evidenciar la consistencia en los nombres de los atributos, parámetros y las variables independientes que se definen en la lectura. Adicionalmente, por las dimensiones de los casos que se simulan, se implementa una lectura equivalente usando archivos para mayor facilidad de uso.
 
-\begin{table}[h]
+\begin{table}[h!]
 	\centering
 	\begin{tabular}{cc}
 		\parbox[c]{1em}{
@@ -186,11 +185,10 @@ En el código \ref{tab:MeshCode} se puede observar que, la conceptualización de
 			\end{lstlisting}
 		\end{tiny}
 	\end{tabular}
-	\label{tab:RockCode}
-	\caption[Traducción a código del concepto Roca.]{Traducción a código del concepto Roca. Los autores.}
+	\caption[Traducción a código del concepto Roca.]{Traducción a código del concepto Roca. Los autores. \label{tab:RockCode}}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[h!]
 	\centering
 	\begin{tabular}{cc}
 		\parbox[c]{5em}{
@@ -240,11 +238,13 @@ En el código \ref{tab:MeshCode} se puede observar que, la conceptualización de
 			\end{lstlisting}
 		\end{tiny}
 	\end{tabular}
-	\label{tab:RockCharacterizeCode}
-	\caption[Traducción a código de la relación dinámica ``Petrofísico caracteriza Roca''.]{Traducción a código de la relación dinámica ``Petrofísico caracteriza Roca''. Los autores.}
+	\caption[Traducción a código de la relación dinámica ``Petrofísico caracteriza Roca''.]{Traducción a código de la relación dinámica ``Petrofísico caracteriza Roca''. Los autores. \label{tab:RockCharacterizeCode}}
 \end{table}
+\newpage
 
-\begin{table}[h]
+En el código de la Tabla \ref{tab:ResidualCode} se evidencia cómo se logra iterar entre los conceptos. Por ejemplo para las ecuaciones, usando los vectores con los que se emula la base de datos, se logra realizar el cálculo del residual consistentemente con la representación. La operación de obtención de tipo, se desarrolla como un método interno dentro de la clase \textit{Equation\_Base}, con el fin de mantener la equivalencia casi exacta entre la representación y el código C++. Luego, la operación de asignación de tipo de ecuación, a fluido o a pozo, se convierte en una conversión de tipo o \textit{cast}.
+
+\begin{table}[h!]
 	\centering
 	\begin{tabular}{cc}
 		\parbox[c]{7em}{
@@ -295,8 +295,7 @@ En el código \ref{tab:MeshCode} se puede observar que, la conceptualización de
 			\end{lstlisting}
 		\end{tiny}
 	\end{tabular}
-	\label{tab:ResidualCode}
-	\caption[Traducción a código del cálculo de residual en el evento ``Presión del Fluido Varía''.]{Traducción a código del cálculo de residual en el evento ``Presión del Fluido Varía''. Los autores.}
+	\caption[Traducción a código del cálculo de residual en el evento ``Presión del Fluido Varía''.]{Traducción a código del cálculo de residual en el evento ``Presión del Fluido Varía''. Los autores. \label{tab:ResidualCode}}
 \end{table}
 
 
@@ -304,7 +303,7 @@ En el código \ref{tab:MeshCode} se puede observar que, la conceptualización de
 En esta Sección se pretende validar el modelo ejecutable que se realiza a partir del esquema preconceptual. Con éste propósito, se plantea un caso que se toma de \cite{jamal2006petroleum}. El cual, consiste en una simulación de un yacimiento lineal (1D) de cinco celdas con un solo fluido y un pozo productor en la cuarta celda, como se muestra en la Figura \ref{fig:Abou-Kassem} \citep{jamal2006petroleum}. Con este, se espera validar el transporte de un fluido y las pérdidas de presión por pozos.\\
 
 El caso de estudio de \cite{jamal2006petroleum} consta de dos procesos principales, uno de pérdidas a caudal fijo, y el otro, cuando la celda perforada para el pozo alcanza la ``presión de abandono''. En este, se cambia la condición operativa del pozo para mantener la presión fija a esa presión de abandono. En la Figura \ref{fig:ConstantQ} se reportan los resultados de la simulación durante la etapa de producción a caudal constante, y en la Figura \ref{fig:ConstantP} se reportan los resultados de la simulación durante la etapa de producción a presión constante.
-\begin{figure}[h]
+\begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.9\textwidth]{Fig/casoasis.pdf}
 	\caption{Representación gráfica del caso proporcionado por \cite{jamal2006petroleum}.}
