@@ -5,6 +5,7 @@
 \usepackage{caption} 
 \usepackage{subcaption}
 \usepackage{color}
+\usepackage{xcolor}
 
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -120,7 +121,7 @@ Oil Reservoir simulation is an application of flow in porous media. Macroscopic 
 
 The black oil model (BOM) is vastly used in industrial efforts. Transport of three fluids at standard conditions is considered in this model. In addition, sink and source terms are involved, which are modeled as wells. Analytic solutions of BOM are unfeasible, hence a numerical solution is required. With this purpose, an spatial and temporal discretization is applied to BOM system of differential equations, the resulting algebraic system is solved using Newton-Raphson method.\\
 
-Preconceptual schemas (PS) are intermediate representations which are useful for establishing a common point of understanding between a stakeholder and a software analyst. Furthermore, PS have elements which allow to represent both structure and dynamics of specific application domains. Moreover, Calle and Nore\~na \textbf{{(citar)}}, extended PS notation for usage in scientific software contexts, which have a greater complexity.\\
+Preconceptual schemas (PS) are intermediate representations which are useful for establishing a common point of understanding between a stakeholder and a software analyst. Furthermore, PS have elements which allow to represent both structure and dynamics of specific application domains. Moreover, Calle and Nore\~na {\color{red} \textbf{(citar)}}, extended PS notation for usage in scientific software contexts, which have a greater complexity.\\
 
 Mathematical models, such as Black Oil Model (BOM), are representations that appear in every effort for developing a simulator or framework for oil reservoir simulation. In addition, other representations in which, concepts and processes are shown, lack of traceability and event representation. There are proposals in which traceability is considered, but those are implementation-specific. The whole converges in oil reservoir simulators being developed in an empirical manner.\\
 
@@ -176,13 +177,13 @@ In addition, {\color{green} wells...}
 An analytic solution for such a model is infeasible, thus a numerical solution is required. Accordingly, a centered finite volume method is used with an implicit scheme for time discretization. Resulting algebraic equations for BOM in a cell $i$ and a time interval $\left[n;n+1 \right] $ are as follows:
 
 \begin{align}
-\label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{R_{v,i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n}}_{\text{Accumulation}} + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \Delta{\Phi_{o,c}^{n+1}} + R_{v,c}T^{n+1}_{g,c} \Delta{\Phi_{g,c}^{n+1}} \right] }_{\text{Flujo - Aceite}} - Q_{o,i}^{n+1} = 0 \\
-\label{ec:gasDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{R_{s,i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Gas}} + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\Delta{\Phi_{g,c}^{n+1} + R_{s,c}T^{n+1}_{o,c} \Delta{\Phi_{o,c}^{n+1}}} \right] }_{\text{Flujo - Gas}} - Q_{g,i}^{n+1} = 0 \\
-\label{ec:aguaDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n}}_{\text{Acumulación - Agua}}
+\label{ec:aceiteDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{o,i}}{B_{o,i}} + \frac{R_{v,i}S_{g,i}}{B_{g,i}}\right)\right]^{n+1}_{n}}_{\text{Oil Accumulation}} + 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{o,c} \Delta{\Phi_{o,c}^{n+1}} + R_{v,c}T^{n+1}_{g,c} \Delta{\Phi_{g,c}^{n+1}} \right] }_{\text{Oil Flow}} - Q_{o,i}^{n+1} = 0 \\
+\label{ec:gasDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{g,i}}{B_{g,i}} + \frac{R_{s,i}S_{o,i}}{B_{o,i}}\right)\right]^{n+1}_{n}}_{\text{Gas Accumulation}} + 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{g,c}\Delta{\Phi_{g,c}^{n+1} + R_{s,c}T^{n+1}_{o,c} \Delta{\Phi_{o,c}^{n+1}}} \right] }_{\text{Gas Flow}} - Q_{g,i}^{n+1} = 0 \\
+\label{ec:aguaDiscretizacion}&\underbrace{\frac{|\Omega_{i}|}{\Delta t}\left[ \phi_{i} \left( \frac{S_{w,i}}{B_{w,i}}\right)\right]^{n+1}_{n}}_{\text{Water Accumulation}}
 + 
-\underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\Delta{\Phi_{w,c}^{n+1}} \right]}_{\text{Flujo - Agua}} - Q_{w,i}^{n+1} = 0 
+\underbrace{\sum_{c \in S}\left[ T^{n+1}_{w,c}\Delta{\Phi_{w,c}^{n+1}} \right]}_{\text{Water Flow}} - Q_{w,i}^{n+1} = 0 
 \end{align}
 where:
 \begin{align*}
@@ -198,6 +199,32 @@ $T_{f,c}$ stands for transmissivity in a face $c$, connecting a cell $i$, with a
 \label{ec:Transmissibity}& T_{f,c} = \left(\frac{2}{(\Delta l_{i}/A_{c}K_{l,i})+(\Delta l_{j}/A_{c}K_{l,j})}\right)\frac{k_{rf,c}}{\mu_{f,c}B_{f,c}}
 \end{align}
 
+\subsection{Preconceptual Schemas Notation}
+Preconceptual Schemas are intermediate representations between natural language and conceptual schemas or formal language. They allow for establishing a common ground between a stakeholder and a software engineer {\color{red} \textbf{(Citar Zapata)}}.{\color{red} \textbf{(Citar Zapata en texto)}} proposes a notation for representing stakeholder domains, which consists of: nodes, relationships, gatherings and links. We show in Figure \ref{fig:PS_Elements} the elements belonging to this notation.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.0\textwidth]{Figures/PSElements.pdf}
+	\caption{PS Elements by category {\color{red} \textbf{(Citar Zapata)}}}
+	\label{fig:PS_Elements}
+\end{figure}
+
+In addition, {\color{red} \textbf{(Citar a Calle y a Paola en texto)}} extend the notation showed above, with elements which allow for representing domains in scientific software contexts. These elements account for usage of mathematical functions, and they allow for extending PS notation, by using user defined functions. In Figure \ref{fig:PS_Extended} we present the extended notation for PS in scientific software contexts.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.0\textwidth]{Figures/PSElements.pdf}
+	\caption{PS Elements by category {\color{red} \textbf{(Citar Zapata)}}}
+	\label{fig:PS_Extended}
+\end{figure}
+
+\section{PS Representation}
+\begin{figure}
+	\centering
+	\includegraphics[width=1.2\textwidth]{Figures/PSElements.pdf}
+	\caption{PS Extension}
+	\label{fig:PS_Translated}
+\end{figure}
 
 %\section{Mathematical Model}
 %
