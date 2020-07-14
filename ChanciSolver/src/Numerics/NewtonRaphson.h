@@ -9,8 +9,8 @@
 
 #include "Mesh.h"
 #include "Rock.h"
-#include "Producer_Well.h"
-#include "Injector_Well.h"
+#include "Production_Well.h"
+#include "Injection_Well.h"
 
 template<typename PropertiesFunction_t, typename FlowFunction_t, typename AccumulationFunction_t, typename PerforationFunction_t, typename WellFunction_t, typename EstimatorFunction_t>
     class NewtonRaphson{
@@ -44,10 +44,10 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
     
     const inline int locate(const auto type, int input_selector, int input_index){
         using namespace Initial_Conditions;
-        if(type == "fluid"){
-            return cells_number*input_selector + input_index;
+        if(type == "phase"){
+            return cells_quantity*input_selector + input_index;
         }else{
-            return cells_number*fluids_quantity + input_index;
+            return cells_quantity*phases_quantity + input_index;
         };
     };
     
@@ -72,9 +72,9 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
  NewtonRaphson(const int& mat_size,const int& max_number_of_non_zeros, PropertiesFunction_t calculateProperties, FlowFunction_t calculateFlow, AccumulationFunction_t calculateAccumulation, PerforationFunction_t calculatePerforation, WellFunction_t calculateWellFlow, EstimatorFunction_t estimatePressure) : _calculateProperties(calculateProperties),
         _calculateFlow(calculateFlow), _calculateAccumulation(calculateAccumulation), _calculatePerforation(calculatePerforation), _calculateWellFlow(calculateWellFlow), _estimatePressure(estimatePressure){
 
-        //= fluids_quantity*cells_number + wells_with_equation;
+        //= phases_quantity*cells_quantity + wells_with_equation;
 
-        // = fluids_quantity*fluids_quantity*cells_number + total_of_perforations*wells_with_equation;
+        // = phases_quantity*phases_quantity*cells_quantity + total_of_perforations*wells_with_equation;
         
         _jacobian.resize(mat_size, mat_size);
 
@@ -90,64 +90,64 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
         _solution_delta.setZero();
     };
 
-    void modifyVariable(const int& term, Fluid& fluid, const std::shared_ptr<Cell>& cell, double& modified_epsilon, const bool undo){
+    void modifyVariable(const int& term, Phase& phase, const std::shared_ptr<Cell>& cell, double& modified_epsilon, const bool undo){
 
 
         double scaled_epsilon = 0.0;
         
         const int cell_index = cell->index();
             
-        if(fluid.principal()){
+        if(phase.main()){
             if(!undo){
-                _aux_variable = fluid.pressure(term, cell_index);
+                _aux_variable = phase.pressure(term, cell_index);
                 
                 scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
                 if(scaled_epsilon == 0.0) scaled_epsilon = _machine_epsilon;
                 
-                fluid.pressure(term, cell_index, fluid.pressure(term, cell_index)+scaled_epsilon);
+                phase.pressure(term, cell_index, phase.pressure(term, cell_index)+scaled_epsilon);
                 
-                modified_epsilon = fluid.pressure(term, cell_index)-_aux_variable;
+                modified_epsilon = phase.pressure(term, cell_index)-_aux_variable;
                 //std::cout << modified_epsilon;
             }else{
-                fluid.pressure(term, cell_index, _aux_variable);
+                phase.pressure(term, cell_index, _aux_variable);
             };
         }else{
             if(!undo){
-                _aux_variable = fluid.saturation(term, cell_index);
+                _aux_variable = phase.saturation(term, cell_index);
                 
                 scaled_epsilon = std::abs(_aux_variable) * _machine_epsilon;
                 if(scaled_epsilon == 0.0) scaled_epsilon = _machine_epsilon;
                 
-                fluid.saturation(term, cell_index, fluid.saturation(term, cell_index)+scaled_epsilon);
+                phase.saturation(term, cell_index, phase.saturation(term, cell_index)+scaled_epsilon);
                 
-                modified_epsilon = fluid.saturation(term, cell_index)-_aux_variable;
+                modified_epsilon = phase.saturation(term, cell_index)-_aux_variable;
                 
             }else{
-                fluid.saturation(term, cell_index, _aux_variable);
+                phase.saturation(term, cell_index, _aux_variable);
             };
         };
     };
     
-    double calculateResidual(const int& term, Fluid& fluid, const Mesh& mesh, const std::shared_ptr<Cell>& cell, Rock& rock, std::vector<std::shared_ptr<Well>>& wells)
+    double calculateResidual(const int& term, Phase& phase, const Mesh& mesh, const std::shared_ptr<Cell>& cell, Rock& rock, std::vector<std::shared_ptr<Well>>& wells)
     {
         double flow=0.0;
         for (auto face = cell->begin(); face!=cell->end(); ++face){
-            flow = flow + _calculateFlow(term, fluid, mesh, cell, *face, rock);
+            flow = flow + _calculateFlow(term, phase, mesh, cell, *face, rock);
         };
-        double accumulation = _calculateAccumulation(term, fluid, cell, rock);
+        double accumulation = _calculateAccumulation(term, phase, cell, rock);
 
         double well_contribution = 0.0;
         
         for (auto well : wells){
             for(auto perforation = well->begin(); perforation !=well->end(); ++perforation){
                 if((*perforation)->index() == cell->index()){
-                    if((*perforation)->type() == typeid(Producer_Perforate).name()){
-                        auto producer_perf = std::dynamic_pointer_cast<Producer_Perforate, Perforate>(*perforation);
-                        well_contribution += producer_perf->flow(fluid.index());
+                    if((*perforation)->type() == typeid(Production_Perforation).name()){
+                        auto production_perf = std::dynamic_pointer_cast<Production_Perforation, Perforation>(*perforation);
+                        well_contribution += production_perf->flow(phase.index());
                         //std::cout <<"\n"<< well_contribution;
                     }else{
-                        auto injector_well = std::dynamic_pointer_cast<Injector_Well, Well>(well);
-                        if (injector_well->injectionFluid()->index() == fluid.index()){
+                        auto injection_well = std::dynamic_pointer_cast<Injection_Well, Well>(well);
+                        if (injection_well->injectionPhase()->index() == phase.index()){
                             well_contribution += (*perforation)->totalFlow();
                             
                         };
@@ -233,8 +233,8 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     
                     }else{
                     
-                        constexpr auto residual_type = "fluid";
-                        auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
+                        constexpr auto residual_type = "phase";
+                        auto residual_phase = std::dynamic_pointer_cast<Phase,Equation_Base>(equation);
             
                         for(auto cell = mesh.begin(); cell != mesh.end(); ++cell){
                 
@@ -242,7 +242,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                             row = locate(residual_type, residual_selector, cell_index);
                         
-                            _residual(row) = calculateResidual(term,*residual_fluid, mesh, *cell, rock, wells);
+                            _residual(row) = calculateResidual(term,*residual_phase, mesh, *cell, rock, wells);
                         
                         };
                     };
@@ -320,9 +320,9 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                     };                     
                                     
                                 }else{
-                                    constexpr auto variable_type = "fluid";
+                                    constexpr auto variable_type = "phase";
                                     
-                                    auto fluid_variable = std::dynamic_pointer_cast<Fluid,Equation_Base>(variable);
+                                    auto phase_variable = std::dynamic_pointer_cast<Phase,Equation_Base>(variable);
                                     for(auto perforation = residual_well->begin(); perforation!=residual_well->end(); ++perforation){
                                         auto cell = mesh.cell((*perforation)->index());
 
@@ -335,7 +335,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
 
                                         modified_epsilon = _machine_epsilon;
 
-                                        modifyVariable(term, *fluid_variable, cell, modified_epsilon, false);
+                                        modifyVariable(term, *phase_variable, cell, modified_epsilon, false);
                                         
                                         _calculateProperties(term, cell, rock);
 
@@ -358,7 +358,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         
                                         modified_epsilon = -_machine_epsilon;
 
-                                        modifyVariable(term, *fluid_variable, cell, modified_epsilon, true);
+                                        modifyVariable(term, *phase_variable, cell, modified_epsilon, true);
                                         
                                         _calculateProperties(term, cell, rock);
 
@@ -376,12 +376,12 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         
                     }else{
                         
-                        constexpr auto residual_type = "fluid";
-                        auto residual_fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(residual);
+                        constexpr auto residual_type = "phase";
+                        auto residual_phase = std::dynamic_pointer_cast<Phase,Equation_Base>(residual);
                 
-                        //residual_selector = residual_fluid->index();
+                        //residual_selector = residual_phase->index();
 
-                        //This should be a principal variable 
+                        //This should be a main variable 
                         for(auto variable : equations){
                             
                             //variable_selector = variable->index();
@@ -415,7 +415,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         
                                         _calculatePerforation(term, well_variable, *perforation);
                                     
-                                        modified_residual = calculateResidual(term,*residual_fluid, mesh,cell,rock, wells);
+                                        modified_residual = calculateResidual(term,*residual_phase, mesh,cell,rock, wells);
 
                                         //std::cout << modified_epsilon << std::endl;
                                         
@@ -437,25 +437,25 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                     
                                 }else{
 
-                                    constexpr auto variable_type = "fluid";
-                                    auto fluid_variable = std::dynamic_pointer_cast<Fluid,Equation_Base>(variable);
-                                    variable_selector = fluid_variable->index();
+                                    constexpr auto variable_type = "phase";
+                                    auto phase_variable = std::dynamic_pointer_cast<Phase,Equation_Base>(variable);
+                                    variable_selector = phase_variable->index();
                     
                                     for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
 
                                         modified_epsilon = _machine_epsilon;
                                         cell_index = (*cell)->index();
                         
-                                        modifyVariable(term, *fluid_variable, *cell, modified_epsilon, false);
+                                        modifyVariable(term, *phase_variable, *cell, modified_epsilon, false);
                                         _calculateProperties(term, *cell, rock);
                         
                                         for (auto face = (*cell)->begin(); face!=(*cell)->end(); ++face){
                             
-                                            auto neighbor_cell = (*face)->neighbor().lock();
+                                            auto neighbor_cell = (*face)->neighborCell().lock();
                                             int neighbor_index = neighbor_cell->index();
                                             row = locate(residual_type, residual_selector, neighbor_index);
                                             col = locate(variable_type, variable_selector, cell_index);
-                                            modified_residual = calculateResidual(term,*residual_fluid, mesh,neighbor_cell,rock, wells);
+                                            modified_residual = calculateResidual(term,*residual_phase, mesh,neighbor_cell,rock, wells);
 
                                             //std::cout << modified_epsilon << std::endl;
                                             
@@ -475,7 +475,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                         
                                         int row = locate(residual_type, residual_selector, cell_index);
                                         int col = locate(variable_type, variable_selector, cell_index);
-                                        modified_residual = calculateResidual(term,*residual_fluid, mesh, *cell, rock, wells);
+                                        modified_residual = calculateResidual(term,*residual_phase, mesh, *cell, rock, wells);
 
                                         //std::cout << modified_epsilon << std::endl;
 
@@ -491,7 +491,7 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                                         };
 
                                         modified_epsilon = -_machine_epsilon;
-                                        modifyVariable(term, *fluid_variable, *cell, modified_epsilon, true);
+                                        modifyVariable(term, *phase_variable, *cell, modified_epsilon, true);
                                         _calculateProperties(term, *cell, rock);
                                     
                                     };
@@ -572,26 +572,26 @@ template<typename PropertiesFunction_t, typename FlowFunction_t, typename Accumu
                     
                 }else{
 
-                    constexpr auto residual_type = "fluid";
-                    auto fluid = std::dynamic_pointer_cast<Fluid,Equation_Base>(equation);
+                    constexpr auto residual_type = "phase";
+                    auto phase = std::dynamic_pointer_cast<Phase,Equation_Base>(equation);
             
-                    residual_selector = fluid->index();
+                    residual_selector = phase->index();
             
                     for(auto cell = mesh.begin(); cell !=mesh.end(); ++cell){
 
                         cell_index = (*cell)->index();
                         row = locate(residual_type,residual_selector,cell_index);
 
-                        if(fluid->principal()){
-                            fluid->pressure(term, cell_index, fluid->pressure(term, cell_index)+_solution_delta(row));
-                            if(fluid->pressure(term, cell_index) < 101325.0){
-                                fluid->pressure(term, cell_index, 101325.0);
+                        if(phase->main()){
+                            phase->pressure(term, cell_index, phase->pressure(term, cell_index)+_solution_delta(row));
+                            if(phase->pressure(term, cell_index) < 101325.0){
+                                phase->pressure(term, cell_index, 101325.0);
                             };
                             
                         }else{
-                            fluid->saturation(term, cell_index, fluid->saturation(term, cell_index)+_solution_delta(row));
-                            if(fluid->saturation(term, cell_index) < 0){
-                                fluid->saturation(term, cell_index, 0);
+                            phase->saturation(term, cell_index, phase->saturation(term, cell_index)+_solution_delta(row));
+                            if(phase->saturation(term, cell_index) < 0){
+                                phase->saturation(term, cell_index, 0);
                             };
                         };
                     };

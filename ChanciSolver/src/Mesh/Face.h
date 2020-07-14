@@ -23,8 +23,8 @@ class Face{
     void index(int index){_index = index;};
     const int& index() const {return _index;};
     
-    void neighbor(std::shared_ptr<Cell>& _cell);
-    const std::weak_ptr<Cell>& neighbor() const {return _neighbor_cell;};
+    void neighborCell(std::shared_ptr<Cell>& _cell);
+    const std::weak_ptr<Cell>& neighborCell() const {return _neighbor_cell;};
 };
 
 #endif /* FACE_H */

@@ -41,20 +41,20 @@ class Rock {
     const std::vector<std::vector<double>>& absolutePermeability (const int& term) const {return _absolute_permeability[term];};
 };
 
-void Rock::characterize(const int& cells_number){
+void Rock::characterize(const int& cells_quantity){
     
     std::ostringstream ss = std::ostringstream();
     const std::string axisnames[3]={"x", "y", "z"};
     
     _absolute_permeability = std::vector<std::vector<std::vector<double>>>
-        (2,std::vector<std::vector<double>>(cells_number,std::vector<double>(3)));
-    _porosity              = std::vector<std::vector<double>>(3,std::vector<double>(cells_number));
+        (2,std::vector<std::vector<double>>(cells_quantity,std::vector<double>(3)));
+    _porosity              = std::vector<std::vector<double>>(3,std::vector<double>(cells_quantity));
 
     Value_Reader::myRead(std::string("Please insert rock compressibility [1/Pa]"), _compressibility, std::string("Please insert a valid input"));
 
     Value_Reader::myRead(std::string("Please insert reference pressure [Pa]"), _reference_pressure, std::string("Please insert a valid input"));
 
-    for(int cellindex=0; cellindex<cells_number; ++cellindex){
+    for(int cellindex=0; cellindex<cells_quantity; ++cellindex){
         
         ss << "Please insert initial porosity for the "<< cellindex+1 << " cell [-]";
         Value_Reader::myRead(ss.str(), _porosity[2][cellindex], std::string("Please insert a valid input"));
@@ -63,7 +63,7 @@ void Rock::characterize(const int& cells_number){
         
         
     };
-    for(int cellindex=0; cellindex<cells_number; ++cellindex){
+    for(int cellindex=0; cellindex<cells_quantity; ++cellindex){
         for(int direction=0; direction<3;++direction){
             ss << "Please insert initial absolute permeability for the "<< cellindex+1
                << " cell in direction " << axisnames[direction] << " [m2]";
@@ -74,12 +74,12 @@ void Rock::characterize(const int& cells_number){
     };
 };
 
-void Rock::characterizeFromFile(std::ifstream& rock_reader, const int& cells_number){
+void Rock::characterizeFromFile(std::ifstream& rock_reader, const int& cells_quantity){
     std::string element;
     
     _absolute_permeability = std::vector<std::vector<std::vector<double>>>
-        (2,std::vector<std::vector<double>>(cells_number,std::vector<double>(3)));
-    _porosity              = std::vector<std::vector<double>>(3,std::vector<double>(cells_number));
+        (2,std::vector<std::vector<double>>(cells_quantity,std::vector<double>(3)));
+    _porosity              = std::vector<std::vector<double>>(3,std::vector<double>(cells_quantity));
 
     
     while(rock_reader>>element){
@@ -89,11 +89,11 @@ void Rock::characterizeFromFile(std::ifstream& rock_reader, const int& cells_num
         }else if(element == "REFERENCE_PRESSURE"){
             rock_reader>>_reference_pressure;
         }else if(element == "POROSITY"){
-            for(int cellindex=0; cellindex<cells_number; ++cellindex){
+            for(int cellindex=0; cellindex<cells_quantity; ++cellindex){
                 rock_reader>>_porosity[2][cellindex];
             };
         }else if(element == "ABSOLUTE_PERMEABILITY"){
-            for(int cellindex=0; cellindex<cells_number; ++cellindex){
+            for(int cellindex=0; cellindex<cells_quantity; ++cellindex){
                 for(int direction=0; direction<3;++direction){
                     rock_reader>>_absolute_permeability[0][cellindex][direction];
                 };

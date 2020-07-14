@@ -1,5 +1,5 @@
-#ifndef MEASURED_PROPERTY_H
-#define MEASURED_PROPERTY_H
+#ifndef PROPERTY_MEASURE_H
+#define PROPERTY_MEASURE_H
 
 #include <map>
 #include <iostream>
@@ -9,24 +9,24 @@
 
 #include "Value_Reader.h"
 
-class Measured_Property : protected Value_Reader{
- private:
+class Property_Measure : protected Value_Reader{
+private:
 
     using Measures_t = std::map<double,double>;
     
     
     std::string _reference_measure_name;
     std::string _measured_value_name;
-    int _number_of_measures;
+    int _measures_quantity;
     Measures_t _taken_measures;
     
- public:
+public:
     
     using Measures_iterator = Measures_t::iterator;
     using Measures_const_iterator = Measures_t::const_iterator;
     
- Measured_Property(std::string reference_measure_name, std::string measured_value_name):
-    _reference_measure_name(reference_measure_name), _measured_value_name(measured_value_name)
+    Property_Measure(std::string reference_measure_name, std::string measured_value_name):
+        _reference_measure_name(reference_measure_name), _measured_value_name(measured_value_name)
     {
         _taken_measures = std::map<double,double>();
     };
@@ -43,16 +43,16 @@ class Measured_Property : protected Value_Reader{
     Measures_const_iterator cend()   const {return _taken_measures.cend();};
 };
 
-void Measured_Property::readMe(){
+void Property_Measure::readMe(){
     std::ostringstream ss=std::ostringstream();
     double aux_reference, aux_measure;
     
     ss << "Please insert the number of measures for " << _measured_value_name <<": ";
-    myRead(ss.str(), _number_of_measures,std::string("Please insert a valid input"));
+    myRead(ss.str(), _measures_quantity,std::string("Please insert a valid input"));
     ss.str("");
     ss.clear();
     
-    for(int measure=1; measure<=_number_of_measures; ++measure){
+    for(int measure=1; measure<=_measures_quantity; ++measure){
 	ss<<"Please insert the " << measure << " " << _reference_measure_name;
 	myRead(ss.str(), aux_reference,std::string("Please insert a valid input"));
         ss.str("");
@@ -68,17 +68,17 @@ void Measured_Property::readMe(){
 
 };
 
-void Measured_Property::readFromFile(std::ifstream& property_reader){
+void Property_Measure::readFromFile(std::ifstream& property_reader){
 
-    double aux_reference, aux_measure;
+    double reference_measure, value_measure;
     
-    property_reader>> _number_of_measures;
+    property_reader>> _measures_quantity;
 
-    for (int measure=0; measure<_number_of_measures; ++measure){
-        property_reader>>aux_reference;
-        property_reader>>aux_measure;
+    for (int measure=0; measure<_measures_quantity; ++measure){
+        property_reader>>reference_measure;
+        property_reader>>value_measure;
 
-        _taken_measures.insert(std::make_pair(aux_reference,aux_measure));
+        _taken_measures.insert(std::make_pair(reference_measure,value_measure));
     };
     return;
 };
@@ -86,12 +86,13 @@ void Measured_Property::readFromFile(std::ifstream& property_reader){
 /*
   This Function implements Linear interpolation in the taken_measures map
 */
-double Measured_Property::interpolate(double reference_value){
+double Property_Measure::interpolate(double reference_value){
 
-    auto great_it = _taken_measures.upper_bound(reference_value);
+    auto great_it = _taken_measures.lower_bound(reference_value);
 
     if(great_it == _taken_measures.end()){
-        return (--great_it)->second;
+        --great_it;
+        return great_it->second;
     }
     if(great_it == _taken_measures.begin()){
         return great_it->second;
@@ -101,7 +102,12 @@ double Measured_Property::interpolate(double reference_value){
     --less_it;
     
     //Interpolate
-    return less_it->second + (reference_value - less_it->first) * (great_it->second - less_it->second) / (great_it->first - less_it->first);
+
+    auto m = (great_it->second - less_it->second) / (great_it->first - less_it->first);
+
+    auto b = less_it->second - m*less_it->first;
+    
+    return m*reference_value + b;
 };
 
-#endif /* MEASURED_PROPERTY_H */
+#endif /* PROPERTY_MEASURE_H */

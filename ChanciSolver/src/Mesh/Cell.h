@@ -17,7 +17,7 @@ class Cell{
     std::vector<int> _numeration_3d;
     double _volume;
     double _depth;
-    int _number_of_active_faces;
+    int _active_faces_quantity;
  public:
 
     using Face_iterator = Faces_t::iterator;
@@ -25,7 +25,7 @@ class Cell{
 
     Cell(int index): _index(index){
         _numeration_3d=std::vector<int>(3);
-        _number_of_active_faces=0;
+        _active_faces_quantity=0;
         _active_faces = std::vector<std::shared_ptr<Face>>();
     };
     
@@ -42,8 +42,8 @@ class Cell{
     void depth(double depth){_depth=depth;};
     const double& depth() const{return _depth;};
 
-    void numberOfActiveFaces(int numberOfActiveFaces){_number_of_active_faces=numberOfActiveFaces;};
-    const int& numberOfActiveFaces() const{return _number_of_active_faces;};
+    void activeFacesQuantity(int activeFacesQuantity){_active_faces_quantity=activeFacesQuantity;};
+    const int& activeFacesQuantity() const{return _active_faces_quantity;};
 
     
     void pushFace(std::shared_ptr<Face>& face){
@@ -60,6 +60,6 @@ class Cell{
     
 };
 
-void Face::neighbor(std::shared_ptr<Cell>& cell) {_neighbor_cell = cell;};
+void Face::neighborCell(std::shared_ptr<Cell>& cell) {_neighbor_cell = cell;};
 
 #endif /* CELL_H */

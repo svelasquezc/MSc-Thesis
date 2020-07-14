@@ -6,25 +6,26 @@
 
 #include "Value_Reader.h"
 #include "Equation.h"
-#include "Fluid.h"
+#include "Phase.h"
 
 #include "Mesh.h"
-#include "Perforate.h"
+#include "Perforation.h"
 
 #include "Operative_Condition.h"
 
 class Well : public Equation<Well>{
 
- protected:
+protected:
 
-    using Perforates_t = std::vector<std::shared_ptr<Perforate>>;
+    using Perforations_t = std::vector<std::shared_ptr<Perforation>>;
     
     std::string _type;
     int _index;
     double _radius;
-    int _number_of_perforates;
+    int _perforations_quantity;
     double _borehole_depth;
-    std::vector<std::shared_ptr<Perforate>> _perforates;
+    double _average_density;
+    std::vector<std::shared_ptr<Perforation>> _perforations;
 
     std::vector<double> _borehole_pressure;
     std::vector<double> _flow;
@@ -32,21 +33,21 @@ class Well : public Equation<Well>{
     std::shared_ptr<Operative_Condition> _operative_condition;
 
     int _operative_status = 0; // 2 - Pending Change
-                     // 1 - Changed
-                     // 0 - Stable
+    // 1 - Changed
+    // 0 - Stable
 
- public:
+public:
 
-    using Perforate_iterator = Perforates_t::iterator;
-    using Perforate_const_iterator = Perforates_t::const_iterator;
+    using Perforation_iterator = Perforations_t::iterator;
+    using Perforation_const_iterator = Perforations_t::const_iterator;
     
- Well(const int index): _index(index){};
+    Well(const int index): _index(index){};
 
     virtual ~Well() = default;
     
-    virtual void perforate(Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type){
+    virtual void perforation(Mesh& mesh, std::vector<std::shared_ptr<Phase>>& characterized_phases, const std::string& type){
 
-        _perforates = std::vector<std::shared_ptr<Perforate>>();
+        _perforations = std::vector<std::shared_ptr<Perforation>>();
         
         _type = type;
 
@@ -55,7 +56,7 @@ class Well : public Equation<Well>{
         _borehole_pressure=std::vector<double>(2,0.0);
         
         Value_Reader::myRead(std::string("Please insert the well radius "), _radius, std::string("Please insert a valid input"));
-        Value_Reader::myRead(std::string("Please insert the number of perforations "), _number_of_perforates, std::string("Please insert a valid input"));
+        Value_Reader::myRead(std::string("Please insert the number of perforations "), _perforations_quantity, std::string("Please insert a valid input"));
 
         Equation<Well>::_status = false;
 
@@ -65,11 +66,11 @@ class Well : public Equation<Well>{
         
     };
 
-    virtual void perforateFromFile(std::ifstream& well_reader, Mesh& mesh, std::vector<std::shared_ptr<Fluid>>& characterized_fluids, const std::string& type){
+    virtual void perforationFromFile(std::ifstream& well_reader, Mesh& mesh, std::vector<std::shared_ptr<Phase>>& characterized_phases, const std::string& type){
 
         std::string element;
         
-        _perforates = std::vector<std::shared_ptr<Perforate>>();
+        _perforations = std::vector<std::shared_ptr<Perforation>>();
         
         _type = type;
         
@@ -81,8 +82,8 @@ class Well : public Equation<Well>{
             std::transform(element.begin(), element.end(), element.begin(), ::toupper);
             if(element == "RADIUS"){
                 well_reader >> _radius;
-            }else if(element == "NUMBER_OF_PERFORATIONS"){
-                well_reader >> _number_of_perforates;
+            }else if(element == "PERFORATIONS_QUANTITY"){
+                well_reader >> _perforations_quantity;
                 break;
             }
         };
@@ -109,24 +110,24 @@ class Well : public Equation<Well>{
     
     const double& flow(const int& term) const { return _flow[term];};
 
-    const int& numberOfPerforates() const {return _number_of_perforates;};
+    const int& numberOfPerforations() const {return _perforations_quantity;};
 
-    template<typename PerforationType> inline void insertPerforationsFromFile(std::ifstream& well_reader, Mesh& mesh, const int& fluids_quantity){
+    template<typename PerforationType> inline void insertPerforationsFromFile(std::ifstream& well_reader, Mesh& mesh, const int& phases_quantity){
         std::string element;
         double skin;
         
-        std::shared_ptr<Perforate> aux_perforate;
+        std::shared_ptr<Perforation> aux_perforation;
 
-        std::vector<int> position = std::vector<int>(3);
+        std::vector<int> location = std::vector<int>(3);
 
-        for(int perforate=0; perforate<_number_of_perforates; ++perforate){
-            aux_perforate = std::make_shared<PerforationType>(PerforationType(fluids_quantity));
+        for(int perforation=0; perforation<_perforations_quantity; ++perforation){
+            aux_perforation = std::make_shared<PerforationType>(PerforationType(phases_quantity));
             while(well_reader >> element){
                 std::transform(element.begin(), element.end(),element.begin(), ::toupper);                
-                if(element == "POSITION"){
+                if(element == "LOCATION"){
                     for(int axis=0; axis<3; ++axis){
-                        well_reader >> position[axis];
-                        --position[axis];
+                        well_reader >> location[axis];
+                        --location[axis];
                     };
                 }else if(element == "SKIN_FACTOR"){
                     well_reader >> skin;
@@ -134,56 +135,56 @@ class Well : public Equation<Well>{
                 };
             };
             
-            aux_perforate->position(position[0], position[1], position[2]);
-            aux_perforate->index(mesh.listCell(position[0],position[1],position[2]));
-            aux_perforate->localIndex(perforate);
-            aux_perforate->skin(skin);
+            aux_perforation->location(location[0], location[1], location[2]);
+            aux_perforation->index(mesh.listCell(location[0],location[1],location[2]));
+            aux_perforation->localIndex(perforation);
+            aux_perforation->skin(skin);
             
-            if(perforate == 0){
-                auto first_perforate_cell = mesh.cell(aux_perforate->index());
-                _borehole_depth = first_perforate_cell->depth();
+            if(perforation == 0){
+                auto first_perforation_cell = mesh.cell(aux_perforation->index());
+                _borehole_depth = first_perforation_cell->depth();
             };
 
-            _perforates.push_back(aux_perforate);
+            _perforations.push_back(aux_perforation);
             
         };
     };
 
-    template<typename PerforationType> inline void insertPerforations(Mesh& mesh, const int& fluids_quantity){
+    template<typename PerforationType> inline void insertPerforations(Mesh& mesh, const int& phases_quantity){
 
         double skin;
         
         std::ostringstream ss = std::ostringstream();
         const std::string axisnames[3]={"x", "y", "z"};
         
-        std::shared_ptr<Perforate> aux_perforate;
+        std::shared_ptr<Perforation> aux_perforation;
 
-        std::vector<int> position = std::vector<int>(3);
+        std::vector<int> location = std::vector<int>(3);
 
-        for(int perforate=0; perforate<_number_of_perforates; ++perforate){
-            aux_perforate = std::make_shared<PerforationType>(PerforationType(fluids_quantity));
+        for(int perforation=0; perforation<_perforations_quantity; ++perforation){
+            aux_perforation = std::make_shared<PerforationType>(PerforationType(phases_quantity));
             for(int axis=0; axis<3; ++axis){
                 
-                ss << "Please insert perforate "<< perforate + 1 << " position in axis " << axisnames[axis] << ": ";
-                Value_Reader::myRead(ss.str(), position[axis], std::string("Please insert a valid option"));
+                ss << "Please insert perforation "<< perforation + 1 << " location in axis " << axisnames[axis] << ": ";
+                Value_Reader::myRead(ss.str(), location[axis], std::string("Please insert a valid option"));
                 ss.str("");
                 ss.clear();
             };
             
-            ss << "Please insert perforate "<< perforate + 1 << " skin factor: ";        
+            ss << "Please insert perforation "<< perforation + 1 << " skin factor: ";        
             Value_Reader::myRead(ss.str(), skin, std::string("Please insert a valid option"));
             
-            aux_perforate->position(position[0], position[1], position[2]);
-            aux_perforate->index(mesh.listCell(position[0],position[1],position[2]));
-            aux_perforate->localIndex(perforate);
-            aux_perforate->skin(skin);
+            aux_perforation->location(location[0], location[1], location[2]);
+            aux_perforation->index(mesh.listCell(location[0],location[1],location[2]));
+            aux_perforation->localIndex(perforation);
+            aux_perforation->skin(skin);
             
-            if(perforate == 0){
-                auto first_perforate_cell = mesh.cell(aux_perforate->index());
-                _borehole_depth = first_perforate_cell->depth();
+            if(perforation == 0){
+                auto first_perforation_cell = mesh.cell(aux_perforation->index());
+                _borehole_depth = first_perforation_cell->depth();
             };
 
-            _perforates.push_back(aux_perforate);
+            _perforations.push_back(aux_perforation);
         };
     };
 
@@ -196,8 +197,8 @@ class Well : public Equation<Well>{
             _flow[0]=_flow[1];
         }
         
-        for(auto perforate : _perforates){
-            perforate->updateProperties(term);
+        for(auto perforation : _perforations){
+            perforation->updateProperties(term);
         }
     };
 
@@ -296,13 +297,13 @@ class Well : public Equation<Well>{
     void operativeStatus(const int operative_status){_operative_status=operative_status;};
     const int& operativeStatus() const {return _operative_status;};
     
-    Perforate_iterator begin() {return _perforates.begin();};
-    Perforate_iterator end()   {return _perforates.end();};
+    Perforation_iterator begin() {return _perforations.begin();};
+    Perforation_iterator end()   {return _perforations.end();};
 
-    Perforate_const_iterator begin()  const {return _perforates.begin();};
-    Perforate_const_iterator end()    const {return _perforates.end();};
-    Perforate_const_iterator cbegin() const {return _perforates.cbegin();};
-    Perforate_const_iterator cend()   const {return _perforates.cend();};
+    Perforation_const_iterator begin()  const {return _perforations.begin();};
+    Perforation_const_iterator end()    const {return _perforations.end();};
+    Perforation_const_iterator cbegin() const {return _perforations.cbegin();};
+    Perforation_const_iterator cend()   const {return _perforations.cend();};
 };
 
 

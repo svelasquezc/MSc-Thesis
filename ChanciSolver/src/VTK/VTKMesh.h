@@ -42,7 +42,7 @@ class VTKMesh{
     void filename(const char* filename){_filename = filename;};
     
     template <typename Mesh> void set(const Mesh& mesh){
-        auto cell_number = mesh.cellNumber();
+        auto cell_number = mesh.cellsQuantity();
 
         double x=0;
         double y=0;

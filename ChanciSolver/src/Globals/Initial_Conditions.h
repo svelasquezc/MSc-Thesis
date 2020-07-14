@@ -11,12 +11,12 @@ namespace Initial_Conditions{
     double timedelta=1;
     int wells_quantity=0;
     int term=0;
-    int fluids_quantity=0;
+    int phases_quantity=0;
     int stencil[2] = {-1,1};
-    int equilibrium_relations_quantity=0;
-    int interfluid_interactions_quantity=0;
-    int cells_number=0;
-    int changing_wells=0;
+    int equilibrium_relationships_quantity=0;
+    int interphase_interactions_quantity=0;
+    int cells_quantity=0;
+    int changing_wells_quantity=0;
     int number_of_print_times=0;
     int current_print_index = 0;
     const double relative_change_in_residual=1e-11;

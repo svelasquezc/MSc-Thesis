@@ -8,8 +8,8 @@
 
 #include "VTKMesh.h"
 
-int Fluid::_count_of_principals=0;
-int Fluid::_count_of_fluids=0;
+int Phase::_main_phase_counter=0;
+int Phase::_count_of_phases=0;
 
 using BlackOilNewton = NewtonRaphson<decltype(calculateProperties), decltype(calculateFlow), decltype(calculateAccumulation),decltype(calculatePerforation),decltype(calculateWellFlow), decltype(estimateWellPressure)>;
 
@@ -20,12 +20,12 @@ VTKMesh vtkholder;
 using namespace Database;
 
 void insertAll(const double mytime, const int& term){
-    for(auto fluid : characterized_fluids){
-        fluid->insert(vtkholder, term);
+    for(auto phase : characterized_phases){
+        phase->insert(vtkholder, term);
     };
 
-    for(auto& equilibrium_relation : added_equilibrium_relations){
-        equilibrium_relation->insert(vtkholder, term);
+    for(auto& equilibrium_relationship : added_equilibrium_relationships){
+        equilibrium_relationship->insert(vtkholder, term);
     };
     
     vtkholder.write(mytime);
@@ -33,23 +33,23 @@ void insertAll(const double mytime, const int& term){
 
 void updateVariables(const int& term){
     
-    for(auto fluid : characterized_fluids){
-	fluid->updateProperties(term);
+    for(auto phase : characterized_phases){
+	phase->updateProperties(term);
     };
 
-    for(auto& equilibrium_relation : added_equilibrium_relations ){
-        equilibrium_relation->updateProperties(term);            
+    for(auto& equilibrium_relationship : added_equilibrium_relationships ){
+        equilibrium_relationship->updateProperties(term);            
     };
 
     for(auto well : perforated_wells){
         well->updateProperties(term);
     };
 
-    myrock->updateProperties(term);
+    characterized_rock->updateProperties(term);
 };
 
 //Change Event Name
-void FluidPressureVaries(std::string& timestamp){
+void PhasePressureVaries(std::string& timestamp){
 
     double tolerance=Initial_Conditions::divergence_tolerance*2;
     
@@ -57,14 +57,14 @@ void FluidPressureVaries(std::string& timestamp){
 
         updateVariables(1);
 
-        tolerance = my_newton->iterate(Initial_Conditions::term, *mymesh, perforated_wells, equations, *myrock);
+        tolerance = my_newton->iterate(Initial_Conditions::term, *defined_mesh, perforated_wells, equations, *characterized_rock);
 
         while(tolerance > Initial_Conditions::relative_change_in_residual){
             updateVariables(1);
             Initial_Conditions::mytime -= Initial_Conditions::timedelta;
             Initial_Conditions::timedelta /= 2.0;
             Initial_Conditions::mytime += Initial_Conditions::timedelta;
-            tolerance = my_newton->iterate(Initial_Conditions::term, *mymesh, perforated_wells, equations, *myrock);
+            tolerance = my_newton->iterate(Initial_Conditions::term, *defined_mesh, perforated_wells, equations, *characterized_rock);
             
         };
         
@@ -80,7 +80,7 @@ void FluidPressureVaries(std::string& timestamp){
 
         for(auto well : perforated_wells){
             if(next_time >= well->operativeCondition()->nextChange()){
-                ++Initial_Conditions::changing_wells;
+                ++Initial_Conditions::changing_wells_quantity;
                 timestamp == "change";
                 well->operativeStatus(2); //Pending Change
             };
@@ -98,14 +98,14 @@ void reBuildNewton(){
     for(auto well : perforated_wells){
                 
         if(well->operativeCondition()->type() == "FLOW"){
-            max_number_of_well_non_zeros += well->numberOfPerforates()*2+1;
+            max_number_of_well_non_zeros += well->numberOfPerforations()*2+1;
             ++well_equations;
         };                    
 
     };
     
-    total_equations = Initial_Conditions::fluids_quantity*Initial_Conditions::cells_number + well_equations;
-    max_non_zeros = Initial_Conditions::fluids_quantity*Initial_Conditions::fluids_quantity*Initial_Conditions::cells_number + max_number_of_well_non_zeros;
+    total_equations = Initial_Conditions::phases_quantity*Initial_Conditions::cells_quantity + well_equations;
+    max_non_zeros = Initial_Conditions::phases_quantity*Initial_Conditions::phases_quantity*Initial_Conditions::cells_quantity + max_number_of_well_non_zeros;
     my_newton.reset();
     my_newton = std::make_unique<BlackOilNewton>(total_equations,max_non_zeros,calculateProperties,calculateFlow,calculateAccumulation,calculatePerforation,calculateWellFlow, estimateWellPressure);
 
@@ -116,8 +116,8 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
     if(timestamp == "continue" && mytime<=simulationtime){
         if(mytime == 0){
             
-            for(auto cell = mymesh->begin(); cell != mymesh->end(); ++cell){
-                calculateProperties(0, *cell, *myrock);
+            for(auto cell = defined_mesh->begin(); cell != defined_mesh->end(); ++cell){
+                calculateProperties(0, *cell, *characterized_rock);
             };
             
             updateVariables(1);
@@ -145,9 +145,9 @@ void timePasses(std::string& timestamp, int& term, double& mytime, double& timed
         //Elements which are not present in the EP,
         //but are necessary for internal management of the simulation-
         
-        if(Initial_Conditions::changing_wells > 0){
+        if(Initial_Conditions::changing_wells_quantity > 0){
             reBuildNewton();
-            Initial_Conditions::changing_wells = 0;
+            Initial_Conditions::changing_wells_quantity = 0;
         };
         if(mytime>=print_times[Initial_Conditions::current_print_index]){
            insertAll(mytime, term);
@@ -175,10 +175,10 @@ void launchGeomodeler(){
     
     switch(option){
     case 1:
-        mymesh = std::make_unique<Mesh>();
-        mymesh->define();
-        Initial_Conditions::cells_number = mymesh->getCellTotal();
-        vtkholder.set(*mymesh);
+        defined_mesh = std::make_unique<Mesh>();
+        defined_mesh->define();
+        Initial_Conditions::cells_quantity = defined_mesh->getCellTotal();
+        vtkholder.set(*defined_mesh);
         break;
     default:
         break;
@@ -187,29 +187,29 @@ void launchGeomodeler(){
 
 void launchPetrophysicalEngineer(){
     int option;
-    std::unique_ptr<Interfluid_Interaction> added_interfluid_interaction;
+    std::unique_ptr<Interphase_Interaction> added_interphase_interaction;
     
     std::cout << "Select your action" << std::endl;
     std::cout << "1. Characterize Rock" << std::endl;;
-    std::cout << "2. Add Interfluid Interaction";
+    std::cout << "2. Add Interphase Interaction";
 
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
     
     switch(option){
     case 1:
-        myrock = std::make_unique<Rock>();
-        myrock->characterize(Initial_Conditions::cells_number);
+        characterized_rock = std::make_unique<Rock>();
+        characterized_rock->characterize(Initial_Conditions::cells_quantity);
         break;
     case 2:
-        if(Initial_Conditions::fluids_quantity >= 2){
+        if(Initial_Conditions::phases_quantity >= 2){
             
-            added_interfluid_interaction = std::make_unique<Interfluid_Interaction>();
-            added_interfluid_interaction->add(characterized_fluids);
+            added_interphase_interaction = std::make_unique<Interphase_Interaction>();
+            added_interphase_interaction->add(characterized_phases);
             
-            added_interfluid_interactions.push_back(std::move(added_interfluid_interaction));
+            added_interphase_interactions.push_back(std::move(added_interphase_interaction));
             
         }else{
-            std::cout << "It is not possible to add an Interfluid interaction with only one fluid characterized."
+            std::cout << "It is not possible to add an Interphase interaction with only one phase characterized."
                       << std::endl;
         }
         break;
@@ -219,34 +219,34 @@ void launchPetrophysicalEngineer(){
     }
 };
 
-void launchFluidsEngineer(){
+void launchPhasesEngineer(){
     int option;
     int _dimension;
-    std::shared_ptr<Fluid> characterized_fluid;
-    std::unique_ptr<Equilibrium_Relation> added_equilibrium_relation;
+    std::shared_ptr<Phase> characterized_phase;
+    std::unique_ptr<Equilibrium_Relationship> added_equilibrium_relationship;
     std::cout << "Select your action" << std::endl;
-    std::cout << "1. Characterize Fluid" << std::endl;
+    std::cout << "1. Characterize Phase" << std::endl;
     std::cout << "2. Add Equilibrium Relation";
     
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
     
     switch(option){
     case 1:
-        characterized_fluid = std::make_shared<Fluid>(Initial_Conditions::fluids_quantity);
-        characterized_fluid->characterize(Initial_Conditions::cells_number);
-        characterized_fluids.push_back(characterized_fluid);
-        equations.push_back(characterized_fluid);
-        ++Initial_Conditions::fluids_quantity;
+        characterized_phase = std::make_shared<Phase>(Initial_Conditions::phases_quantity);
+        characterized_phase->characterize(Initial_Conditions::cells_quantity);
+        characterized_phases.push_back(characterized_phase);
+        equations.push_back(characterized_phase);
+        ++Initial_Conditions::phases_quantity;
         break;
     case 2:
-        if(Initial_Conditions::fluids_quantity >= 2){
-            added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(Initial_Conditions::equilibrium_relations_quantity);
-            added_equilibrium_relation->add(Initial_Conditions::cells_number,characterized_fluids);
-            added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
-            ++Initial_Conditions::equilibrium_relations_quantity;
+        if(Initial_Conditions::phases_quantity >= 2){
+            added_equilibrium_relationship = std::make_unique<Equilibrium_Relationship>(Initial_Conditions::equilibrium_relationships_quantity);
+            added_equilibrium_relationship->add(Initial_Conditions::cells_quantity,characterized_phases);
+            added_equilibrium_relationships.push_back(std::move(added_equilibrium_relationship));
+            ++Initial_Conditions::equilibrium_relationships_quantity;
             break;
         }else{
-            std::cout << "It is not possible to add an Equilibrium relation with only one fluid characterized."
+            std::cout << "It is not possible to add an Equilibrium relation with only one phase characterized."
                       << std::endl;
         }
         break;
@@ -265,7 +265,7 @@ void launchReservoirEngineer(std::string& timestamp){
     int index=0;
     
     std::cout << "Select your action" << std::endl;
-    if(timestamp =="")std::cout << "1. Perforate Well" << std::endl;
+    if(timestamp =="")std::cout << "1. Perforation Well" << std::endl;
     std::cout << "2. Establish Operative Condition ";
 
     Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid option"));
@@ -279,27 +279,27 @@ void launchReservoirEngineer(std::string& timestamp){
     switch(option){
     case 1:
         if(timestamp ==""){
-            if(Initial_Conditions::fluids_quantity >= 1){
+            if(Initial_Conditions::phases_quantity >= 1){
                 Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
-                while(type != "Producer" && type != "Injector"){
-                    std::cout << "Only Injector or Producer wells";
+                while(type != "Production" && type != "Injection"){
+                    std::cout << "Only Injection or Production wells";
                     Value_Reader::myRead(std::string("Please insert the type of well "), type, std::string("Please insert a valid input"));
                 };
                 ++Initial_Conditions::wells_quantity;
-                if(type == "Producer"){
-                    well = std::make_shared<Producer_Well>(Producer_Well(Initial_Conditions::wells_quantity));
-                }else if(type == "Injector"){
-                    well = std::make_shared<Injector_Well>(Injector_Well(Initial_Conditions::wells_quantity));
+                if(type == "Production"){
+                    well = std::make_shared<Production_Well>(Production_Well(Initial_Conditions::wells_quantity));
+                }else if(type == "Injection"){
+                    well = std::make_shared<Injection_Well>(Injection_Well(Initial_Conditions::wells_quantity));
                 }else{
-                    std::cout << "Only Injector or Producer wells";
+                    std::cout << "Only Injection or Production wells";
                 };
             
-                well->perforate(*mymesh, characterized_fluids,type);
+                well->perforation(*defined_mesh, characterized_phases,type);
                 perforated_wells.push_back(well);
                 equations.push_back(well);
             
             }else{
-                std::cout << "It is not possible to perforate wells with no fluid characterized."
+                std::cout << "It is not possible to perforation wells with no phase characterized."
                           << std::endl;
             };
         };
@@ -345,9 +345,9 @@ void reEstablishOperativeConditions(std::ifstream& file_reader, const int& term,
 
 void launchTriggers(){
     using namespace Initial_Conditions;
-    mymesh->appear(timestamp,stencil);
+    defined_mesh->appear(timestamp,stencil);
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
-    FluidPressureVaries(timestamp);
+    PhasePressureVaries(timestamp);
     if(timestamp == "change"){
         launchReservoirEngineer(timestamp);
     }
@@ -355,9 +355,9 @@ void launchTriggers(){
 
 void launchTriggers(std::ifstream& file_reader){
     using namespace Initial_Conditions;
-    mymesh->appear(timestamp,stencil);
+    defined_mesh->appear(timestamp,stencil);
     timePasses(timestamp, term, mytime, timedelta, simulationtime);
-    FluidPressureVaries(timestamp);
+    PhasePressureVaries(timestamp);
     reEstablishOperativeConditions(file_reader, term, timestamp);
 };
 
@@ -367,7 +367,7 @@ void launchMenu(){
     while(!run){
         std::cout << "Select your role or -1 for running simulation" << std::endl;
         std::cout << "1. Geomodeler"<< std::endl << "2. Petrophysical Engineer" << std::endl;
-        std::cout << "3. Fluids Engineer" << std::endl << "4. Reservoir Engineer";
+        std::cout << "3. Phases Engineer" << std::endl << "4. Reservoir Engineer";
         
         Value_Reader::myRead(std::string(""), option, std::string("Please insert a valid role"));
         
@@ -379,7 +379,7 @@ void launchMenu(){
             launchPetrophysicalEngineer();
             break;
         case 3:
-            launchFluidsEngineer();
+            launchPhasesEngineer();
             break;
         case 4:
             launchReservoirEngineer(Initial_Conditions::timestamp);
@@ -398,9 +398,9 @@ void launchFromFile(std::ifstream& file_reader){
     std::string object;
     std::string type;
     
-    std::shared_ptr<Fluid> characterized_fluid;
-    std::unique_ptr<Equilibrium_Relation> added_equilibrium_relation;
-    std::unique_ptr<Interfluid_Interaction> added_interfluid_interaction;
+    std::shared_ptr<Phase> characterized_phase;
+    std::unique_ptr<Equilibrium_Relationship> added_equilibrium_relationship;
+    std::unique_ptr<Interphase_Interaction> added_interphase_interaction;
     std::shared_ptr<Well> well;
     
     if(file_reader.is_open()){
@@ -410,52 +410,52 @@ void launchFromFile(std::ifstream& file_reader){
             
             if(object == "MESH"){
                 
-                mymesh = std::make_unique<Mesh>();
-                mymesh->defineFromFile(file_reader);
-                Initial_Conditions::cells_number = mymesh->getCellTotal();
-                vtkholder.set(*mymesh);
+                defined_mesh = std::make_unique<Mesh>();
+                defined_mesh->defineFromFile(file_reader);
+                Initial_Conditions::cells_quantity = defined_mesh->getCellTotal();
+                vtkholder.set(*defined_mesh);
             }else if(object == "ROCK"){
                 
-                myrock = std::make_unique<Rock>();
-                myrock->characterizeFromFile(file_reader, Initial_Conditions::cells_number);
+                characterized_rock = std::make_unique<Rock>();
+                characterized_rock->characterizeFromFile(file_reader, Initial_Conditions::cells_quantity);
             
-            }else if(object == "FLUIDS"){
+            }else if(object == "PHASES"){
                 
-                file_reader>>Initial_Conditions::fluids_quantity;
+                file_reader>>Initial_Conditions::phases_quantity;
                 
-                for(int fluid=0; fluid<Initial_Conditions::fluids_quantity;++fluid){
+                for(int phase=0; phase<Initial_Conditions::phases_quantity;++phase){
                     
-                    characterized_fluid = std::make_shared<Fluid>(fluid);
-                    characterized_fluid->characterizeFromFile(file_reader, Initial_Conditions::cells_number);
-                    characterized_fluids.push_back(characterized_fluid);
-                    equations.push_back(characterized_fluid);
+                    characterized_phase = std::make_shared<Phase>(phase);
+                    characterized_phase->characterizeFromFile(file_reader, Initial_Conditions::cells_quantity);
+                    characterized_phases.push_back(characterized_phase);
+                    equations.push_back(characterized_phase);
                     
                 };
                 
-            }else if(object == "EQUILIBRIUM_RELATIONS"){
+            }else if(object == "EQUILIBRIUM_RELATIONSHIPS"){
                 
-                if(Initial_Conditions::fluids_quantity >= 2){
-                    file_reader>>Initial_Conditions::equilibrium_relations_quantity;
-                    for(int equilibrium_relation=0; equilibrium_relation<Initial_Conditions::equilibrium_relations_quantity; ++equilibrium_relation){
-                        added_equilibrium_relation = std::make_unique<Equilibrium_Relation>(equilibrium_relation);
-                        added_equilibrium_relation->addFromFile(file_reader, Initial_Conditions::cells_number, characterized_fluids);
-                        added_equilibrium_relations.push_back(std::move(added_equilibrium_relation));
+                if(Initial_Conditions::phases_quantity >= 2){
+                    file_reader>>Initial_Conditions::equilibrium_relationships_quantity;
+                    for(int equilibrium_relationship=0; equilibrium_relationship<Initial_Conditions::equilibrium_relationships_quantity; ++equilibrium_relationship){
+                        added_equilibrium_relationship = std::make_unique<Equilibrium_Relationship>(equilibrium_relationship);
+                        added_equilibrium_relationship->addFromFile(file_reader, Initial_Conditions::cells_quantity, characterized_phases);
+                        added_equilibrium_relationships.push_back(std::move(added_equilibrium_relationship));
                     };
                 }else{
-                    std::cout << "There is only one fluid, EQUILIBRIUM_RELATIONS will be omitted\n";
+                    std::cout << "There is only one phase, EQUILIBRIUM_RELATIONSHIPS will be omitted\n";
                 };
                 
-            }else if(object == "INTERFLUID_INTERACTIONS"){
+            }else if(object == "INTERPHASE_INTERACTIONS"){
                 
-                if(Initial_Conditions::fluids_quantity >= 2){
-                    file_reader>>Initial_Conditions::interfluid_interactions_quantity;
-                    for(int interfluid_interaction=0; interfluid_interaction<Initial_Conditions::interfluid_interactions_quantity; ++interfluid_interaction){
-                        added_interfluid_interaction = std::make_unique<Interfluid_Interaction>(interfluid_interaction);
-                        added_interfluid_interaction->addFromFile(file_reader, characterized_fluids);
-                        added_interfluid_interactions.push_back(std::move(added_interfluid_interaction));
+                if(Initial_Conditions::phases_quantity >= 2){
+                    file_reader>>Initial_Conditions::interphase_interactions_quantity;
+                    for(int interphase_interaction=0; interphase_interaction<Initial_Conditions::interphase_interactions_quantity; ++interphase_interaction){
+                        added_interphase_interaction = std::make_unique<Interphase_Interaction>(interphase_interaction);
+                        added_interphase_interaction->addFromFile(file_reader, characterized_phases);
+                        added_interphase_interactions.push_back(std::move(added_interphase_interaction));
                     };
                 }else{
-                    std::cout << "There is only one fluid, INTERFLUID_INTERACTIONS will be omitted\n";
+                    std::cout << "There is only one phase, INTERPHASE_INTERACTIONS will be omitted\n";
                 };
                 
             }else if(object == "TIME_DELTA"){
@@ -475,30 +475,30 @@ void launchFromFile(std::ifstream& file_reader){
                 };
                 
             }else if(object == "WELLS"){
-                if(Initial_Conditions::fluids_quantity >= 1){
+                if(Initial_Conditions::phases_quantity >= 1){
                     file_reader>>Initial_Conditions::wells_quantity;
                     for(int well_index=0; well_index<Initial_Conditions::wells_quantity;++well_index){
                         file_reader>>type;
                         std::transform(type.begin(), type.end(), type.begin(), ::toupper);
-                        if(type == "PRODUCER"){
-                            well = std::make_shared<Producer_Well>(Producer_Well(well_index));
-                        }else if(type == "INJECTOR"){
-                            well = std::make_shared<Injector_Well>(Injector_Well(well_index));
+                        if(type == "PRODUCTION"){
+                            well = std::make_shared<Production_Well>(Production_Well(well_index));
+                        }else if(type == "INJECTION"){
+                            well = std::make_shared<Injection_Well>(Injection_Well(well_index));
                         }else{
                             
                             std::ostringstream well_err = std::ostringstream();
                             
-                            well_err<<"The type selected for well "<< well_index+1 <<": ("<< type <<") is invalid, only Producer or Injector Wells"<<std::endl;
+                            well_err<<"The type selected for well "<< well_index+1 <<": ("<< type <<") is invalid, only Production or Injection Wells"<<std::endl;
                             
                             throw std::invalid_argument(well_err.str());
                         };
-                        well->perforateFromFile(file_reader,*mymesh, characterized_fluids,type);
+                        well->perforationFromFile(file_reader,*defined_mesh, characterized_phases,type);
                         perforated_wells.push_back(well);
                         equations.push_back(well);
 
                     };
                 }else{
-                    throw std::domain_error("There are no fluids characterized or WELLS Keyword appears before FLUIDS");
+                    throw std::domain_error("There are no phases characterized or WELLS Keyword appears before PHASES");
                 };
                 
             }else if(object == "OPERATIVE_CONDITIONS"){
