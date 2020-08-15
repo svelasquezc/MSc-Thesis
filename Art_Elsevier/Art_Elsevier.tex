@@ -91,15 +91,18 @@
 %\fntext[myfootnote]{Since 1880.}
 
 %% or include affiliations in footnotes:
-\author[mymainaddress]{Steven Vel\'asquez-Chanc\'i\corref{mycorrespondingauthor}}
+\author[mymainaddress]{Steven Vel\'asquez\corref{mycorrespondingauthor}}
 \cortext[mycorrespondingauthor]{Corresponding author}
 \ead{svelasquezc@unal.edu.co}
 %\ead[url]{www.uhasselt.be/UH/Computational-Mathematics/Members-of-the-research-group.html}
 
 \author[mysecondaryaddress1]{Juan M. Mej\'ia}
-\author[mysecondaryaddress2]{ Carlos M. Zapata}
+\author[mysecondaryaddress2]{Carlos M. Zapata}
+
 
 \address[mymainaddress]{National University of Colombia, Medellin. Department of Computer and Decision Science.}
+\address{
+	}
 \address[mysecondaryaddress1]{National University of Colombia, Medellin. Department of Processes and Energy.}
 \address[mysecondaryaddress2]{National University of Colombia, Medellin. Department of Computer and Decision Science.}
 
@@ -125,7 +128,7 @@ Preconceptual schemas (PS) are intermediate representations which are useful for
 
 Mathematical models, such as Black Oil Model (BOM), are representations that appear in every effort for developing a simulator or framework for oil reservoir simulation. In addition, other representations in which, concepts and processes are shown, lack of traceability and event representation. There are proposals in which traceability is considered, but those are implementation-specific. The whole converges in oil reservoir simulators being developed in an empirical manner.\\
 
-Norena, Calle and Zapata, present PS potential for representing different application domains in scientific software contexts. In their representations, cohesion and traceability between concepts is maintained. Additionally, the whole process is traced in the elaborated PS. In this work, we present the development of an event based representation for oil reservoir simulation using Preconceptual Schemas. The developed representation consists of eight principal concepts, three events which process a simulation, and multiple functions in which reusable portions of representation are used within the PS.
+Norena, Calle and Zapata, present PS potential for representing different application domains in scientific software contexts. In their representations, cohesion and traceability between concepts is maintained. Additionally, the whole process is traced in the elaborated PS. In this work, we present the development of an event based representation for oil reservoir simulation using Preconceptual Schemas. The developed representation consists of eight principal concepts, three events which process a simulation, and multiple functions in which reusable portions of representation are used within the PS.\\
 
 This paper is organized as follows: In Section 2 (ref), we present the Black oil model formulation, its solution method, and PS notation. Section 3 (ref) consists of PS representation and the concepts involved. Section 4 presents a study case for validation of the representation proposed and its translation to C++.
 
@@ -200,7 +203,7 @@ $T_{f,c}$ stands for transmissivity in a face $c$, connecting a cell $i$, with a
 \end{align}
 
 \subsection{Preconceptual Schemas Notation}
-Preconceptual Schemas are intermediate representations between natural language and conceptual schemas or formal language. They allow for establishing a common ground between a stakeholder and a software engineer {\color{red} \textbf{(Citar Zapata)}}.{\color{red} \textbf{(Citar Zapata en texto)}} proposes a notation for representing stakeholder domains, which consists of: nodes, relationships, gatherings and links. We show in Figure \ref{fig:PS_Elements} the elements belonging to this notation.
+Preconceptual Schemas are intermediate representations between natural language and conceptual schemas or formal language. They allow for establishing a common ground between a stakeholder and a software engineer {\color{red} \textbf{(Citar Zapata)}}.{\color{red} \textbf{(Citar Zapata en texto)}} proposes a notation for representing stakeholder domains, which consists of: nodes, relationships, gatherings and links. We show in Figure \ref{fig:PS_Elements} the elements belonging to this notation.\\
 
 \begin{figure}
 	\centering
@@ -214,15 +217,17 @@ In addition, {\color{red} \textbf{(Citar a Calle y a Paola en texto)}} extend th
 \begin{figure}
 	\centering
 	\includegraphics[width=1.0\textwidth]{Figures/PSElements.pdf}
-	\caption{PS Elements by category {\color{red} \textbf{(Citar Zapata)}}}
+	\caption{PS Extension for scientific software contexts {\color{red} \textbf{(Citar Zapata)}}.}
 	\label{fig:PS_Extended}
 \end{figure}
+
+
 
 \section{PS Representation}
 \begin{figure}
 	\centering
-	\includegraphics[width=1.2\textwidth]{Figures/PSElements.pdf}
-	\caption{PS Extension}
+	\includegraphics[width=1.0\textwidth]{Figures/Translated_PS.pdf}
+	\caption{Black Oil PS Representation.}
 	\label{fig:PS_Translated}
 \end{figure}
 
