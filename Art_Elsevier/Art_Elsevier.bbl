@@ -5,94 +5,169 @@
 \expandafter\ifx\csname href\endcsname\relax
   \def\href#1#2{#2} \def\path#1{#1}\fi
 
-\bibitem{gatica2014simple}
-G.~N. Gatica, A simple introduction to the mixed finite element method, Theory
-  and Applications. Springer Briefs in Mathematics. Springer, London (2014).
+\bibitem{velasquez_chanci_modelo_2019}
+S.~Vel\'{a}squez, \href{https://repositorio.unal.edu.co/handle/unal/75603}{Un
+  modelo ejecutable para la simulaci\'{o}n multi-f\'{i}sica de procesos de
+  recobro mejorado en yacimientos de petr\'{o}leo basado en esquemas
+  preconceptuales}, Master's thesis (2019).
+\newline\urlprefix\url{https://repositorio.unal.edu.co/handle/unal/75603}
 
-\bibitem{cockburn2010projection}
-B.~Cockburn, J.~Gopalakrishnan, F.-J. Sayas, A projection-based error analysis
-  of hdg methods, Mathematics of Computation 79~(271) (2010) 1351--1367 (2010).
+\bibitem{JCalle}
+J.~Calle, \href{http://bdigital.unal.edu.co/56381/}{Identificaci{\'o}n de
+  patrones de dise{\~n}o para software cient{\'i}fico a partir de esquemas
+  preconceptuales}, Master's thesis, Universidad Nacional de Colombia, Sede
+  Medell{\'i}n, l{\'i}nea de Investigaci{\'o}n: Ingenier{\'i}a de software
+  (Noviembre 2016).
+\newline\urlprefix\url{http://bdigital.unal.edu.co/56381/}
 
-\bibitem{lynd2016application}
-E.~A. Lynd, J.~T. Foster, Q.~P. Nguyen, et~al., An application of the
-  isogeometric analysis method to reservoir simulation, in: SPE Europec
-  featured at 78th EAGE Conference and Exhibition, Society of Petroleum
-  Engineers, 2016 (2016).
+\bibitem{norena2018Ling}
+P.~Nore\~{n}a, C.~Zapata, A.~Villamizar, Representaci{\'o}n de eventos a partir
+  de estructuras ling{\"u}{\'i}sticas basadas en roles sem{\'a}nticos: Una
+  extensi{\'o}n al esquema preconceptual, Investigaci\'{o}n e innovaci\'{o}n en
+  Ingenier\'{i}a de Software 2 (2018) 69--79.
 
-\bibitem{FERGUSON1996}
-W.~Ferguson, I.~Turner,
-  \href{http://www.sciencedirect.com/science/article/pii/S0021999196900790}{A
-  control volume finite element numerical simulation of the drying of spruce},
-  Journal of Computational Physics 125~(1) (1996) 59 -- 70 (1996).
-\newblock \href {https://doi.org/https://doi.org/10.1006/jcph.1996.0079}
-  {\path{doi:https://doi.org/10.1006/jcph.1996.0079}}.
-\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0021999196900790}
+\bibitem{norena2018bs}
+P.~Nore\~{n}a, C.~Zapata,
+  \href{https://absel-ojs-ttu.tdl.org/absel/index.php/absel/article/view/3240/3163}{Business
+  simulation by using events from pre-conceptual schemas}, in: Developments in
+  business simulation and experiential learning: proceedings of the annual
+  Absel conference, 2019, pp. 258--263.
+\newline\urlprefix\url{https://absel-ojs-ttu.tdl.org/absel/index.php/absel/article/view/3240/3163}
 
-\bibitem{jasak1996error}
-H.~Jasak, Error analysis and estimation for finite volume method with
-  applications to fluid flow (1996).
+\bibitem{norena2018det}
+P.~Nore\~{n}a, C.~Zapata,
+  \href{http://www.rcs.cic.ipn.mx/rcs/2018_147_6/Una%20representacion%20basada%20en%20esquemas%20preconceptuales%20de%20eventos%20deterministicos%20y%20aleatorios.pdf}{Una
+  representación basada en esquemas preconceptuales de eventos
+  determinísticos y aleatorios tipo señal desde dominios de software
+  científico}, Research in Computing Science 147 (2018) 207--220.
+\newline\urlprefix\url{http://www.rcs.cic.ipn.mx/rcs/2018_147_6/Una%20representacion%20basada%20en%20esquemas%20preconceptuales%20de%20eventos%20deterministicos%20y%20aleatorios.pdf}
 
-\bibitem{juretic2005error}
-F.~Juretic, Error analysis in finite volume cfd, Ph.D. thesis, Imperial College
-  London (University of London) (2005).
+\bibitem{norena2018ruido}
+C.~Durango, P.~Nore\~{n}a, C.~Zapata,
+  \href{http://www.rcs.cic.ipn.mx/rcs/2018_147_6/Representacion%20de%20eventos%20de%20ruido%20ambiental%20a%20partir%20de%20esquemas%20preconceptuales%20y%20buenas.pdf}{Representación
+  de eventos de ruido ambiental a partir de esquemas preconceptuales y buenas
+  prácticas de educción geoespacial de requisitos}, Research in Computing
+  Science 147 (2018) 337--341.
+\newline\urlprefix\url{http://www.rcs.cic.ipn.mx/rcs/2018_147_6/Representacion%20de%20eventos%20de%20ruido%20ambiental%20a%20partir%20de%20esquemas%20preconceptuales%20y%20buenas.pdf}
 
-\bibitem{jayantha2003}
-J.~Pasdunkorale~A, I.~W. Turner, A second order finite volume technique for
-  simulating transport in anisotropic media, International Journal of Numerical
-  Methods for Heat \& Fluid Flow 13~(1) (2003) 31--56 (2003).
+\bibitem{norena2018timrep}
+P.~Nore\~{n}a, C.~Zapata,
+  \href{http://www.iiis.org/CDs2018/CD2018Summer/papers/SA390CI.pdf}{A
+  pre-conceptual-schema-based representation of time events coming from
+  scientific software domain}, in: Proceedings of The 22nd World
+  Multi-Conference on Systemics, Cybernetics and Informatics (WMSCI 2018),
+  2018, pp. 53--58.
+\newline\urlprefix\url{http://www.iiis.org/CDs2018/CD2018Summer/papers/SA390CI.pdf}
 
-\bibitem{loudyi}
-D.~Loudyi, R.~A. Falconer, B.~Lin, Mathematical development and verification of
-  a non-orthogonal finite volume model for groundwater flow applications,
-  Advances in water resources 30~(1) (2007) 29--42 (2007).
+\bibitem{jamal2006petroleum}
+J.~Abou-Kassem, S.~Farouq-Ali, M.~Islam, Petroleum reservoir simulation: a
+  Basic Approach, Gulf Publishing Company, 2006.
 
-\bibitem{KATIYAR}
-A.~Katiyar, J.~T. Foster, H.~Ouchi, M.~M. Sharma,
-  \href{http://www.sciencedirect.com/science/article/pii/S0021999113008474}{A
-  peridynamic formulation of pressure driven convective fluid transport in
-  porous media}, Journal of Computational Physics 261~(Supplement C) (2014) 209
-  -- 229 (2014).
-\newblock \href {https://doi.org/https://doi.org/10.1016/j.jcp.2013.12.039}
-  {\path{doi:https://doi.org/10.1016/j.jcp.2013.12.039}}.
-\newline\urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0021999113008474}
+\bibitem{Bear2018}
+J.~Bear, \href{http://link.springer.com/10.1007/978-3-319-72826-1
+  https://doi.org/10.1007/978-3-319-72826-1{\%}0Ahttp://link.springer.com/10.1007/978-3-319-72826-1}{{Modeling
+  Phenomena of Flow and Transport in Porous Media}}, Vol.~31 of Theory and
+  Applications of Transport in Porous Media, Springer International Publishing,
+  Cham, 2018.
+\newblock \href {https://doi.org/10.1007/978-3-319-72826-1}
+  {\path{doi:10.1007/978-3-319-72826-1}}.
+\newline\urlprefix\url{http://link.springer.com/10.1007/978-3-319-72826-1
+  https://doi.org/10.1007/978-3-319-72826-1{\%}0Ahttp://link.springer.com/10.1007/978-3-319-72826-1}
 
-\bibitem{sahimi2011flow}
-M.~Sahimi, Flow and transport in porous media and fractured rock: from
-  classical methods to modern approaches, John Wiley \& Sons, 2011 (2011).
+\bibitem{chen2007reservoir}
+Z.~Chen, Reservoir simulation: mathematical techniques in oil recovery,
+  Vol.~77, Siam, 2007.
 
-\bibitem{fractureGhafouri96}
-H.~R. Ghafouri, R.~W. Lewis,
-  \href{http://dx.doi.org/10.1002/(SICI)1096-9853(199611)20:11<831::AID-NAG850>3.0.CO;2-6}{A
-  finite element double porosity model for heterogeneous deformable porous
-  media}, International Journal for Numerical and Analytical Methods in
-  Geomechanics 20~(11) (1996) 831--844 (1996).
-\newblock \href
-  {https://doi.org/10.1002/(SICI)1096-9853(199611)20:11<831::AID-NAG850>3.0.CO;2-6}
-  {\path{doi:10.1002/(SICI)1096-9853(199611)20:11<831::AID-NAG850>3.0.CO;2-6}}.
-\newline\urlprefix\url{http://dx.doi.org/10.1002/(SICI)1096-9853(199611)20:11<831::AID-NAG850>3.0.CO;2-6}
+\bibitem{ertekin2001basic}
+T.~Ertekin, J.~H. Abou-Kassem, G.~R. King,
+  \href{https://store.spe.org/Basic-Applied-Reservoir-Simulation--P12.aspx}{{Basic
+  Applied Reservoir Simulation}}, Society of Petroleum Engineers, 2001.
+\newline\urlprefix\url{https://store.spe.org/Basic-Applied-Reservoir-Simulation--P12.aspx}
 
-\bibitem{fractureLewis97}
-R.~W. Lewis, H.~R. Ghafouri,
-  \href{http://dx.doi.org/10.1002/(SICI)1096-9853(199711)21:11<789::AID-NAG901>3.0.CO;2-C}{A
-  novel finite element double porosity model for multiphase flow through
-  deformable fractured porous media}, International Journal for Numerical and
-  Analytical Methods in Geomechanics 21~(11) (1997) 789--816 (1997).
-\newblock \href
-  {https://doi.org/10.1002/(SICI)1096-9853(199711)21:11<789::AID-NAG901>3.0.CO;2-C}
-  {\path{doi:10.1002/(SICI)1096-9853(199711)21:11<789::AID-NAG901>3.0.CO;2-C}}.
-\newline\urlprefix\url{http://dx.doi.org/10.1002/(SICI)1096-9853(199711)21:11<789::AID-NAG901>3.0.CO;2-C}
+\bibitem{peaceman1983interpretation}
+D.~W. Peaceman, Interpretation of well-block pressures in numerical reservoir
+  simulation with nonsquare grid blocks and anisotropic permeability, Society
+  of Petroleum Engineers Journal 23~(03) (1983) 531--543.
 
-\bibitem{fractureHuyakorn83}
-P.~S. Huyakorn, B.~H. Lester, J.~W. Mercer,
-  \href{http://dx.doi.org/10.1029/WR019i003p00841}{An efficient finite element
-  technique for modeling transport in fractured porous media: 1. single species
-  transport}, Water Resources Research 19~(3) (1983) 841--854 (1983).
-\newblock \href {https://doi.org/10.1029/WR019i003p00841}
-  {\path{doi:10.1029/WR019i003p00841}}.
-\newline\urlprefix\url{http://dx.doi.org/10.1029/WR019i003p00841}
+\bibitem{atkinson2008introduction}
+K.~E. Atkinson, An introduction to numerical analysis, John Wiley \& Sons,
+  2008.
 
-\bibitem{bobaru2012}
-A peridynamic formulation for transient heat conduction in bodies with evolving
-  discontinuities, Journal of Computational Physics 231~(7).
+\bibitem{zapata2007phd}
+C.~Zapata, \href{http://bdigital.unal.edu.co/10296/}{Definici{\'o}n de un
+  esquema preconceptual para la obtenci{\'o}n autom{\'a}tica de esquemas
+  conceptuales de uml}, Ph.D. thesis, Universidad Nacional de Colombia, Sede
+  Medellin, Medell{\'i}n (2007).
+\newline\urlprefix\url{http://bdigital.unal.edu.co/10296/}
+
+\bibitem{zapata2012unc}
+C.~Zapata, The UNC-Method revisited: elements of the new approach,
+  Saarbr{\"u}cken: Lambert Academic Publishing, 2012.
+
+\bibitem{JChaverra}
+J.~Chaverra, \href{http://bdigital.unal.edu.co/5498/}{Generaci{\'o}n
+  autom{\'a}tica de prototipos funcionales a partir de esquemas
+  preconceptuales}, Master's thesis, Universidad Nacional de Colombia, Sede
+  Medell{\'i}n (2011).
+\newline\urlprefix\url{http://bdigital.unal.edu.co/5498/}
+
+\bibitem{zapata2013Eventos}
+C.~Zapata, P.~Nore\~{n}a, N.~Gonz{\'a}lez, Representaci{\'o}n de eventos
+  disparadores y de resultado en el grafo de interacci{\'o}n de eventos,
+  Ingenier{\'\i}as USBMed 4~(2) (2013) 23--32.
+
+\bibitem{Cao2002}
+H.~Cao, {Development of Techniques for General Purpose Research Simulator},
+  Ph.D. thesis, Stanford University. Stanford, CA (2002).
+
+\bibitem{Flemisch2011}
+B.~Flemisch, M.~Darcis, K.~Erbertseder, B.~Faigle, A.~Lauser, K.~Mosthaf,
+  S.~M{\"{u}}thing, P.~Nuske, A.~Tatomir, M.~Wolff, R.~Helmig,
+  \href{https://www.sciencedirect.com/science/article/pii/S030917081100056X}{{DuMux:
+  DUNE for multi-{\{}phase,component,scale,physics,...{\}} flow and transport
+  in porous media}}, Advances in Water Resources 34~(9) (2011) 1102--1112.
+\newblock \href {https://doi.org/10.1016/j.advwatres.2011.03.007}
+  {\path{doi:10.1016/j.advwatres.2011.03.007}}.
+\newline\urlprefix\url{https://www.sciencedirect.com/science/article/pii/S030917081100056X}
+
+\bibitem{HerreraCG2016}
+C.~Herrera, \href{http://bdigital.unal.edu.co/53175/}{Simulation of nitrogen
+  injection as an enhanced recovery method in a tight natural fracture
+  sandstone reservoir with compositional fluids}, Master's thesis, Universidad
+  Nacional de Colombia - Sede Medell{\'i}n (Julio 2016).
+\newline\urlprefix\url{http://bdigital.unal.edu.co/53175/}
+
+\bibitem{IsazaCN2017}
+C.~Isaza, \href{http://bdigital.unal.edu.co/59420/}{Modelo fenomenol{\'o}gico y
+  simulaci{\'o}n de la disoluci{\'o}n de los asfaltenos depositados en
+  formaci{\'o}n usando un solvente qu{\'i}mico}, Master's thesis, Universidad
+  Nacional de Colombia - Sede Medell{\'i}n, magister en Ingenier{\'i}a de
+  Petr{\'o}leos (2017).
+\newline\urlprefix\url{http://bdigital.unal.edu.co/59420/}
+
+\bibitem{Mohammad2017}
+R.~S. Mohammad, X.~Zhao, S.~Zhang, S.~J.-u.-D. Shah,
+  \href{https://doi.org/10.1007/s13369-016-2347-4}{Bubble point simulation of
+  reservoir oil and carbon dioxide mixtures}, Arabian Journal for Science and
+  Engineering 42~(4) (2017) 1633--1641.
+\newblock \href {https://doi.org/10.1007/s13369-016-2347-4}
+  {\path{doi:10.1007/s13369-016-2347-4}}.
+\newline\urlprefix\url{https://doi.org/10.1007/s13369-016-2347-4}
+
+\bibitem{MozoID2017}
+I.~Mozo, \href{http://bdigital.unal.edu.co/59324/}{Desarrollo de un modelo
+  matem{\'a}tico de la estimulaci{\'o}n de pozos productores de crudo pesado
+  con nano?uidos reductores de viscosidad}, Master's thesis, Universidad
+  Nacional de Colombia - Sede Medell{\'i}n (Septiembre 2017).
+\newline\urlprefix\url{http://bdigital.unal.edu.co/59324/}
+
+\bibitem{Qiao2017}
+C.~Qiao, S.~Khorsandi, R.~T. Johns, {A General Purpose Reservoir Simulation
+  Framework for Multiphase Multicomponent Reactive Fluids}, in: SPE Reservoir
+  Simulation Conference, Society of Petroleum Engineers, 2017.
+
+\bibitem{cao2002development}
+H.~Cao, Development of techniques for general purpose research simulator, Ph.D.
+  thesis, Ph. D. Thesis, Stanford University (2002).
 
 \end{thebibliography}
