@@ -21,6 +21,8 @@
 
 \usepackage{geometry}
 
+\usepackage{dirtytalk}
+
 %\newcommand{\r}{\mathbb{R}}
 \def\r{\mathbb{R}}
 \def\n{\mathbb{N}}
@@ -229,7 +231,7 @@ In addition, Calle, Chaverra and Nore\~na \cite{JCalle,norena2018Ling, JChaverra
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.7\textwidth]{Figures/NuevosElementosDelEP.pdf}
+	\includegraphics[width=0.7\textwidth]{Figures/PSNewElements.pdf}
 	\caption{PS Extension for scientific software contexts \cite{zapata2013Eventos}}
 	\label{fig:PS_Extended}
 \end{figure}
@@ -240,6 +242,15 @@ In addition, Calle, Chaverra and Nore\~na \cite{JCalle,norena2018Ling, JChaverra
 For our PS representation, we first collect common concepts and synonyms across several references such as \cite{jamal2006petroleum,Bear2018,ertekin2001basic,Cao2002,Flemisch2011,HerreraCG2016,IsazaCN2017,Mohammad2017,MozoID2017,Qiao2017,cao2002development}, then search the ownership and hierarchy relationships among those concepts. These led to structural relationships in PS representation. After establishing those, we define the possible interactions between actors and concepts involved in our simulation, which are the dynamical relationships in the PS, these represent the actions in which an engineer provides the initial status of a reservoir. Once provided the initial status, some events represent the spontaneous process in which the oil reservoir changes its status, those are triggered by the pass of time, which is an event itself.\\ 
  
 Our PS representation consists of seven main concepts: Mesh, Phase, Equilibrium Relationship, Interphase Interaction, Well, Rock and Equation. Moreover, three events describe the process for solving an implicit Black Oil simulation: Mesh appears, Time passes, and Phase pressure varies. 
+
+\subsection{Mesh}
+The reservoir, which is our spatial domain, is discretized as an orthogonal mesh. This mesh is a collection of cells, which are, likewise, a collection of faces forming a closed surface. In addition, when discretizing the spatial domain, properties like volume and area arise. The volumes are saved for each cell, and the areas are saved for each face. 
+
+Moreover each cell has a numeration, which indicates its position in space, and it is used for locating the corresponding neighborhood. This is a reference to another cell, and it is saved inside the connecting face. 
+
+For generating the simulation mesh, a geomodeller provides the quantity of cells in each direction (x,y,z), dimensions of each cell, and a top, which is the depth of the superior face of each cell. With this information, the mesh appears in an iterative process of creating cells and faces holding the cells connectivity.
+
+\subsection{Phase}
 
 \newpage
 \newgeometry{top=0.5mm, bottom=2.5cm, left=0.5mm, right=0.5mm}
@@ -252,29 +263,38 @@ Our PS representation consists of seven main concepts: Mesh, Phase, Equilibrium 
 \newpage
 \restoregeometry
 \section{Results}\label{sec:validation}
-We developed a simulator, which code is a translation of our PS representation; we chose C++17 because of the Standard Template Library (STL) data structures. This code is available in a GitHub repository. We present some code snippets with their representation in PS as an example of consistency
+We developed a simulator, which code is a translation of our PS representation; We chose C++17 because of the Standard Template Library (STL) data structures, which allow for achieving a explicit consistency between the code and our PS. Moreover, the concepts are stored in global arrays, and their relations are translated as pointers. This code is available in a GitHub repository.
+
+Here, We present some code snippets like concepts, functions or PS pieces with their representation in PS for verifying consistency. 
 
 
 
 \begin{figure}
 	\centering
 	\includegraphics[width=1.0\textwidth]{Figures/casoasis.pdf}
-	\caption{Black Oil PS Representation.}
+	\caption{Graphical explanation of study case used from \cite{jamal2006petroleum}.}
 	\label{fig:casoasis}
 \end{figure}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=1.2\textwidth]{Figures/validacion.pdf}
-	\caption{Black Oil PS Representation.}
-	\label{fig:validacion}
+	\includegraphics[width=1.0\textwidth]{Figures/Validation1.pdf}
+	\caption{Pressure loss at constant well flow, simulation vs study case \cite{jamal2006petroleum}.}
+	\label{fig:validation1}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=1.0\textwidth]{Figures/Validation2.pdf}
+	\caption{Pressure loss at constant well pressure, simulation vs study case \cite{jamal2006petroleum}.}
+	\label{fig:validation2}
 \end{figure}
 
 
 \section{Conclusion}\label{sec:conclusions}
 
 \section*{Acknowledgments}
-Authors thank MINCIENCIAS and the Agencia Nacional de Hidrocarburos (ANH) for financial support under Contract No. 273-2017: \textit{Plan Nacional para el Potenciamiento de la Tecnolog\'{i}a CEOR con Gas Mejorado Qu\'{i}micamente}. Authors also thank Universidad Nacional de Colombia for logistic and financial support.
+Authors thank to FONDO NACIONAL DE FINANCIAMIENTO PARA LA CIENCIA, LA TECNOLOG\'{I}A Y LA INOVACI\'{O}N \say{FRANCISCO JOS\'{E} DE CALDAS}, to MINCIENCIAS and the Agencia Nacional de Hidrocarburos (ANH) for financial support under Contract No. 273-2017: \textit{Plan Nacional para el Potenciamiento de la Tecnolog\'{i}a CEOR con Gas Mejorado Qu\'{i}micamente}. Authors also thank Universidad Nacional de Colombia for logistic and financial support, and the research groups Flow and Transport Dynamics in porous media, and Computational Languages for their contributions on this work.
 
 \bibliography{BibliMSc}
 
